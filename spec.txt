@@ -1,0 +1,106 @@
+world move around rooms building locations to go environment
+
+if in same local talk to eachother
+
+if not then yell or not have communication
+
+life experience
+
+thru text
+
+interact and do stuff
+
+sunlight is bad!!!!!
+
+login system - avatar 
+
+-secure system
+
+create experiences
+
+build
+
+create world (only special people)
+
+digital world with descriptions of things
+
+see other people are there
+
+things there
+
+squirrles
+
+stuff lying on ground (gold) can take it
+
+
+have stuff interact with world via text
+
+give status (fights people can fight u) - dont wanna fight with people
+
+manage groups of people
+
+social groups (guild)
+
+ - can decide someone broke their rules player enforced laws
+
+ 
+
+not many people in same location at same time
+
+reasonable to see lots of text from other people
+
+privaledged few (world builders managers who can ban kick)
+
+talk to person or comm channel maybe different locations
+
+- wb put npc in locations
+
+named locations
+
+no fast travel
+
+world builder can create npcs
+
+quests refesh
+
+commerce - shops
+
+privladges - restrict building to areas
+
+forrest world - city world that are connected - 
+
+
+travel via command to named location?
+
+
+
+
+player stats
+strength 
+theft
+magic - defined by world builders
+
+
+
+cant just steal - npe only 
+
+
+world update x times a second
+
+bestow and take away powers below you
+
+
+
+client to access 
+
+tables via ascii
+
+world builders can make commands and say what they do
+
+
+
+world builders can manage attributes increase decrease
+
+skills spells and gear can change attributes
+
+
