@@ -1,16 +1,31 @@
+UI: Curses
+
+Look direction
+Walk direction
+
+Interaction commands
+ - check player stats, very specific
+
+
+
+
 world move around rooms building locations to go environment
+
+
 
 if in same local talk to eachother
 
 if not then yell or not have communication
+
+Chat sytem
+
+
 
 life experience
 
 thru text
 
 interact and do stuff
-
-sunlight is bad!!!!!
 
 login system - avatar 
 
@@ -19,12 +34,23 @@ login system - avatar
 create experiences
 
 build
+create interaction command
+    - 
+create paths command
+create room 
+    - room object
+    - room npc
+    - 
+    - 
+
 
 create world (only special people)
 
 digital world with descriptions of things
 
 see other people are there
+Get people in your room command
+
 
 things there
 
@@ -32,7 +58,20 @@ squirrles
 
 stuff lying on ground (gold) can take it
 
-
+Players
+    - status
+    - attributes
+    - inventory / equiped
+    
+NPC
+    - atributes
+    - inventory
+    
+objects
+    - characters
+    - inventory
+    - trap
+    
 have stuff interact with world via text
 
 give status (fights people can fight u) - dont wanna fight with people
