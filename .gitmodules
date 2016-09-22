@@ -1,0 +1,3 @@
+[submodule "single-threaded-networking"]
+	path = single-threaded-networking
+	url = https://github.com/nsumner/single-threaded-networking
