@@ -1,0 +1,3 @@
+/home/octavian13/Documents/temp/b/CMakeFiles/edit_cache.dir
+/home/octavian13/Documents/temp/b/CMakeFiles/rebuild_cache.dir
+/home/octavian13/Documents/temp/b/CMakeFiles/hello.dir

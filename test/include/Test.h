@@ -3,4 +3,5 @@ class Test {
 public:
   Test (int,int);
   int area () {return (width*height);}
+
 };

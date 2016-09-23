@@ -2,17 +2,23 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 #include "Test.h"
 using namespace std;
 
 int main(int argc, char ** argv)
 {
-        puts("Hello, World!");
+        puts("<<<Start>>>");
+        vector<Test> v;
 
-        Test rect (3,4);
+
+
+        v.push_back(test)
+
+        Test test (3,4);
         cout << "rect area: " << rect.area() << endl;
         string line;
-        ifstream myfile ("../example.txt");
+        ifstream myfile ("./example.txt");
         if (myfile.is_open())
         {
                 while ( getline (myfile,line) )
