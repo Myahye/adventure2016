@@ -558,3 +558,31 @@ make[1]: Leaving directory '/home/kpws/373/adventure2016/yaml-test/CMakeFiles/CM
     Feature record: CXX_FEATURE:0cxx_variable_templates
     Feature record: CXX_FEATURE:0cxx_variadic_macros
     Feature record: CXX_FEATURE:0cxx_variadic_templates
+Determining if the include file pthread.h exists passed with the following output:
+Change Dir: /home/kpws/373/adventure2016/yaml-test/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_aa7ea/fast"
+/usr/bin/make -f CMakeFiles/cmTC_aa7ea.dir/build.make CMakeFiles/cmTC_aa7ea.dir/build
+make[1]: Entering directory '/home/kpws/373/adventure2016/yaml-test/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_aa7ea.dir/CheckIncludeFile.c.o
+/usr/bin/clang     -o CMakeFiles/cmTC_aa7ea.dir/CheckIncludeFile.c.o   -c /home/kpws/373/adventure2016/yaml-test/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_aa7ea
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_aa7ea.dir/link.txt --verbose=1
+/usr/bin/clang       CMakeFiles/cmTC_aa7ea.dir/CheckIncludeFile.c.o  -o cmTC_aa7ea -rdynamic 
+make[1]: Leaving directory '/home/kpws/373/adventure2016/yaml-test/CMakeFiles/CMakeTmp'
+
+
+Determining if the function pthread_create exists in the pthread passed with the following output:
+Change Dir: /home/kpws/373/adventure2016/yaml-test/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_248de/fast"
+/usr/bin/make -f CMakeFiles/cmTC_248de.dir/build.make CMakeFiles/cmTC_248de.dir/build
+make[1]: Entering directory '/home/kpws/373/adventure2016/yaml-test/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_248de.dir/CheckFunctionExists.c.o
+/usr/bin/clang    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_248de.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_248de
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_248de.dir/link.txt --verbose=1
+/usr/bin/clang   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_248de.dir/CheckFunctionExists.c.o  -o cmTC_248de -rdynamic -lpthread 
+make[1]: Leaving directory '/home/kpws/373/adventure2016/yaml-test/CMakeFiles/CMakeTmp'
+
+

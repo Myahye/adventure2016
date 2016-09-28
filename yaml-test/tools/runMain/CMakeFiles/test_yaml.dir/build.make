@@ -90,6 +90,7 @@ test_yaml_EXTERNAL_OBJECTS =
 
 bin/test_yaml: tools/runMain/CMakeFiles/test_yaml.dir/main.cpp.o
 bin/test_yaml: tools/runMain/CMakeFiles/test_yaml.dir/build.make
+bin/test_yaml: lib/yaml/libyaml-cpp.a
 bin/test_yaml: tools/runMain/CMakeFiles/test_yaml.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/kpws/373/adventure2016/yaml-test/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable ../../bin/test_yaml"
 	cd /home/kpws/373/adventure2016/yaml-test/tools/runMain && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/test_yaml.dir/link.txt --verbose=$(VERBOSE)

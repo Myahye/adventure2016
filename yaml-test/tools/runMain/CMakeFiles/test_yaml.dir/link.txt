@@ -1,1 +1,1 @@
-/usr/bin/clang++   -g   CMakeFiles/test_yaml.dir/main.cpp.o  -o ../../bin/test_yaml -rdynamic 
+/usr/bin/clang++   -g   CMakeFiles/test_yaml.dir/main.cpp.o  -o ../../bin/test_yaml -rdynamic ../../lib/yaml/libyaml-cpp.a 

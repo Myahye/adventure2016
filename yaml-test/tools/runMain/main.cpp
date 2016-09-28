@@ -1,10 +1,13 @@
 #include <iostream>
+#include <fstream>
 #include "yaml-cpp/yaml.h"
-
-using namespace std;
 
 int main()
 {
-    YAML::Node config = YAML::LoadFile("shire.yml");
-    return 0;
+  YAML::Node test = YAML::LoadFile("shire.yml");
+  if (test["name"]) {
+    std::cout << "Name is: " << test["name"].as<std::string>() << "\n";
+  }
+  std::ofstream fout("shire.yml");
+  fout << test;
 }

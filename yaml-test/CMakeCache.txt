@@ -165,6 +165,12 @@ CMAKE_STRIP:FILEPATH=/usr/bin/strip
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
+//Path to a file.
+YAMLCPP_INCLUDE_DIR:PATH=/usr/local/include
+
+//Path to a library.
+YAMLCPP_LIBRARY:FILEPATH=/usr/local/lib/libyaml-cpp.a
+
 //Value Computed by CMake
 yaml-test_BINARY_DIR:STATIC=/home/kpws/373/adventure2016/yaml-test
 
@@ -240,6 +246,14 @@ CMAKE_GENERATOR:INTERNAL=Unix Makefiles
 CMAKE_GENERATOR_PLATFORM:INTERNAL=
 //Name of generator toolset.
 CMAKE_GENERATOR_TOOLSET:INTERNAL=
+//Have symbol pthread_create
+CMAKE_HAVE_LIBC_CREATE:INTERNAL=
+//Have library pthreads
+CMAKE_HAVE_PTHREADS_CREATE:INTERNAL=
+//Have library pthread
+CMAKE_HAVE_PTHREAD_CREATE:INTERNAL=1
+//Have include pthread.h
+CMAKE_HAVE_PTHREAD_H:INTERNAL=1
 //Source directory with the top level CMakeLists.txt file for this
 // project
 CMAKE_HOME_DIRECTORY:INTERNAL=/home/kpws/373/adventure2016/yaml-test
@@ -262,7 +276,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=3
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=4
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
@@ -301,4 +315,12 @@ CMAKE_STRIP-ADVANCED:INTERNAL=1
 CMAKE_UNAME:INTERNAL=/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
+//Details about finding Threads
+FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
+//Details about finding YAMLCPP
+FIND_PACKAGE_MESSAGE_DETAILS_YAMLCPP:INTERNAL=[/usr/local/include][/usr/local/lib/libyaml-cpp.a][v()]
+//ADVANCED property for variable: YAMLCPP_INCLUDE_DIR
+YAMLCPP_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: YAMLCPP_LIBRARY
+YAMLCPP_LIBRARY-ADVANCED:INTERNAL=1
 

@@ -60,6 +60,24 @@ CMAKE_SOURCE_DIR = /home/kpws/373/adventure2016/yaml-test
 CMAKE_BINARY_DIR = /home/kpws/373/adventure2016/yaml-test
 
 #=============================================================================
+# Directory level rules for directory lib
+
+# Convenience name for "all" pass in the directory.
+lib/all:
+
+.PHONY : lib/all
+
+# Convenience name for "clean" pass in the directory.
+lib/clean:
+
+.PHONY : lib/clean
+
+# Convenience name for "preinstall" pass in the directory.
+lib/preinstall:
+
+.PHONY : lib/preinstall
+
+#=============================================================================
 # Directory level rules for directory tools
 
 # Convenience name for "all" pass in the directory.
