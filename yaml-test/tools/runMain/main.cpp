@@ -4,7 +4,7 @@
 
 int main()
 {
-  YAML::Node test = YAML::LoadFile("shire.yml");
+  YAML::Node test = YAML::LoadFile("../shire.yml");
   if (test["name"]) {
     std::cout << "Name is: " << test["name"].as<std::string>() << "\n";
   }
