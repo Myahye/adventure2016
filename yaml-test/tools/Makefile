@@ -56,17 +56,6 @@ CMAKE_BINARY_DIR = /home/kpws/373/adventure2016/yaml-test
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
-
 # Special rule for the target install
 install: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
@@ -111,6 +100,17 @@ install/local/fast: install/local
 
 .PHONY : install/local/fast
 
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
+
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
@@ -124,14 +124,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/kpws/373/adventure2016/yaml-test && $(CMAKE_COMMAND) -E cmake_progress_start /home/kpws/373/adventure2016/yaml-test/CMakeFiles /home/kpws/373/adventure2016/yaml-test/tools/runMain/CMakeFiles/progress.marks
-	cd /home/kpws/373/adventure2016/yaml-test && $(MAKE) -f CMakeFiles/Makefile2 tools/runMain/all
+	cd /home/kpws/373/adventure2016/yaml-test && $(CMAKE_COMMAND) -E cmake_progress_start /home/kpws/373/adventure2016/yaml-test/CMakeFiles /home/kpws/373/adventure2016/yaml-test/tools/CMakeFiles/progress.marks
+	cd /home/kpws/373/adventure2016/yaml-test && $(MAKE) -f CMakeFiles/Makefile2 tools/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/kpws/373/adventure2016/yaml-test/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/kpws/373/adventure2016/yaml-test && $(MAKE) -f CMakeFiles/Makefile2 tools/runMain/clean
+	cd /home/kpws/373/adventure2016/yaml-test && $(MAKE) -f CMakeFiles/Makefile2 tools/clean
 .PHONY : clean
 
 # The main clean target
@@ -141,12 +141,12 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/kpws/373/adventure2016/yaml-test && $(MAKE) -f CMakeFiles/Makefile2 tools/runMain/preinstall
+	cd /home/kpws/373/adventure2016/yaml-test && $(MAKE) -f CMakeFiles/Makefile2 tools/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/kpws/373/adventure2016/yaml-test && $(MAKE) -f CMakeFiles/Makefile2 tools/runMain/preinstall
+	cd /home/kpws/373/adventure2016/yaml-test && $(MAKE) -f CMakeFiles/Makefile2 tools/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
@@ -154,64 +154,18 @@ depend:
 	cd /home/kpws/373/adventure2016/yaml-test && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
-# Convenience name for target.
-tools/runMain/CMakeFiles/test_yaml.dir/rule:
-	cd /home/kpws/373/adventure2016/yaml-test && $(MAKE) -f CMakeFiles/Makefile2 tools/runMain/CMakeFiles/test_yaml.dir/rule
-.PHONY : tools/runMain/CMakeFiles/test_yaml.dir/rule
-
-# Convenience name for target.
-test_yaml: tools/runMain/CMakeFiles/test_yaml.dir/rule
-
-.PHONY : test_yaml
-
-# fast build rule for target.
-test_yaml/fast:
-	cd /home/kpws/373/adventure2016/yaml-test && $(MAKE) -f tools/runMain/CMakeFiles/test_yaml.dir/build.make tools/runMain/CMakeFiles/test_yaml.dir/build
-.PHONY : test_yaml/fast
-
-main.o: main.cpp.o
-
-.PHONY : main.o
-
-# target to build an object file
-main.cpp.o:
-	cd /home/kpws/373/adventure2016/yaml-test && $(MAKE) -f tools/runMain/CMakeFiles/test_yaml.dir/build.make tools/runMain/CMakeFiles/test_yaml.dir/main.cpp.o
-.PHONY : main.cpp.o
-
-main.i: main.cpp.i
-
-.PHONY : main.i
-
-# target to preprocess a source file
-main.cpp.i:
-	cd /home/kpws/373/adventure2016/yaml-test && $(MAKE) -f tools/runMain/CMakeFiles/test_yaml.dir/build.make tools/runMain/CMakeFiles/test_yaml.dir/main.cpp.i
-.PHONY : main.cpp.i
-
-main.s: main.cpp.s
-
-.PHONY : main.s
-
-# target to generate assembly for a file
-main.cpp.s:
-	cd /home/kpws/373/adventure2016/yaml-test && $(MAKE) -f tools/runMain/CMakeFiles/test_yaml.dir/build.make tools/runMain/CMakeFiles/test_yaml.dir/main.cpp.s
-.PHONY : main.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... rebuild_cache"
 	@echo "... install"
 	@echo "... list_install_components"
-	@echo "... test_yaml"
 	@echo "... install/strip"
 	@echo "... install/local"
+	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
 .PHONY : help
 
 
