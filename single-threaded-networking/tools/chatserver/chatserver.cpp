@@ -120,8 +120,6 @@ main(int argc, char* argv[]) {
     }
 
     auto incoming = server.receive();
-    //auto log      = processMessages(server, incoming, done);
-    //auto outgoing = buildOutgoing(log);
     auto outgoing = processMessagesAndBuildOutgoing(server, incoming, done);
 
     // for (auto m : outgoing) {
