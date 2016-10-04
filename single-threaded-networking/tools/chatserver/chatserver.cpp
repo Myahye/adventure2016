@@ -21,7 +21,8 @@
 #include <unistd.h>
 
 #include <boost/algorithm/string/predicate.hpp>
-//#include <string_span.h>
+
+#include <string_span>
 
 
 using namespace networking;
@@ -29,9 +30,9 @@ using namespace networking;
 
 std::vector<Connection> clients;
 
-//can't get gsl::string_span<> to work
-std::string handleCreateCommand(const Message &message) {
-  return "Create command not yet implemented.";
+//gsl::string_span<> works with g++ 6.2.0
+gsl::cstring_span<> handleCreateCommand(const Message &message) {
+  return gsl::ensure_z("Create command not yet implemented.");
 }
 
 void
@@ -54,7 +55,7 @@ std::deque<Message>
 processMessagesAndBuildOutgoing(Server &server,
                 const std::deque<Message> &incoming,
                 bool &quit) {
-  std::ostringstream result;
+
   std::deque<Message> outgoing;
 
   for (auto client : clients) {
@@ -68,21 +69,12 @@ processMessagesAndBuildOutgoing(Server &server,
       printf("Shutting down.\n");
       quit = true;
     } else if (boost::starts_with(message.text,"Create ")) {
-      for(auto &m : outgoing) {
-        if(m.connection == message.connection ) {
-          m.text += std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
-          break;
-        }
-      }
-    }
-    else
-    {
-      for (auto &m : outgoing) {
-        m.text += std::to_string(message.connection.id) + "> " + message.text + "\n";
-      }
+      auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
+      selectedClient->text += std::to_string(message.connection.id) + "> " + gsl::to_string(handleCreateCommand(message)) + "\n";
+    } else {
+      std::for_each(outgoing.begin(), outgoing.end(), [message] (Message &m) { m.text += std::to_string(message.connection.id) + "> " + message.text + "\n"; });
     }
   }
-
   return outgoing;
 }
 
