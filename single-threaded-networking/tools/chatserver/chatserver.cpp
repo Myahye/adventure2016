@@ -30,7 +30,7 @@ using namespace networking;
 
 std::vector<Connection> clients;
 
-//gsl::string_span<> works with g++ 6.2.0
+//gsl::string_span<> works: tested with g++ 6.2.0
 gsl::cstring_span<> handleCreateCommand(const Message &message) {
   return gsl::ensure_z("Create command not yet implemented.");
 }
