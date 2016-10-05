@@ -1,9 +1,16 @@
-class Helper {
-  std::vector<> Npcs;
-public:
-  Helper();
-  Helper(std::vector<Npc>);
+#include "NPC.h"
+#include <string>
+#include <vector>
+using namespace std;
 
-  boolean createNpc(int, string);
-  Npc getNpc (int);
+class Helper {
+  static vector<string> Npcs;
+
+public:
+
+  Helper();
+  Helper(vector<NPC>);
+  //bool createNpc();
+  bool createNpc(int, string);
+  NPC getNpc (int);
 };

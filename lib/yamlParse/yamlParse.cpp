@@ -1,14 +1,8 @@
-#include "yaml-cpp/yaml.h"
-#include "Helper.h"
-#include "Npc.h"
-#include <iostream>
-#include <fstream>
-#include <cstring>
-#include <vector>
+#include "yamlParse.h"
 
 void yamlParse() {
-	Helper helper();
-	Boolean return;
+	Helper helper;
+	bool ret = false;
 	YAML::Node test = YAML::LoadFile("../data/test.yml");
 	if (test["username"]) {
 		std::cout << test["username"].as<std::string>() << "\n";
@@ -21,8 +15,9 @@ void yamlParse() {
 		//std::cout << "Armor: " << element["armor"].as<std::string>() << "\n\n";
 		int id = element["id"].as<int>();
 		string shortdesc = element["shortdesc"].as<std::string>();
-		return = helper.createNpc(id,shortdesc);
-		std::cout << "Create Npc with ID: " + id + " = " + return << "\n\n";
+		ret = helper.createNpc(id,shortdesc);
+		//ret = helper.createNpc();
+		std::cout << "Create Npc with ID: " << id << " = " << ret << "\n\n";
 		//helper.getNpc
 		// for (auto el : element["description"]){
 		// 	//std::cout << el.as<std::string>() << "\n";

@@ -1,2 +1,0 @@
-/usr/bin/ar cq ../libHelper.a  CMakeFiles/Helper.dir/Helper.cpp.o
-/usr/bin/ranlib ../libHelper.a

@@ -1,25 +1,21 @@
 #include "Helper.h"
-#include<cstring>
-#include <vector>
 
-using namespace std;
+Helper::Helper() {}
 
-Helper::Helper(){
-
+Helper::Helper(std::vector<std::string> asdf){
+  this.Npcs = asdf;
 }
+vector<string> Helper::Npcs;
 
-Helper::Helper(vector<string> Npcs){
-  this.Npcs = Npcs;
-}
 
 //Need to add error codes
-boolean createNpc(int id, string shortdesc){
-  for(Npc &npc : Npcs){
+bool createNpc(int id, string shortdesc){
+  for(NPC &npc : Npcs){
     if(npc.getId == id){
       return false;
     }
   }
-  Npc npc (id, shortdesc);
+  NPC npc (id, shortdesc);
   Npcs.push_back(npc);
   return true;
 }
