@@ -1,0 +1,4 @@
+/home/kmccormi/sfuhome/temp3/b/lib/baseClasses/CMakeFiles/BaseClass.dir
+/home/kmccormi/sfuhome/temp3/b/tools/runMain/CMakeFiles/adventure.dir
+/home/kmccormi/sfuhome/temp3/b/lib/helperClasses/CMakeFiles/Helper.dir
+/home/kmccormi/sfuhome/temp3/b/lib/yamlParse/CMakeFiles/yamlParse.dir

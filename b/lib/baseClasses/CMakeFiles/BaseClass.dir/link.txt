@@ -1,0 +1,2 @@
+/usr/bin/ar cq ../libBaseClass.a  CMakeFiles/BaseClass.dir/Npc.cpp.o
+/usr/bin/ranlib ../libBaseClass.a

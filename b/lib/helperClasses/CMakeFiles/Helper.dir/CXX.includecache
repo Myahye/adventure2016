@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/Helper.h
+NPC.h
+../include/NPC.h
+string
+-
+vector
+-
+
+../include/NPC.h
+iostream
+-
+vector
+-
+string
+-
+
+/home/kmccormi/sfuhome/temp3/lib/helperClasses/Helper.cpp
+Helper.h
+/home/kmccormi/sfuhome/temp3/lib/helperClasses/Helper.h
+
