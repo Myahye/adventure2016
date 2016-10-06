@@ -27,6 +27,9 @@ namespace networking {
  */
 struct Connection {
   uintptr_t id;
+  // std::string username;
+  // bool doNotSend;
+  // bool unauthorized;
 
   bool
   operator==(Connection other) const {

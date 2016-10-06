@@ -25,9 +25,64 @@
 
 using namespace networking;
 
-
 std::vector<Connection> clients;
 std::unordered_map<std::string, std::string> commands {{"Create","Create "},{"Look","Look "},{"Go","Go "},{"Read","Read "},{"Attack","Attack "},{"Say","Say "},{"ListCommands","commands"},};
+
+/*
+class Student {
+  struct Sleep {};
+  struct Play {};
+  struct Work { uint64_t timeWorked; };
+  boost::variant<Sleep,Play,Work> currentState;
+};
+
+*/
+/*
+gsl::cstring_span<> handleSignOn(Message &message) {
+  if(message.text == "1" && message.connection.state == UNAUTHORIZED) {
+    message.connection.state = REGISTERING_USERNAME;
+    return gsl::ensure_z("Please enter your new username: ");
+  } else if(message.connection.state == REGISTERING_USERNAME) {
+    bool found = findExistingUsername(message.text);
+    if(found) {
+      return gsl::ensure_z("Sorry that username is in use. Please enter a different username: ");
+    }
+    message.connection.state = REGISTERING_USERNAME_CONFIRM;
+    return gsl::ensure_z("Are you sure? (y/n): ");
+  } else if(message.connection.state == REGISTERING_USERNAME_CONFIRM) {
+    if(message.text == "y") {
+      message.connection.state = CURRENTLY_PLAYING;
+      message.connection.unauthorized = CURRENTLY_PLAYING;
+      return gsl::ensure_z("The adventurer " + name + "wakes up in a dimly lit room.");
+    } else if(message.text == "n") {
+      message.connection.state = REGISTERING_USERNAME;
+      return gsl::ensure_z("Please enter your new username: ");
+    }
+    return gsl::ensure_z("Are you sure? (y/n): ");
+  } else if(message.text == "2" && message.connection.state == UNAUTHORIZED) {
+    message.connection.state = LOGIN_USERNAME;
+    return gsl::ensure_z("Please enter your existing username: ");
+  } else if(message.connection.state == LOGIN_USERNAME) {
+    bool found = findExistingUsername(message.text);
+    if(found) {
+      find(message.connection.id,clients).username = message.text;
+      message.connection.state = LOGIN_PASSWORD
+      return gsl::ensure_z("Please enter your password ");
+    }
+    return gsl::ensure_z("There is no existing username by that name, please try again: ");
+  } else if(message.connection.state == LOGIN_PASSWORD) {
+    bool found = findExistingUsernamePass(client.connection.username, message.text);
+    if(found) {
+      message.connection.state = CURRENTLY_PLAYING;
+      message.connection.unauthorized = CURRENTLY_PLAYING;
+      return gsl::ensure_z("The adventurer " + name + "wakes up in a dimly lit room.");
+    }
+    return gsl::ensure_z("Invalid password, please try again: ");
+  } else {
+      return gsl::ensure_z("Sorry that is not a valid command, please enter '1' to create a new character, enter '2' to login to an existing character, or enter 'quit' to quit");
+  }
+}
+*/
 
 //gsl::string_span<> works: tested with g++ 6.2.0 *removed
 std::string handleCreateCommand(const Message &message) {
@@ -93,10 +148,14 @@ processMessagesAndBuildOutgoing(Server &server,
     } else if (message.text == "shutdown") {
       printf("Shutting down.\n");
       quit = true;
+
     } else if (boost::istarts_with(message.text,commands["Create"])) {
       auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
       selectedClient->text += std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
-    } else if (boost::istarts_with(message.text,commands["Look"])) {
+    }/* else if (message.connection.unauthorized)) {
+      auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
+      selectedClient->text += std::to_string(message.connection.id) + "> " + gsl::to_string(handleSignOn(message)) + "\n";
+    }*/ else if (boost::istarts_with(message.text,commands["Look"])) {
       auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
       selectedClient->text += std::to_string(message.connection.id) + "> " + handleLookCommand(message) + "\n";
     } else if (boost::istarts_with(message.text,commands["Go"])) {

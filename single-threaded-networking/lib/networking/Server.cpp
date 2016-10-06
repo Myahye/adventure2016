@@ -25,7 +25,7 @@ public:
           Server& server,
           std::deque<Message> &readBuffer)
     : disconnected{false},
-      connection{reinterpret_cast<uintptr_t>(this)},
+      connection{reinterpret_cast<uintptr_t>(this)/*, "", false*/},
       socket{io_service},
       server{server},
       streamBuf{BUFFER_SIZE},
