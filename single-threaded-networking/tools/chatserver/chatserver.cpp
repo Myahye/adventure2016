@@ -22,8 +22,6 @@
 
 #include <boost/algorithm/string/predicate.hpp>
 
-#include <string_span>
-
 
 using namespace networking;
 
@@ -31,36 +29,35 @@ using namespace networking;
 std::vector<Connection> clients;
 std::unordered_map<std::string, std::string> commands {{"Create","Create "},{"Look","Look "},{"Go","Go "},{"Read","Read "},{"Attack","Attack "},{"Say","Say "},{"ListCommands","commands"},};
 
-//gsl::string_span<> works: tested with g++ 6.2.0
-gsl::cstring_span<> handleCreateCommand(const Message &message) {
-  return gsl::ensure_z("Create command not yet implemented.");
+//gsl::string_span<> works: tested with g++ 6.2.0 *removed
+std::string handleCreateCommand(const Message &message) {
+  return "Create command not yet implemented.";
 }
 
-gsl::cstring_span<> handleLookCommand(const Message &message) {
-  return gsl::ensure_z("Look command not yet implemented.");
+std::string handleLookCommand(const Message &message) {
+  return "Look command not yet implemented.";
 }
 
-gsl::cstring_span<> handleGoCommand(const Message &message) {
-  return gsl::ensure_z("Go command not yet implemented.");
+std::string handleGoCommand(const Message &message) {
+  return "Go command not yet implemented.";
 }
 
-gsl::cstring_span<> handleReadCommand(const Message &message) {
-  return gsl::ensure_z("Read command not yet implemented.");
+std::string handleReadCommand(const Message &message) {
+  return "Read command not yet implemented.";
 }
 
-gsl::cstring_span<> handleAttackCommand(const Message &message) {
-  return gsl::ensure_z("Attack command not yet implemented.");
+std::string handleAttackCommand(const Message &message) {
+  return "Attack command not yet implemented.";
 }
 
-gsl::cstring_span<> handleListCommandsCommand() {
+std::string handleListCommandsCommand() {
   std::string commandsList = "A list of commands:\n\n";
 
   for(auto command : commands) {
     commandsList += "  " + command.second + "\n";
   }
 
-  gsl::cstring_span<> commandsListStringSpan = commandsList;
-  return gsl::ensure_z(commandsListStringSpan);
+  return commandsList;
 }
 
 void
@@ -98,24 +95,24 @@ processMessagesAndBuildOutgoing(Server &server,
       quit = true;
     } else if (boost::istarts_with(message.text,commands["Create"])) {
       auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
-      selectedClient->text += std::to_string(message.connection.id) + "> " + gsl::to_string(handleCreateCommand(message)) + "\n";
+      selectedClient->text += std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
     } else if (boost::istarts_with(message.text,commands["Look"])) {
       auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
-      selectedClient->text += std::to_string(message.connection.id) + "> " + gsl::to_string(handleLookCommand(message)) + "\n";
+      selectedClient->text += std::to_string(message.connection.id) + "> " + handleLookCommand(message) + "\n";
     } else if (boost::istarts_with(message.text,commands["Go"])) {
       auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
-      selectedClient->text += std::to_string(message.connection.id) + "> " + gsl::to_string(handleGoCommand(message)) + "\n";
+      selectedClient->text += std::to_string(message.connection.id) + "> " + handleGoCommand(message) + "\n";
     } else if (boost::istarts_with(message.text,commands["Read"])) {
       auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
-      selectedClient->text += std::to_string(message.connection.id) + "> " + gsl::to_string(handleReadCommand(message)) + "\n";
+      selectedClient->text += std::to_string(message.connection.id) + "> " + handleReadCommand(message) + "\n";
     } else if (boost::istarts_with(message.text,commands["Attack"])) {
       auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
-      selectedClient->text += std::to_string(message.connection.id) + "> " + gsl::to_string(handleAttackCommand(message)) + "\n";
+      selectedClient->text += std::to_string(message.connection.id) + "> " + handleAttackCommand(message) + "\n";
     } else if (boost::istarts_with(message.text,commands["Say"])) {
       std::for_each(outgoing.begin(), outgoing.end(), [message] (Message &m) { m.text += std::to_string(message.connection.id) + "> " + message.text.substr(4) + "\n"; });
     } else if (boost::iequals(message.text, commands["ListCommands"])) {
       auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
-      selectedClient->text += std::to_string(message.connection.id) + "> " + gsl::to_string(handleListCommandsCommand()) + "\n";
+      selectedClient->text += std::to_string(message.connection.id) + "> " + handleListCommandsCommand() + "\n";
     } else {
       //Will output all other message types sent for now for testing purposes
       std::for_each(outgoing.begin(), outgoing.end(), [message] (Message &m) { m.text += std::to_string(message.connection.id) + "> " + message.text + "\n"; });
