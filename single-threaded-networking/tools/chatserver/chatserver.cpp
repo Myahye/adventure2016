@@ -29,10 +29,38 @@ using namespace networking;
 
 
 std::vector<Connection> clients;
+std::unordered_map<std::string, std::string> commands {{"Create","Create "},{"Look","Look "},{"Go","Go "},{"Read","Read "},{"Attack","Attack "},{"Say","Say "},{"ListCommands","commands"},};
 
 //gsl::string_span<> works: tested with g++ 6.2.0
 gsl::cstring_span<> handleCreateCommand(const Message &message) {
   return gsl::ensure_z("Create command not yet implemented.");
+}
+
+gsl::cstring_span<> handleLookCommand(const Message &message) {
+  return gsl::ensure_z("Look command not yet implemented.");
+}
+
+gsl::cstring_span<> handleGoCommand(const Message &message) {
+  return gsl::ensure_z("Go command not yet implemented.");
+}
+
+gsl::cstring_span<> handleReadCommand(const Message &message) {
+  return gsl::ensure_z("Read command not yet implemented.");
+}
+
+gsl::cstring_span<> handleAttackCommand(const Message &message) {
+  return gsl::ensure_z("Attack command not yet implemented.");
+}
+
+gsl::cstring_span<> handleListCommandsCommand() {
+  std::string commandsList = "A list of commands:\n\n";
+
+  for(auto command : commands) {
+    commandsList += "  " + command.second + "\n";
+  }
+
+  gsl::cstring_span<> commandsListStringSpan = commandsList;
+  return gsl::ensure_z(commandsListStringSpan);
 }
 
 void
@@ -68,10 +96,28 @@ processMessagesAndBuildOutgoing(Server &server,
     } else if (message.text == "shutdown") {
       printf("Shutting down.\n");
       quit = true;
-    } else if (boost::starts_with(message.text,"Create ")) {
+    } else if (boost::istarts_with(message.text,commands["Create"])) {
       auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
       selectedClient->text += std::to_string(message.connection.id) + "> " + gsl::to_string(handleCreateCommand(message)) + "\n";
+    } else if (boost::istarts_with(message.text,commands["Look"])) {
+      auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
+      selectedClient->text += std::to_string(message.connection.id) + "> " + gsl::to_string(handleLookCommand(message)) + "\n";
+    } else if (boost::istarts_with(message.text,commands["Go"])) {
+      auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
+      selectedClient->text += std::to_string(message.connection.id) + "> " + gsl::to_string(handleGoCommand(message)) + "\n";
+    } else if (boost::istarts_with(message.text,commands["Read"])) {
+      auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
+      selectedClient->text += std::to_string(message.connection.id) + "> " + gsl::to_string(handleReadCommand(message)) + "\n";
+    } else if (boost::istarts_with(message.text,commands["Attack"])) {
+      auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
+      selectedClient->text += std::to_string(message.connection.id) + "> " + gsl::to_string(handleAttackCommand(message)) + "\n";
+    } else if (boost::istarts_with(message.text,commands["Say"])) {
+      std::for_each(outgoing.begin(), outgoing.end(), [message] (Message &m) { m.text += std::to_string(message.connection.id) + "> " + message.text.substr(4) + "\n"; });
+    } else if (boost::iequals(message.text, commands["ListCommands"])) {
+      auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
+      selectedClient->text += std::to_string(message.connection.id) + "> " + gsl::to_string(handleListCommandsCommand()) + "\n";
     } else {
+      //Will output all other message types sent for now for testing purposes
       std::for_each(outgoing.begin(), outgoing.end(), [message] (Message &m) { m.text += std::to_string(message.connection.id) + "> " + message.text + "\n"; });
     }
   }
@@ -114,12 +160,8 @@ main(int argc, char* argv[]) {
     auto incoming = server.receive();
     auto outgoing = processMessagesAndBuildOutgoing(server, incoming, done);
 
-    // for (auto m : outgoing) {
-    //   printf("%s\n", m.text.c_str());
-    // }
-
     server.send(outgoing);
-    sleep(1);
+    usleep(100000);
   }
 
   return 0;
