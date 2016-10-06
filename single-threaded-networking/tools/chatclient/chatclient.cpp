@@ -22,12 +22,16 @@ main(int argc, char* argv[]) {
 
   networking::Client client{argv[1], argv[2]};
 
+  bool responseReceived = true;
   bool done = false;
-  auto onTextEntry = [&done, &client] (std::string text) {
+  auto onTextEntry = [&done, &client, &responseReceived] (std::string text) {
     if ("exit" == text || "quit" == text) {
       done = true;
-    } else {
+    } else if(responseReceived) {
       client.send(text);
+      responseReceived = false;
+    } else {
+      client.send("Server response not received");
     }
   };
 
@@ -44,6 +48,7 @@ main(int argc, char* argv[]) {
     auto response = client.receive();
     if (!response.empty()) {
       chatWindow.displayText(response);
+      responseReceived = true;
     }
     chatWindow.update();
   }

@@ -158,7 +158,7 @@ main(int argc, char* argv[]) {
     auto outgoing = processMessagesAndBuildOutgoing(server, incoming, done);
 
     server.send(outgoing);
-    usleep(100000);
+    sleep(1);
   }
 
   return 0;
