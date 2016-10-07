@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/door.h
+iostream
+-
+vector
+-
+string
+-
+
+../include/room.h
+door.h
+../include/door.h
+iostream
+-
+string
+-
+vector
+-
+
+/home/kmccormi/sfuhome/tmp/tools/runMain/main.cpp
+iostream
+-
+fstream
+-
+string
+-
+vector
+-
+room.h
+/home/kmccormi/sfuhome/tmp/tools/runMain/room.h
+door.h
+/home/kmccormi/sfuhome/tmp/tools/runMain/door.h
+

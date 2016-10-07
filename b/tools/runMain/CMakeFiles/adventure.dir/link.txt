@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/adventure.dir/main.cpp.o  -o ../../bin/adventure -rdynamic ../../lib/libbaseClasses.a 
