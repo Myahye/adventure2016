@@ -25,8 +25,8 @@
 
 using namespace networking;
 
-
 std::vector<Connection> clients;
+std::unordered_map<Connection,std::deque<Message>, ConnectionHash> pendingOutgoingQueue;
 std::unordered_map<std::string, std::string> commands {{"Create","Create "},{"Look","Look "},{"Go","Go "},{"Read","Read "},{"Attack","Attack "},{"Say","Say "},{"ListCommands","commands"},};
 
 //gsl::string_span<> works: tested with g++ 6.2.0 *removed
@@ -63,6 +63,7 @@ std::string handleListCommandsCommand() {
 void
 onConnect(Connection c) {
   printf("New connection found: %lu\n", c.id);
+  pendingOutgoingQueue[c] = std::deque<Message>();
   clients.push_back(c);
 }
 
@@ -72,66 +73,73 @@ onDisconnect(Connection c) {
   printf("Connection lost: %lu\n", c.id);
   auto eraseBegin = std::remove(std::begin(clients), std::end(clients), c);
   clients.erase(eraseBegin, std::end(clients));
+  pendingOutgoingQueue.erase(c);
 }
 
 // Modified by Lawrence Yu - Reads and processes incoming messages from clients since last update call
 // and returns a message queue containing the proper messages to send to clients
 std::deque<Message>
-processMessagesAndBuildOutgoing(Server &server,
-                const std::deque<Message> &incoming,
-                bool &quit) {
+processMessagesAndBuildOutgoing(Server &server, bool &quit) {
 
-  std::deque<Message> outgoing;
+  std::unordered_map<Connection, Message, ConnectionHash> outgoing;
+  std::deque<Message> outgoingQueue;
 
-  for (auto client : clients) {
-    outgoing.push_back({client, ""});
+  for(auto client : clients) {
+    outgoing[client] = {client,""};
   }
 
-  for (auto& message : incoming) {
-    if (message.text == "quit") {
-      server.disconnect(message.connection);
-    } else if (message.text == "shutdown") {
-      printf("Shutting down.\n");
-      quit = true;
-    } else if (boost::istarts_with(message.text,commands["Create"])) {
-      auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
-      selectedClient->text += std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
-    } else if (boost::istarts_with(message.text,commands["Look"])) {
-      auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
-      selectedClient->text += std::to_string(message.connection.id) + "> " + handleLookCommand(message) + "\n";
-    } else if (boost::istarts_with(message.text,commands["Go"])) {
-      auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
-      selectedClient->text += std::to_string(message.connection.id) + "> " + handleGoCommand(message) + "\n";
-    } else if (boost::istarts_with(message.text,commands["Read"])) {
-      auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
-      selectedClient->text += std::to_string(message.connection.id) + "> " + handleReadCommand(message) + "\n";
-    } else if (boost::istarts_with(message.text,commands["Attack"])) {
-      auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
-      selectedClient->text += std::to_string(message.connection.id) + "> " + handleAttackCommand(message) + "\n";
-    } else if (boost::istarts_with(message.text,commands["Say"])) {
-      std::for_each(outgoing.begin(), outgoing.end(), [message] (Message &m) { m.text += std::to_string(message.connection.id) + "> " + message.text.substr(4) + "\n"; });
-    } else if (boost::iequals(message.text, commands["ListCommands"])) {
-      auto selectedClient = std::find_if(outgoing.begin(), outgoing.end(), [message] (const Message &m) { return m.connection == message.connection; });
-      selectedClient->text += std::to_string(message.connection.id) + "> " + handleListCommandsCommand() + "\n";
-    } else {
-      //Will output all other message types sent for now for testing purposes
-      std::for_each(outgoing.begin(), outgoing.end(), [message] (Message &m) { m.text += std::to_string(message.connection.id) + "> " + message.text + "\n"; });
+  for (auto& client : clients) {
+    if(pendingOutgoingQueue[client].size() != 0) {
+      if (pendingOutgoingQueue[client].back().text == "quit") {
+        server.disconnect(client);
+      } else if (pendingOutgoingQueue[client].back().text == "shutdown") {
+        printf("Shutting down.\n");
+        quit = true;
+      } else if (boost::istarts_with(pendingOutgoingQueue[client].back().text,commands["Create"])) {
+        outgoing[client].text += std::to_string(client.id) + "> " + handleCreateCommand(pendingOutgoingQueue[client].back()) + "\n";
+        pendingOutgoingQueue[client].pop_back();
+      } else if (boost::istarts_with(pendingOutgoingQueue[client].back().text,commands["Look"])) {
+        outgoing[client].text += std::to_string(client.id) + "> " + handleLookCommand(pendingOutgoingQueue[client].back()) + "\n";
+        pendingOutgoingQueue[client].pop_back();
+      } else if (boost::istarts_with(pendingOutgoingQueue[client].back().text,commands["Go"])) {
+        outgoing[client].text += std::to_string(client.id) + "> " + handleGoCommand(pendingOutgoingQueue[client].back()) + "\n";
+        pendingOutgoingQueue[client].pop_back();
+      } else if (boost::istarts_with(pendingOutgoingQueue[client].back().text,commands["Read"])) {
+        outgoing[client].text += std::to_string(client.id) + "> " + handleReadCommand(pendingOutgoingQueue[client].back()) + "\n";
+        pendingOutgoingQueue[client].pop_back();
+      } else if (boost::istarts_with(pendingOutgoingQueue[client].back().text,commands["Attack"])) {
+        outgoing[client].text += std::to_string(client.id) + "> " + handleAttackCommand(pendingOutgoingQueue[client].back()) + "\n";
+        pendingOutgoingQueue[client].pop_back();
+      } else if (boost::istarts_with(pendingOutgoingQueue[client].back().text,commands["Say"])) {
+        std::for_each(outgoing.begin(), outgoing.end(), [client] (auto &m) { m.second.text += std::to_string(m.first.id) + "> " + pendingOutgoingQueue[client].back().text.substr(4) + "\n"; });
+        pendingOutgoingQueue[client].pop_back();
+      } else if (boost::iequals(pendingOutgoingQueue[client].back().text, commands["ListCommands"])) {
+        outgoing[client].text += std::to_string(client.id) + "> " + handleListCommandsCommand() + "\n";
+        pendingOutgoingQueue[client].pop_back();
+      } else {
+        printf("%s\n", pendingOutgoingQueue[client].back().text.c_str());
+        //Will output all other messageIterator types sent for now for testing purposes
+        std::for_each(outgoing.begin(), outgoing.end(), [client] (auto &m) { m.second.text += std::to_string(m.first.id) + "> " + pendingOutgoingQueue[client].back().text + "\n"; });
+        pendingOutgoingQueue[client].pop_back();
+      }
     }
   }
-  return outgoing;
+
+  for(auto client : clients) {
+    outgoingQueue.push_back(outgoing[client]);
+  }
+
+  return outgoingQueue;
 }
 
 // Can only send to one specific id/client or all clients no in between for now how to fix?
 // how to differentiate between different users on same client (I guess user id username/password would fix this)
 
-std::deque<Message>
-buildOutgoing(const std::string& log) {
-  std::deque<Message> outgoing;
-  for (auto client : clients) {
-    //if id == id to send to specific id only
-    outgoing.push_back({client, log});
+void
+addToPendingOutgoingQueue(const auto& incoming) {
+  for (auto message : incoming) {
+    pendingOutgoingQueue[message.connection].push_front({message.connection,message.text});
   }
-  return outgoing;
 }
 
 
@@ -155,7 +163,8 @@ main(int argc, char* argv[]) {
     }
 
     auto incoming = server.receive();
-    auto outgoing = processMessagesAndBuildOutgoing(server, incoming, done);
+    addToPendingOutgoingQueue(incoming);
+    auto outgoing = processMessagesAndBuildOutgoing(server, done);
 
     server.send(outgoing);
     sleep(1);

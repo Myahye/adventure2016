@@ -4,7 +4,7 @@
 // This file is distributed under the MIT License. See the LICENSE file
 // for details.
 /////////////////////////////////////////////////////////////////////////////
-
+//scrolling window 
 
 #include <unistd.h>
 
@@ -22,20 +22,17 @@ main(int argc, char* argv[]) {
 
   networking::Client client{argv[1], argv[2]};
 
-  bool responseReceived = true;
   bool done = false;
-  auto onTextEntry = [&done, &client, &responseReceived] (std::string text) {
+  auto onTextEntry = [&done, &client] (std::string text) {
     if ("exit" == text || "quit" == text) {
       done = true;
-    } else if(responseReceived) {
-      client.send(text);
-      responseReceived = false;
     } else {
-      client.send("Server response not received");
+      client.send(text);
     }
   };
 
   ChatWindow chatWindow(onTextEntry);
+  chatWindow.displayText("Welcome! enter '1' to create a new character, enter '2' to login to an existing character, or enter 'quit' to quit\n\n");
   while (!done && !client.isDisconnected()) {
     try {
       client.update();
@@ -48,7 +45,6 @@ main(int argc, char* argv[]) {
     auto response = client.receive();
     if (!response.empty()) {
       chatWindow.displayText(response);
-      responseReceived = true;
     }
     chatWindow.update();
   }
