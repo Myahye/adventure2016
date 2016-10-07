@@ -1,2 +1,0 @@
-/home/kmccormi/sfuhome/tmp/b/lib/baseClasses/CMakeFiles/baseClasses.dir
-/home/kmccormi/sfuhome/tmp/b/tools/runMain/CMakeFiles/adventure.dir

@@ -1,4 +1,2 @@
-add_subdirectory(yamlParse)
-add_library(room
-  room.cpp
-)
+add_subdirectory(baseClasses)
+add_subdirectory(helperClasses)

@@ -1,2 +1,0 @@
-/usr/bin/ar cq ../libbaseClass.a  CMakeFiles/baseClass.dir/room.cpp.o CMakeFiles/baseClass.dir/door.cpp.o
-/usr/bin/ranlib ../libbaseClass.a

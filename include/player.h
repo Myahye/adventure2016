@@ -8,13 +8,14 @@
 
 using namespace std;
 
-class Room {
+class Player {
 private:
     string desc;
-    vector<Door> doors;
+
     string extended_desc;
     string name;
     unsigned int room_id;
+    vector<Door> doors;
 //  Class Npc have not been created yet
     //    static vector<Npc> npcs;
 //  Class Object have not been created yet
