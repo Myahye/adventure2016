@@ -6,7 +6,7 @@
 #include "door.h"
 using namespace std;
 int main() {
-    vecttor<Room> rooms;
+    vector<Room> rooms;
     Door door1;
     vector<Door> doors;
     doors.push_back(door1);

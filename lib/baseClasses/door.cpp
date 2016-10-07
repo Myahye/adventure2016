@@ -14,7 +14,7 @@
 using namespace std;
 
 Door::Door(){
-    desc = "none";
+    desc = "al;sdkjf;aksdjf;laksjdf;lkajsdf;lkajd";
     dir = "none";
     keywords = "none";
     Door_id = 0;
