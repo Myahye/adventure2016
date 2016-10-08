@@ -4,7 +4,7 @@
 // This file is distributed under the MIT License. See the LICENSE file
 // for details.
 /////////////////////////////////////////////////////////////////////////////
-
+//scrolling window 
 
 #include <unistd.h>
 
@@ -32,6 +32,7 @@ main(int argc, char* argv[]) {
   };
 
   ChatWindow chatWindow(onTextEntry);
+  chatWindow.displayText("Welcome! enter '1' to create a new character, enter '2' to login to an existing character, or enter 'quit' to quit\n\n");
   while (!done && !client.isDisconnected()) {
     try {
       client.update();
