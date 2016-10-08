@@ -26,7 +26,7 @@
 using namespace networking;
 
 std::vector<Connection> clients;
-std::unordered_map<Connection,std::deque<Message>, ConnectionHash> pendingOutgoingQueue;
+std::unordered_map<Connection,std::deque<Message>, ConnectionHash> clientMessageQueues;
 std::unordered_map<std::string, std::string> commands {{"Create","Create "},{"Look","Look "},{"Go","Go "},{"Read","Read "},{"Attack","Attack "},{"Say","Say "},{"ListCommands","commands"},};
 
 //gsl::string_span<> works: tested with g++ 6.2.0 *removed
@@ -53,7 +53,7 @@ std::string handleAttackCommand(const Message &message) {
 std::string handleListCommandsCommand() {
   std::string commandsList = "A list of commands:\n\n";
 
-  for(auto command : commands) {
+  for(auto& command : commands) {
     commandsList += "  " + command.second + "\n";
   }
 
@@ -63,7 +63,7 @@ std::string handleListCommandsCommand() {
 void
 onConnect(Connection c) {
   printf("New connection found: %lu\n", c.id);
-  pendingOutgoingQueue[c] = std::deque<Message>();
+  clientMessageQueues[c] = std::deque<Message>();
   clients.push_back(c);
 }
 
@@ -73,7 +73,7 @@ onDisconnect(Connection c) {
   printf("Connection lost: %lu\n", c.id);
   auto eraseBegin = std::remove(std::begin(clients), std::end(clients), c);
   clients.erase(eraseBegin, std::end(clients));
-  pendingOutgoingQueue.erase(c);
+  clientMessageQueues.erase(c);
 }
 
 // Modified by Lawrence Yu - Reads and processes incoming messages from clients since last update call
@@ -81,64 +81,59 @@ onDisconnect(Connection c) {
 std::deque<Message>
 processMessagesAndBuildOutgoing(Server &server, bool &quit) {
 
-  std::unordered_map<Connection, Message, ConnectionHash> outgoing;
+  std::unordered_map<Connection, Message, ConnectionHash> outgoingMap;
   std::deque<Message> outgoingQueue;
 
-  for(auto client : clients) {
-    outgoing[client] = {client,""};
+  for(auto& client : clients) {
+    outgoingMap[client] = {client,""};
   }
 
   for (auto& client : clients) {
-    if(pendingOutgoingQueue[client].size() != 0) {
-      if (pendingOutgoingQueue[client].back().text == "quit") {
+    if(!clientMessageQueues[client].empty()) {
+      if (clientMessageQueues[client].back().text == "quit") {
         server.disconnect(client);
-      } else if (pendingOutgoingQueue[client].back().text == "shutdown") {
+      } else if (clientMessageQueues[client].back().text == "shutdown") {
         printf("Shutting down.\n");
         quit = true;
-      } else if (boost::istarts_with(pendingOutgoingQueue[client].back().text,commands["Create"])) {
-        outgoing[client].text += std::to_string(client.id) + "> " + handleCreateCommand(pendingOutgoingQueue[client].back()) + "\n";
-        pendingOutgoingQueue[client].pop_back();
-      } else if (boost::istarts_with(pendingOutgoingQueue[client].back().text,commands["Look"])) {
-        outgoing[client].text += std::to_string(client.id) + "> " + handleLookCommand(pendingOutgoingQueue[client].back()) + "\n";
-        pendingOutgoingQueue[client].pop_back();
-      } else if (boost::istarts_with(pendingOutgoingQueue[client].back().text,commands["Go"])) {
-        outgoing[client].text += std::to_string(client.id) + "> " + handleGoCommand(pendingOutgoingQueue[client].back()) + "\n";
-        pendingOutgoingQueue[client].pop_back();
-      } else if (boost::istarts_with(pendingOutgoingQueue[client].back().text,commands["Read"])) {
-        outgoing[client].text += std::to_string(client.id) + "> " + handleReadCommand(pendingOutgoingQueue[client].back()) + "\n";
-        pendingOutgoingQueue[client].pop_back();
-      } else if (boost::istarts_with(pendingOutgoingQueue[client].back().text,commands["Attack"])) {
-        outgoing[client].text += std::to_string(client.id) + "> " + handleAttackCommand(pendingOutgoingQueue[client].back()) + "\n";
-        pendingOutgoingQueue[client].pop_back();
-      } else if (boost::istarts_with(pendingOutgoingQueue[client].back().text,commands["Say"])) {
-        std::for_each(outgoing.begin(), outgoing.end(), [client] (auto &m) { m.second.text += std::to_string(m.first.id) + "> " + pendingOutgoingQueue[client].back().text.substr(4) + "\n"; });
-        pendingOutgoingQueue[client].pop_back();
-      } else if (boost::iequals(pendingOutgoingQueue[client].back().text, commands["ListCommands"])) {
-        outgoing[client].text += std::to_string(client.id) + "> " + handleListCommandsCommand() + "\n";
-        pendingOutgoingQueue[client].pop_back();
+      } else if (boost::istarts_with(clientMessageQueues[client].back().text,commands["Create"])) {
+        outgoingMap[client].text += std::to_string(client.id) + "> " + handleCreateCommand(clientMessageQueues[client].back()) + "\n";
+        clientMessageQueues[client].pop_back();
+      } else if (boost::istarts_with(clientMessageQueues[client].back().text,commands["Look"])) {
+        outgoingMap[client].text += std::to_string(client.id) + "> " + handleLookCommand(clientMessageQueues[client].back()) + "\n";
+        clientMessageQueues[client].pop_back();
+      } else if (boost::istarts_with(clientMessageQueues[client].back().text,commands["Go"])) {
+        outgoingMap[client].text += std::to_string(client.id) + "> " + handleGoCommand(clientMessageQueues[client].back()) + "\n";
+        clientMessageQueues[client].pop_back();
+      } else if (boost::istarts_with(clientMessageQueues[client].back().text,commands["Read"])) {
+        outgoingMap[client].text += std::to_string(client.id) + "> " + handleReadCommand(clientMessageQueues[client].back()) + "\n";
+        clientMessageQueues[client].pop_back();
+      } else if (boost::istarts_with(clientMessageQueues[client].back().text,commands["Attack"])) {
+        outgoingMap[client].text += std::to_string(client.id) + "> " + handleAttackCommand(clientMessageQueues[client].back()) + "\n";
+        clientMessageQueues[client].pop_back();
+      } else if (boost::istarts_with(clientMessageQueues[client].back().text,commands["Say"])) {
+        std::for_each(outgoingMap.begin(), outgoingMap.end(), [client] (auto &m) { m.second.text += std::to_string(m.first.id) + "> " + clientMessageQueues[client].back().text.substr(4) + "\n"; });
+        clientMessageQueues[client].pop_back();
+      } else if (boost::iequals(clientMessageQueues[client].back().text, commands["ListCommands"])) {
+        outgoingMap[client].text += std::to_string(client.id) + "> " + handleListCommandsCommand() + "\n";
+        clientMessageQueues[client].pop_back();
       } else {
-        printf("%s\n", pendingOutgoingQueue[client].back().text.c_str());
-        //Will output all other messageIterator types sent for now for testing purposes
-        std::for_each(outgoing.begin(), outgoing.end(), [client] (auto &m) { m.second.text += std::to_string(m.first.id) + "> " + pendingOutgoingQueue[client].back().text + "\n"; });
-        pendingOutgoingQueue[client].pop_back();
+        std::for_each(outgoingMap.begin(), outgoingMap.end(), [client] (auto &m) { m.second.text += std::to_string(m.first.id) + "> " + clientMessageQueues[client].back().text + "\n"; });
+        clientMessageQueues[client].pop_back();
       }
     }
   }
 
-  for(auto client : clients) {
-    outgoingQueue.push_back(outgoing[client]);
+  for(auto& client : clients) {
+    outgoingQueue.push_back(outgoingMap[client]);
   }
 
   return outgoingQueue;
 }
 
-// Can only send to one specific id/client or all clients no in between for now how to fix?
-// how to differentiate between different users on same client (I guess user id username/password would fix this)
-
 void
-addToPendingOutgoingQueue(const auto& incoming) {
-  for (auto message : incoming) {
-    pendingOutgoingQueue[message.connection].push_front({message.connection,message.text});
+addToClientMessageQueues(const auto& incoming) {
+  for (auto& message : incoming) {
+    clientMessageQueues[message.connection].push_front({message.connection,message.text});
   }
 }
 
@@ -163,7 +158,7 @@ main(int argc, char* argv[]) {
     }
 
     auto incoming = server.receive();
-    addToPendingOutgoingQueue(incoming);
+    addToClientMessageQueues(incoming);
     auto outgoing = processMessagesAndBuildOutgoing(server, done);
 
     server.send(outgoing);
