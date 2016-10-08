@@ -4,6 +4,7 @@
 #include <vector>
 #include "yamlParse.h"
 #include "room.h"
+using namespace std;
 
 int main() {
     string desc ="You stand in a grassy field nothing to get too excited about.  The field ";
@@ -11,10 +12,10 @@ int main() {
     string name_room = "Grassy Field";
     int id_room = 1128;
     Room temp(desc, ext_desc, name_room, id_room);
-    std::cout << temp.GetName() <<endl;
-    std::cout << temp.GetDesc() <<endl;
-    std::cout << temp.getRoomId() <<endl;
-    std::cout << temp.GetExtendedDesc() <<endl;
+    cout << temp.getName() <<endl;
+    cout << temp.getDesc() <<endl;
+    cout << temp.getRoomId() <<endl;
+    cout << temp.getExtendedDesc() <<endl;
     yamlParse();
     
 	return 0;
