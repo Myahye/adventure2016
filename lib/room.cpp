@@ -2,52 +2,48 @@
 
 // Constructor
 Room::Room(){
-    name = "NO_NAME";
-    room_id = 0;
+    string desc ="No Description";
+    string ext_desc = "No extended description";
+    string name_room = "Empty Room";
+    int id_room = 1128;
+    Room(desc, ext_desc, name_room, id_room);
 }
 
 // Parameterized constructor
-Room::Room(string new_desc, string new_extended_desc, string new_name, int new_room_id){
-    desc = new_desc;
-    extended_desc = new_extended_desc;
-    name = new_name;
-    room_id = new_room_id;
+Room::Room(string& new_desc, string& new_extended_desc, string& new_name, int& new_room_id):
+mDesc{new_desc},mExtendedDesc{new_extended_desc},
+mName{new_name},mRoomId{static_cast<unsigned int>(new_room_id)}{
 }
 
 // Accessors
-string Room::GetDesc() const{
-    return this->desc;
+string Room::getDesc() const{
+    return this->mDesc;
 }
 
-string Room::GetExtendedDesc() const{
-    return this->extended_desc;
+string Room::getExtendedDesc() const{
+    return this->mExtendedDesc;
     
 }
-string Room::GetName() const{
-    return this->name;
+string Room::getName() const{
+    return this->mName;
 }
 
 int Room::getRoomId() const{
-    return this->room_id;
-    
+    return this->mRoomId;
 }
 
 // Mutators
-bool Room::SetDescription(string new_desc){
-    this->desc = new_desc;
-    return this->desc == new_desc;
+void Room::setDescription(string& new_desc){
+    this->mDesc = new_desc;
     
 }
-bool Room::SetExtendeeDesc(string new_extended_desc){
-    this->extended_desc = new_extended_desc;
-    return this->extended_desc == new_extended_desc;
+void Room::setExtendedDesc(string& new_extended_desc){
+    this->mExtendedDesc = new_extended_desc;
 }
-bool Room::SetName(string new_name){
-    this->name = new_name;
-    return this->name == new_name;
+void Room::setName(string& new_name){
+    this->mName = new_name;
     
 }
-bool Room::SetRoomId(int new_room_id){
-    this->room_id = new_room_id;
-    return this->room_id == new_room_id;
+void Room::setRoomId(int& new_room_id){
+    this->mRoomId = new_room_id;
 }
