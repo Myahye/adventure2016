@@ -25,7 +25,7 @@ public:
           Server& server,
           std::deque<Message> &readBuffer)
     : disconnected{false},
-      connection{reinterpret_cast<uintptr_t>(this)/*, "", false*/},
+      connection{reinterpret_cast<uintptr_t>(this),User(),ConnectionState::UNAUTHORIZED},
       socket{io_service},
       server{server},
       streamBuf{BUFFER_SIZE},
@@ -38,6 +38,8 @@ public:
 
   boost::asio::ip::tcp::socket & getSocket() { return socket; }
   Connection getConnection() const { return connection; }
+  void setConnectionState(ConnectionState state) {connection.currentState = state;}
+  void setUser(User user) {connection.userConnectedToClientConnection = user;}
 
   static constexpr unsigned BUFFER_SIZE = 256;
 
@@ -161,5 +163,21 @@ Server::listenForConnections() {
       }
       this->listenForConnections();
   });
+}
+
+void
+Server::setUserConnectedToClientConnection(const Connection& connection, const User& user) {
+  auto found = channels.find(connection);
+  if (channels.end() != found) {
+    found->second->setUser(user);
+  }
+}
+
+void 
+Server::changeConnectionCurrentState(const Connection& connection, const ConnectionState& state) {
+  auto found = channels.find(connection);
+  if (channels.end() != found) {
+    found->second->setConnectionState(state);
+  }
 }
 

@@ -20,6 +20,26 @@
 
 namespace networking {
 
+enum class ConnectionState {
+  UNAUTHORIZED,
+  REGISTERING_USERNAME,
+  REGISTERING_PASSWORD,
+  LOGIN_USERNAME,
+  LOGIN_PASSWORD,
+  CURRENTLY_PLAYING,
+};
+
+struct User {
+  User() : username("no"), password(""), level(0), inventory("") {}
+
+  User(std::string user, std::string pass, int lvl, std::string inv) 
+  : username(user), password(pass), level(lvl), inventory(inv) {}
+
+  std::string username;
+  std::string password;
+  int level;
+  std::string inventory;
+};
 
 /**
  *  An identifier for a Client connected to a Server. The ID of a Connection is
@@ -27,9 +47,8 @@ namespace networking {
  */
 struct Connection {
   uintptr_t id;
-  // std::string username;
-  // bool doNotSend;
-  // bool unauthorized;
+   User userConnectedToClientConnection;
+   ConnectionState currentState;
 
   bool
   operator==(Connection other) const {
@@ -118,6 +137,10 @@ public:
    *  Disconnect the Client specified by the given Connection.
    */
   void disconnect(Connection connection);
+
+  void setUserConnectedToClientConnection(const Connection& client, const User& user);
+
+  void changeConnectionCurrentState(const Connection& client, const ConnectionState& state);
 
 private:
   // Hiding the template parameters of the Server class behind a pointer to

@@ -32,7 +32,7 @@ main(int argc, char* argv[]) {
   };
 
   ChatWindow chatWindow(onTextEntry);
-  chatWindow.displayText("Welcome! enter '1' to create a new character, enter '2' to login to an existing character, or enter 'quit' to quit\n\n");
+  chatWindow.displayText("Welcome! enter 'register' to create a new character, enter 'login' to login to an existing character, or enter 'quit' to quit\n\n");
   while (!done && !client.isDisconnected()) {
     try {
       client.update();
