@@ -79,7 +79,7 @@ onDisconnect(Connection c) {
 // Modified by Lawrence Yu - Reads and processes incoming messages from clients since last update call
 // and returns a message queue containing the proper messages to send to clients
 std::deque<Message>
-processMessagesAndBuildOutgoing(Server &server, bool &quit) {
+pullFromClientMessageQueues(Server &server, bool &quit) {
 
   std::unordered_map<Connection, Message, ConnectionHash> outgoingMap;
   std::deque<Message> outgoingQueue;
@@ -95,37 +95,16 @@ processMessagesAndBuildOutgoing(Server &server, bool &quit) {
       } else if (clientMessageQueues[client].back().text == "shutdown") {
         printf("Shutting down.\n");
         quit = true;
-      } else if (boost::istarts_with(clientMessageQueues[client].back().text,commands["Create"])) {
-        outgoingMap[client].text += std::to_string(client.id) + "> " + handleCreateCommand(clientMessageQueues[client].back()) + "\n";
-        clientMessageQueues[client].pop_back();
-      } else if (boost::istarts_with(clientMessageQueues[client].back().text,commands["Look"])) {
-        outgoingMap[client].text += std::to_string(client.id) + "> " + handleLookCommand(clientMessageQueues[client].back()) + "\n";
-        clientMessageQueues[client].pop_back();
-      } else if (boost::istarts_with(clientMessageQueues[client].back().text,commands["Go"])) {
-        outgoingMap[client].text += std::to_string(client.id) + "> " + handleGoCommand(clientMessageQueues[client].back()) + "\n";
-        clientMessageQueues[client].pop_back();
-      } else if (boost::istarts_with(clientMessageQueues[client].back().text,commands["Read"])) {
-        outgoingMap[client].text += std::to_string(client.id) + "> " + handleReadCommand(clientMessageQueues[client].back()) + "\n";
-        clientMessageQueues[client].pop_back();
-      } else if (boost::istarts_with(clientMessageQueues[client].back().text,commands["Attack"])) {
-        outgoingMap[client].text += std::to_string(client.id) + "> " + handleAttackCommand(clientMessageQueues[client].back()) + "\n";
-        clientMessageQueues[client].pop_back();
-      } else if (boost::istarts_with(clientMessageQueues[client].back().text,commands["Say"])) {
-        std::for_each(outgoingMap.begin(), outgoingMap.end(), [client] (auto &m) { m.second.text += std::to_string(m.first.id) + "> " + clientMessageQueues[client].back().text.substr(4) + "\n"; });
-        clientMessageQueues[client].pop_back();
-      } else if (boost::iequals(clientMessageQueues[client].back().text, commands["ListCommands"])) {
-        outgoingMap[client].text += std::to_string(client.id) + "> " + handleListCommandsCommand() + "\n";
-        clientMessageQueues[client].pop_back();
       } else {
-        std::for_each(outgoingMap.begin(), outgoingMap.end(), [client] (auto &m) { m.second.text += std::to_string(m.first.id) + "> " + clientMessageQueues[client].back().text + "\n"; });
+        outgoingQueue.push_back(clientMessageQueues[client].back());
         clientMessageQueues[client].pop_back();
       }
     }
   }
 
-  for(auto& client : clients) {
-    outgoingQueue.push_back(outgoingMap[client]);
-  }
+  // for(auto& client : clients) {
+  //   outgoingQueue.push_back(outgoingMap[client]);
+  // }
 
   return outgoingQueue;
 }
@@ -136,7 +115,6 @@ addToClientMessageQueues(const auto& incoming) {
     clientMessageQueues[message.connection].push_front({message.connection,message.text});
   }
 }
-
 
 int
 main(int argc, char* argv[]) {
@@ -159,9 +137,12 @@ main(int argc, char* argv[]) {
 
     auto incoming = server.receive();
     addToClientMessageQueues(incoming);
-    auto outgoing = processMessagesAndBuildOutgoing(server, done);
+    
+    
+  
+    //auto outgoing = processMessagesAndBuildOutgoing(server, done);
+    //server.send(outgoing);
 
-    server.send(outgoing);
     sleep(1);
   }
 
