@@ -10,23 +10,23 @@
 
 #include <cassert>
 
+const int STATS_WINDOW_HEIGHT = 20;
+const int STATS_WINDOW_WIDTH = 20;
 
 ChatWindow::ChatWindow(std::function<void(std::string)> onTextEntry,
                        int updateDelay)
   : onTextEntry{onTextEntry} {
   initscr();
   noecho();
+  start_color();
   halfdelay(updateDelay);
 
   getmaxyx(stdscr, parentY, parentX);
-
-  view = newwin(parentY - entrySize, parentX, 0, 0);
+  createALL();              //create all the windows view,desc,view,entry
   scrollok(view, TRUE);
 
-  entry = newwin(entrySize, parentX, parentY - entrySize, 0);
-  wborder(entry, ' ', ' ', '-', ' ', '+', '+', ' ', ' ');
   entrySub = derwin(entry, entrySize - 1, parentX, 1, 0);
-  
+
   entryField = new_field(entrySize - 1, parentX, 0, 0, 0, 0);
   assert(entryField && "Error creating entry field.");
   set_field_buffer(entryField, 0, "");
@@ -50,6 +50,9 @@ ChatWindow::~ChatWindow() {
   free_field(entryField);
   delwin(entry);
   delwin(view);
+  delwin(desc);
+  delwin(Stats);
+  delwin(Chatbox);
   endwin();
 }
 
@@ -58,14 +61,79 @@ void
 ChatWindow::update() {
   resizeOnShapeChange();
   processInput(getch());
+  wrefresh(desc);
   wrefresh(view);
+  wrefresh(Stats);
   wrefresh(entry);
+  wrefresh(Chatbox);
+
+}
+void ChatWindow::setWindowColor(WINDOW *win, int color) {
+  if (color==1)
+    wbkgd(win, COLOR_PAIR(1));
+  else if (color==2)
+    wbkgd(win, COLOR_PAIR(2));
+  else if (color==3)
+    wbkgd(win, COLOR_PAIR(3));
+
+  wrefresh(win);
 }
 
 
 void
+ChatWindow::createALL() {
+  /*define color pairs*/
+  init_pair(1,COLOR_BLUE,COLOR_BLACK);
+  init_pair(2,COLOR_WHITE,COLOR_BLACK);
+  init_pair(3,COLOR_RED,COLOR_BLACK);
+
+  view = newwin(parentY - (entrySize + STATS_WINDOW_HEIGHT), parentX - 40, STATS_WINDOW_HEIGHT , 0);
+  setWindowColor(view,1);
+  /*Create player's stat window*/
+  Stats = newwin(STATS_WINDOW_HEIGHT, STATS_WINDOW_HEIGHT, 0, parentX - STATS_WINDOW_WIDTH);
+
+  //playerStats->displayStatsTest();
+
+  /*CREATE description window*/
+  desc = newwin(STATS_WINDOW_HEIGHT, parentX - STATS_WINDOW_WIDTH,0,0);
+  setWindowColor(desc,3);
+  DUMMYADD();
+
+  /* CREATE the new chatbox window*/
+
+  Chatbox = newwin(parentY - (entrySize + STATS_WINDOW_HEIGHT),40,STATS_WINDOW_HEIGHT,parentX - 40);
+  setWindowColor(Chatbox,3);
+
+  entry = newwin(entrySize, parentX, parentY - entrySize, 0);
+  wborder(entry, ' ', ' ', '-', ' ', '+', '+', ' ', ' ');
+  wborder(Stats, '*', '*', '*', '*', '*', '*', '*', '*');
+  wborder(desc, '*', ' ', '*', '*', '*', '*', '*', '*');
+  wborder(Chatbox,'*','*',' ','*','*','*', '*', '*');
+
+
+}
+
+void ChatWindow::DUMMYADD(){
+  mvwaddstr(desc,1, 1," This is the description window");
+  mvwaddstr(desc,2, 2," This will contain info from the server");
+  mvwaddstr(desc,3, 3," This will change depending on the update");
+
+  mvwaddstr(Stats,1,2,"Player: TEST \n");
+  mvwaddstr(Stats,2,2,"Level: Noob \n");
+  mvwaddstr(Stats,3,2,"Aera: TEST \n");
+  mvwaddstr(Stats,4,2,"Health : 25 \n");
+  mvwaddstr(Stats,5,2,"Mana: 10 \n");
+
+}
+
+void
 ChatWindow::displayText(const std::string& text) {
-  wprintw(view, "%s", text.c_str());
+  int currentY;
+  int currentX;
+  getyx(view, currentY, currentX);
+  currentX = 0;
+  mvwaddstr(view, currentY, currentX + 1, text.c_str());
+
 }
 
 
@@ -78,15 +146,26 @@ ChatWindow::resizeOnShapeChange() {
     parentX = newX;
     parentY = newY;
 
-    wresize(view, parentY - entrySize, parentX);
-    wresize(entry, entrySize, parentX);
-    mvwin(entry, parentY - entrySize, 0);
+    resizeHelper(view, parentY - (entrySize + STATS_WINDOW_HEIGHT), parentX - 40, STATS_WINDOW_HEIGHT, 0);
+    resizeHelper(entry, entrySize, parentX, parentY- entrySize,0);
+    resizeHelper(desc, STATS_WINDOW_HEIGHT, parentX - STATS_WINDOW_WIDTH, 0,0);
+    resizeHelper(Chatbox,parentY - (entrySize + STATS_WINDOW_HEIGHT),40,STATS_WINDOW_HEIGHT,parentX - 40);
+    resizeHelper(Stats,STATS_WINDOW_HEIGHT, STATS_WINDOW_HEIGHT, 0, parentX - STATS_WINDOW_WIDTH);
 
     wclear(stdscr);
+
     wborder(entry, ' ', ' ', '-', ' ', '+', '+', ' ', ' ');
+    wborder(desc, '*', ' ', '*', '*', '*', '*', '*', '*');
+    wborder(Chatbox,'*','*',' ','*','*','*', '*', '*');
+    wborder(Stats, '*', '*', '*', '*', '*', '*', '*', '*');
   }
 }
 
+void
+ChatWindow::resizeHelper(WINDOW *win, int win_heigth, int win_width, int win_y, int win_x) {
+  wresize(win, win_heigth , win_width);
+  mvwin(win, win_y, win_x);
+}
 
 void
 ChatWindow::processInput(int key) {
@@ -130,5 +209,3 @@ std::string
 ChatWindow::getFieldString() const {
   return std::string{field_buffer(entryField, 0), getFieldSize()};
 }
-
-

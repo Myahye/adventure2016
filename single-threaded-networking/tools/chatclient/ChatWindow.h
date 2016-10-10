@@ -37,6 +37,14 @@ private:
 
   void processInput(int key);
 
+  void createALL();
+
+  void DUMMYADD();
+
+  void resizeHelper(WINDOW *win, int win_heigth, int win_width, int win_y, int win_x);
+
+  void setWindowColor(WINDOW *win, int color);
+
   size_t getFieldSize() const;
 
   std::string getFieldString() const;
@@ -50,6 +58,9 @@ private:
   WINDOW *view     = nullptr;
   WINDOW *entry    = nullptr;
   WINDOW *entrySub = nullptr;
+  WINDOW *Stats    = nullptr;
+  WINDOW *desc     = nullptr;
+  WINDOW *Chatbox  = nullptr;
 
   FIELD *fields[2]  = { nullptr, nullptr };
   FIELD *entryField = nullptr;
@@ -59,4 +70,3 @@ private:
 
 
 #endif
-
