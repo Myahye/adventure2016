@@ -3,11 +3,11 @@
 
 #include "NPC.h"
 
-using namespace std;
-
 NPC::NPC (int id_, string shortdesc_) {
-  this->setId(id_);
-  this->setShortDesc(shortdesc_);
+	id = id_;
+	shortdesc = shortdesc_;
+	// this->setId(id_);
+	// this->setShortDesc(shortdesc_);
 }
 
 int NPC::getArmor() const {
