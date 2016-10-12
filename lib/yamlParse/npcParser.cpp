@@ -55,17 +55,21 @@ int npcParser::getThac0_P (const int& index){
 }
 
 void npcParser::showDesc (const int& index){
-	cout << npcVector[index].getDesc(); << endl;
+	vector<string> desc = npcVector[index].getDesc();
+	for (auto d : desc)
+		cout << d << endl;
 }
 
 void npcParser::showKeywords (const int& index){
-	cout << npcVector[index].getKeywords(); << endl;
+	vector<string> keywords = npcVector[index].getKeywords();
+	for (auto word : keywords)
+		cout << word << endl;
 }
 
 void npcParser::showLongDesc (const int& index){
-	cout << npcVector[index].getLongDesc();
+	cout << npcVector[index].getLongDesc() << endl;
 }
 
 void npcParser::showShortDesc (const int& index){
-	cout << npcVector[index].getShortDesc();
+	cout << npcVector[index].getShortDesc() << endl;
 }
