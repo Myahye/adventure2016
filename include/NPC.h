@@ -16,40 +16,40 @@ public:
 	NPC (int, string);
 	
 	int getArmor() const;
-	void setArmor(int);
+	void setArmor(int&);
 	
 	string getDamage() const;
-	void setDamage(string);
+	void setDamage(string&);
 	
 	vector<string> getDesc() const;
-	void setDesc(vector<string>);
+	void setDesc(vector<string>&);
 
 	int getExp() const;
-	void setExp(int);
+	void setExp(int&);
 
 	int getGold() const;
-	void setGold(int);
+	void setGold(int&);
 
 	string getHit() const;
-	void setHit(string);
+	void setHit(string&);
 
 	int getId() const;
-	void setId(int);
+	void setId(int&);
 
 	vector<string> getKeywords() const;
-	void setKeywords(vector<string>);
+	void setKeywords(vector<string>&);
 
 	int getLevel() const;
-	void setLevel(int);
+	void setLevel(int&);
 
 	string getLongDesc() const;
-	void setLongDesc(string);
+	void setLongDesc(string&);
 	
 	string getShortDesc() const;
-	void setShortDesc(string);
+	void setShortDesc(string&);
 
 	int getThac0() const;
-	void setThac0(int);
+	void setThac0(int&);
 };
 
 #endif
