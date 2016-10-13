@@ -5,6 +5,7 @@ add_executable(chatserver
 
 target_link_libraries(chatserver
   networking
+  model
 )
 
 set_target_properties(chatserver
@@ -22,4 +23,3 @@ target_link_libraries(chatserver ${Boost_LIBRARIES})
 install(TARGETS chatserver
   RUNTIME DESTINATION bin
 )
-

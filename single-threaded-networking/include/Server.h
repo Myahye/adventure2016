@@ -17,7 +17,6 @@
 #include <string>
 #include <unordered_map>
 
-
 namespace networking {
 
 
@@ -162,4 +161,3 @@ private:
 
 
 #endif
-

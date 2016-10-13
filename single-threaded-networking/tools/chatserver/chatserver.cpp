@@ -7,12 +7,12 @@
 
 // - Can only send to one specific id/client or all clients no in between for now how to fix?
 // - how to differentiate between different users on
-//   same client (I guess user id username/password would fix this) *probably not a problem as 
+//   same client (I guess user id username/password would fix this) *probably not a problem as
 //   there is a unique id for each running client
 // - sign on/ sign off (cmp276)
-// - have a user/pass list on server when user types in username and pass compare with list then 
+// - have a user/pass list on server when user types in username and pass compare with list then
 //   recognize the client id as that user (channel 1 -> Derek123, Channel2 ->moman601)
-// - 
+// -
 
 #include "Server.h"
 
@@ -26,15 +26,18 @@
 
 #include <iostream>
 
+#include "CommandParse.h"
+
 
 using namespace networking;
 
 std::vector<Connection> clients;
 std::unordered_map<Connection,std::deque<Message>, ConnectionHash> clientMessageQueues;
-std::unordered_map<std::string, std::string> commands {{"Create","Create "},{"Look","Look "},{"Go","Go "},{"Read","Read "},{"Attack","Attack "},{"Say","Say "},{"ListCommands","commands"},};
+std::unordered_map<std::string, std::string> commands {{"Create","Create"},{"Look","Look "},{"Go","Go "},{"Read","Read "},{"Attack","Attack "},{"Say","Say "},{"ListCommands","commands"},};
 
 //gsl::string_span<> works: tested with g++ 6.2.0 *removed
 std::string handleCreateCommand(const Message &message) {
+  std::cout << "In handleCreateCommand" << "s\n";
   return "Create command not yet implemented.";
 }
 
@@ -123,9 +126,9 @@ addToClientMessageQueues(const auto& incoming) {
 std::deque<Message>
 parseCommandsDummy(const auto& clientMessageQueue) {
   std::deque<Message> outgoing;
-
   for (auto& message : clientMessageQueue) {
     if (boost::istarts_with(message.text,commands["Create"])) {
+      std::cout << "In Create" << "\n";
       std::string messageText = std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
       outgoing.push_back({message.connection, messageText});
     } else if (boost::istarts_with(message.text,commands["Look"])) {
@@ -146,6 +149,8 @@ parseCommandsDummy(const auto& clientMessageQueue) {
       std::string messageText = std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
       outgoing.push_back({message.connection, messageText});
     } else {
+      std::cout << "In else" << "s\n";
+
       //Will output all other message types sent for now for testing purposes
       std::for_each(clients.begin(), clients.end(), [&message,&outgoing] (Connection& c) { outgoing.push_back({c,std::string(std::to_string(message.connection.id) + "> " + message.text + "\n")}); });
     }
@@ -161,7 +166,7 @@ main(int argc, char* argv[]) {
   }
 
   std::chrono::time_point<std::chrono::system_clock> start, end;
- 
+
  // std::time_t end_time = std::chrono::system_clock::to_time_t(end);
 
  // std::cout << "finished computation at " << std::ctime(&end_time)
@@ -170,6 +175,8 @@ main(int argc, char* argv[]) {
   bool done = false;
   unsigned short port = std::stoi(argv[1]);
   Server server{port, onConnect, onDisconnect};
+
+  CommandParse commandParse;
 
   start = std::chrono::system_clock::now();
   while (!done) {
@@ -182,20 +189,21 @@ main(int argc, char* argv[]) {
 
     auto incoming = server.receive();
     addToClientMessageQueues(incoming);
-    
-    
+
+
     //model::initWorld(pathtoyaml);
     end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end-start;
     if(elapsed_seconds.count() >= 3.0){
-       std::cout 
+       std::cout
            << "elapsed time: " << elapsed_seconds.count() << "s\n";
       auto commands = pullFromClientMessageQueues(server,done);
-      auto response = parseCommandsDummy(commands);
+      //auto response = parseCommandsDummy(commands);
+      auto response = commandParse.parseCommands(commands, clients);
       server.send(response);
       start = std::chrono::system_clock::now();
     }
-  
+
     //auto outgoing = processMessagesAndBuildOutgoing(server, done);
     //server.send(outgoing);
 
@@ -203,4 +211,3 @@ main(int argc, char* argv[]) {
 
   return 0;
 }
-
