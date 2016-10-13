@@ -4,15 +4,14 @@
 #include <iostream>
 #include <string>
 #include <vector>
-//#include "Door.h"
+#include "Door.h"
 
 using namespace std;
 
 class Room {
 private:
     string mDesc;
-    //  Class Door have not been created yet
-    //    static vector<Door> doors;
+    vector<Door> doors;
     string mExtendedDesc;
     string mName;
     unsigned int mRoomId;
@@ -25,19 +24,21 @@ public:
     Room();
     
     // Parameterized constructor
-    Room(string& new_desc, string& new_extended_desc, string& new_name, int& new_room_id);
+    Room(string& new_desc, string& new_extended_desc, string& new_name, int& new_room_id, vector<Door> new_doors);
     
     // Accessors
     string getDesc() const;
     string getExtendedDesc() const;
     string getName() const;
     int getRoomId() const;
+    vector<Door> getDoors();
+    int numberOfDoors();
     
     // Mutators
     void setDescription(string& new_desc);
     void setExtendedDesc(string& new_extended_desc);
     void setName(string& new_name);
     void setRoomId(int& new_room_id);
-    
+    void addDoor(Door& new_door);
 };
 #endif /* room_h */
