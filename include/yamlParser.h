@@ -43,3 +43,4 @@ public:
 	void showLongDesc (const int& index);
 	void showShortDesc (const int& index);
 }
+#endif
