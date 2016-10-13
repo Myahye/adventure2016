@@ -27,10 +27,11 @@ enum class ConnectionState {
   LOGIN_USERNAME,
   LOGIN_PASSWORD,
   CURRENTLY_PLAYING,
+  REGISTERING_PASSWORD_CONFIRM
 };
 
 struct User {
-  User() : username("no"), password(""), level(0), inventory("") {}
+  User() : username("peasant"), password(""), level(0), inventory("") {}
 
   User(std::string user, std::string pass, int lvl, std::string inv) 
   : username(user), password(pass), level(lvl), inventory(inv) {}
