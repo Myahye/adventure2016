@@ -22,6 +22,10 @@
 
 #include <boost/algorithm/string/predicate.hpp>
 
+#include <chrono>
+
+#include <iostream>
+
 
 using namespace networking;
 
@@ -116,6 +120,39 @@ addToClientMessageQueues(const auto& incoming) {
   }
 }
 
+std::deque<Message>
+parseCommandsDummy(const auto& clientMessageQueue) {
+  std::deque<Message> outgoing;
+
+  for (auto& message : clientMessageQueue) {
+    if (boost::istarts_with(message.text,commands["Create"])) {
+      std::string messageText = std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
+      outgoing.push_back({message.connection, messageText});
+    } else if (boost::istarts_with(message.text,commands["Look"])) {
+      std::string messageText = std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
+      outgoing.push_back({message.connection, messageText});
+    } else if (boost::istarts_with(message.text,commands["Go"])) {
+      std::string messageText = std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
+      outgoing.push_back({message.connection, messageText});
+    } else if (boost::istarts_with(message.text,commands["Read"])) {
+      std::string messageText = std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
+      outgoing.push_back({message.connection, messageText});
+    } else if (boost::istarts_with(message.text,commands["Attack"])) {
+      std::string messageText = std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
+      outgoing.push_back({message.connection, messageText});
+    } else if (boost::istarts_with(message.text,commands["Say"])) {
+      std::for_each(clients.begin(), clients.end(), [&message,&outgoing] (Connection& c) { outgoing.push_back({c,std::string(std::to_string(message.connection.id) + "> " + message.text.substr(4) + "\n")}); });
+    } else if (boost::iequals(message.text, commands["ListCommands"])) {
+      std::string messageText = std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
+      outgoing.push_back({message.connection, messageText});
+    } else {
+      //Will output all other message types sent for now for testing purposes
+      std::for_each(clients.begin(), clients.end(), [&message,&outgoing] (Connection& c) { outgoing.push_back({c,std::string(std::to_string(message.connection.id) + "> " + message.text + "\n")}); });
+    }
+  }
+  return outgoing;
+}
+
 int
 main(int argc, char* argv[]) {
   if (argc < 2) {
@@ -123,10 +160,18 @@ main(int argc, char* argv[]) {
     return 1;
   }
 
+  std::chrono::time_point<std::chrono::system_clock> start, end;
+ 
+ // std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+
+ // std::cout << "finished computation at " << std::ctime(&end_time)
+   //         << "elapsed time: " << elapsed_seconds.count() << "s\n";
+
   bool done = false;
   unsigned short port = std::stoi(argv[1]);
   Server server{port, onConnect, onDisconnect};
 
+  start = std::chrono::system_clock::now();
   while (!done) {
     try {
       server.update();
@@ -139,11 +184,21 @@ main(int argc, char* argv[]) {
     addToClientMessageQueues(incoming);
     
     
+    //model::initWorld(pathtoyaml);
+    end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    if(elapsed_seconds.count() >= 3.0){
+       std::cout 
+           << "elapsed time: " << elapsed_seconds.count() << "s\n";
+      auto commands = pullFromClientMessageQueues(server,done);
+      auto response = parseCommandsDummy(commands);
+      server.send(response);
+      start = std::chrono::system_clock::now();
+    }
   
     //auto outgoing = processMessagesAndBuildOutgoing(server, done);
     //server.send(outgoing);
 
-    sleep(1);
   }
 
   return 0;
