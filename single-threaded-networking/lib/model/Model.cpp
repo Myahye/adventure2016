@@ -1,28 +1,14 @@
-#ifndef model_h
-#define model_h
+#include "Model.h"
 
+Model::Model(){}
 
-class Model {
+Model::movePlayer(const int$ playerId, const string$ direction){
+  
+}
 
-private:
-
-
-
-public:
-
-  //CommandParse(pathtoyaml);
-  Model();
-  //players
-  //rooms
-  //npcs
-  //objects
-
-  //Model::yamlParse
-
-  //Methods for players to interact with room
-  //Model::movePlayer(PlayerId, currentRoomID, Direction)
-  //Model::get
-  //Model::
-
-};
-#endif /* commandparse_h */
+// Model::yamlParse(){
+//   this->players = YamlParse.parseBuildPlayers;
+//   this->rooms = YamlParse.parseBuildRooms;
+//   this->npcs = YamlParse.parseBuildNpcs;
+//   this->objects = YamlParse.parseBuildObjects;
+// }
