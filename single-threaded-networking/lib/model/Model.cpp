@@ -2,8 +2,8 @@
 
 Model::Model(){}
 
-Model::movePlayer(const int$ playerId, const string$ direction){
-  
+Model::movePlayer(const int& playerId, const string& direction){
+  int playerId  = this->playerLocation[]
 }
 
 // Model::yamlParse(){

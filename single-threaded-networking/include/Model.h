@@ -9,17 +9,17 @@ class Model {
 private:
 
 //need to change these to temlpate values
-std::map<int,int> playerLocation;
+std::map<PlayerId,RoomId> playerLocation;
 
 
 public:
 
   //CommandParse(pathtoyaml);
   Model();
-  //map[players]
-  //map[rooms]
-  //map[npcs]
-  //map[objects]
+  //map<int, Players>
+  //map<int, rooms>
+  //map<int, npcs>
+  //map<int, objects>
 
 
   //builds above member variables
@@ -27,7 +27,7 @@ public:
 
   //Methods for players to interact with room
   //These are inorder of importance and what needs to be implemented first
-  string movePlayer(const int$ playerId, const string$ direction);
+  string movePlayer(const int& playerId, const string& direction);
   //Model::getAvailableDoors
   //Model::getAvailableRoomCommands
   //
