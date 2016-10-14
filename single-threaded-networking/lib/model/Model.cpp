@@ -2,8 +2,18 @@
 
 Model::Model(){}
 
-Model::movePlayer(const int& playerId, const string& direction){
-  int playerId  = this->playerLocation[]
+string Model::movePlayer(const int& playerId, const string& direction){
+  int roomId  = this->playerLocation[playerId];
+  Room currentRoom = this->rooms[roomId];
+  try{
+    int destRoomId = currentRoom.getRoomInDir(direction);
+  }catch (CustErrors::noSuchDoorException){
+    
+    return
+  }
+
+
+  if(direction)
 }
 
 // Model::yamlParse(){
