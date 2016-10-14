@@ -1,1 +1,0 @@
-/usr/bin/c++    -Wall -fno-rtti   CMakeFiles/chatserver.dir/chatserver.cpp.o  -o ../../bin/chatserver -rdynamic ../../lib/libnetworking.a ../../lib/libmodel.a -lboost_system 
