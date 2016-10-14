@@ -8,19 +8,8 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
-//#include "Server.h"
-struct Connection2 {
-  uintptr_t id;
+#include "Server.h"
 
-  bool
-  operator==(Connection2 other) const {
-    return id == other.id;
-  }
-};
-struct Message2 {
-  Connection2 connection;
-  std::string text;
-};
 
 class CommandParse {
 
@@ -33,7 +22,7 @@ public:
   //CommandParse(pathtoyaml);
   CommandParse();
 
-  std::deque<Message2>  parseCommands(const auto& clientMessageQueue,  std::vector<Connection2> clients);
+  std::deque<networking::Message>  parseCommands(const auto& clientMessageQueue,  std::vector<networking::Connection> clients);
 
 
 };

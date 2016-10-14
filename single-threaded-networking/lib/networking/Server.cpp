@@ -162,4 +162,3 @@ Server::listenForConnections() {
       this->listenForConnections();
   });
 }
-

@@ -30,4 +30,4 @@ target_link_libraries(chatclient
 install(TARGETS chatclient
   RUNTIME DESTINATION bin
 )
-
+set_property(TARGET chatclient PROPERTY CXX_STANDARD 14)
