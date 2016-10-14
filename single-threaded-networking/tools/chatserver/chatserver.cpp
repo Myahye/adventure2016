@@ -199,6 +199,13 @@ main(int argc, char* argv[]) {
            << "elapsed time: " << elapsed_seconds.count() << "s\n";
       std::deque<Message> commands = pullFromClientMessageQueues(server,done);
       //auto response = parseCommandsDummy(commands);
+      try {
+        commandParse.test();
+      }
+      catch(std::exception& e){
+        std::cout << "Exception: " << e.what() << std::endl;
+      }
+
       std::deque<Message> response = commandParse.parseCommands(commands, clients);
       server.send(response);
       start = std::chrono::system_clock::now();

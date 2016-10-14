@@ -7,7 +7,9 @@ CommandParse::CommandParse() {}
 
 std::unordered_map<std::string, std::string> commands {{"Create","create "},{"Look","look "},{"Go","go "},{"Read","read "},{"Attack","attack "},{"Say","say "},{"ListCommands","ls "},};
 
-
+void CommandParse::test(){
+  throw std::runtime_error(std::string("failed custom msg "));
+}
 
 std::deque<Message>
 CommandParse::parseCommands(const std::deque<Message>& clientMessageQueue, std::vector<Connection>& clients) {
