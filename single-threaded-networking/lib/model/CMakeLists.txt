@@ -14,4 +14,4 @@ install(TARGETS model
 )
 
 
-#set_property(TARGET model PROPERTY CXX_STANDARD 14)
+set_property(TARGET model PROPERTY CXX_STANDARD 14)

@@ -33,39 +33,39 @@ using namespace networking;
 
 std::vector<Connection> clients;
 std::unordered_map<Connection,std::deque<Message>, ConnectionHash> clientMessageQueues;
-std::unordered_map<std::string, std::string> commands {{"Create","Create"},{"Look","Look "},{"Go","Go "},{"Read","Read "},{"Attack","Attack "},{"Say","Say "},{"ListCommands","commands"},};
+//std::unordered_map<std::string, std::string> commands {{"Create","Create"},{"Look","Look "},{"Go","Go "},{"Read","Read "},{"Attack","Attack "},{"Say","Say "},{"ListCommands","commands"},};
 
 //gsl::string_span<> works: tested with g++ 6.2.0 *removed
-std::string handleCreateCommand(const Message &message) {
-  std::cout << "In handleCreateCommand" << "s\n";
-  return "Create command not yet implemented.";
-}
+// std::string handleCreateCommand(const Message &message) {
+//   std::cout << "In handleCreateCommand" << "s\n";
+//   return "Create command not yet implemented.";
+// }
 
-std::string handleLookCommand(const Message &message) {
-  return "Look command not yet implemented.";
-}
+// std::string handleLookCommand(const Message &message) {
+//   return "Look command not yet implemented.";
+// }
 
-std::string handleGoCommand(const Message &message) {
-  return "Go command not yet implemented.";
-}
+// std::string handleGoCommand(const Message &message) {
+//   return "Go command not yet implemented.";
+// }
 
-std::string handleReadCommand(const Message &message) {
-  return "Read command not yet implemented.";
-}
+// std::string handleReadCommand(const Message &message) {
+//   return "Read command not yet implemented.";
+// }
 
-std::string handleAttackCommand(const Message &message) {
-  return "Attack command not yet implemented.";
-}
+// std::string handleAttackCommand(const Message &message) {
+//   return "Attack command not yet implemented.";
+// }
 
-std::string handleListCommandsCommand() {
-  std::string commandsList = "A list of commands:\n\n";
+// std::string handleListCommandsCommand() {
+//   std::string commandsList = "A list of commands:\n\n";
 
-  for(auto& command : commands) {
-    commandsList += "  " + command.second + "\n";
-  }
+//   for(auto& command : commands) {
+//     commandsList += "  " + command.second + "\n";
+//   }
 
-  return commandsList;
-}
+//   return commandsList;
+// }
 
 void
 onConnect(Connection c) {
@@ -123,40 +123,40 @@ addToClientMessageQueues(const auto& incoming) {
   }
 }
 
-std::deque<Message>
-parseCommandsDummy(const auto& clientMessageQueue) {
-  std::deque<Message> outgoing;
-  for (auto& message : clientMessageQueue) {
-    if (boost::istarts_with(message.text,commands["Create"])) {
-      std::cout << "In Create" << "\n";
-      std::string messageText = std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
-      outgoing.push_back({message.connection, messageText});
-    } else if (boost::istarts_with(message.text,commands["Look"])) {
-      std::string messageText = std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
-      outgoing.push_back({message.connection, messageText});
-    } else if (boost::istarts_with(message.text,commands["Go"])) {
-      std::string messageText = std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
-      outgoing.push_back({message.connection, messageText});
-    } else if (boost::istarts_with(message.text,commands["Read"])) {
-      std::string messageText = std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
-      outgoing.push_back({message.connection, messageText});
-    } else if (boost::istarts_with(message.text,commands["Attack"])) {
-      std::string messageText = std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
-      outgoing.push_back({message.connection, messageText});
-    } else if (boost::istarts_with(message.text,commands["Say"])) {
-      std::for_each(clients.begin(), clients.end(), [&message,&outgoing] (Connection& c) { outgoing.push_back({c,std::string(std::to_string(message.connection.id) + "> " + message.text.substr(4) + "\n")}); });
-    } else if (boost::iequals(message.text, commands["ListCommands"])) {
-      std::string messageText = std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
-      outgoing.push_back({message.connection, messageText});
-    } else {
-      std::cout << "In else" << "s\n";
+// std::deque<Message>
+// parseCommandsDummy(const auto& clientMessageQueue) {
+//   std::deque<Message> outgoing;
+//   for (auto& message : clientMessageQueue) {
+//     if (boost::istarts_with(message.text,commands["Create"])) {
+//       std::cout << "In Create" << "\n";
+//       std::string messageText = std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
+//       outgoing.push_back({message.connection, messageText});
+//     } else if (boost::istarts_with(message.text,commands["Look"])) {
+//       std::string messageText = std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
+//       outgoing.push_back({message.connection, messageText});
+//     } else if (boost::istarts_with(message.text,commands["Go"])) {
+//       std::string messageText = std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
+//       outgoing.push_back({message.connection, messageText});
+//     } else if (boost::istarts_with(message.text,commands["Read"])) {
+//       std::string messageText = std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
+//       outgoing.push_back({message.connection, messageText});
+//     } else if (boost::istarts_with(message.text,commands["Attack"])) {
+//       std::string messageText = std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
+//       outgoing.push_back({message.connection, messageText});
+//     } else if (boost::istarts_with(message.text,commands["Say"])) {
+//       std::for_each(clients.begin(), clients.end(), [&message,&outgoing] (Connection& c) { outgoing.push_back({c,std::string(std::to_string(message.connection.id) + "> " + message.text.substr(4) + "\n")}); });
+//     } else if (boost::iequals(message.text, commands["ListCommands"])) {
+//       std::string messageText = std::to_string(message.connection.id) + "> " + handleCreateCommand(message) + "\n";
+//       outgoing.push_back({message.connection, messageText});
+//     } else {
+//       std::cout << "In else" << "s\n";
 
-      //Will output all other message types sent for now for testing purposes
-      std::for_each(clients.begin(), clients.end(), [&message,&outgoing] (Connection& c) { outgoing.push_back({c,std::string(std::to_string(message.connection.id) + "> " + message.text + "\n")}); });
-    }
-  }
-  return outgoing;
-}
+//       //Will output all other message types sent for now for testing purposes
+//       std::for_each(clients.begin(), clients.end(), [&message,&outgoing] (Connection& c) { outgoing.push_back({c,std::string(std::to_string(message.connection.id) + "> " + message.text + "\n")}); });
+//     }
+//   }
+//   return outgoing;
+// }
 
 int
 main(int argc, char* argv[]) {
@@ -176,7 +176,7 @@ main(int argc, char* argv[]) {
   unsigned short port = std::stoi(argv[1]);
   Server server{port, onConnect, onDisconnect};
 
-  CommandParse commandParse;
+  CommandParse commandParse{};
 
   start = std::chrono::system_clock::now();
   while (!done) {
@@ -197,9 +197,9 @@ main(int argc, char* argv[]) {
     if(elapsed_seconds.count() >= 3.0){
        std::cout
            << "elapsed time: " << elapsed_seconds.count() << "s\n";
-      auto commands = pullFromClientMessageQueues(server,done);
+      std::deque<Message> commands = pullFromClientMessageQueues(server,done);
       //auto response = parseCommandsDummy(commands);
-      auto response = commandParse.parseCommands(commands, clients);
+      std::deque<Message> response = commandParse.parseCommands(commands, clients);
       server.send(response);
       start = std::chrono::system_clock::now();
     }

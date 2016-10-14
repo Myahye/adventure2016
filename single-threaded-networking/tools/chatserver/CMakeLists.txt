@@ -23,4 +23,4 @@ target_link_libraries(chatserver ${Boost_LIBRARIES})
 install(TARGETS chatserver
   RUNTIME DESTINATION bin
 )
-set_property(TARGET model PROPERTY CXX_STANDARD 14)
+set_property(TARGET chatserver PROPERTY CXX_STANDARD 14)

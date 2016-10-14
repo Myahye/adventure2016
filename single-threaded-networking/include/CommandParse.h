@@ -8,7 +8,9 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+
 #include "Server.h"
+
 
 
 class CommandParse {
@@ -22,7 +24,7 @@ public:
   //CommandParse(pathtoyaml);
   CommandParse();
 
-  std::deque<networking::Message>  parseCommands(const auto& clientMessageQueue,  std::vector<networking::Connection> clients);
+  std::deque<networking::Message>  parseCommands(const std::deque<networking::Message>& clientMessageQueue,  std::vector<networking::Connection>& clients);
 
 
 };
