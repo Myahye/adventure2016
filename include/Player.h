@@ -22,7 +22,7 @@ private:
     std::vector<std::string> longdesc;
 public:
     // Constructor
-    Player (int id, std::string shortdesc);
+    Player (int pid, std::string shortdesc);
     
     //Armor
     int getArmor() const;
