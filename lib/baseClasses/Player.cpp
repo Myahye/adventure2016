@@ -1,10 +1,8 @@
 #include "Player.h"
 
 //Player constructor
-Player::Player (int pid, std::string shortdesc) {
-    this->pid = pid;
-    this->shortdesc = shortdesc;
-}
+Player::Player (int pid, std::string shortdesc):
+    pid{pid}, shortdesc{shortdesc}{};
 
 //Getter and setter for Armor
 int Player::getArmor() const {
