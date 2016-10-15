@@ -19,33 +19,32 @@ CommandParse::parseCommands(const std::deque<Message>& clientMessageQueue, std::
     for (auto& message : clientMessageQueue) {
 
       std::string messageText = message.text;
-      std::transform(messageText.begin(), messageText.end(), messageText.begin(), ::tolower);
 
-      if (boost::istarts_with(messageText,commands["Create"])) {
+      if (boost::istarts_with(message.text,commands["Create"])) {
         std::string messageText = std::to_string(message.connection.id) + ">asdfasdfasdf Kieran " + /*handleCreateCommand(message)*/ + "\n";
         outgoing.push_back({message.connection, messageText});
       }
-      else if (boost::istarts_with(messageText,commands["Look"])) {
-        std::string messageText = std::to_string(message.connection.id) + "> " + /*handleCreateCommand(message)*/ + "\n";
-        outgoing.push_back({messageText, messageText});
-      }
-      else if (boost::istarts_with(messageText,commands["Go"])) {
+      else if (boost::istarts_with(message.text,commands["Look"])) {
         std::string messageText = std::to_string(message.connection.id) + "> " + /*handleCreateCommand(message)*/ + "\n";
         outgoing.push_back({message.connection, messageText});
       }
-      else if (boost::istarts_with(messageText,commands["Read"])) {
+      else if (boost::istarts_with(message.text,commands["Go"])) {
         std::string messageText = std::to_string(message.connection.id) + "> " + /*handleCreateCommand(message)*/ + "\n";
         outgoing.push_back({message.connection, messageText});
       }
-      else if (boost::istarts_with(messageText,commands["Attack"])) {
+      else if (boost::istarts_with(message.text,commands["Read"])) {
         std::string messageText = std::to_string(message.connection.id) + "> " + /*handleCreateCommand(message)*/ + "\n";
         outgoing.push_back({message.connection, messageText});
       }
-      else if (boost::istarts_with(messageText,commands["Say"])) {
+      else if (boost::istarts_with(message.text,commands["Attack"])) {
+        std::string messageText = std::to_string(message.connection.id) + "> " + /*handleCreateCommand(message)*/ + "\n";
+        outgoing.push_back({message.connection, messageText});
+      }
+      else if (boost::istarts_with(message.text,commands["Say"])) {
         std::for_each(clients.begin(), clients.end(), [&message,&outgoing] (Connection& c)
           { outgoing.push_back({c,std::string(std::to_string(message.connection.id) + "> " + message.text.substr(4) + "\n")}); });
       }
-      else if (boost::iequals(messageText, commands["ListCommands"])) {
+      else if (boost::iequals(message.text, commands["ListCommands"])) {
         std::string messageText = std::to_string(message.connection.id) + "> " + /*handleCreateCommand(message)*/ + "\n";
         outgoing.push_back({message.connection, messageText});
       }
