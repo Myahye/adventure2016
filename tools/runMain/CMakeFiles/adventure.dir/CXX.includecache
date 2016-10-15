@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/JLUD/Desktop/Player_Classes/tools/runMain/main.cpp
+Player.h
+/Users/JLUD/Desktop/Player_Classes/tools/runMain/Player.h
+iostream
+-
+vector
+-
+string
+-
+
+include/Player.h
+iostream
+-
+vector
+-
+string
+-
+
