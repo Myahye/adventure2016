@@ -1,5 +1,5 @@
-#ifndef room_h
-#define room_h
+#ifndef Room_h
+#define Room_h
 
 #include <iostream>
 #include <string>

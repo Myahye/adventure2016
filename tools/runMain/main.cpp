@@ -2,9 +2,8 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include "yamlParse.h"
-#include "room.h"
-#include "door.h"
+#include "Room.h"
+#include "Door.h"
 using namespace std;
 
 int main() {
