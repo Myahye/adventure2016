@@ -24,9 +24,9 @@ string Room::getDesc() const {
     return this->mDesc;
 }
 
-string Room::getExtendedDesc() const { 
+string Room::getExtendedDesc() const {
     return this->mExtendedDesc;
-    
+
 }
 string Room::getName() const {
     return this->mName;
@@ -46,23 +46,26 @@ int Room::numberOfDoors() {
 // Mutators
 void Room::setDescription(string& new_desc) {
     this->mDesc = new_desc;
-    
+
 }
 void Room::setExtendedDesc(string& new_extended_desc) {
     this->mExtendedDesc = new_extended_desc;
 }
 void Room::setName(string& new_name) {
     this->mName = new_name;
-    
+
 }
 void Room::setRoomId(int& new_room_id) {
     this->mRoomId = new_room_id;
 }
-void Room::addDoor(Door& new_door) {
-for(Door door : doors){
-    if(new_door.getDir() == door.getDir()) {
-        break;
-    }
-}
-doors.push_back(new_door);
+
+//Change bool to error
+bool Room::addDoor(Door& new_door) {
+  if(!std::any_of(doors.begin(), doors.end(), [new_door](const Door& door) {return new_door.getDir() == door.getDir();})){
+    doors.push_back(new_door);
+    return true;
+  }else{
+    //didnt work becuse there is already a door in that dir
+    return false;
+  }
 }

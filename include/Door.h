@@ -10,6 +10,7 @@ using namespace std;
 class Door{
 public:
     Door();
+    Door(string dir);
     Door(string& new_desc, string& new_dir, string& new_keywords, int& new_door_id, int& new_to);
 
     string getDesc() const;
@@ -21,7 +22,7 @@ public:
     void setDesc(string& new_desc);
     void setDir(string& new_dir);
     void setKeywords(string& new_keywords);
-    void setDoorId(int& new_door_id);
+    void setDoorId(int new_door_id);
 
 
 private:

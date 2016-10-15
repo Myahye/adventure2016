@@ -1,23 +1,29 @@
-#include <iostream>
-#include <string>
+//#include <iostream>
 #include "Door.h"
-#include <fstream>
+//#include <fstream>
 
 using namespace std;
 
 Door::Door() {
-    desc = "none";
-    dir = "none";
-    keywords = "none";
-    Door_id = 0;
-    to = 0;
+    this->desc = "none";
+    this->dir = "none";
+    this->keywords = "none";
+    this->Door_id = 0;
+    this->to = 0;
 }
-
-Door::Door(string& new_desc, string& new_dir, string& new_keywords,
-        int& new_door_id, int& new_to):
-        desc{new_desc}, dir{new_dir}, keywords{new_keywords},
-        Door_id{static_cast<unsigned int>(new_door_id)}, to{static_cast<unsigned int>(new_to)} {
+Door::Door(string dir) {
+    this->desc = "none";
+    this->dir = dir;
+    this->keywords = "none";
+    this->Door_id = 0;
+    this->to = 0;
 }
+Door::Door(string& new_desc, string& new_dir, string& new_keywords, int& new_door_id, int& new_to)
+        : desc{new_desc}
+        , dir{new_dir}
+        , keywords{new_keywords}
+        , Door_id{static_cast<unsigned int>(new_door_id)}
+        , to{static_cast<unsigned int>(new_to)} {}
 
 string Door::getDesc() const {
     return this -> desc;
@@ -52,6 +58,6 @@ void Door::setKeywords(string& new_keywords) {
     this -> keywords = new_keywords;
 }
 
-void Door::setDoorId(int& new_door_id) {
+void Door::setDoorId(int new_door_id) {
     this -> Door_id = new_door_id;
 }
