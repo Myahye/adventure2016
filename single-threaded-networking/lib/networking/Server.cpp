@@ -25,7 +25,7 @@ public:
           Server& server,
           std::deque<Message> &readBuffer)
     : disconnected{false},
-      connection{reinterpret_cast<uintptr_t>(this)},
+      connection{reinterpret_cast<uintptr_t>(this),"Peasant",ConnectionState::UNAUTHORIZED},/*********************Modified by Lawrence***********************************************************************/
       socket{io_service},
       server{server},
       streamBuf{BUFFER_SIZE},
@@ -40,6 +40,15 @@ public:
   Connection getConnection() const { return connection; }
 
   static constexpr unsigned BUFFER_SIZE = 256;
+
+/*********************Modified by Lawrence***********************************************************************/
+
+
+  void setConnectionState(ConnectionState state) {connection.currentState = state;}
+  void setUser(std::string username) {connection.playerIdConnectedToClientConnection = username;}
+
+
+/*********************Modified by Lawrence***********************************************************************/
 
 private:
   void readLine();
@@ -162,3 +171,27 @@ Server::listenForConnections() {
       this->listenForConnections();
   });
 }
+
+
+/*********************Modified by Lawrence***********************************************************************/
+
+
+
+void
+Server::setPlayerConnectedToClient(const Connection& connection, const std::string& username) {
+  auto found = channels.find(connection);
+  if (channels.end() != found) {
+    found->second->setUser(username);
+  }
+}
+
+void 
+Server::setClientCurrentState(const Connection& connection, const ConnectionState& state) {
+  auto found = channels.find(connection);
+  if (channels.end() != found) {
+    found->second->setConnectionState(state);
+  }
+}
+
+
+/*********************Modified by Lawrence***********************************************************************/

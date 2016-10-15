@@ -19,6 +19,25 @@
 
 namespace networking {
 
+/*********************Modified by Lawrence***********************************************************************/
+enum class ConnectionState {
+  UNAUTHORIZED,
+  REGISTERING,
+  LOGIN,
+  AUTHORIZED
+};
+
+struct Player {
+  Player() : username("peasant"), password(""), level(0), inventory("") {}
+
+  Player(std::string player, std::string pass, int lvl, std::string inv) 
+  : username(player), password(pass), level(lvl), inventory(inv) {}
+
+  std::string username;
+  std::string password;
+  int level;
+  std::string inventory;
+};
 
 /**
  *  An identifier for a Client connected to a Server. The ID of a Connection is
@@ -26,13 +45,15 @@ namespace networking {
  */
 struct Connection {
   uintptr_t id;
+   std::string playerIdConnectedToClientConnection;
+   ConnectionState currentState;
 
   bool
   operator==(Connection other) const {
     return id == other.id;
   }
 };
-
+/*********************Modified by Lawrence***********************************************************************/
 
 struct ConnectionHash {
   size_t
@@ -115,6 +136,15 @@ public:
    */
   void disconnect(Connection connection);
 
+/*********************Modified by Lawrence***********************************************************************/
+
+
+  void setPlayerConnectedToClient(const Connection& client, const std::string& username);
+
+  void setClientCurrentState(const Connection& client, const ConnectionState& state);
+
+  
+/*********************Modified by Lawrence***********************************************************************/
 private:
   // Hiding the template parameters of the Server class behind a pointer to
   // a private interface allows us to refer to an unparameterized Server
