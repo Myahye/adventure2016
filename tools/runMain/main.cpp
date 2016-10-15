@@ -17,6 +17,8 @@ using namespace std;
 int main(int argc, const char * argv[]) {
     // insert code here...
     int pid = 123;
+    string Damage = "5d6";
+    string Hit ="6d7";
     string shortdesc = "this is test main";
     string shortdesc2 = "reset info";
     string str[]={"hello","world","this","find","gank","pink","that","when","how","cpp"};
@@ -38,7 +40,7 @@ int main(int argc, const char * argv[]) {
     cout << "Aromor: " << temp1.getArmor() << endl;
     
 //    set and get Damage
-    temp1.setDamage("5d6");
+    temp1.setDamage(Damage);
     cout << "Damage: " << temp1.getDamage() << endl;
     
 //    set and get Desc
@@ -54,7 +56,7 @@ int main(int argc, const char * argv[]) {
     cout << "Gold: " << temp1.getGold() << endl;
     
 //    set and get hit
-    temp1.setHit("6d7");
+    temp1.setHit(Hit);
     cout << "Hit: " << temp1.getHit() << endl;
     
 //    set and get Player ID

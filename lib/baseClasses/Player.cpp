@@ -32,7 +32,7 @@ void Player::setArmor(int new_armor) {
 string Player::getDamage() const {
     return damage;
 }
-void Player::setDamage(string new_damage) {
+void Player::setDamage(string &new_damage) {
     this->damage = new_damage;
 }
 
@@ -40,7 +40,7 @@ void Player::setDamage(string new_damage) {
 vector<string> Player::getDesc() const {
     return description;
 }
-void Player::setDesc(vector<string> new_description) {
+void Player::setDesc(vector<string> &new_description) {
     this->description = new_description;
 }
 
@@ -64,7 +64,7 @@ void Player::setGold(int new_gold) {
 string Player::getHit() const {
     return hit;
 }
-void Player::setHit(string new_hit) {
+void Player::setHit(string &new_hit) {
     this->hit = new_hit;
 }
 
@@ -80,7 +80,7 @@ void Player::setId(int new_pid) {
 vector<string> Player::getKeywords() const {
     return keywords;
 }
-void Player::setKeywords(vector<string> new_keywords) {
+void Player::setKeywords(vector<string> &new_keywords) {
     this->keywords = new_keywords;
 }
 
@@ -96,7 +96,7 @@ void Player::setLevel(int new_level) {
 vector<string> Player::getLongDesc() const {
     return longdesc;
 }
-void Player::setLongDesc(vector<string> new_longdesc) {
+void Player::setLongDesc(vector<string> &new_longdesc) {
     this->longdesc = new_longdesc;
 }
 
@@ -104,7 +104,7 @@ void Player::setLongDesc(vector<string> new_longdesc) {
 string Player::getShortDesc() const {
     return shortdesc;
 }
-void Player::setShortDesc(string new_shortdesc) {
+void Player::setShortDesc(string &new_shortdesc) {
     this->shortdesc = new_shortdesc;
 }
 

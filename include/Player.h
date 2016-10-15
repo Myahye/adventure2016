@@ -23,51 +23,51 @@ private:
     
 public:
     // create Player
-    Player (int, string);
+    Player (int new_pid, string new_shortdesc);
     
     //Armor
     int getArmor() const;
-    void setArmor(int);
+    void setArmor(int new_armor);
     
     //Damage
     string getDamage() const;
-    void setDamage(string);
+    void setDamage(string &new_damage);
     
     //Description
     vector<string> getDesc() const;
-    void setDesc(vector<string>);
+    void setDesc(vector<string> &new_description);
     
     //Experience
     int getExp() const;
-    void setExp(int);
+    void setExp(int new_exp);
     
     //Gold
     int getGold() const;
-    void setGold(int);
+    void setGold(int new_gold);
     
     //Hit
     string getHit() const;
-    void setHit(string);
+    void setHit(string &new_hit);
     
     //Player ID
     int getId() const;
-    void setId(int);
+    void setId(int new_pid);
     
     //Keywords
     vector<string> getKeywords() const;
-    void setKeywords(vector<string>);
+    void setKeywords(vector<string> &new_keywords);
     
     //Level
     int getLevel() const;
-    void setLevel(int);
+    void setLevel(int new_level);
     
     //Long Description
     vector<string> getLongDesc() const;
-    void setLongDesc(vector<string>);
+    void setLongDesc(vector<string> &new_longdesc);
     
     //Short Description
     string getShortDesc() const;
-    void setShortDesc(string);
+    void setShortDesc(string &new_shortdesc);
     
     //Thac0
     int getThac0() const;
