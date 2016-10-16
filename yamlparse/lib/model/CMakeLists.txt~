@@ -1,0 +1,7 @@
+#project(model model.cpp)
+#target_link_libraries(model NPC)
+#add_executable(model model.cpp)
+add_library(model model.cpp)
+install(TARGETS model DESTINATION lib)
+set_property(TARGET model PROPERTY CXX_STANDARD 14)
+#install(TARGETS model DESTINATION bin)

@@ -1,0 +1,2456 @@
+AREA:
+  name: The Shire
+HELPS: []
+NPCS:
+- armor: 0
+  damage: 3d2+15
+  description:
+  - The Elven Wizard looks at you in a solemn sort of way.  His gaze seems to
+  - penetrate through your innermost being.  He is wearing a silvery cloak
+  - and holding a multi-colored staff.  Although he appears to be older
+  - than the oldest man, he seems to have an inner strength which most mortals
+  - cannot overcome.
+  exp: 30000
+  gold: 2109
+  hit: 18d18+180
+  id: 1100
+  keywords:
+  - elven
+  - wizard
+  level: 18
+  longdesc:
+  - An Elven Wizard is here, creating fireworks for the festivities.
+  shortdesc: the Elven Wizard
+  thac0: 5
+- armor: -5
+  damage: 1d8+16
+  description:
+  - The Ring Keeper is a rather big but short halfling.  His short stature and
+  - bulbous nose belie his true nature.  An elven sword that glows with a blue
+  - light hangs from his belt, and on his finger you see the One Ring.  Although
+  - usually a halfling of peace, he will fight you to the death if you attempt
+  - to take away that which belongs to him.
+  exp: 35000
+  gold: 1231
+  hit: 19d19+190
+  id: 1101
+  keywords:
+  - ring
+  - keeper
+  level: 19
+  longdesc:
+  - The Keeper of the Ring is here, guarding his treasure jealously.
+  shortdesc: the Keeper of the Ring
+  thac0: 2
+- armor: 4
+  damage: 1d4+5
+  description:
+  - Farmer Gamgee is a short, stout halfling of thirty years.  His skin has
+  - been tanned from working the fields night and day.  He's quite a jolly
+  - chap, always ready to befriend an injured bunny rabbit.
+  exp: 1000
+  gold: 0
+  hit: 7d7+77
+  id: 1102
+  keywords:
+  - farmer
+  - gamgee
+  level: 7
+  longdesc:
+  - Farmer Gamgee sniffs the air, wondering if harvest time is near.
+  shortdesc: Farmer Gamgee
+  thac0: 14
+- armor: 9
+  damage: 1d3+1
+  description:
+  - The toddler is dressed in nothing but his birthday suit.  He crawls about
+  - for he hasn't learned to walk yet.  He peers up at you and asks "da da?"
+  exp: 100
+  gold: 0
+  hit: 2d2+22
+  id: 1103
+  keywords:
+  - toddler
+  level: 2
+  longdesc:
+  - A toddler crawls about, looking for something to chew on.
+  shortdesc: a toddler
+  thac0: 19
+- armor: 5
+  damage: 1d3+4
+  description:
+  - The nursemaid looks rather tired and worn out.  Taking care of so many
+  - toddlers for too long has evidently taken its toll.  She looks to you and
+  - in her eyes you can see her longing for a better life.
+  exp: 300
+  gold: 30
+  hit: 5d5+55
+  id: 1104
+  keywords:
+  - nursemaid
+  level: 5
+  longdesc:
+  - A nursemaid wanders about, trying to keep track of all the toddlers.
+  shortdesc: a nursemaid
+  thac0: 16
+- armor: 6
+  damage: 1d4+3
+  description:
+  - The cow looks like it hasn't been milked in quite some time.  Although she
+  - is past her prime, you see that she still has a lot of years left, and that
+  - if provoked, her rear kick can be quite deadly.
+  exp: 200
+  gold: 0
+  hit: 4d4+44
+  id: 1105
+  keywords:
+  - cow
+  level: 4
+  longdesc:
+  - A cow is here, chewing her cud.
+  shortdesc: a cow
+  thac0: 17
+- armor: 7
+  damage: 2d2+1
+  description:
+  - The pig appears quite happy to be a pig.  He is oblivious to your presence
+  - and cares only for the care-free life that he leads.  It is enormously fat
+  - and consequently cannot move around very quickly.
+  exp: 150
+  gold: 0
+  hit: 3d3+33
+  id: 1106
+  keywords:
+  - pig
+  level: 3
+  longdesc:
+  - A pig wallows in the mud and oinks in contentment.
+  shortdesc: a pig
+  thac0: 17
+- armor: 7
+  damage: 1d4+0
+  description:
+  - The chicken is bright and healthy.  She has no weapons but her beak.
+  exp: 100
+  gold: 0
+  hit: 2d2+22
+  id: 1107
+  keywords:
+  - chicken
+  level: 2
+  longdesc:
+  - A chicken sits on her nest.
+  shortdesc: a chicken
+  thac0: 20
+- armor: 4
+  damage: 1d4+4
+  description:
+  - The bull is in top condition.  He looks like quite a fighter, nothing to be
+  - reckoned with.  With his horns and his hooves he can attack just about
+  - anything.
+  exp: 500
+  gold: 0
+  hit: 6d6+66
+  id: 1108
+  keywords:
+  - bull
+  level: 6
+  longdesc:
+  - A bull scratches at the ground and lowers his head.
+  shortdesc: a bull
+  thac0: 15
+- armor: 6
+  damage: 1d8+0
+  description:
+  - The horse looks at you and turns away.  You can tell that it is afraid of you.
+  exp: 460
+  gold: 2
+  hit: 4d4+44
+  id: 1109
+  keywords:
+  - horse
+  level: 4
+  longdesc:
+  - A horse becomes frightened by your presence.
+  shortdesc: a horse
+  thac0: 17
+- armor: 5
+  damage: 1d4+5
+  description:
+  - The shiriff is over waist high, quite tall for a halfling.  His eyes are
+  - ever roaming, looking for signs of trouble from riff-raff like you.  In
+  - his belt is a thin dagger, and on his body he wears a suit of leather armor.
+  - This is one halfling you don't want to mess with.
+  exp: 1000
+  gold: 50
+  hit: 8d8+88
+  id: 1110
+  keywords:
+  - shiriff
+  level: 8
+  longdesc:
+  - A shiriff of the Shire looks for signs of trouble.
+  shortdesc: a shiriff
+  thac0: 13
+- armor: 5
+  damage: 1d4+5
+  description:
+  - The shiriff is over waist high, quite tall for a halfling.  His eyes are
+  - ever roaming, looking for signs of trouble from riff raff like you.  In
+  - his belt is a thin dagger, and on his body he wears a suit of leather armor.
+  - This is one halfling you don't want to mess with.
+  exp: 1000
+  gold: 50
+  hit: 8d8+88
+  id: 1111
+  keywords:
+  - shiriff
+  level: 8
+  longdesc:
+  - A shiriff of the Shire looks for signs of trouble.
+  shortdesc: a shiriff
+  thac0: 13
+- armor: -3
+  damage: 1d4+12
+  description:
+  - A personable yet serious halfling, the Thain looks at you and yells a
+  - deep 'Hullo'.  He walks about comfortably, secure in the knowledge that
+  - as long as he's in office, the Shire will always remain a safe haven for
+  - Shire folk.
+  exp: 20000
+  gold: 500
+  hit: 14d14+140
+  id: 1112
+  keywords:
+  - thain
+  level: 14
+  longdesc:
+  - The Thain commands respect from all Shire folk.
+  shortdesc: the Thain
+  thac0: 7
+- armor: 2
+  damage: 1d4+10
+  description:
+  - The Innkeeper is a jolly old halfling who spends his days eavesdropping on
+  - local gossip.  In his younger days, he was quite a seasoned traveller.
+  exp: 10000
+  gold: 700
+  hit: 12d12+120
+  id: 1113
+  keywords:
+  - innkeeper
+  level: 12
+  longdesc:
+  - The Innkeeper stands here awaiting your order.
+  shortdesc: the Innkeeper
+  thac0: 9
+- armor: 4
+  damage: 1d4+4
+  description:
+  - The Miller is an impatient young halfling, always trying to command more
+  - respect from his workers than he can get.  He looks like the type of person
+  - who deserves a spanking but never got one.
+  exp: 500
+  gold: 200
+  hit: 6d6+66
+  id: 1114
+  keywords:
+  - miller
+  level: 6
+  longdesc:
+  - The Miller is here, overseeing his busy mill workers.
+  shortdesc: the Miller
+  thac0: 15
+- armor: 5
+  damage: 1d6+3
+  description:
+  - The mill worker is in fine shape from the hard labor that he does at the
+  - mill.  He doesn't notice your presence, but he looks like he could break you
+  - in two without thinking about it.
+  exp: 450
+  gold: 50
+  hit: 5d5+55
+  id: 1115
+  keywords:
+  - mill
+  - worker
+  level: 5
+  longdesc:
+  - The mill worker runs to and fro.
+  shortdesc: the mill worker
+  thac0: 16
+- armor: -4
+  damage: 1d4+15
+  description:
+  - The tall elven warrior is light and fair-skinned.  The expression that he wears
+  - on his countenance is solemn and tragic.  He cares not for this world any
+  - longer and wearies of it.
+  exp: 30000
+  gold: 500
+  hit: 17d17+170
+  id: 1116
+  keywords:
+  - elven
+  - warrior
+  level: 17
+  longdesc:
+  - The elven warrior watches you solemnly.
+  shortdesc: the elven warrior
+  thac0: 4
+- armor: -8
+  damage: 1d4+15
+  description:
+  - Grim and cold, the dwarven prince is quite strong and bulky, even for the
+  - dwarves of his land.  His glowing eyes peer out of his bushy face and stare
+  - beyond your gaze.
+  exp: 30000
+  gold: 700
+  hit: 17d17+170
+  id: 1117
+  keywords:
+  - dwarven
+  - prince
+  level: 17
+  longdesc:
+  - The dwarven prince sits here patiently for the return of his king.
+  shortdesc: the dwarven prince
+  thac0: 6
+- armor: -12
+  damage: 2d4+22
+  description:
+  - The shopkeeper will fight like a madman to protect his store from riff-raff
+  - like you.
+  exp: 40000
+  gold: 12000
+  hit: 22d22+222
+  id: 1118
+  keywords:
+  - shopkeeper
+  level: 21
+  longdesc:
+  - the shopkeeper smiles and patiently waits for you to buy something.
+  shortdesc: the shopkeeper
+  thac0: -2
+- armor: -12
+  damage: 2d4+22
+  description:
+  - The grocer is a large, jovial halfling who knows how to enjoy his pipeweed.
+  - However, he also knows that it's worth protecting and so will do everything
+  - in his power to prevent riff-raff like you from stealing it.
+  exp: 40000
+  gold: 1500
+  hit: 22d22+222
+  id: 1119
+  keywords:
+  - grocer
+  level: 21
+  longdesc:
+  - The grocer offers you the finest breads in all the land.
+  shortdesc: the grocer
+  thac0: -2
+- armor: -30
+  damage: 1d6+36
+  description:
+  - The blacksmith is a lean and mean fighting machine.  His knowledge of weapons
+  - and armour would certainly help him in any fight against riff-raff like you.
+  exp: 10000
+  gold: 18000
+  hit: 50d50+500
+  id: 1120
+  keywords:
+  - blacksmith
+  level: 50
+  longdesc:
+  - The blacksmith bids you welcome to his humble store.
+  shortdesc: the blacksmith
+  thac0: -20
+- armor: -15
+  damage: 2d6+20
+  description:
+  - The battle master is a wizened fighter, with many scars to prove his worth.
+  exp: 40000
+  gold: 1500
+  hit: 25d25+250
+  id: 1121
+  keywords:
+  - battle
+  - master
+  level: 25
+  longdesc:
+  - The battle master offers you the services of his fine trainees.
+  shortdesc: the battle master
+  thac0: -2
+- armor: 7
+  damage: 1d6+1
+  description:
+  - The halfling youth is not yet quite in the prime of his youth.  He's knee
+  - high and you get the sudden urge to step on him.
+  exp: 150
+  gold: 0
+  hit: 3d3+33
+  id: 1122
+  keywords:
+  - halfling
+  - youth
+  level: 3
+  longdesc:
+  - A halfling youth stands here, waiting for nothing in particular.
+  shortdesc: a halfling youth
+  thac0: 18
+- armor: 3
+  damage: 2d3+7
+  description:
+  - The seasoned adventurer has seen his share of glory days.  Although he is
+  - past his prime, he still looks like he could put up more than his share of
+  - a good fight.
+  exp: 1000
+  gold: 170
+  hit: 8d8+88
+  id: 1123
+  keywords:
+  - seasoned
+  - adventurer
+  level: 8
+  longdesc:
+  - A seasoned adventurer sits here, telling tales of fame and fortune.
+  shortdesc: a seasoned adventurer
+  thac0: 13
+- armor: 6
+  damage: 1d4+2
+  description:
+  - The gossip is all talk and no action.  You're transfixed by her ability to
+  - talk so much so quickly.
+  exp: 200
+  gold: 25
+  hit: 4d4+44
+  id: 1124
+  keywords:
+  - local
+  - gossip
+  level: 4
+  longdesc:
+  - A local gossip asks you, "Have you heard the latest?"
+  shortdesc: a local gossip
+  thac0: 17
+- armor: 4
+  damage: 1d4+4
+  description:
+  - She is the most beautiful creature you've seen in quite some time.  As you
+  - stare at her, thoughts of all else vanish.  You get the sudden urge to grovel
+  - at her feet, hoping she'll take you in like a lost puppy.  You wouldn't dare
+  - harm a hair on her precious little head.
+  exp: 500
+  gold: 75
+  hit: 6d6+66
+  id: 1125
+  keywords:
+  - halfling
+  - beauty
+  level: 6
+  longdesc:
+  - A halfling beauty stares dreamily into your eyes.
+  shortdesc: a halfling beauty
+  thac0: 15
+- armor: 5
+  damage: 1d6+3
+  description:
+  - The trainee smiles smugly, aware of your interest in him.  He's a little
+  - fresh, but his enthusiasm and desire to please more than make up for what
+  - he lacks in skill.
+  exp: 400
+  gold: 0
+  hit: 5d5+55
+  id: 1126
+  keywords:
+  - trainee
+  level: 5
+  longdesc:
+  - A trainee screams a death cry as he delivers the fatal blow to a dummy.
+  shortdesc: a trainee
+  thac0: 16
+- armor: 6
+  damage: 2d2+2
+  description:
+  - The urbanite seems very much at home in his surroundings.  His clothes are
+  - all of the latest fashions and his manners impeccable.  He offers you some
+  - coins if you'd be so good as to order a drink for him.
+  exp: 200
+  gold: 100
+  hit: 4d4+44
+  id: 1127
+  keywords:
+  - chic
+  - urbanite
+  level: 4
+  longdesc:
+  - A chic urbanite sits here, enjoying his class status.
+  shortdesc: a chic urbanite
+  thac0: 17
+- armor: 5
+  damage: 1d4+3
+  description:
+  - The country bumpkin snores noisily.
+  exp: 100
+  gold: 70
+  hit: 5d5+55
+  id: 1128
+  keywords:
+  - country
+  - bumpkin
+  level: 5
+  longdesc:
+  - A country bumpkin dreams of pipeweed and its many uses.
+  shortdesc: a country bumpkin
+  thac0: 16
+- armor: 2
+  damage: 1d4+10
+  description:
+  - The Innkeeper is a jolly old halfling who spends his days eavesdropping on
+  - local gossip.  In his younger days, he was quite a seasoned traveller.
+  exp: 10000
+  gold: 1000
+  hit: 12d12+120
+  id: 1130
+  keywords:
+  - innkeeper
+  level: 12
+  longdesc:
+  - The Innkeeper stands here awaiting your order.
+  shortdesc: the Innkeeper
+  thac0: 9
+- armor: -2
+  damage: 1d8+14
+  description:
+  - He is a very professional looking type.
+  exp: 5000
+  gold: 70
+  hit: 12d12+120
+  id: 1131
+  keywords:
+  - receptionist
+  level: 12
+  longdesc:
+  - The receptionist sits here, signing forms.
+  shortdesc: the receptionist
+  thac0: 4
+- armor: 5
+  damage: 1d4+6
+  description:
+  - The shiriff is over waist high, quite tall for a halfling.
+  - He looks at you, smiles and asks you if you have seen a halfling youth
+  - somewhere outside the shire.
+  exp: 1000
+  gold: 50
+  hit: 8d8+88
+  id: 1132
+  keywords:
+  - shiriff
+  level: 8
+  longdesc:
+  - A shiriff of the Shire looks for the lost halfling youth.
+  shortdesc: a shiriff
+  thac0: 13
+OBJECTS:
+- attributes:
+  - magic
+  cost: 5000
+  extra: []
+  id: 1100
+  item_type: light
+  keywords:
+  - rainbow
+  - staff
+  longdesc:
+  - The rainbow staff lies here.
+  shortdesc: the rainbow staff
+  wear_flags:
+  - take
+  - ears
+  weight: 8
+- attributes:
+  - glow
+  - hum
+  - antievil
+  cost: 10000
+  extra: []
+  id: 1101
+  item_type: weapon
+  keywords:
+  - sting
+  longdesc:
+  - Sting lies here.
+  shortdesc: Sting
+  wear_flags:
+  - take
+  - wield
+  weight: 1
+- attributes: []
+  cost: 0
+  extra:
+  - desc:
+    - ''
+    - Welcome to the Shire.  As you enter the Shire from Haon-Dor you come under
+    - the jurisdiction of the Thain, the peacekeeper of the Shire.  Consequently,
+    - by entering these lands you agree to obey our laws.  If you break these laws,
+    - you will be severely punished.  We do not like riff raff in our peaceful
+    - town.
+    - ''
+    - "\t\t\t\t\tThe Thain"
+    - "\t\t\t\t\tPeacekeeper of the Shire"
+    - ''
+    keywords:
+    - sign
+  id: 1102
+  item_type: furniture
+  keywords:
+  - sign
+  longdesc:
+  - A sign demands your attention.
+  shortdesc: a sign
+  wear_flags: []
+  weight: 0
+- attributes: []
+  cost: 13
+  extra: []
+  id: 1103
+  item_type: food
+  keywords:
+  - pipeweed
+  - bread
+  longdesc:
+  - A loaf of pipeweed bread arouses your hunger.
+  shortdesc: a pipeweed bread
+  wear_flags:
+  - take
+  weight: 1
+- attributes:
+  - magic
+  - antievil
+  cost: 10000
+  extra: []
+  id: 1104
+  item_type: armor
+  keywords:
+  - silvery
+  - cloak
+  longdesc:
+  - A silvery cloak lies here.
+  shortdesc: a silvery cloak
+  wear_flags:
+  - take
+  - about
+  weight: 3
+- attributes:
+  - magic
+  cost: 2500
+  extra: []
+  id: 1105
+  item_type: armor
+  keywords:
+  - one
+  - ring
+  longdesc:
+  - The One Ring is here.
+  shortdesc: the One Ring
+  wear_flags:
+  - take
+  - finger
+  - hold
+  weight: 3
+- attributes:
+  - hum
+  - magic
+  - antievil
+  cost: 2000
+  extra: []
+  id: 1106
+  item_type: weapon
+  keywords:
+  - elven
+  - bow
+  longdesc:
+  - An elven bow lies here.
+  shortdesc: an elven bow
+  wear_flags:
+  - take
+  - wield
+  weight: 10
+- attributes:
+  - glow
+  - dark
+  - noremove
+  - inventory
+  - antimage
+  cost: 4000
+  extra: []
+  id: 1107
+  item_type: weapon
+  keywords:
+  - mithril
+  - axe
+  longdesc:
+  - A mithril axe lies here.
+  shortdesc: a mithril axe
+  wear_flags:
+  - take
+  - wield
+  weight: 12
+- attributes:
+  - inventory
+  cost: 1000
+  extra: []
+  id: 1108
+  item_type: armor
+  keywords:
+  - thain
+  - girth
+  longdesc:
+  - The girth of the thain lies here.
+  shortdesc: the thain girth
+  wear_flags:
+  - take
+  - waist
+  weight: 4
+- attributes: []
+  cost: 40
+  extra: []
+  id: 1109
+  item_type: weapon
+  keywords:
+  - tiny
+  - dagger
+  longdesc:
+  - A tiny dagger lies here.
+  shortdesc: a tiny dagger
+  wear_flags:
+  - take
+  - wield
+  weight: 3
+- attributes: []
+  cost: 9
+  extra: []
+  id: 1110
+  item_type: food
+  keywords:
+  - egg
+  longdesc:
+  - An egg lies here.
+  shortdesc: an egg
+  wear_flags:
+  - take
+  weight: 1
+- attributes: []
+  cost: 50
+  extra: []
+  id: 1111
+  item_type: container
+  keywords:
+  - bag
+  longdesc:
+  - A bag is on the floor.
+  shortdesc: a bag
+  wear_flags:
+  - take
+  weight: 5
+- attributes: []
+  cost: 50
+  extra: []
+  id: 1112
+  item_type: light
+  keywords:
+  - lantern
+  longdesc:
+  - A lantern is on the floor.
+  shortdesc: a lantern
+  wear_flags:
+  - take
+  weight: 4
+- attributes: []
+  cost: 1000
+  extra: []
+  id: 1113
+  item_type: weapon
+  keywords:
+  - bardiche
+  longdesc:
+  - A long weapon with a sharp end is on the floor.
+  shortdesc: a bardiche
+  wear_flags:
+  - take
+  - wield
+  weight: 10
+- attributes: []
+  cost: 300
+  extra: []
+  id: 1114
+  item_type: weapon
+  keywords:
+  - flail
+  longdesc:
+  - A flail is on the floor.
+  shortdesc: a flail
+  wear_flags:
+  - take
+  - wield
+  weight: 8
+RESETS:
+- action: object
+  comment: Sign
+  id: 1102
+  room: 1103
+- action: npc
+  comment: General Store Shopkeeper
+  id: 1118
+  limit: 1
+  room: 1105
+- action: give
+  comment: bags
+  id: 1111
+- action: give
+  comment: lanterns
+  id: 1112
+- action: npc
+  comment: Blacksmith
+  id: 1120
+  limit: 1
+  room: 1107
+- action: npc
+  comment: Nursemaids
+  id: 1104
+  limit: 2
+  room: 1108
+- action: npc
+  id: 1104
+  limit: 2
+  room: 1108
+- action: npc
+  comment: Toddlers
+  id: 1103
+  limit: 6
+  room: 1108
+- action: npc
+  id: 1103
+  limit: 6
+  room: 1108
+- action: npc
+  id: 1103
+  limit: 6
+  room: 1108
+- action: npc
+  id: 1103
+  limit: 6
+  room: 1108
+- action: npc
+  id: 1103
+  limit: 6
+  room: 1108
+- action: npc
+  id: 1103
+  limit: 6
+  room: 1108
+- action: npc
+  comment: Non-mobile shiriffs
+  id: 1110
+  limit: 8
+  room: 1110
+- action: equip
+  comment: Tiny dagger
+  id: 1109
+  slot: 16
+- action: equip
+  comment: Leather armour
+  id: 616
+  slot: 5
+- action: npc
+  id: 1110
+  limit: 8
+  room: 1110
+- action: equip
+  id: 616
+  slot: 5
+- action: npc
+  comment: Mobile shiriff
+  id: 1111
+  limit: 4
+  room: 1110
+- action: equip
+  id: 616
+  slot: 5
+- action: npc
+  comment: Thain
+  id: 1112
+  limit: 1
+  room: 1111
+- action: equip
+  comment: Long sword
+  id: 1113
+  slot: 16
+- action: equip
+  comment: Leather vest
+  id: 616
+  slot: 5
+- action: equip
+  id: 1108
+  slot: 13
+- action: npc
+  comment: Country bumpkin
+  id: 1128
+  limit: 4
+  room: 1114
+- action: give
+  id: 1103
+- action: npc
+  comment: Country bumpkin
+  id: 1128
+  limit: 4
+  room: 1115
+- action: give
+  id: 1103
+- action: npc
+  comment: Innkeeper - Ivy Bush
+  id: 1113
+  limit: 1
+  room: 1116
+- action: give
+  comment: eggs
+  id: 1110
+- action: give
+  comment: whiskey
+  id: 648
+- action: give
+  comment: ale
+  id: 649
+- action: give
+  comment: port brew
+  id: 650
+- action: npc
+  comment: Seasoned adventurers
+  id: 1123
+  limit: 4
+  room: 1116
+- action: npc
+  id: 1123
+  limit: 4
+  room: 1116
+- action: npc
+  comment: Gossips
+  id: 1124
+  limit: 2
+  room: 1116
+- action: npc
+  id: 1124
+  limit: 2
+  room: 1116
+- action: npc
+  comment: Chic urbanites
+  id: 1127
+  limit: 7
+  room: 1116
+- action: npc
+  id: 1127
+  limit: 7
+  room: 1116
+- action: npc
+  id: 1127
+  limit: 7
+  room: 1116
+- action: npc
+  comment: Battle master
+  id: 1121
+  limit: 1
+  room: 1117
+- action: equip
+  comment: Small sword
+  id: 1113
+  slot: 16
+- action: npc
+  comment: Trainees
+  id: 1126
+  limit: 3
+  room: 1117
+- action: equip
+  comment: Small sword
+  id: 1113
+  slot: 16
+- action: npc
+  id: 1126
+  limit: 3
+  room: 1117
+- action: equip
+  id: 1113
+  slot: 16
+- action: npc
+  id: 1126
+  limit: 3
+  room: 1117
+- action: equip
+  id: 1113
+  slot: 16
+- action: npc
+  comment: Non-mobile shiriffs
+  id: 1110
+  limit: 8
+  room: 1119
+- action: equip
+  comment: Tiny dagger
+  id: 1109
+  slot: 16
+- action: equip
+  id: 616
+  slot: 5
+- action: npc
+  id: 1110
+  limit: 8
+  room: 1119
+- action: equip
+  id: 616
+  slot: 5
+- action: npc
+  comment: Mobile shiriff
+  id: 1111
+  limit: 4
+  room: 1119
+- action: equip
+  id: 616
+  slot: 5
+- action: npc
+  comment: Grocer
+  id: 1119
+  limit: 1
+  room: 1121
+- action: give
+  comment: bread
+  id: 1103
+- action: npc
+  comment: Mill workers
+  id: 1115
+  limit: 6
+  room: 1123
+- action: npc
+  id: 1115
+  limit: 6
+  room: 1123
+- action: npc
+  id: 1115
+  limit: 6
+  room: 1124
+- action: npc
+  id: 1115
+  limit: 6
+  room: 1124
+- action: npc
+  id: 1115
+  limit: 6
+  room: 1124
+- action: npc
+  comment: Miller
+  id: 1114
+  limit: 1
+  room: 1124
+- action: npc
+  comment: Mill workers
+  id: 1115
+  limit: 6
+  room: 1125
+- action: npc
+  comment: Halfing youths
+  id: 1122
+  limit: 9
+  room: 1127
+- action: npc
+  id: 1122
+  limit: 9
+  room: 1127
+- action: npc
+  id: 1122
+  limit: 9
+  room: 1127
+- action: npc
+  id: 1122
+  limit: 9
+  room: 1129
+- action: npc
+  id: 1122
+  limit: 9
+  room: 1129
+- action: npc
+  id: 1122
+  limit: 9
+  room: 1129
+- action: npc
+  id: 1122
+  limit: 9
+  room: 1130
+- action: npc
+  id: 1122
+  limit: 9
+  room: 1130
+- action: npc
+  id: 1122
+  limit: 9
+  room: 1130
+- action: npc
+  comment: Beauty
+  id: 1125
+  limit: 1
+  room: 1128
+- action: npc
+  comment: Wizard
+  id: 1100
+  limit: 1
+  room: 1128
+- action: equip
+  comment: Silvery cloak
+  id: 1104
+  slot: 12
+- action: equip
+  comment: Rainbow staff
+  id: 1100
+  slot: 0
+- action: npc
+  comment: Elven warrior
+  id: 1116
+  limit: 1
+  room: 1136
+- action: equip
+  comment: Elven bow
+  id: 1106
+  slot: 16
+- action: equip
+  comment: Bronze helmet
+  id: 622
+  slot: 6
+- action: npc
+  comment: Dwarven prince
+  id: 1117
+  limit: 1
+  room: 1136
+- action: equip
+  comment: Mithril axe
+  id: 1107
+  slot: 16
+- action: equip
+  comment: Bronze breast plate
+  id: 621
+  slot: 5
+- action: npc
+  comment: Ring keeper
+  id: 1101
+  limit: 1
+  room: 1137
+- action: equip
+  comment: Sting
+  id: 1101
+  slot: 16
+- action: equip
+  comment: One ring
+  id: 1105
+  slot: 1
+- action: equip
+  comment: Bronze leggings
+  id: 623
+  slot: 7
+- action: npc
+  comment: Bull
+  id: 1108
+  limit: 1
+  room: 1138
+- action: npc
+  comment: Pigs
+  id: 1106
+  limit: 5
+  room: 1139
+- action: npc
+  id: 1106
+  limit: 5
+  room: 1139
+- action: npc
+  id: 1106
+  limit: 5
+  room: 1139
+- action: npc
+  id: 1106
+  limit: 5
+  room: 1139
+- action: npc
+  id: 1106
+  limit: 5
+  room: 1139
+- action: npc
+  comment: Farmer Gamgee
+  id: 1102
+  limit: 1
+  room: 1141
+- action: npc
+  comment: Cows
+  id: 1105
+  limit: 3
+  room: 1142
+- action: npc
+  id: 1105
+  limit: 3
+  room: 1142
+- action: npc
+  id: 1105
+  limit: 3
+  room: 1142
+- action: npc
+  comment: Horses
+  id: 1109
+  limit: 4
+  room: 1142
+- action: npc
+  id: 1109
+  limit: 4
+  room: 1142
+- action: npc
+  id: 1109
+  limit: 4
+  room: 1142
+- action: npc
+  id: 1109
+  limit: 4
+  room: 1142
+- action: npc
+  comment: Chickens
+  id: 1107
+  limit: 6
+  room: 1143
+- action: give
+  comment: egg
+  id: 1110
+- action: npc
+  id: 1107
+  limit: 6
+  room: 1143
+- action: give
+  id: 1110
+- action: npc
+  id: 1107
+  limit: 6
+  room: 1143
+- action: give
+  id: 1110
+- action: npc
+  id: 1107
+  limit: 6
+  room: 1143
+- action: give
+  id: 1110
+- action: npc
+  id: 1107
+  limit: 6
+  room: 1143
+- action: give
+  id: 1110
+- action: npc
+  id: 1107
+  limit: 6
+  room: 1143
+- action: give
+  id: 1110
+- action: npc
+  comment: Innkeeper - Green Dragon
+  id: 1130
+  limit: 1
+  room: 1144
+- action: give
+  comment: eggs
+  id: 1110
+- action: give
+  comment: whiskey
+  id: 648
+- action: give
+  comment: ale
+  id: 649
+- action: give
+  comment: port brew
+  id: 650
+- action: npc
+  comment: receptionist - green dragon
+  id: 1131
+  limit: 1
+  room: 1157
+- action: npc
+  comment: Seasoned adventurers
+  id: 1123
+  limit: 6
+  room: 1144
+- action: npc
+  id: 1123
+  limit: 6
+  room: 1144
+- action: npc
+  id: 1123
+  limit: 6
+  room: 1144
+- action: npc
+  comment: Chic urbanites
+  id: 1127
+  limit: 7
+  room: 1144
+- action: npc
+  id: 1127
+  limit: 7
+  room: 1144
+- action: npc
+  id: 1127
+  limit: 7
+  room: 1144
+- action: npc
+  id: 1127
+  limit: 7
+  room: 1144
+- action: npc
+  comment: Non-mobile shiriffs
+  id: 1110
+  limit: 8
+  room: 1145
+- action: equip
+  comment: Tiny daggers
+  id: 1109
+  slot: 16
+- action: equip
+  comment: Leather armour
+  id: 616
+  slot: 5
+- action: npc
+  id: 1110
+  limit: 8
+  room: 1145
+- action: equip
+  id: 616
+  slot: 5
+- action: npc
+  comment: Mobile shiriff
+  id: 1111
+  limit: 4
+  room: 1145
+- action: equip
+  id: 616
+  slot: 5
+- action: npc
+  comment: Non-mobile shiriffs
+  id: 1110
+  limit: 8
+  room: 1153
+- action: equip
+  comment: Tiny daggers
+  id: 1109
+  slot: 16
+- action: equip
+  comment: Leather armour
+  id: 616
+  slot: 5
+- action: npc
+  id: 1110
+  limit: 8
+  room: 1153
+- action: equip
+  id: 616
+  slot: 5
+- action: npc
+  comment: Mobile shiriff
+  id: 1111
+  limit: 4
+  room: 1153
+- action: equip
+  id: 616
+  slot: 5
+- action: npc
+  comment: Country bumpkin
+  id: 1128
+  limit: 4
+  room: 1154
+- action: npc
+  comment: Country bumpkin
+  id: 1128
+  limit: 4
+  room: 1155
+ROOMS:
+- desc:
+  - '   You tread through the deep, dark forest on a dimly lit path.  Up ahead you'
+  - can hear the faint sounds of a village.
+  doors:
+  - desc:
+    - The dimly lit path leads south through the light forest.
+    dir: south
+    keywords: []
+    to: 6000
+  - desc:
+    - The dimly lit path leads north through the dense forest.
+    dir: north
+    keywords: []
+    to: 1101
+  extended_descriptions: []
+  id: 1100
+  name: A dimly lit path
+- desc:
+  - '   You tread through the deep, dark forest on a dimly lit path.  Up ahead you'
+  - can hear the faint sounds of a village.
+  doors:
+  - desc:
+    - The dimly lit path leads north through the dense forest.
+    dir: north
+    keywords: []
+    to: 1102
+  - desc:
+    - The dimly lit path leads south through the dense forest.
+    dir: south
+    keywords: []
+    to: 1100
+  extended_descriptions: []
+  id: 1101
+  name: A dimly lit path
+- desc:
+  - '   You tread through the deep, dark forest on a dimly lit path.  The forest'
+  - here seems less dense than to the south.  Northward you see the faint outline
+  - of a village.
+  doors:
+  - desc:
+    - The dimly lit path leads south through the dense forest.
+    dir: south
+    keywords: []
+    to: 1101
+  - desc:
+    - The dimly lit path leads to a village.
+    dir: north
+    keywords: []
+    to: 1103
+  extended_descriptions: []
+  id: 1102
+  name: A dimly lit path
+- desc:
+  - '   You stand at the entrance to the Shire.  You see halflings, no more than'
+  - wee tall, every which way you look. Bywater Road leads east and west.
+  doors:
+  - desc:
+    - To the south you see a dimly lit path which leads to a dense forest.
+    dir: south
+    keywords: []
+    to: 1102
+  - desc:
+    - To the east runs Bywater Road.
+    dir: east
+    keywords: []
+    to: 1104
+  - desc:
+    - To the west runs Bywater Road.
+    dir: west
+    keywords: []
+    to: 1118
+  extended_descriptions: []
+  id: 1103
+  name: Entrance to the Shire
+- desc:
+  - '   You stand on Bywater Road, the busiest street in all of Shiredom.  The road'
+  - continues to the east and west while to the north lies the general store.
+  doors:
+  - desc:
+    - To the west you see the entrance to the Shire.
+    dir: west
+    keywords: []
+    to: 1103
+  - desc:
+    - The general store lies to the north.
+    dir: north
+    keywords: []
+    to: 1105
+  - desc:
+    - To the east runs Bywater Road.
+    dir: east
+    keywords: []
+    to: 1106
+  extended_descriptions: []
+  id: 1104
+  name: Bywater Road
+- desc:
+  - '   You are inside the general store.  All sorts of goodies are stacked on the'
+  - many shelves.  Your local friendly shopkeeper is smiling patiently, waiting to
+  - serve you to the best of his abilities.  The only exit is to the south.
+  doors:
+  - desc:
+    - The only exit lies to the south.
+    dir: south
+    keywords: []
+    to: 1104
+  extended_descriptions: []
+  id: 1105
+  name: The General Store
+- desc:
+  - '   You stand on Bywater Road, the busiest street in all of Shiredom.  The road'
+  - continues to the east and west.  To the north, steps lead to a friendly looking
+  - weaponry/armory while a nursery lies to the south.
+  doors:
+  - desc:
+    - To the west runs Bywater Road.
+    dir: west
+    keywords: []
+    to: 1104
+  - desc:
+    - To the east runs Bywater Road.
+    dir: east
+    keywords: []
+    to: 1109
+  - desc:
+    - Steps lead to a friendly looking weaponry and armory.
+    dir: north
+    keywords: []
+    to: 1107
+  - desc:
+    - To the south lies Kid'n Keep, the local nursery.
+    dir: south
+    keywords: []
+    to: 1108
+  extended_descriptions: []
+  id: 1106
+  name: Bywater Road
+- desc:
+  - '   You are inside the finest weapons and armour shop in all of Shiredom.  The'
+  - shopkeeper proudly displays his fine wares and humbly offers the best daggers
+  - that you have ever laid eyes on.
+  doors:
+  - desc:
+    - The only exit lies to the south.
+    dir: south
+    keywords: []
+    to: 1106
+  extended_descriptions: []
+  id: 1107
+  name: The House of Arms
+- desc:
+  - '   You are inside Kid''n Keep, the convenient one-stop nursery that maintains'
+  - the youth of the Shire.  Toddlers run every which way while their nursemaids
+  - sigh in exasperation.  The only exit lies to the north.
+  doors:
+  - desc:
+    - The only exit lies to the north.
+    dir: north
+    keywords: []
+    to: 1106
+  extended_descriptions: []
+  id: 1108
+  name: Kid'n Keep
+- desc:
+  - '   Bywater Road continues west and south.  A large, imposing building lies'
+  - to the east.  Farther to the south, you can see an Inn of some sort.
+  doors:
+  - desc:
+    - To the west runs Bywater Road.
+    dir: west
+    keywords: []
+    to: 1106
+  - desc:
+    - To the south runs Bywater Road.
+    dir: south
+    keywords: []
+    to: 1112
+  - desc:
+    - A large, imposing building lies to the east.  A sign reads 'Shiriff Post'.
+    dir: east
+    keywords: []
+    to: 1110
+  extended_descriptions: []
+  id: 1109
+  name: A bend in the road
+- desc:
+  - '   You are in the Shiriff Post which acts as the nucleus for the three shiriffs'
+  - of the Eastern Shire.  As you examine the shiriffs on duty, you come to realize
+  - that the halflings of the Shire are not to be reckoned with.  You cower with
+  - awe.  A door offers passage to the east.
+  doors:
+  - desc:
+    - To the west you can see Bywater Road.
+    dir: west
+    keywords: []
+    to: 1109
+  - desc:
+    - A door offers passage to the office of the Thain.
+    dir: east
+    keywords:
+    - door
+    to: 1111
+  extended_descriptions: []
+  id: 1110
+  name: Shiriff Post of the Eastern Shire
+- desc:
+  - '   You stand inside the office of the Thain, the police protectorate of the'
+  - great Shire.  The Thain has sworn to protect the Shire from all thieves and
+  - murderers with his life, and so eyes you suspiciously.  A door to the west
+  - leads to the Shiriff Post.
+  doors:
+  - desc:
+    - A door offers passage to the Shiriff Post.
+    dir: west
+    keywords:
+    - door
+    to: 1110
+  extended_descriptions: []
+  id: 1111
+  name: Thain's Office
+- desc:
+  - '   You stand on Bywater Road, the busiest street in all of Shiredom.  The road'
+  - continues to the north and south.  To the east you spy the training grounds for
+  - shiriffs in training.
+  doors:
+  - desc:
+    - To the north runs Bywater Road.
+    dir: north
+    keywords: []
+    to: 1109
+  - desc:
+    - To the south runs Bywater Road.
+    dir: south
+    keywords: []
+    to: 1113
+  - desc:
+    - The Shiriff Training Grounds lies to the east.
+    dir: east
+    keywords: []
+    to: 1117
+  extended_descriptions: []
+  id: 1112
+  name: Bywater Road
+- desc:
+  - '   You stand on Bywater Road, the busiest street in all of Shiredom.  The road'
+  - continues to the north.  The private residences of Shire inhabitants are to
+  - the east and west while to the south lies the Ivy Bush, second only to the
+  - Green Dragon for its hospitality and service.
+  doors:
+  - desc:
+    - To the north runs Bywater Road.
+    dir: north
+    keywords: []
+    to: 1112
+  - desc:
+    - You spy the private dwelling of a Shire folk to the east.
+    dir: east
+    keywords: []
+    to: 1115
+  - desc:
+    - To the south you see the Ivy Bush, a favorite haunt of Shire urbanites and
+    - seasoned travelers.
+    dir: south
+    keywords: []
+    to: 1116
+  - desc:
+    - You spy the private dwelling of a Shire folk to the west.
+    dir: west
+    keywords: []
+    to: 1114
+  extended_descriptions: []
+  id: 1113
+  name: Bywater Road
+- desc:
+  - '   You are inside a smial, a hole in the ground which serves as the proper'
+  - dwelling place for halflings.  As you look around this private abode, you feel
+  - as if you were intruding and so quickly cover your eyes.  The only exit lies
+  - to the east.
+  doors:
+  - desc:
+    - The only exit lies to the east.
+    dir: east
+    keywords: []
+    to: 1113
+  extended_descriptions: []
+  id: 1114
+  name: A smial
+- desc:
+  - '   You are inside a smial, a hole in the ground which serves as the proper'
+  - dwelling place for halflings.  As you look around this private abode, you feel
+  - as if you were intruding and so quickly cover your eyes.  The only exit lies
+  - to the west.
+  doors:
+  - desc:
+    - The only exit lies to the west.
+    dir: west
+    keywords: []
+    to: 1113
+  extended_descriptions: []
+  id: 1115
+  name: A smial
+- desc:
+  - '   You are in the Ivy Bush, one of the most famous inns in all of Shiredom.'
+  - Chique Shire urbanites and seasoned travelers fill the confines of the room
+  - with gay and lively talk.  A jovial innkeeper stops all that he is doing to
+  - await your command.  The only exit lies to the north.
+  doors:
+  - desc:
+    - The only exit lies to the north.
+    dir: north
+    keywords: []
+    to: 1113
+  extended_descriptions: []
+  id: 1116
+  name: The Ivy Bush
+- desc:
+  - '   The sounds of mock battle and feigned death cries fill your ears.  Every'
+  - which way you turn you see halfling trainees at the prime of their youth.  A
+  - wizened old battle instructor meets your gaze and asks if he may be of
+  - service.  The only exit lies to the west.
+  doors:
+  - desc:
+    - The only exit lies to the west.
+    dir: west
+    keywords: []
+    to: 1112
+  extended_descriptions: []
+  id: 1117
+  name: Shiriff Training Grounds
+- desc:
+  - '   You stand on Bywater Road, the busiest street in all of Shiredom.  The road'
+  - continues to the east and west.  A large, imposing building lies to the south.
+  - You catch a glimpse of the Brandywine River to the north.
+  doors:
+  - desc:
+    - To the east you see the entrance to the Shire.
+    dir: east
+    keywords: []
+    to: 1103
+  - desc:
+    - A large, imposing building lies to the south.  A sign reads 'Shiriff Post'.
+    dir: south
+    keywords: []
+    to: 1119
+  - desc:
+    - To the west runs Bywater Road.
+    dir: west
+    keywords: []
+    to: 1120
+  extended_descriptions: []
+  id: 1118
+  name: Bywater Road
+- desc:
+  - '   You are in the Shiriff Post which acts as the nucleus for the three shiriffs'
+  - of the Bridge.  As you examine the shiriffs on duty, you come to realize that
+  - the halflings of the Shire are not to be reckoned with.  You cower with awe.
+  - The only exit is to the north.
+  doors:
+  - desc:
+    - The only exit is to the north.
+    dir: north
+    keywords: []
+    to: 1118
+  extended_descriptions: []
+  id: 1119
+  name: Shiriff Post of the Bridge
+- desc:
+  - '   You stand on Bywater Road, the busiest street in all of Shiredom.  The road'
+  - continues to the east and west.  To the south you spy the Grocer's Delight,
+  - the premium grocer's shop in all the realm while to the north lies Brandywine
+  - Bridge.
+  doors:
+  - desc:
+    - Brandywine Bridge offers safe passage across the tumultuous river.
+    dir: north
+    keywords: []
+    to: 1131
+  - desc:
+    - To the east runs Bywater Road.
+    dir: east
+    keywords: []
+    to: 1118
+  - desc:
+    - You see the Grocer's Delight to the south.
+    dir: south
+    keywords: []
+    to: 1121
+  - desc:
+    - To the west runs Bywater Road.
+    dir: west
+    keywords: []
+    to: 1122
+  extended_descriptions: []
+  id: 1120
+  name: Bywater Road
+- desc:
+  - '   You tremble with ecstasy as the tempting odors of freshly made pipeweed'
+  - bread fill your lungs.  Rumor has it that the pipeweed bread sold here can
+  - restore vitality.  You look around but find no one to take your order.
+  - You then peep over the counter and discover a friendly grocer who is too
+  - short to be seen over the counter.  The only exit is to the north.
+  doors:
+  - desc:
+    - The only exit is to the north.
+    dir: north
+    keywords: []
+    to: 1120
+  extended_descriptions: []
+  id: 1121
+  name: The Grocer's Delight
+- desc:
+  - '   You stand on Bywater Road, the busiest street in all of Shiredom.  The road'
+  - continues to the east.  A small hill lies to the west while you can see a
+  - watermill to the far south.  You catch a glimpse of the Brandywine River to
+  - the north.
+  doors:
+  - desc:
+    - To the east runs Bywater Road.
+    dir: east
+    keywords: []
+    to: 1120
+  - desc:
+    - An entrance to the watermill lies to the south.
+    dir: south
+    keywords: []
+    to: 1123
+  - desc:
+    - A small hill to the west blocks your view.
+    dir: west
+    keywords: []
+    to: 1126
+  extended_descriptions: []
+  id: 1122
+  name: Bywater Road
+- desc:
+  - '   You stand at the entrance to a watermill.  You hear the bustle of busy'
+  - workers and the sound of a creaking mill.  Bywater Road is to the north while
+  - the watermill continues to the south.
+  doors:
+  - desc:
+    - You see Bywater Road to the north.
+    dir: north
+    keywords: []
+    to: 1122
+  - desc:
+    - A watermill meets your gaze.
+    dir: south
+    keywords: []
+    to: 1124
+  extended_descriptions: []
+  id: 1123
+  name: Entrance to Watermill
+- desc:
+  - '   Halfling workers are scattered everywhere, busy at work.  You see the river'
+  - to the west and get a compelling urge to grab the nearest worker and to toss
+  - him into the river.  The entrance stands to the north while a door offers
+  - passage to the south.
+  doors:
+  - desc:
+    - You see the entrance.
+    dir: north
+    keywords: []
+    to: 1123
+  - desc:
+    - A wooden door leads to the rear of the watermill.
+    dir: south
+    keywords:
+    - door
+    to: 1125
+  extended_descriptions: []
+  id: 1124
+  name: The Watermill
+- desc:
+  - '   You stand in a damp, dimly lit room.  Mildew clings to the walls and it'
+  - appears as if you were the first person to enter the room in ages.  A barely
+  - visible portal in the ground catches your eye.
+  doors:
+  - desc:
+    - A watermill meets your gaze.
+    dir: north
+    keywords: []
+    to: 1124
+  - desc:
+    - A hidden portal reveals a passageway down.
+    dir: down
+    keywords: []
+    to: 1146
+  extended_descriptions: []
+  id: 1125
+  name: Rear of watermill
+- desc:
+  - '   You stand on top of Took Hill, named after the legendary Bandobras Took.'
+  - You feel honored to be standing on a hill named after your hero.  From this
+  - vantage point you can see all of shiredom.  You get the feeling that with
+  - one stomp you could eliminate their great city.  You can see the outline of
+  - Midgaard to the far east.  Sounds of joyful celebration are heard from the
+  - fields west of here.  The Brandywine flows by lazily nearby.
+  doors:
+  - desc:
+    - To the east runs Bywater Road.
+    dir: east
+    keywords: []
+    to: 1122
+  - desc:
+    - You see a grassy field to the west.
+    dir: west
+    keywords: []
+    to: 1128
+  extended_descriptions: []
+  id: 1126
+  name: Took Hill
+- desc:
+  - '   You stand in a grassy field--nothing to get too excited about.  The field'
+  - extends toward the south and the west.  To the east you see Took Hill.
+  doors:
+  - desc:
+    - You see a grassy field.
+    dir: south
+    keywords: []
+    to: 1128
+  extended_descriptions: []
+  id: 1127
+  name: Northern end of grassy field
+- desc:
+  - '   You stand in the center of a grassy field.  A great birthday party appears'
+  - to be taking place.  Great tables of food are spread out and a young halfling
+  - beauty offers you welcome.  You are enticed by her generosity and suggestive
+  - winks.
+  doors:
+  - desc:
+    - You see a grassy field.
+    dir: north
+    keywords: []
+    to: 1127
+  - desc:
+    - A small hill to the east blocks your view.
+    dir: east
+    keywords: []
+    to: 1126
+  - desc:
+    - You see a grassy field.
+    dir: south
+    keywords: []
+    to: 1129
+  - desc:
+    - You see a grassy field.
+    dir: west
+    keywords: []
+    to: 1130
+  extended_descriptions: []
+  id: 1128
+  name: A grassy field
+- desc:
+  - '   You stand in a grassy field--nothing to get too excited about.  The field'
+  - extends toward the north and the west.  To the east you see Took Hill.
+  doors:
+  - desc:
+    - You see a grassy field.
+    dir: north
+    keywords: []
+    to: 1128
+  extended_descriptions: []
+  id: 1129
+  name: Southern end of grassy field
+- desc:
+  - '   You stand in a grassy field--nothing to get too excited about.  The field'
+  - extends every which way but west.
+  doors:
+  - desc:
+    - You see a grassy field.
+    dir: east
+    keywords: []
+    to: 1128
+  extended_descriptions: []
+  id: 1130
+  name: Western end of grassy field
+- desc:
+  - '   You stand on a solidly built bridge.  As you look down you spy gaily'
+  - colored fish swimming with the current of Brandywine River.  The cool water
+  - looks invitingly refreshing and you get a sudden urge to strip and bathe in
+  - the river, but you hear the laughter of women nearby and so resist the urge.
+  - Delving Lane extends to the north while Bywater Road can be seen to the south.
+  doors:
+  - desc:
+    - You see Delving Lane.
+    dir: north
+    keywords: []
+    to: 1132
+  - desc:
+    - To the south runs Bywater Road.
+    dir: south
+    keywords: []
+    to: 1120
+  extended_descriptions: []
+  id: 1131
+  name: Brandywine Bridge
+- desc:
+  - '   Delving Lane runs north and south in this small borough of the Shire.  To'
+  - the south stands Brandywine Bridge.  The Green Dragon, the undisputed leader
+  - in the art of innkeeping, offers rest and comfort to the east.  You hear the
+  - bray of horses from the west.
+  doors:
+  - desc:
+    - You see Delving Lane.
+    dir: north
+    keywords: []
+    to: 1133
+  - desc:
+    - Brandywine Bridge offers safe passage across the tumultuous river.
+    dir: south
+    keywords: []
+    to: 1131
+  - desc:
+    - The Green Dragon offers food, drink, and above all hospitality for mere gold.
+    dir: east
+    keywords: []
+    to: 1144
+  extended_descriptions: []
+  id: 1132
+  name: Delving Lane
+- desc:
+  - '   Delving Lane runs north and south in this small borough of the Shire.  A'
+  - large, imposing building lies to the east.  You hear the bray of horses from
+  - the west.
+  doors:
+  - desc:
+    - You see Delving Lane.
+    dir: north
+    keywords: []
+    to: 1134
+  - desc:
+    - A large, imposing building lies to the east.  A sign reads 'Shiriff Post'.
+    dir: east
+    keywords: []
+    to: 1145
+  - desc:
+    - You see Delving Lane.
+    dir: south
+    keywords: []
+    to: 1132
+  - desc:
+    - You see a grassy field.
+    dir: west
+    keywords: []
+    to: 1138
+  extended_descriptions: []
+  id: 1133
+  name: Delving Lane
+- desc:
+  - '   Delving Lane runs north and south in this small borough of the Shire. There'
+  - is a small house to the west, nothing to the east, and up ahead you see a round
+  - door which leads to a rather impressive abode.
+  doors:
+  - desc:
+    - A large, magnificent house meets your steady gaze.  Above the round door a
+    - sign reads 'Bag End'.
+    dir: north
+    keywords: []
+    to: 1135
+  - desc:
+    - You see Delving Lane.
+    dir: south
+    keywords: []
+    to: 1133
+  extended_descriptions: []
+  id: 1134
+  name: Delving Lane
+- desc:
+  - '   You stand in a comfortably well-equipped house, a palace by humble halfling'
+  - standards.  On the wall you see a banner which reads "Home Sweet Home".
+  - A solid oak door to the east leads to a pantry while you see a cozy bedroom
+  - to the west.
+  doors:
+  - desc:
+    - Through the keyhole you see what looks like a well stocked pantry.
+    dir: east
+    keywords:
+    - door
+    to: 1137
+  - desc:
+    - You see Delving Lane.
+    dir: south
+    keywords: []
+    to: 1134
+  - desc:
+    - You see a bedroom.  It looks like the beds have recently been slept in.
+    dir: west
+    keywords: []
+    to: 1136
+  extended_descriptions: []
+  id: 1135
+  name: Bag End
+- desc:
+  - '   You stand in the private bedroom of Bag End.  There are two beds to the'
+  - side, neither of which are made.  Portraits of halflings hang on the wall,
+  - and as you gaze upon them you come to the conclusion that the owner of
+  - Bag End comes from a long line of distinguished halflings.  A cozy fire
+  - in the fireplace keeps the room warm and comfortable.
+  doors:
+  - desc:
+    - Through the doorway you see the main room of Bag End.
+    dir: east
+    keywords: []
+    to: 1135
+  extended_descriptions: []
+  id: 1136
+  name: Bedroom
+- desc:
+  - '   You are inside the pantry.  Shelves filled with food and drink surround'
+  - you on all sides.  You wonder why a halfling would need so much to eat.
+  - The presence of something unseen chills you to your bones.  On the floor
+  - you spy a trapdoor.
+  doors:
+  - desc:
+    - Beyond the door you see the main room of Bag End.
+    dir: west
+    keywords:
+    - door
+    to: 1135
+  - desc:
+    - It's anyone's guess as to where the trapdoor leads.
+    dir: down
+    keywords: []
+    to: 1156
+  extended_descriptions: []
+  id: 1137
+  name: Pantry
+- desc:
+  - '   You stand upon a grassy field.  A bull stands grazing not far away and'
+  - out of the corner of your eye you can see him considering you.  The sound
+  - of animals fill the air from the north.  To the south you see a pig pen.
+  doors:
+  - desc:
+    - You see a large barn.
+    dir: north
+    keywords: []
+    to: 1142
+  - desc:
+    - You see Delving Lane.
+    dir: east
+    keywords: []
+    to: 1133
+  - desc:
+    - A rather large pig pen is to the south.
+    dir: south
+    keywords: []
+    to: 1139
+  extended_descriptions: []
+  id: 1138
+  name: A grassy field
+- desc:
+  - '   You feel your boots sinking into the mud.  Numerous pigs roam about,'
+  - oblivious to your company.  A grassy field is to the north while you see
+  - a small path winding to the west.
+  doors:
+  - desc:
+    - You see a grassy field.
+    dir: north
+    keywords: []
+    to: 1138
+  - desc:
+    - A small path winds its way eastward.
+    dir: west
+    keywords: []
+    to: 1140
+  extended_descriptions: []
+  id: 1139
+  name: Pig pen
+- desc:
+  - '   You walk on a stony path which leads to a small residence to the north.'
+  - From the east you hear the noisy din of pigs.
+  doors:
+  - desc:
+    - To the north you see a modest house.
+    dir: north
+    keywords: []
+    to: 1141
+  - desc:
+    - A rather large pig pen is to the east.
+    dir: east
+    keywords: []
+    to: 1139
+  extended_descriptions: []
+  id: 1140
+  name: A stony path
+- desc:
+  - '   You stand inside a modest home.  You deduce that this is indeed the home'
+  - of whomever owns the surrounding lands.  The air is somewhat musty and
+  - the smell reminds you of a stable.  As you look around disdainfully, you
+  - think to yourself that this is more of a shack than a proper residence and
+  - you long for the urban riches of the Shire proper.
+  doors:
+  - desc:
+    - You see a small path winding its way southward.
+    dir: south
+    keywords: []
+    to: 1140
+  extended_descriptions: []
+  id: 1141
+  name: Gamgee Residence
+- desc:
+  - '   Animals of every sort fill the small barn.  You feel the hot breath of'
+  - horses and cows on your neck and you feel the sudden need for fresh air.
+  - Other than that, you feel cozy and protected and don't mind staying for a
+  - bit longer.  All the warmth and good vibes remind you of the days when your
+  - mother would hold you in her arms and sing you to sleep.  You find yourself
+  - wanting to cradle all the animals.
+  doors:
+  - desc:
+    - You see a chicken coop to the north.
+    dir: north
+    keywords: []
+    to: 1143
+  - desc:
+    - You see a grassy field.
+    dir: south
+    keywords: []
+    to: 1138
+  extended_descriptions: []
+  id: 1142
+  name: A barn
+- desc:
+  - '   You stand inside a rather crowded chicken coop.  The cackle of hens fill'
+  - the air.  The only exit is to the south.
+  doors:
+  - desc:
+    - You see a large barn.
+    dir: south
+    keywords: []
+    to: 1142
+  extended_descriptions: []
+  id: 1143
+  name: A chicken coop
+- desc:
+  - '   Welcome to the Green Dragon, the undisputed leader in the art of'
+  - innkeeping.  A rather charming and friendly hostess stands to the side,
+  - ready to offer you food and drink.  While most of the patrons are halfling
+  - locals, you spy an occasional human or two.  As you listen more closely
+  - to the conversations that fill the inn, you hear the tales of great and
+  - seasoned adventurers as well as the usual gossip.  You feel as if you've
+  - found your second home in the Green Dragon.  You see a stairway leading
+  - upwards.
+  doors:
+  - desc:
+    - You see Delving Lane.
+    dir: west
+    keywords: []
+    to: 1132
+  - desc:
+    - You see the reception.
+    dir: up
+    keywords: []
+    to: 1157
+  extended_descriptions: []
+  id: 1144
+  name: The Green Dragon
+- desc:
+  - '   You are in the Shiriff Post which acts as the nucleus for the three shiriffs'
+  - of Delving Lane.  As you examine the shiriffs on duty, you come to realize
+  - that the halflings of the Shire are not to be reckoned with.  You cower with
+  - awe.  The only exit is to the west.
+  doors:
+  - desc:
+    - You see Delving Lane.
+    dir: west
+    keywords: []
+    to: 1133
+  extended_descriptions: []
+  id: 1145
+  name: Shiriff Post of Delving Lane
+- desc:
+  - '   You stand inside a small underground tunnel.  The ceiling is so low that'
+  - you must crouch to avoid hitting your head.  You see light from a small
+  - hole in the ceiling while to the east you see nothing but darkness.
+  doors:
+  - desc:
+    - You see a dark tunnel.
+    dir: east
+    keywords: []
+    to: 1147
+  - desc:
+    - You see a portal which leads to a small room.
+    dir: up
+    keywords: []
+    to: 1125
+  extended_descriptions: []
+  id: 1146
+  name: A dark tunnel
+- desc:
+  - '   You stand inside a small underground tunnel.  The ceiling is so low that'
+  - you must crouch to avoid hitting your head.  The tunnel continues east and
+  - west.  All you can see is darkness.
+  doors:
+  - desc:
+    - You see a dark tunnel.
+    dir: east
+    keywords: []
+    to: 1148
+  - desc:
+    - You see a dark tunnel.
+    dir: west
+    keywords: []
+    to: 1146
+  extended_descriptions: []
+  id: 1147
+  name: A dark tunnel
+- desc:
+  - '   You stand inside a small underground tunnel.  The ceiling is so low that'
+  - you must crouch to avoid hitting your head.  The tunnel continues east and
+  - west.  All you can see is darkness.
+  doors:
+  - desc:
+    - You see a dark tunnel.
+    dir: east
+    keywords: []
+    to: 1149
+  - desc:
+    - You see a dark tunnel.
+    dir: west
+    keywords: []
+    to: 1147
+  extended_descriptions: []
+  id: 1148
+  name: A dark tunnel
+- desc:
+  - '   You stand at an intersection.  The tunnel continues east and west while'
+  - to the north you can barely make out a smaller trail.
+  doors:
+  - desc:
+    - You see a dark tunnel.
+    dir: north
+    keywords: []
+    to: 1151
+  - desc:
+    - You see a dark tunnel.
+    dir: east
+    keywords: []
+    to: 1150
+  - desc:
+    - You see a dark tunnel.
+    dir: west
+    keywords: []
+    to: 1148
+  extended_descriptions: []
+  id: 1149
+  name: A three way intersection
+- desc:
+  - '   You stand at the end of a dark tunnel.  The underground tunnel continues'
+  - to the west.  From a trapdoor in the ceiling you can hear the din of
+  - adventurers.
+  doors:
+  - desc:
+    - You see a dark tunnel.
+    dir: west
+    keywords: []
+    to: 1149
+  - desc:
+    - You hear the din of adventurers.
+    dir: up
+    keywords: []
+    to: 3001
+  extended_descriptions: []
+  id: 1150
+  name: End of a dark tunnel
+- desc:
+  - '   You stand inside a small underground tunnel.  The ceiling is so low that'
+  - you must crouch to avoid hitting your head.  The tunnel continues north and
+  - south.  To the west you see a Shirriff Post while to the east lies a small
+  - home.  All you can see is darkness.
+  doors:
+  - desc:
+    - You see a dark tunnel.
+    dir: north
+    keywords: []
+    to: 1152
+  - desc:
+    - You see a halfling hole.
+    dir: east
+    keywords: []
+    to: 1154
+  - desc:
+    - You see a dark tunnel.
+    dir: south
+    keywords: []
+    to: 1149
+  - desc:
+    - Above a great oak door you see a sign which reads 'Shirriff Post'.
+    dir: west
+    keywords: []
+    to: 1153
+  extended_descriptions: []
+  id: 1151
+  name: A dark tunnel
+- desc:
+  - '   You stand inside a small underground tunnel.  The ceiling is so low that'
+  - you must crouch to avoid hitting your head.  The tunnel continues north and
+  - south.  To the west lies a small home.  All you can see is darkness.
+  doors:
+  - desc:
+    - You see a dark tunnel.
+    dir: north
+    keywords: []
+    to: 1156
+  - desc:
+    - You see a dark tunnel.
+    dir: south
+    keywords: []
+    to: 1151
+  - desc:
+    - You see a halfling hole.
+    dir: west
+    keywords: []
+    to: 1155
+  extended_descriptions: []
+  id: 1152
+  name: A dark tunnel
+- desc:
+  - '   You are in the shiriff Post which acts as the nucleus for the three shiriffs'
+  - of the Lower Shire.  As you examine the shiriffs on duty, you come to realize
+  - that the halflings of the Shire are not to be reckoned with.  You cower with
+  - awe.  The only exit is to the east.
+  doors:
+  - desc:
+    - You see a dark tunnel.
+    dir: east
+    keywords: []
+    to: 1151
+  extended_descriptions: []
+  id: 1153
+  name: Shiriff Post of the Lower Shire
+- desc:
+  - '   You stand inside a rather crudely built halfling hole.  The many passageways'
+  - and winding paths remind you of a rodent's lair.  The air is musty and damp
+  - and you feel the need for fresh air.
+  doors:
+  - desc:
+    - You see a dark tunnel.
+    dir: west
+    keywords: []
+    to: 1151
+  extended_descriptions: []
+  id: 1154
+  name: A halfling hole
+- desc:
+  - '   You stand inside a rather crudely built halfling hole.  The many passageways'
+  - and winding paths remind you of a rodent's lair.  The air is musty and damp
+  - and you feel the need for fresh air.
+  doors:
+  - desc:
+    - You see a dark tunnel.
+    dir: east
+    keywords: []
+    to: 1152
+  extended_descriptions: []
+  id: 1155
+  name: A halfling hole
+- desc:
+  - '   You are at one end of a dark tunnel.  The tunnel continues to the south'
+  - while on the ceiling you can make out a trapdoor.
+  doors:
+  - desc:
+    - You see a dark tunnel.
+    dir: south
+    keywords: []
+    to: 1152
+  - desc:
+    - A trapdoor on the ceiling reveals a passageway.
+    dir: up
+    keywords: []
+    to: 1137
+  extended_descriptions: []
+  id: 1156
+  name: End of a dark tunnel
+- desc:
+  - '   You are standing in the Inn of the Green dragon.  Large paintings of'
+  - halflings at work, and halflings at play adorn the walls.  Comfortable
+  - benches and seats line the walls.  A stairway leads down.
+  doors:
+  - desc: []
+    dir: down
+    keywords: []
+    to: 1144
+  extended_descriptions: []
+  id: 1157
+  name: The Inn of the Green Dragon
+SHOPS: []
