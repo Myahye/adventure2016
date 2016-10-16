@@ -5,7 +5,7 @@ using namespace networking;
 
 ServerHelper::ServerHelper() {}
 
-std::unordered_map<std::string, std::string> commands {{"Create","create "},{"Look","look "},{"Walk","walk "},{"Read","read "},{"Go","go "}{"Attack","attack "},{"Say","say "},{"ListCommands","ls "},};
+std::unordered_map<std::string, std::string> commands {{"Create","create "},{"Look","look "},{"Walk","walk "},{"Read","read "},{"Go","go "},{"Attack","attack "},{"Say","say "},{"ListCommands","ls "},};
 
 std::deque<Message>
 ServerHelper::parseCommands(const std::deque<Message>& clientMessageQueue, std::vector<Connection>& clients) {

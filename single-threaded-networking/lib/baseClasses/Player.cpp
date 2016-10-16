@@ -1,8 +1,24 @@
 #include "Player.h"
 
 //Player constructor
-Player::Player (int const pid, std::string const shortdesc):
-    pid{pid}, shortdesc{shortdesc}{};
+Player::Player (int const pid, std::string const username, std::string const password):
+    pid{pid}, username{username}, password{password}{};
+
+//Getter and setter for Shortdesc
+std::string Player::getUsername() const {
+    return username;
+}
+void Player::setUsername(const std::string& username) {
+    this->username = username;
+}
+
+//Getter and setter for Shortdesc
+std::string Player::getPassword() const {
+    return password;
+}
+void Player::setPassword(const std::string& password) {
+    this->password = password;
+}
 
 //Getter and setter for Armor
 int Player::getArmor() const {
@@ -98,14 +114,6 @@ void Player::printLongDesc() const{
     for (auto &desc : longdesc){
         std::cout << desc << std::endl;
     }
-}
-
-//Getter and setter for Shortdesc
-std::string Player::getShortDesc() const {
-    return shortdesc;
-}
-void Player::setShortDesc(const std::string& shortdesc) {
-    this->shortdesc = shortdesc;
 }
 
 //Getter and setter for Thac0

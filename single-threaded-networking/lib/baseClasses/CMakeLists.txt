@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.2.2)
 
 add_library(BaseClass
 	Room.cpp
-	Door.cpp)
+	Door.cpp
+	Player.cpp
+	NPC.cpp)
 
 	set_target_properties(networking
 	                      PROPERTIES

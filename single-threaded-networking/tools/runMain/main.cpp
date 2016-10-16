@@ -4,6 +4,8 @@
 #include <vector>
 #include "Room.h"
 #include "Door.h"
+#include "Player.h"
+#include "NPC.h"
 using namespace std;
 
 int main() {
@@ -42,5 +44,9 @@ int main() {
     }else{
       cout << "No doors in room." <<endl;
     }
+
+    Player player1{1, "Kieran", "1234"};
+    cout << "Player1 ID: " << player1.getId() << ", username: " << player1.getUsername() << ", password: " << player1.getPassword() <<endl;
+
 	return 0;
 }
