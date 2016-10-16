@@ -31,7 +31,6 @@
 using namespace networking;
 
 std::vector<Connection> clients;
-std::unordered_map<std::string, Player> players;
 std::unordered_map<Connection,std::deque<Message>, ConnectionHash> clientMessageQueues;
 //std::unordered_map<std::string, std::string> commands {{"Create","Create"},{"Look","Look "},{"Go","Go "},{"Read","Read "},{"Attack","Attack "},{"Say","Say "},{"ListCommands","commands"},};
 
@@ -164,7 +163,7 @@ std::deque<Message> processMessages(CommandParse& commandParse, std::deque<Messa
 
   for(auto& message : commands) {
     if(message.connection.currentState != ConnectionState::AUTHORIZED) {
-      server.send(std::deque<Message>{Message{message.connection, Authentication::authorizeClient(message, server, clients, /*GameModel.*/players)}});
+      server.send(std::deque<Message>{Message{message.connection, Authentication::authorizeClient(message, server, clients, commandParse)}});
     } else {
       outgoing.push_back(message);
     }
@@ -210,8 +209,8 @@ main(int argc, char* argv[]) {
     end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end-start;
     if(elapsed_seconds.count() >= 1.0){
-       std::cout
-           << "elapsed time: " << elapsed_seconds.count() << "s\n";
+       // std::cout
+       //     << "elapsed time: " << elapsed_seconds.count() << "s\n";
       std::deque<Message> commands = pullFromClientMessageQueues(server,done);
       //auto response = parseCommandsDummy(commands);
       std::deque<Message> response = processMessages(commandParse, commands, server);

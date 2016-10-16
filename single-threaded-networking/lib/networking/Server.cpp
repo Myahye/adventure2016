@@ -25,7 +25,7 @@ public:
           Server& server,
           std::deque<Message> &readBuffer)
     : disconnected{false},
-      connection{reinterpret_cast<uintptr_t>(this),"Peasant",ConnectionState::UNAUTHORIZED},/*********************Modified by Lawrence***********************************************************************/
+      connection{reinterpret_cast<uintptr_t>(this),0,ConnectionState::UNAUTHORIZED},/*********************Modified by Lawrence***********************************************************************/
       socket{io_service},
       server{server},
       streamBuf{BUFFER_SIZE},
@@ -45,7 +45,7 @@ public:
 
 
   void setConnectionState(ConnectionState state) {connection.currentState = state;}
-  void setUser(std::string username) {connection.playerIdConnectedToClientConnection = username;}
+  void setPlayerID(int ID) {connection.playerIDConnectedToClientConnection = ID;}
 
 
 /*********************Modified by Lawrence***********************************************************************/
@@ -178,10 +178,10 @@ Server::listenForConnections() {
 
 
 void
-Server::setPlayerConnectedToClient(const Connection& connection, const std::string& username) {
+Server::setPlayerIDConnectedToClient(const Connection& connection, int ID) {
   auto found = channels.find(connection);
   if (channels.end() != found) {
-    found->second->setUser(username);
+    found->second->setPlayerID(ID);
   }
 }
 

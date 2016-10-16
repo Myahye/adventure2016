@@ -27,25 +27,13 @@ enum class ConnectionState {
   AUTHORIZED
 };
 
-struct Player {
-  Player() : username("peasant"), password(""), level(0), inventory("") {}
-
-  Player(std::string player, std::string pass, int lvl, std::string inv) 
-  : username(player), password(pass), level(lvl), inventory(inv) {}
-
-  std::string username;
-  std::string password;
-  int level;
-  std::string inventory;
-};
-
 /**
  *  An identifier for a Client connected to a Server. The ID of a Connection is
  *  guaranteed to be unique across all actively connected Client instances.
  */
 struct Connection {
   uintptr_t id;
-   std::string playerIdConnectedToClientConnection;
+   int playerIDConnectedToClientConnection;
    ConnectionState currentState;
 
   bool
@@ -139,7 +127,7 @@ public:
 /*********************Modified by Lawrence***********************************************************************/
 
 
-  void setPlayerConnectedToClient(const Connection& client, const std::string& username);
+  void setPlayerIDConnectedToClient(const Connection& client, int ID);
 
   void setClientCurrentState(const Connection& client, const ConnectionState& state);
 

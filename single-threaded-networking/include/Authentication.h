@@ -2,20 +2,23 @@
 #define authentication_h
 
 #include "Server.h"
+#include "CommandParse.h"
 
 using namespace networking;
 
 namespace Authentication {
 
-	bool findExistingUsername(const std::string& username);
+	int findExistingPlayer(const std::string& username, const std::vector<std::tuple<int,std::string,std::string>>& players);
 
-	bool currentlyLoggedIn(const std::string& username);
+	bool currentlyLoggedIn(int playerID, std::vector <Connection>& clients);
 
-	std::string authorizeClient(Message& message, Server& server, std::vector<Connection>& clients, std::unordered_map<std::string, Player>& players);
+	bool correctPassword(int playerID, const std::string& password, const std::vector<std::tuple<int,std::string,std::string>>& players);
 
-	std::string handleLogin(Message& message, Server& server, std::vector<Connection>& clients, std::unordered_map<std::string, Player>& players);
+	std::string authorizeClient(Message& message, Server& server, std::vector <Connection>& clients, CommandParse& commandParse);
 
-	std::string handleRegistration(Message& message, Server& server, std::vector<Connection>& clients, std::unordered_map<std::string, Player>& players);
+	std::string handleLogin(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players);
+
+	std::string handleRegistration(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, CommandParse& commandParse);
 
 }
 
