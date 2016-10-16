@@ -1,144 +1,131 @@
 // Object.cpp
+#include "Object.h"
 
-#include <iostream>
-#include <vector>
-#include <string>
-// #include "Object.h"
-
-class Object {
-private:
-  int id;
-  int cost;
-  int weight;
-
-  std::string itemType;
-
-  // Need to change vector type
-  std::vector<std::string> extra;
-
-  std::vector<std::string> Attributes;
-  std::vector<std::string> KeyWords;
-  std::vector<std::string> longDesc;
-  std::vector<std::string> shortDesc;
-  std::vector<std::string> wearFlags;
-public:
-  // Constructors:
-  Object(int id, std::string itemType) {
-    this->id = id;
-    this->itemType = itemType;
-  }
-
-  Object(int id, std::string itemType, int cost, int weight) {
-    this->id = id;
-    this->itemType = itemType;
-    this->cost = cost;
-    this->weight = weight;
-  }
+// Constructor:
+Object::Object(int id, std::string itemType)
+: id{id}, 
+  itemType{itemType} {};
 
 
-  // Deconstructor:
-  ~Object() {
+// Getter and setter for ID:
+int Object::getID() const {
+  return id;
+}
 
-  }
+void Object::setID(int id) {
+  this->id = id;
+}
 
-  // Getters:
-  int getID() {
-    return this->id;
-  }
 
-  int getCost() {
-    return this->cost;
-  }
+// Getter and setter for cost:
+int Object::getCost() const {
+  return cost;
+}
 
-  int getWeight() {
-    return this->weight;
-  }
+void Object::setCost(int cost) {
+  this->cost = cost;
+}
 
-  std::string getItemType() {
-    return this->itemType;
-  }
 
-  // Setters:
-  void setID(int id) {
-    this->id = id;
-  }
+// Getter and setter for weight:
+int Object::getWeight() const {
+  return weight;
+}
 
-  void setCost(int cost) {
-    this->cost = cost;
-  }
+void Object::setWeight(int weight) {
+  this->weight = weight;
+}
 
-  void setWeight(int weight) {
-    this->weight = weight;
-  }
 
-  void setItemType(std::string itemType) {
-    this->itemType = itemType;
-  }
+// Getter and setter for itemType:
+std::string Object::getItemType() const {
+  return itemType;
+}
 
-  void addAttribute(std::string attribute) {
-    this->Attributes.push_back(attribute);
-    //Attributes.push_back(attribute);
-  }
+void Object::setItemType(std::string& itemType) {
+  this->itemType = itemType;
+}
 
-  void addKeyWord(std::string keyWord) {
-    this->KeyWords.push_back(keyWord);
-  }
 
-  void addLongDesc(std::string longDesc) {
-    this->longDesc.push_back(longDesc);
-  }
+// Getter and setter for Attributes:
+std::vector<std::string> Object::getAttributes() const {
+  return attributes;
+}
 
-  void addShortDesc(std::string shortDesc) {
-    this->shortDesc.push_back(shortDesc);
-  }
+void Object::setAttributes(std::vector<std::string>& attributes) {
+  this->attributes = attributes;
+}
 
-  void addWearFlag(std::string wearFlags) {
-    this->wearFlags.push_back(wearFlags);
-  }
+void Object::addAttribute(std::string& attribute) {
+  this->attributes.push_back(attribute);
+}
 
-  void addExtra(std::string extra) {
-    this->extra.push_back(extra);
-  }
 
-  // Function implementations:
-  void print_object() {
-    /* code */
-    std::cout<<"object Id is : "<< id<< std::endl;
-    std::cout<<"object cost is: "<< cost<<std::endl;
-    std::cout<<"object attribute is "<<std::endl;
-    print_vec(Attributes);
-    std::cout<<"object type is: "<< itemType <<std::endl;
-    std::cout<<"object KeyWords is "<<std::endl;
-    print_vec(KeyWords);
-    std::cout<<"object longDesc is "<<std::endl;
-    print_vec(longDesc);
-    std::cout<<"object shortDesc is "<<std::endl;
-    print_vec(shortDesc);
-    std::cout<<"object wearFlags is "<<std::endl;
-    print_vec(wearFlags);
-    std::cout<<"object extra is "<<std::endl;
-    print_vec(extra);
-    }
+// Getter and setter for keyWords:
+std::vector<std::string> Object::getKeyWords() const {
+  return keyWords;
+}
 
-  void print_vec(const std::vector<std::string>& Alist){
-    for(auto& i:Alist)
-      std::cout <<"    - "<<i<< std::endl;
-  }
-};
+void Object::setKeyWords(std::vector<std::string>& keyWords) {
+  this->keyWords = keyWords;
+}
 
-int main(void){
-  Object box(1100,"light",5000,8);
+void Object::addKeyWord(std::string& keyWord) {
+  this->keyWords.push_back(keyWord);
+}
 
-  std::cout << "This is a object test file" << std::endl;
-  //box.print_object();
-  box.addAttribute("magic");
-  box.addKeyWord("rainbow");
-  box.addKeyWord("staff");
-  box.addLongDesc("-The rainbow staff lies here.");
-  box.addShortDesc("the rainbow staff");
-  box.addWearFlag("take");
-  box.addWearFlag("ears");
-  box.print_object();
-  return 0;
 
+// Getter and setter for longDesc:
+std::vector<std::string> Object::getLongDesc() const {
+  return longDesc;
+}
+
+void Object::setLongDesc(std::vector<std::string>& longDesc) {
+  this->longDesc = longDesc;
+}
+
+void Object::addLongDesc(std::string& longDesc) {
+  this->longDesc.push_back(longDesc);
+}
+
+
+// Getter and setter for shortDesc:
+std::vector<std::string> Object::getshortDesc() const {
+  return shortDesc;
+}
+
+void Object::setShortDesc(std::vector<std::string>& shortDesc) {
+  this->shortDesc = shortDesc;
+}
+
+void Object::addShortDesc(std::string& shortDesc) {
+  this->shortDesc.push_back(shortDesc);
+}
+
+
+// Getter and setter or wearFlags:
+std::vector<std::string> Object::getWearFlags() const {
+  return wearFlags;
+}
+
+void Object::setWearFlags(std::vector<std::string>& wearFlags) {
+  this->wearFlags = wearFlags;
+}
+
+void Object::addWearFlag(std::string& wearFlags) {
+  this->wearFlags.push_back(wearFlags);
+}
+
+
+// Getter and setter for extra:
+std::vector<std::string> Object::getExtra() const {
+  return extra;
+} 
+
+void Object::setExtra(std::vector<std::string>& extra) {
+  this->extra = extra;
+}
+
+void Object::addExtra(std::string& extra) {
+  this->extra.push_back(extra);
 }
