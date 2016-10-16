@@ -1,6 +1,6 @@
 #include "Model.h"
 
-Model::Model(std::string path){
+Model::Model(const std::string& path){
   yamlParse(path);
 }
 
