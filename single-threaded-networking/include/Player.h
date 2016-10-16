@@ -10,9 +10,9 @@ private:
     int armor;
     int exp;
     int gold;
-    int pid;
     int level;
     int thac0;
+    int pid;
 
     std::string damage;
     std::string hit;
@@ -23,6 +23,8 @@ private:
     std::vector<std::string> keywords;
     std::vector<std::string> longdesc;
 public:
+
+
     // Constructor
     Player (int const pid, std::string const username, std::string const password);
     //username

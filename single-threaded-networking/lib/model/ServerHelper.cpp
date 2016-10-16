@@ -3,7 +3,10 @@
 
 using namespace networking;
 
-ServerHelper::ServerHelper() {}
+ServerHelper::ServerHelper() {
+  this->model = Model{};
+
+}
 
 std::unordered_map<std::string, std::string> commands {{"Create","create "},{"Look","look "},{"Walk","walk "},{"Read","read "},{"Go","go "},{"Attack","attack "},{"Say","say "},{"ListCommands","ls "},};
 
@@ -54,28 +57,29 @@ ServerHelper::parseCommands(const std::deque<Message>& clientMessageQueue, std::
       return outgoing;
     }
 
-    /*********************Modified by Lawrence***********************************************************************/
-
   int ServerHelper::createPlayer(const std::string& username, const std::string& password) {
-      playersCreated[assignedIDs] = Player {
-          username, password, 1, "", assignedIDs
-      };
-      assignedIDs++;
-      for (auto & player: playersCreated) {
-          std::cout << "Player: " << player.second.playerID << " username: " << player.second.username << " password: " << player.second.password << "\n";
-      }
-      return assignedIDs - 1;
+
+      return(this->model.createPlayer(username, password));
+
+      // playersCreated[assignedIDs] = Player {
+      //     username, password, 1, "", assignedIDs
+      // };
+      // assignedIDs++;
+      // for (auto & player: playersCreated) {
+      //     std::cout << "Player: " << player.second.playerID << " username: " << player.second.username << " password: " << player.second.password << "\n";
+      // }
+      // return assignedIDs - 1;
     }
 
     std::vector<std::tuple<int,std::string,std::string>> ServerHelper::getPlayerCredentialsVector() const {
 
-      std::vector<std::tuple<int,std::string,std::string>> vector;
+      return(this->model.getPlayerCredentialsVector());
 
-      for(auto player: playersCreated) {
-        vector.push_back(std::make_tuple(player.first,player.second.username,player.second.password));
-      }
-
-      return vector;
+      // std::vector<std::tuple<int,std::string,std::string>> vector;
+      //
+      // for(auto player: playersCreated) {
+      //   vector.push_back(std::make_tuple(player.first,player.second.username,player.second.password));
+      // }
+      //
+      // return vector;
     }
-
-    /*********************Modified by Lawrence***********************************************************************/

@@ -1,7 +1,7 @@
 
 add_library(model
-  ServerHelper.cpp
-)
+            ServerHelper.cpp
+            Model.cpp)
 
 set_target_properties(networking
                       PROPERTIES

@@ -7,6 +7,7 @@ target_link_libraries(chatserver
   networking
   model
   authentication
+  BaseClass
 )
 
 set_target_properties(chatserver

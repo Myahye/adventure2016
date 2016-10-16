@@ -4,33 +4,33 @@
 #include <boost/algorithm/string/predicate.hpp>
 
 #include "Server.h"
-
+#include "Model.h"
 
 
 class ServerHelper {
 
 private:
-
+	Model model;
 
 
 public:
 /*********************Modified by Lawrence***********************************************************************/
-	int assignedIDs = 1;
-
-  struct Player {
-	Player() : username("peasant"), password(""), level(0), inventory(""), playerID(0) {}
-
-	Player(std::string player, std::string pass, int lvl, std::string inv, int ID)
-	: username(player), password(pass), level(lvl), inventory(inv), playerID(ID) {}
-
-	std::string username;
-	std::string password;
-	int level;
-	std::string inventory;
-	int playerID;
-  };
-
-  std::unordered_map<int,Player> playersCreated;
+	// int assignedIDs = 1;
+	//
+  // struct Player {
+	// Player() : username("peasant"), password(""), level(0), inventory(""), playerID(0) {}
+	//
+	// Player(std::string player, std::string pass, int lvl, std::string inv, int ID)
+	// : username(player), password(pass), level(lvl), inventory(inv), playerID(ID) {}
+	//
+	// std::string username;
+	// std::string password;
+	// int level;
+	// std::string inventory;
+	// int playerID;
+  // };
+	//
+  // std::unordered_map<int,Player> playersCreated;
 /*********************Modified by Lawrence***********************************************************************/
   //ServerHelper(pathtoyaml);
   ServerHelper();
