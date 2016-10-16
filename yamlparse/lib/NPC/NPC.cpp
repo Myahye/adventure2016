@@ -91,7 +91,9 @@ void NPC::setThac0(int thac0_) {
 }
 
 //New function added in to test
-void NPC::printClass() const{
+void NPC::printClass(int n) const{
+	std::cout << "\n\n";
+	std::cout << "NPC: "<< n << "\n";
 	std::cout << "Npc id: " << id << std::endl;
 	std::cout << "\tarmor: " << armor << std::endl;
 	std::cout << "\texp: " << id << std::endl;

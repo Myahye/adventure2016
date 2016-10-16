@@ -51,7 +51,7 @@ public:
 	void setThac0(int thac0_);
 
 	//New function added in to test
-	void printClass() const;
+	void printClass(int n) const;
 };
 
 #endif

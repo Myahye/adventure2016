@@ -1,6 +1,5 @@
 add_executable(adventure main.cpp)
 
-target_link_libraries(adventure NPC)
 target_link_libraries(adventure model)
 target_link_libraries(adventure ${CMAKE_SOURCE_DIR}/lib/yaml/libyaml-cpp.a)
 
