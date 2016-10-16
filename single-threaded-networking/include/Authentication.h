@@ -10,7 +10,7 @@ namespace Authentication {
 
 	int findExistingPlayer(const std::string& username, const std::vector<std::tuple<int,std::string,std::string>>& players);
 
-	bool currentlyLoggedIn(int playerID, std::vector <Connection>& clients);
+	bool currentlyLoggedIn(int playerID, const std::vector<Connection>& clients);
 
 	bool correctPassword(int playerID, const std::string& password, const std::vector<std::tuple<int,std::string,std::string>>& players);
 

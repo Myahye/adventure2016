@@ -15,7 +15,7 @@ namespace Authentication {
     }
   }
 
-  bool currentlyLoggedIn(int playerID, std::vector <Connection>& clients) {
+  bool currentlyLoggedIn(int playerID, const std::vector<Connection>& clients) {
 
     auto player = std::find_if(clients.begin(), clients.end(), [playerID] (Connection c) { return c.playerIDConnectedToClientConnection == playerID; });
     if (player != clients.end()) {

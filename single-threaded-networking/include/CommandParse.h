@@ -39,7 +39,7 @@ public:
  
 /*********************Modified by Lawrence***********************************************************************/
   int createPlayer(const std::string& username, const std::string& password);
-  std::vector<std::tuple<int,std::string,std::string>> getPlayerCredentialsVector();
+  std::vector<std::tuple<int,std::string,std::string>> getPlayerCredentialsVector() const;
 /*********************Modified by Lawrence***********************************************************************/
 };
 

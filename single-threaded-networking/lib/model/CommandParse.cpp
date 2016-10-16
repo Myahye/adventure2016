@@ -69,7 +69,7 @@ int CommandParse::createPlayer(const std::string& username, const std::string& p
     return assignedIDs - 1;
   }
 
-  std::vector<std::tuple<int,std::string,std::string>> CommandParse::getPlayerCredentialsVector() {
+  std::vector<std::tuple<int,std::string,std::string>> CommandParse::getPlayerCredentialsVector() const {
 
     std::vector<std::tuple<int,std::string,std::string>> vector;
 
