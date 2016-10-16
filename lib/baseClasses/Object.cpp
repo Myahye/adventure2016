@@ -3,9 +3,22 @@
 
 // Constructor:
 Object::Object(int id, std::string itemType)
-: id{id}, 
+: id{id},
   itemType{itemType} {};
 
+Object::Object(const Object &ob){
+  this->id=ob.id;
+  this->cost=ob.cost;
+  this->weight=ob.weight;
+  this->itemType=ob.itemType;
+
+  copy_vec(attributes);
+  copy_vec(keyWords);
+  copy_vec(longDesc);
+  copy_vec(shortDesc);
+  copy_vec(wearFlags);
+  copy_vec(extra);
+}
 
 // Getter and setter for ID:
 int Object::getID() const {
@@ -120,7 +133,7 @@ void Object::addWearFlag(std::string& wearFlags) {
 // Getter and setter for extra:
 std::vector<std::string> Object::getExtra() const {
   return extra;
-} 
+}
 
 void Object::setExtra(std::vector<std::string>& extra) {
   this->extra = extra;

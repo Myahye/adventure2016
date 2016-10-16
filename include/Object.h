@@ -9,7 +9,7 @@
 class Object {
 private:
 	int id;
-	int cost = 0;  
+	int cost = 0;
 	int weight = 0;
 
 	std::string itemType;
@@ -24,6 +24,8 @@ private:
 public:
 	// Object constructor
 	Object(int id, std::string itemType);
+	// Object copy constructor
+	Object(const Object &ob);
 
 	// Getter and setter for ID:
   	int getID() const;
@@ -36,7 +38,7 @@ public:
   	// Getter and setter for weight:
   	int getWeight() const;
   	void setWeight(int weight);
- 
+
   	// Getter and setter or itemType:
   	std::string getItemType() const;
   	void setItemType(std::string& itemType);
@@ -63,7 +65,7 @@ public:
 
 
 	// Getter and setter or wearFlags:
-	std::vector<std::string> getWearFlags() const;
+	  std::vector<std::string> getWearFlags() const;
 	void setWearFlags(std::vector<std::string>& wearFlags);
 	void addWearFlag(std::string& wearFlags);
 
@@ -71,6 +73,8 @@ public:
   	std::vector<std::string> getExtra() const;
 	void setExtra(std::vector<std::string>& exta);
 	void addExtra(std::string& extra);
+		
+	void copy_vec(vector<string>& output, const vector<string>& Alist );
 };
 
 #endif
