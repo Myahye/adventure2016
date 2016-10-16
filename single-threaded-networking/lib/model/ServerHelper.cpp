@@ -1,18 +1,14 @@
-#include "CommandParse.h"
+#include "ServerHelper.h"
 
 
 using namespace networking;
 
-CommandParse::CommandParse() {}
+ServerHelper::ServerHelper() {}
 
-std::unordered_map<std::string, std::string> commands {{"Create","create "},{"Look","look "},{"Go","go "},{"Read","read "},{"Attack","attack "},{"Say","say "},{"ListCommands","ls "},};
-
-
+std::unordered_map<std::string, std::string> commands {{"Create","create "},{"Look","look "},{"Walk","walk "},{"Read","read "},{"Attack","attack "},{"Say","say "},{"ListCommands","ls "},};
 
 std::deque<Message>
-CommandParse::parseCommands(const std::deque<Message>& clientMessageQueue, std::vector<Connection>& clients) {
-
-
+ServerHelper::parseCommands(const std::deque<Message>& clientMessageQueue, std::vector<Connection>& clients) {
 
     std::deque<Message> outgoing;
 
@@ -28,7 +24,7 @@ CommandParse::parseCommands(const std::deque<Message>& clientMessageQueue, std::
         std::string messageText = std::to_string(message.connection.id) + "> " + /*handleCreateCommand(message)*/ + "\n";
         outgoing.push_back({message.connection, messageText});
       }
-      else if (boost::istarts_with(message.text,commands["Go"])) {
+      else if (boost::istarts_with(message.text,commands["Walk"])) {
         std::string messageText = std::to_string(message.connection.id) + "> " + /*handleCreateCommand(message)*/ + "\n";
         outgoing.push_back({message.connection, messageText});
       }

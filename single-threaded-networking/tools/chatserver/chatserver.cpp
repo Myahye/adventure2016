@@ -26,7 +26,7 @@
 
 #include <iostream>
 
-#include "CommandParse.h"
+#include "ServerHelper.h"
 
 
 using namespace networking;
@@ -176,7 +176,7 @@ main(int argc, char* argv[]) {
   unsigned short port = std::stoi(argv[1]);
   Server server{port, onConnect, onDisconnect};
 
-  CommandParse commandParse{};
+  ServerHelper serverHelper{};
 
   start = std::chrono::system_clock::now();
   while (!done) {
@@ -199,7 +199,7 @@ main(int argc, char* argv[]) {
            << "elapsed time: " << elapsed_seconds.count() << "s\n";
       std::deque<Message> commands = pullFromClientMessageQueues(server,done);
       //auto response = parseCommandsDummy(commands);
-      std::deque<Message> response = commandParse.parseCommands(commands, clients);
+      std::deque<Message> response = serverHelper.parseCommands(commands, clients);
       server.send(response);
       start = std::chrono::system_clock::now();
     }

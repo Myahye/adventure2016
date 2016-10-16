@@ -1,5 +1,5 @@
-#ifndef commandparse_h
-#define commandparse_h
+#ifndef serverhelper_h
+#define serverhelper_h
 //include "model.h"
 #include <boost/asio.hpp>
 #include <boost/algorithm/string/predicate.hpp>
@@ -13,7 +13,7 @@
 
 
 
-class CommandParse {
+class ServerHelper {
 
 private:
 
@@ -21,11 +21,11 @@ private:
 
 public:
 
-  //CommandParse(pathtoyaml);
-  CommandParse();
+  //ServerHelper(pathtoyaml);
+  ServerHelper();
 
   std::deque<networking::Message>  parseCommands(const std::deque<networking::Message>& clientMessageQueue,  std::vector<networking::Connection>& clients);
 
 
 };
-#endif /* commandparse_h */
+#endif /* serverhelper_h */

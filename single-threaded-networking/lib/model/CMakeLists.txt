@@ -1,6 +1,6 @@
 
 add_library(model
-  CommandParse.cpp
+  ServerHelper.cpp
 )
 
 set_target_properties(networking
