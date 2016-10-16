@@ -19,6 +19,13 @@
 
 namespace networking {
 
+/*********************Modified by Lawrence***********************************************************************/
+enum class ConnectionState {
+  UNAUTHORIZED,
+  REGISTERING,
+  LOGIN,
+  AUTHORIZED
+};
 
 /**
  *  An identifier for a Client connected to a Server. The ID of a Connection is
@@ -26,13 +33,15 @@ namespace networking {
  */
 struct Connection {
   uintptr_t id;
+   int playerIDConnectedToClientConnection;
+   ConnectionState currentState;
 
   bool
   operator==(Connection other) const {
     return id == other.id;
   }
 };
-
+/*********************Modified by Lawrence***********************************************************************/
 
 struct ConnectionHash {
   size_t
@@ -115,6 +124,15 @@ public:
    */
   void disconnect(Connection connection);
 
+/*********************Modified by Lawrence***********************************************************************/
+
+
+  void setPlayerIDConnectedToClient(const Connection& client, int ID);
+
+  void setClientCurrentState(const Connection& client, const ConnectionState& state);
+
+
+/*********************Modified by Lawrence***********************************************************************/
 private:
   // Hiding the template parameters of the Server class behind a pointer to
   // a private interface allows us to refer to an unparameterized Server
