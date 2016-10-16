@@ -1,6 +1,7 @@
 #ifndef NPC_H
 #define NPC_H
 
+#include <iostream>
 #include <vector>
 #include <string>
 
@@ -22,55 +23,58 @@ class NPC {
 
 public:
 	//NPC Constructor
-	NPC (int id, std::string shortdesc);
+	NPC (int const id, std::string const shortdesc);
 	
 	//Armor
 	int getArmor() const;
-	void setArmor(int armor);
+	void setArmor(int const armor);
 	
 	//Damage
 	std::string getDamage() const;
-	void setDamage(std::string& damage);
+	void setDamage(const std::string& damage);
 	
 	//Description
-	std::vector<string> getDesc() const;
-	void setDesc(vector<std::string>& description);
+	std::vector<std::string> getDesc() const;
+	void setDesc(const std::vector<std::string>& description);
+	void printDesc() const;
 
 	//Exp
 	int getExp() const;
-	void setExp(int exp);
+	void setExp(int const exp);
 
 	//Gold
 	int getGold() const;
-	void setGold(int gold);
+	void setGold(int const gold);
 
 	//Hit
 	std::string getHit() const;
-	void setHit(std::string& hit);
+	void setHit(const std::string& hit);
 
 	//ID
 	int getId() const;
-	void setId(int id);
+	void setId(int const id);
 
 	//Keywords
 	std::vector<std::string> getKeywords() const;
-	void setKeywords(std::vector<string>& keywords);
+	void setKeywords(const std::vector<std::string>& keywords);
+	void printKeywords() const;
 
 	//Level
 	int getLevel() const;
-	void setLevel(int level);
+	void setLevel(int const level);
 
 	//LongDesc
-	std::string getLongDesc() const;
-	void setLongDesc(std::string& longdesc);
+	std::vector<std::string> getLongDesc() const;
+	void setLongDesc(const std::vector<std::string>& longdesc);
+	void printLongDesc() const;
 	
 	//ShortDesc
 	std::string getShortDesc() const;
-	void setShortDesc(std::string& shortdesc);
+	void setShortDesc(const std::string& shortdesc);
 
 	//Thac0
 	int getThac0() const;
-	void setThac0(int thac0);
+	void setThac0(int const thac0);
 };
 
 #endif

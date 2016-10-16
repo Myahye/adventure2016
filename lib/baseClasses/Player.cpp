@@ -1,14 +1,14 @@
 #include "Player.h"
 
 //Player constructor
-Player::Player (int pid, std::string shortdesc):
+Player::Player (int const pid, std::string const shortdesc):
     pid{pid}, shortdesc{shortdesc}{};
 
 //Getter and setter for Armor
 int Player::getArmor() const {
     return armor;
 }
-void Player::setArmor(int armor) {
+void Player::setArmor(int const armor) {
     this->armor = armor;
 }
 
@@ -16,7 +16,7 @@ void Player::setArmor(int armor) {
 std::string Player::getDamage() const {
     return damage;
 }
-void Player::setDamage(std::string& damage) {
+void Player::setDamage(const std::string& damage) {
     this->damage = damage;
 }
 
@@ -24,15 +24,20 @@ void Player::setDamage(std::string& damage) {
 std::vector<std::string> Player::getDesc() const {
     return description;
 }
-void Player::setDesc(std::vector<std::string>& description) {
+void Player::setDesc(const std::vector<std::string>& description) {
     this->description = description;
+}
+void Player::printDesc() const{
+    for (auto &desc : description){
+        std::cout << desc << std::endl;
+    }
 }
 
 //Getter and setter for Exp
 int Player::getExp() const {
     return exp;
 }
-void Player::setExp(int exp) {
+void Player::setExp(int const exp) {
     this->exp = exp;
 }
 
@@ -40,7 +45,7 @@ void Player::setExp(int exp) {
 int Player::getGold() const {
     return gold;
 }
-void Player::setGold(int gold) {
+void Player::setGold(int const gold) {
     this->gold = gold;
 }
 
@@ -48,7 +53,7 @@ void Player::setGold(int gold) {
 std::string Player::getHit() const {
     return hit;
 }
-void Player::setHit(std::string& hit) {
+void Player::setHit(const std::string& hit) {
     this->hit = hit;
 }
 
@@ -56,7 +61,7 @@ void Player::setHit(std::string& hit) {
 int Player::getId() const {
     return pid;
 }
-void Player::setId(int pid) {
+void Player::setId(int const pid) {
     this->pid = pid;
 }
 
@@ -64,15 +69,20 @@ void Player::setId(int pid) {
 std::vector<std::string> Player::getKeywords() const {
     return keywords;
 }
-void Player::setKeywords(std::vector<std::string>& keywords) {
+void Player::setKeywords(const std::vector<std::string>& keywords) {
     this->keywords = keywords;
+}
+void Player::printKeywords() const{
+    for (auto &word : keywords){
+        std::cout << word << std::endl;
+    }
 }
 
 //Getter and setter for Level
 int Player::getLevel() const {
     return level;
 }
-void Player::setLevel(int level) {
+void Player::setLevel(int const level) {
     this->level = level;
 }
 
@@ -80,15 +90,21 @@ void Player::setLevel(int level) {
 std::vector<std::string> Player::getLongDesc() const {
     return longdesc;
 }
-void Player::setLongDesc(std::vector<std::string>& longdesc) {
+void Player::setLongDesc(const std::vector<std::string>& longdesc) {
     this->longdesc = longdesc;
+}
+
+void Player::printLongDesc() const{
+    for (auto &desc : longdesc){
+        std::cout << desc << std::endl;
+    }
 }
 
 //Getter and setter for Shortdesc
 std::string Player::getShortDesc() const {
     return shortdesc;
 }
-void Player::setShortDesc(std::string& shortdesc) {
+void Player::setShortDesc(const std::string& shortdesc) {
     this->shortdesc = shortdesc;
 }
 
@@ -96,6 +112,6 @@ void Player::setShortDesc(std::string& shortdesc) {
 int Player::getThac0() const {
     return thac0;
 }
-void Player::setThac0(int thac0) {
+void Player::setThac0(int const thac0) {
     this->thac0 = thac0;
 }

@@ -1,101 +1,80 @@
-#include "Player.h"
+#ifndef PLAYER_H
+#define PLAYER_H
 
-//Player constructor
-Player::Player (int pid, std::string shortdesc):
-    pid{pid}, shortdesc{shortdesc}{};
+#include <iostream>
+#include <vector>
+#include <string>
 
-//Getter and setter for Armor
-int Player::getArmor() const {
-    return armor;
-}
-void Player::setArmor(int armor) {
-    this->armor = armor;
-}
+class Player {
+private:
+    int armor;
+    int exp;
+    int gold;
+    int pid;
+    int level;
+    int thac0;
+    
+    std::string damage;
+    std::string hit;
+    std::string shortdesc;
+    
+    std::vector<std::string> description;
+    std::vector<std::string> keywords;
+    std::vector<std::string> longdesc;
+public:
+    // Constructor
+    Player (int const pid, std::string const shortdesc);
+    
+    //Armor
+    int getArmor() const;
+    void setArmor(int const armor);
+    
+    //Damage
+    std::string getDamage() const;
+    void setDamage(const std::string& damage);
+    
+    //Description
+    std::vector<std::string> getDesc() const;
+    void setDesc(const std::vector<std::string>& description);
+    void printDesc() const;
 
-//Getter and setter for Damage
-std::string Player::getDamage() const {
-    return damage;
-}
-void Player::setDamage(std::string& damage) {
-    this->damage = damage;
-}
+    //Experience
+    int getExp() const;
+    void setExp(int const exp);
+    
+    //Gold
+    int getGold() const;
+    void setGold(int const gold);
+    
+    //Hit
+    std::string getHit() const;
+    void setHit(const std::string& hit);
+    
+    //Player ID
+    int getId() const;
+    void setId(int const pid);
+    
+    //Keywords
+    std::vector<std::string> getKeywords() const;
+    void setKeywords(const std::vector<std::string>& keywords);
+    void printKeywords() const;
 
-//Getter and setter for Desc
-std::vector<std::string> Player::getDesc() const {
-    return description;
-}
-void Player::setDesc(std::vector<std::string>& description) {
-    this->description = description;
-}
+    //Levels
+    int getLevel() const;
+    void setLevel(int const level);
+    
+    //Long Description
+    std::vector<std::string> getLongDesc() const;
+    void setLongDesc(const std::vector<std::string>& longdesc);
+    void printLongDesc() const;
+    
+    //Short Description
+    std::string getShortDesc() const;
+    void setShortDesc(const std::string& shortdesc);
+    
+    //Thac0
+    int getThac0() const;
+    void setThac0(int const thac0);
+};
 
-//Getter and setter for Exp
-int Player::getExp() const {
-    return exp;
-}
-void Player::setExp(int exp) {
-    this->exp = exp;
-}
-
-//Getter and setter for Gold
-int Player::getGold() const {
-    return gold;
-}
-void Player::setGold(int gold) {
-    this->gold = gold;
-}
-
-//Getter and setter for Hit
-std::string Player::getHit() const {
-    return hit;
-}
-void Player::setHit(std::string& hit) {
-    this->hit = hit;
-}
-
-//Getter and setter for Player ID
-int Player::getId() const {
-    return pid;
-}
-void Player::setId(int pid) {
-    this->pid = pid;
-}
-
-//Getter and setter for Keywords
-std::vector<std::string> Player::getKeywords() const {
-    return keywords;
-}
-void Player::setKeywords(std::vector<std::string>& keywords) {
-    this->keywords = keywords;
-}
-
-//Getter and setter for Level
-int Player::getLevel() const {
-    return level;
-}
-void Player::setLevel(int level) {
-    this->level = level;
-}
-
-//Getter and setter for LongDesc
-std::vector<std::string> Player::getLongDesc() const {
-    return longdesc;
-}
-void Player::setLongDesc(std::vector<std::string>& longdesc) {
-    this->longdesc = longdesc;
-}
-
-//Getter and setter for Shortdesc
-std::string Player::getShortDesc() const {
-    return shortdesc;
-}
-void Player::setShortDesc(std::string& shortdesc) {
-    this->shortdesc = shortdesc;
-}
-
-//Getter and setter for Thac0
-int Player::getThac0() const {
-    return thac0;
-}
-void Player::setThac0(int thac0) {
-    this->thac0 = thac0;
-}
+#endif /* PLAYER_H */
