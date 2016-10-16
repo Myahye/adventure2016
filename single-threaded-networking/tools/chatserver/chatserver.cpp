@@ -1,0 +1,170 @@
+/////////////////////////////////////////////////////////////////////////////
+//                         Single Threaded Networking
+//
+// This file is distributed under the MIT License. See the LICENSE file
+// for details.
+/////////////////////////////////////////////////////////////////////////////
+
+// - Can only send to one specific id/client or all clients no in between for now how to fix?
+// - how to differentiate between different users on
+//   same client (I guess user id username/password would fix this) *probably not a problem as 
+//   there is a unique id for each running client
+// - sign on/ sign off (cmp276)
+// - have a user/pass list on server when user types in username and pass compare with list then 
+//   recognize the client id as that user (channel 1 -> Derek123, Channel2 ->moman601)
+// - 
+
+#include "Server.h"
+
+#include <sstream>
+
+#include <unistd.h>
+
+#include <boost/algorithm/string/predicate.hpp>
+
+
+using namespace networking;
+
+std::vector<Connection> clients;
+std::unordered_map<Connection,std::deque<Message>, ConnectionHash> clientMessageQueues;
+std::unordered_map<std::string, std::string> commands {{"Create","Create "},{"Look","Look "},{"Go","Go "},{"Read","Read "},{"Attack","Attack "},{"Say","Say "},{"ListCommands","commands"},};
+
+//gsl::string_span<> works: tested with g++ 6.2.0 *removed
+std::string handleCreateCommand(const Message &message) {
+  return "Create command not yet implemented.";
+}
+
+std::string handleLookCommand(const Message &message) {
+  return "Look command not yet implemented.";
+}
+
+std::string handleGoCommand(const Message &message) {
+  return "Go command not yet implemented.";
+}
+
+std::string handleReadCommand(const Message &message) {
+  return "Read command not yet implemented.";
+}
+
+std::string handleAttackCommand(const Message &message) {
+  return "Attack command not yet implemented.";
+}
+
+std::string handleListCommandsCommand() {
+  std::string commandsList = "A list of commands:\n\n";
+
+  for(auto& command : commands) {
+    commandsList += "  " + command.second + "\n";
+  }
+
+  return commandsList;
+}
+
+void
+onConnect(Connection c) {
+  printf("New connection found: %lu\n", c.id);
+  clientMessageQueues[c] = std::deque<Message>();
+  clients.push_back(c);
+}
+
+
+void
+onDisconnect(Connection c) {
+  printf("Connection lost: %lu\n", c.id);
+  auto eraseBegin = std::remove(std::begin(clients), std::end(clients), c);
+  clients.erase(eraseBegin, std::end(clients));
+  clientMessageQueues.erase(c);
+}
+
+// Modified by Lawrence Yu - Reads and processes incoming messages from clients since last update call
+// and returns a message queue containing the proper messages to send to clients
+std::deque<Message>
+processMessagesAndBuildOutgoing(Server &server, bool &quit) {
+
+  std::unordered_map<Connection, Message, ConnectionHash> outgoingMap;
+  std::deque<Message> outgoingQueue;
+
+  for(auto& client : clients) {
+    outgoingMap[client] = {client,""};
+  }
+
+  for (auto& client : clients) {
+    if(!clientMessageQueues[client].empty()) {
+      if (clientMessageQueues[client].back().text == "quit") {
+        server.disconnect(client);
+      } else if (clientMessageQueues[client].back().text == "shutdown") {
+        printf("Shutting down.\n");
+        quit = true;
+      } else if (boost::istarts_with(clientMessageQueues[client].back().text,commands["Create"])) {
+        outgoingMap[client].text += std::to_string(client.id) + "> " + handleCreateCommand(clientMessageQueues[client].back()) + "\n";
+        clientMessageQueues[client].pop_back();
+      } else if (boost::istarts_with(clientMessageQueues[client].back().text,commands["Look"])) {
+        outgoingMap[client].text += std::to_string(client.id) + "> " + handleLookCommand(clientMessageQueues[client].back()) + "\n";
+        clientMessageQueues[client].pop_back();
+      } else if (boost::istarts_with(clientMessageQueues[client].back().text,commands["Go"])) {
+        outgoingMap[client].text += std::to_string(client.id) + "> " + handleGoCommand(clientMessageQueues[client].back()) + "\n";
+        clientMessageQueues[client].pop_back();
+      } else if (boost::istarts_with(clientMessageQueues[client].back().text,commands["Read"])) {
+        outgoingMap[client].text += std::to_string(client.id) + "> " + handleReadCommand(clientMessageQueues[client].back()) + "\n";
+        clientMessageQueues[client].pop_back();
+      } else if (boost::istarts_with(clientMessageQueues[client].back().text,commands["Attack"])) {
+        outgoingMap[client].text += std::to_string(client.id) + "> " + handleAttackCommand(clientMessageQueues[client].back()) + "\n";
+        clientMessageQueues[client].pop_back();
+      } else if (boost::istarts_with(clientMessageQueues[client].back().text,commands["Say"])) {
+        std::for_each(outgoingMap.begin(), outgoingMap.end(), [client] (auto &m) { m.second.text += std::to_string(m.first.id) + "> " + clientMessageQueues[client].back().text.substr(4) + "\n"; });
+        clientMessageQueues[client].pop_back();
+      } else if (boost::iequals(clientMessageQueues[client].back().text, commands["ListCommands"])) {
+        outgoingMap[client].text += std::to_string(client.id) + "> " + handleListCommandsCommand() + "\n";
+        clientMessageQueues[client].pop_back();
+      } else {
+        std::for_each(outgoingMap.begin(), outgoingMap.end(), [client] (auto &m) { m.second.text += std::to_string(m.first.id) + "> " + clientMessageQueues[client].back().text + "\n"; });
+        clientMessageQueues[client].pop_back();
+      }
+    }
+  }
+
+  for(auto& client : clients) {
+    outgoingQueue.push_back(outgoingMap[client]);
+  }
+
+  return outgoingQueue;
+}
+
+void
+addToClientMessageQueues(const auto& incoming) {
+  for (auto& message : incoming) {
+    clientMessageQueues[message.connection].push_front({message.connection,message.text});
+  }
+}
+
+
+int
+main(int argc, char* argv[]) {
+  if (argc < 2) {
+    printf("Usage:\n%s <port>\ne.g. %s 4002\n", argv[0], argv[0]);
+    return 1;
+  }
+
+  bool done = false;
+  unsigned short port = std::stoi(argv[1]);
+  Server server{port, onConnect, onDisconnect};
+
+  while (!done) {
+    try {
+      server.update();
+    } catch (std::exception& e) {
+      printf("Exception from Server update:\n%s\n\n", e.what());
+      done = true;
+    }
+
+    auto incoming = server.receive();
+    addToClientMessageQueues(incoming);
+    auto outgoing = processMessagesAndBuildOutgoing(server, done);
+
+    server.send(outgoing);
+    sleep(1);
+  }
+
+  return 0;
+}
+
