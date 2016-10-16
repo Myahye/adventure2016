@@ -20,13 +20,12 @@
 
 #include <unistd.h>
 
-#include <boost/algorithm/string/predicate.hpp>
-
 #include <chrono>
 
 #include <iostream>
 
 #include "ServerHelper.h"
+#include "Authentication.h"
 
 
 using namespace networking;
@@ -158,6 +157,21 @@ addToClientMessageQueues(const auto& incoming) {
 //   return outgoing;
 // }
 
+std::deque<Message> processMessages(ServerHelper& serverHelper, std::deque<Message>& commands, Server& server) {
+
+  std::deque<Message> outgoing;
+
+  for(auto& message : commands) {
+    if(message.connection.currentState != ConnectionState::AUTHORIZED) {
+      server.send(std::deque<Message>{Message{message.connection, Authentication::authorizeClient(message, server, clients, serverHelper)}});
+    } else {
+      outgoing.push_back(message);
+    }
+  }
+
+  return serverHelper.parseCommands(outgoing, clients);
+}
+
 int
 main(int argc, char* argv[]) {
   if (argc < 2) {
@@ -194,12 +208,12 @@ main(int argc, char* argv[]) {
     //model::initWorld(pathtoyaml);
     end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end-start;
-    if(elapsed_seconds.count() >= 3.0){
-       std::cout
-           << "elapsed time: " << elapsed_seconds.count() << "s\n";
+    if(elapsed_seconds.count() >= 1.0){
+       // std::cout
+       //     << "elapsed time: " << elapsed_seconds.count() << "s\n";
       std::deque<Message> commands = pullFromClientMessageQueues(server,done);
       //auto response = parseCommandsDummy(commands);
-      std::deque<Message> response = serverHelper.parseCommands(commands, clients);
+      std::deque<Message> response = processMessages(serverHelper, commands, server);
       server.send(response);
       start = std::chrono::system_clock::now();
     }

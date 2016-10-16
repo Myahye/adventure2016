@@ -6,6 +6,7 @@ add_executable(chatserver
 target_link_libraries(chatserver
   networking
   model
+  authentication
 )
 
 set_target_properties(chatserver

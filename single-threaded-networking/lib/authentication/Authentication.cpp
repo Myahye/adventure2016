@@ -30,9 +30,9 @@ namespace Authentication {
   	return std::get<2>(*player) == password;
   }
 
-  std::string authorizeClient(Message& message, Server& server, std::vector <Connection>& clients, CommandParse& commandParse) {
+  std::string authorizeClient(Message& message, Server& server, std::vector <Connection>& clients, ServerHelper& serverHelper) {
 
-  	std::vector<std::tuple<int,std::string,std::string>> players = commandParse.getPlayerCredentialsVector();
+  	std::vector<std::tuple<int,std::string,std::string>> players = serverHelper.getPlayerCredentialsVector();
 
     if (message.text == "1" && message.connection.currentState == ConnectionState::UNAUTHORIZED) {
 
@@ -45,7 +45,7 @@ namespace Authentication {
 
       return "Please enter your username and password ex. 'Bob Bobpassword': \n";
     } else if (message.connection.currentState == ConnectionState::REGISTERING) {
-      return handleRegistration(message, server, clients, players, commandParse);
+      return handleRegistration(message, server, clients, players, serverHelper);
     } else if (message.connection.currentState == ConnectionState::LOGIN) {
       return handleLogin(message, server, clients, players);
     } else {
@@ -91,7 +91,7 @@ namespace Authentication {
     }
   }
 
-  std::string handleRegistration(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, CommandParse& commandParse) {
+  std::string handleRegistration(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, ServerHelper& serverHelper) {
     std::vector <std::string> playerCredentials;
     boost::trim_if(message.text, boost::is_any_of("\t "));
     boost::split(playerCredentials, message.text, boost::is_any_of("\t "), boost::token_compress_on);
@@ -111,7 +111,7 @@ namespace Authentication {
     } else if ((playerID = findExistingPlayer(playerCredentials[0], players)) != 0) {
       return "Sorry that username is in use. Please enter a different username: \n";
     } else {
-      playerID = commandParse.createPlayer(playerCredentials[0],playerCredentials[1]);
+      playerID = serverHelper.createPlayer(playerCredentials[0],playerCredentials[1]);
 
       server.setPlayerIDConnectedToClient(message.connection,playerID);
       server.setClientCurrentState(message.connection, ConnectionState::AUTHORIZED);
