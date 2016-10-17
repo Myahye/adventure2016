@@ -1,8 +1,56 @@
 #include "NPC.h"
 
 //NPC Constructor
-NPC::NPC (int const id, std::string const shortdesc): 
+NPC::NPC (int const id, std::string const shortdesc):
 	id{id}, shortdesc{shortdesc}{};
+
+//Clonning
+NPC::NPC(const NPC &npc){
+	this->armor =npc.armor;
+	this->id    =npc.id;
+	this->exp   =npc.exp;
+	this->gold	=npc.gold;
+	this->level	=npc.level;
+	this->thac0	=npc.thac0;
+
+	this->damage		=npc.damage;
+	this->hit				=npc.hit;
+	this->shortdesc	=npc.shortdesc;
+
+	/*clean all vectors of the objects before copy*/
+	clear_vec(description);
+	clear_vec(keywords);
+	clear_vec(longdesc);
+
+	/*------copy vectors------*/
+	copy_vec(this->description,npc.description);
+	copy_vec(this->keywords,npc.keywords);
+	copy_vec(this->longdesc,npc.longdesc);
+}
+
+NPC& NPC::operator =(const NPC& npc){
+	this->armor =npc.armor;
+	this->id    =npc.id;
+	this->exp   =npc.exp;
+	this->gold	=npc.gold;
+	this->level	=npc.level;
+	this->thac0	=npc.thac0;
+
+	this->damage		=npc.damage;
+	this->hit				=npc.hit;
+	this->shortdesc	=npc.shortdesc;
+
+	/*clean all vectors of the objects before copy*/
+	clear_vec(description);
+	clear_vec(keywords);
+	clear_vec(longdesc);
+
+	/*------copy vectors------*/
+	copy_vec(this->description,npc.description);
+	copy_vec(this->keywords,npc.keywords);
+	copy_vec(this->longdesc,npc.longdesc);
+	return *this;
+}
 
 //Getter and Setter for Armor
 int NPC::getArmor() const {
@@ -113,4 +161,14 @@ int NPC::getThac0() const {
 }
 void NPC::setThac0(int const thac0) {
 	this->thac0 = thac0;
+}
+
+void NPC::copy_vec(std::vector<std::string>& output, const std::vector<std::string> Alist ){
+  for(auto& i:Alist)
+    output.push_back(i);
+}
+
+void NPC::clear_vec(std::vector<std::string> Alist){
+  Alist.clear();
+  Alist.shrink_to_fit(); // reduces the size of an already expanded vector back to 0 p.s. I THINK
 }
