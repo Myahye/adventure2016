@@ -9,31 +9,38 @@ Door::Door() {
     this->dir = "none";
     this->keywords = "none";
     this->Door_id = 0;
-    this->to = 0;
+    this->destinationId = 0;
 }
-Door::Door(string dir) {
+Door::Door(std::string dir) {
     this->desc = "none";
     this->dir = dir;
     this->keywords = "none";
     this->Door_id = 0;
-    this->to = 0;
+    this->destinationId = 0;
 }
-Door::Door(string& new_desc, string& new_dir, string& new_keywords, int& new_door_id, int& new_to)
+Door::Door(std::string dir, std::string description, int destinationId) {
+    this->desc = description;
+    this->dir = dir;
+    this->keywords = "none";
+    this->Door_id = 0;
+    this->destinationId = destinationId;
+}
+Door::Door(std::string& new_desc, std::string& new_dir, std::string& new_keywords, int& new_door_id, int& new_destinationId)
         : desc{new_desc}
         , dir{new_dir}
         , keywords{new_keywords}
         , Door_id{static_cast<unsigned int>(new_door_id)}
-        , to{static_cast<unsigned int>(new_to)} {}
+        , destinationId{static_cast<unsigned int>(new_destinationId)} {}
 
-string Door::getDesc() const {
+std::string Door::getDesc() const {
     return this -> desc;
 }
 
-string Door::getDir() const {
+std::string Door::getDir() const {
     return this -> dir;
 }
 
-string Door::getKeywords() const {
+std::string Door::getKeywords() const {
     return this -> keywords;
 }
 
@@ -41,20 +48,20 @@ int Door::getDoorId() const {
     return this -> Door_id;
 }
 
-//Needs to be changed
-int Door::getTo() const {
-    return this -> to;
+//Needs destinationId be changed
+int Door::getDestinationId() const {
+    return this -> destinationId;
 }
 
-void Door::setDesc(string& new_desc) {
+void Door::setDesc(std::string& new_desc) {
     this -> desc = new_desc;
 }
 
-void Door::setDir(string& new_dir) {
+void Door::setDir(std::string& new_dir) {
     this -> dir = new_dir;
 }
 
-void Door::setKeywords(string& new_keywords) {
+void Door::setKeywords(std::string& new_keywords) {
     this -> keywords = new_keywords;
 }
 

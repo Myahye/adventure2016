@@ -5,32 +5,31 @@
 #include <vector>
 #include <string>
 
-using namespace std;
-
 class Door{
 public:
     Door();
-    Door(string dir);
-    Door(string& new_desc, string& new_dir, string& new_keywords, int& new_door_id, int& new_to);
+    Door(std::string dir);
+    Door(std::string dir, std::string description, int destinationId);
+    Door(std::string& new_desc, std::string& new_dir, std::string& new_keywords, int& new_door_id, int& new_destinationId);
 
-    string getDesc() const;
-    string getDir() const;
-    string getKeywords() const;
+    std::string getDesc() const;
+    std::string getDir() const;
+    std::string getKeywords() const;
     int getDoorId() const;
-    int getTo() const;
+    int getDestinationId() const;
 
-    void setDesc(string& new_desc);
-    void setDir(string& new_dir);
-    void setKeywords(string& new_keywords);
+    void setDesc(std::string& new_desc);
+    void setDir(std::string& new_dir);
+    void setKeywords(std::string& new_keywords);
     void setDoorId(int new_door_id);
 
 
 private:
-    string desc;
-    string dir;
-    string keywords;
+    std::string desc;
+    std::string dir;
+    std::string keywords;
     unsigned int Door_id;
-    unsigned int to;
+    unsigned int destinationId;
 
 };
 #endif /* Door_h */

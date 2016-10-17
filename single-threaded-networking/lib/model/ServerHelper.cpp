@@ -3,10 +3,7 @@
 
 using namespace networking;
 
-ServerHelper::ServerHelper() {
-  this->model = Model{};
-
-}
+ServerHelper::ServerHelper() {}
 
 std::unordered_map<std::string, std::string> commands {{"Create","create "},{"Look","look "},{"Walk","walk "},{"Read","read "},{"Go","go "},{"Attack","attack "},{"Say","say "},{"ListCommands","ls "},};
 
@@ -29,7 +26,7 @@ ServerHelper::parseCommands(const std::deque<Message>& clientMessageQueue, std::
           outgoing.push_back(Message{message.connection, messageText});
         }
         else if (boost::istarts_with(messageText,commands["Go"])) {
-          std::string messageText = std::to_string(message.connection.playerIDConnectedToClientConnection) + "> " + /*handleCreateCommand(message)*/ + "\n";
+          std::string messageText = std::to_string(message.connection.playerIDConnectedToClientConnection) + "> " + this->model.movePlayer(message.connection.playerIDConnectedToClientConnection, message.text.substr(3)) + "\n";
           outgoing.push_back(Message{message.connection, messageText});
         }
         else if (boost::istarts_with(messageText,commands["Read"])) {

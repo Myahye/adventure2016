@@ -1,11 +1,16 @@
 #ifndef model_h
 #define model_h
-
+//#include "CustomError.h"
 #include <string>
 #include <unordered_map>
 #include <tuple>
 #include <boost/algorithm/string/predicate.hpp>
 #include "Player.h"
+#include "Room.h"
+#include "Door.h"
+#include "CustomError.h"
+
+//using namespace custom_errors;
 
 class Model {
 
@@ -13,7 +18,8 @@ private:
 std::unordered_map<int,Player> players;
 int assignedIDs = 1;
 //need to change these to temlpate values
-//std::unordered_map<PlayerId,RoomId> playerLocation;
+std::unordered_map<int,int> playerLocation;
+std::unordered_map<int,Room> rooms;
 
 public:
 
@@ -35,7 +41,7 @@ public:
 
   //Methods for players to interact with room
   //These are inorder of importance and what needs to be implemented first
-  //string movePlayer(const int& playerId, const string& direction);
+  std::string movePlayer(const int& playerId, const std::string& direction);
   //Model::getAvailableDoors
   //Model::getAvailableRoomCommands
   //
