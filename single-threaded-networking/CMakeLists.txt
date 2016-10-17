@@ -19,8 +19,4 @@ link_directories(${LIBRARY_OUTPUT_PATH})
 set(CMAKE_TEMP_LIBRARY_PATH "${PROJECT_BINARY_DIR}/lib")
 
 add_subdirectory(lib)
-<<<<<<< HEAD
 add_subdirectory(tools)
-=======
-add_subdirectory(tools)
->>>>>>> 8f97c93b10bffbe7ba2a5e3b6bc5cbda7e8aaa08

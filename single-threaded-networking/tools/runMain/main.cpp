@@ -108,8 +108,12 @@ void testObjectClass() {
 	cout << "Finished Object class tests!" << endl;
 }
 
-void testNPCCLass() {
-	vector<Room> rooms;
+int main() {
+	testObjectClass();
+
+	/*
+
+    vector<Room> rooms;
     Door door1("south");
     Door door2("west");
     Door door3("north");
@@ -147,11 +151,8 @@ void testNPCCLass() {
 
     Player player1{1, "Kieran", "1234"};
     cout << "Player1 ID: " << player1.getId() << ", username: " << player1.getUsername() << ", password: " << player1.getPassword() <<endl;
-}
+	
+	*/
 
-int main() {
-	testNPCCLass();
-	testObjectClass();
-    
 	return 0;
 }
