@@ -1,4 +1,0 @@
-add_library(NPC NPC.cpp)
-install(TARGETS NPC DESTINATION lib)
-set_property(TARGET NPC PROPERTY CXX_STANDARD 14)
-
