@@ -6,6 +6,7 @@ Object::Object(int id, std::string itemType)
 : id{id},
   itemType{itemType} {};
 
+/*
 Object::Object(const Object &ob){
   this->id=ob.id;
   this->cost=ob.cost;
@@ -19,6 +20,7 @@ Object::Object(const Object &ob){
   copy_vec(wearFlags);
   copy_vec(extra);
 }
+*/
 
 // Getter and setter for ID:
 int Object::getID() const {
@@ -55,7 +57,7 @@ std::string Object::getItemType() const {
   return itemType;
 }
 
-void Object::setItemType(std::string& itemType) {
+void Object::setItemType(const std::string& itemType) {
   this->itemType = itemType;
 }
 
@@ -65,11 +67,11 @@ std::vector<std::string> Object::getAttributes() const {
   return attributes;
 }
 
-void Object::setAttributes(std::vector<std::string>& attributes) {
+void Object::setAttributes(const std::vector<std::string>& attributes) {
   this->attributes = attributes;
 }
 
-void Object::addAttribute(std::string& attribute) {
+void Object::addAttribute(const std::string& attribute) {
   this->attributes.push_back(attribute);
 }
 
@@ -79,11 +81,11 @@ std::vector<std::string> Object::getKeyWords() const {
   return keyWords;
 }
 
-void Object::setKeyWords(std::vector<std::string>& keyWords) {
+void Object::setKeyWords(const std::vector<std::string>& keyWords) {
   this->keyWords = keyWords;
 }
 
-void Object::addKeyWord(std::string& keyWord) {
+void Object::addKeyWord(const std::string& keyWord) {
   this->keyWords.push_back(keyWord);
 }
 
@@ -93,25 +95,25 @@ std::vector<std::string> Object::getLongDesc() const {
   return longDesc;
 }
 
-void Object::setLongDesc(std::vector<std::string>& longDesc) {
+void Object::setLongDesc(const std::vector<std::string>& longDesc) {
   this->longDesc = longDesc;
 }
 
-void Object::addLongDesc(std::string& longDesc) {
+void Object::addLongDesc(const std::string& longDesc) {
   this->longDesc.push_back(longDesc);
 }
 
 
 // Getter and setter for shortDesc:
-std::vector<std::string> Object::getshortDesc() const {
+std::vector<std::string> Object::getShortDesc() const {
   return shortDesc;
 }
 
-void Object::setShortDesc(std::vector<std::string>& shortDesc) {
+void Object::setShortDesc(const std::vector<std::string>& shortDesc) {
   this->shortDesc = shortDesc;
 }
 
-void Object::addShortDesc(std::string& shortDesc) {
+void Object::addShortDesc(const std::string& shortDesc) {
   this->shortDesc.push_back(shortDesc);
 }
 
@@ -121,11 +123,11 @@ std::vector<std::string> Object::getWearFlags() const {
   return wearFlags;
 }
 
-void Object::setWearFlags(std::vector<std::string>& wearFlags) {
+void Object::setWearFlags(const std::vector<std::string>& wearFlags) {
   this->wearFlags = wearFlags;
 }
 
-void Object::addWearFlag(std::string& wearFlags) {
+void Object::addWearFlag(const std::string& wearFlags) {
   this->wearFlags.push_back(wearFlags);
 }
 
@@ -135,10 +137,10 @@ std::vector<std::string> Object::getExtra() const {
   return extra;
 }
 
-void Object::setExtra(std::vector<std::string>& extra) {
+void Object::setExtra(const std::vector<std::string>& extra) {
   this->extra = extra;
 }
 
-void Object::addExtra(std::string& extra) {
+void Object::addExtra(const std::string& extra) {
   this->extra.push_back(extra);
 }

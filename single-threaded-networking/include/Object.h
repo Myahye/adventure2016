@@ -24,6 +24,7 @@ private:
 public:
 	// Object constructor
 	Object(int id, std::string itemType);
+	
 	// Object copy constructor
 	Object(const Object &ob);
 
@@ -41,40 +42,39 @@ public:
 
   	// Getter and setter or itemType:
   	std::string getItemType() const;
-  	void setItemType(std::string& itemType);
+  	void setItemType(const std::string& itemType);
 
   	// Getter and setter for attributes:
 	std::vector<std::string> getAttributes() const;
-	void setAttributes(std::vector<std::string>& attributes);
-	void addAttribute(std::string& attribute);
+	void setAttributes(const std::vector<std::string>& attributes);
+	void addAttribute(const std::string& attribute);
 
 	// Getter and setter for keyWords:
 	std::vector<std::string> getKeyWords() const;
-	void setKeyWords(std::vector<std::string>& keyWords);
-  	void addKeyWord(std::string& keyWord);
+	void setKeyWords(const std::vector<std::string>& keyWords);
+  	void addKeyWord(const std::string& keyWord);
 
   	// Getter and setter for longDesc:
   	std::vector<std::string> getLongDesc() const;
-	void setLongDesc(std::vector<std::string>& longDesc);
-	void addLongDesc(std::string& longDesc);
+	void setLongDesc(const std::vector<std::string>& longDesc);
+	void addLongDesc(const std::string& longDesc);
 
   	// Getter and setter for shortDesc:
-  	std::vector<std::string> getshortDesc() const;
-	void setShortDesc(std::vector<std::string>& shortDesc);
-	void addShortDesc(std::string& shortDesc);
-
+  	std::vector<std::string> getShortDesc() const;
+	void setShortDesc(const std::vector<std::string>& shortDesc);
+	void addShortDesc(const std::string& shortDesc);
 
 	// Getter and setter or wearFlags:
 	  std::vector<std::string> getWearFlags() const;
-	void setWearFlags(std::vector<std::string>& wearFlags);
-	void addWearFlag(std::string& wearFlags);
+	void setWearFlags(const std::vector<std::string>& wearFlags);
+	void addWearFlag(const std::string& wearFlags);
 
   	// Getter and setter for extra:
   	std::vector<std::string> getExtra() const;
-	void setExtra(std::vector<std::string>& exta);
-	void addExtra(std::string& extra);
+	void setExtra(const std::vector<std::string>& exta);
+	void addExtra(const std::string& extra);
 		
-	void copy_vec(vector<string>& output, const vector<string>& Alist );
+	void copy_vec(std::vector<std::string>& output, const std::vector<std::string>& Alist );
 };
 
 #endif

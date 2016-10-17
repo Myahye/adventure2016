@@ -1,3 +1,0 @@
-add_subdirectory(yamlParse)
-add_subdirectory(baseClasses)
-add_subdirectory(helperClasses)

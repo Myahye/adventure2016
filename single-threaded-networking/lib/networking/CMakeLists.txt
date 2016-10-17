@@ -13,4 +13,4 @@ set_target_properties(networking
 install(TARGETS networking
   ARCHIVE DESTINATION lib
 )
-
+set_property(TARGET networking PROPERTY CXX_STANDARD 14)
