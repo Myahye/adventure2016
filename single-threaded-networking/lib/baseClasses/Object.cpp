@@ -6,21 +6,54 @@ Object::Object(int id, std::string itemType)
 : id{id},
   itemType{itemType} {};
 
-/*
+
 Object::Object(const Object &ob){
   this->id=ob.id;
   this->cost=ob.cost;
   this->weight=ob.weight;
   this->itemType=ob.itemType;
 
-  copy_vec(attributes);
-  copy_vec(keyWords);
-  copy_vec(longDesc);
-  copy_vec(shortDesc);
-  copy_vec(wearFlags);
-  copy_vec(extra);
+  /*clean all vectors of the objects before copy*/
+  clear_vec(this->attributes);
+  clear_vec(this->keyWords);
+  clear_vec(this->longDesc);
+  clear_vec(this->shortDesc);
+  clear_vec(this->wearFlags);
+  clear_vec(this->extra);
+
+  /*------copy vectors------*/
+  copy_vec(this->attributes,ob.getAttributes());
+  copy_vec(this->keyWords,ob.getKeyWords());
+  copy_vec(this->longDesc,ob.getLongDesc());
+  copy_vec(this->shortDesc,ob.getShortDesc());
+  copy_vec(this->wearFlags,ob.getWearFlags());
+  copy_vec(this->extra, ob.getExtra());
 }
-*/
+
+Object& Object::operator =(const Object& ob){
+  this->id=ob.id;
+  this->cost=ob.cost;
+  this->weight=ob.weight;
+  this->itemType=ob.itemType;
+
+  /*clean all vectors of the objects before copy*/
+  clear_vec(this->attributes);
+  clear_vec(this->keyWords);
+  clear_vec(this->longDesc);
+  clear_vec(this->shortDesc);
+  clear_vec(this->wearFlags);
+  clear_vec(this->extra);
+
+  /*------copy vectors------*/
+  copy_vec(this->attributes,ob.getAttributes());
+  copy_vec(this->keyWords,ob.getKeyWords());
+  copy_vec(this->longDesc,ob.getLongDesc());
+  copy_vec(this->shortDesc,ob.getShortDesc());
+  copy_vec(this->wearFlags,ob.getWearFlags());
+  copy_vec(this->extra, ob.getExtra());
+
+  return *this;
+}
 
 // Getter and setter for ID:
 int Object::getID() const {
@@ -143,4 +176,14 @@ void Object::setExtra(const std::vector<std::string>& extra) {
 
 void Object::addExtra(const std::string& extra) {
   this->extra.push_back(extra);
+}
+
+void Object::copy_vec(std::vector<std::string>& output, const std::vector<std::string> Alist ){
+  for(auto& i:Alist)
+    output.push_back(i);
+}
+
+void Object::clear_vec(std::vector<std::string> Alist){
+  Alist.clear();
+  Alist.shrink_to_fit();
 }

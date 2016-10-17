@@ -24,9 +24,12 @@ private:
 public:
 	// Object constructor
 	Object(int id, std::string itemType);
-	
+
 	// Object copy constructor
 	Object(const Object &ob);
+
+	//Object overloaed
+	Object& operator =(const Object& ob);
 
 	// Getter and setter for ID:
   	int getID() const;
@@ -73,8 +76,9 @@ public:
   	std::vector<std::string> getExtra() const;
 	void setExtra(const std::vector<std::string>& exta);
 	void addExtra(const std::string& extra);
-		
-	void copy_vec(std::vector<std::string>& output, const std::vector<std::string>& Alist );
+
+	void copy_vec(std::vector<std::string>& output, const std::vector<std::string> Alist );
+	void clear_vec(std::vector<std::string> Alist);
 };
 
 #endif

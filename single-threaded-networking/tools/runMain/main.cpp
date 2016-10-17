@@ -21,7 +21,7 @@ void testObjectClass() {
 	Object treasure(12345, "Treasure chest");
 	assert(treasure.getID() == 12345);
 	assert(treasure.getItemType() == "Treasure chest");
-	cout << "Object: " << treasure.getItemType() << " with ID: " << treasure.getID() << endl; 
+	cout << "Object: " << treasure.getItemType() << " with ID: " << treasure.getID() << endl;
 	cout << endl;
 
 	// Cost and weight tests:
@@ -108,9 +108,57 @@ void testObjectClass() {
 	cout << "Finished Object class tests!" << endl;
 }
 
-int main() {
-	testObjectClass();
+void testObjectClone(){
+	Object b1(11,"A box");
+	b1.setCost(50);
+	b1.setWeight(100);
+	b1.addExtra("Extra are as follows");
+	b1.addExtra("Knock knock, open up the door, it's real");
+	b1.addExtra("Wit the non-stop, pop pop and stainless steel");
+	b1.addExtra("Go hard gettin busy wit it");
+	b1.addExtra("But I got such a good heart");
+	cout<< "Object 1 id : "<<b1.getID()<<" Object 1 is: "<<b1.getItemType()<<endl;
+	cout<<"Cost: "<<b1.getCost()<<" weight: "<<b1.getWeight()<<endl;
+	cout<<"EXTRA: "<<endl;
+	cout<<endl;
+	printVectorContent(b1.getExtra());
+	cout<<endl;
 
+	/*lets copy this shit*/
+
+	cout<<"OBJECT 2 COPY OF OBJECT 1"<<endl;
+	Object b2(b1);
+	b2.addExtra("I'll make a motherfucker wonder if he did it");
+	b2.addExtra("Damn right and I'll do it again");
+	b2.addExtra("Cuz I am right so I gots to win");
+
+	cout<< "Object 2 id : "<<b2.getID()<<" Object 2 is: "<<b2.getItemType()<<endl;
+	cout<<"Cost: "<<b2.getCost()<<" weight: "<<b2.getWeight()<<endl;
+	cout<<"EXTRA: "<<endl;
+	cout<<endl;
+	printVectorContent(b2.getExtra());
+	cout<<endl;
+
+	cout<<"OBJECT 3 copy of OBJECT 1 WITH operator overloading"<<endl;
+	Object b3(1,"Blank");
+	b3=b2;
+
+	b3.addExtra("Break break wit the enemy");
+	b3.addExtra("But no matter how many cats I break bread wit");
+	b3.addExtra("I'll break who you sendin me");
+
+	cout<< "Object 3 id : "<<b3.getID()<<" Object 3 is: "<<b3.getItemType()<<endl;
+	cout<<"Cost: "<<b3.getCost()<<" weight: "<<b3.getWeight()<<endl;
+	cout<<"EXTRA: "<<endl;
+	cout<<endl;
+	printVectorContent(b3.getExtra());
+	cout<<endl;
+
+}
+
+int main() {
+	//testObjectClass();
+	testObjectClone();
 	/*
 
     vector<Room> rooms;
@@ -151,7 +199,7 @@ int main() {
 
     Player player1{1, "Kieran", "1234"};
     cout << "Player1 ID: " << player1.getId() << ", username: " << player1.getUsername() << ", password: " << player1.getPassword() <<endl;
-	
+
 	*/
 
 	return 0;
