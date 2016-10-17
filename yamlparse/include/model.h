@@ -7,7 +7,7 @@ class model{
 
 private:
 	std::unordered_map<int,NPC> allNPC;
-
+	std::unordered_map<int,Object> allObjects;
 public:
 	model();
 	void printallNPCmap();
