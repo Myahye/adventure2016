@@ -19,7 +19,7 @@ using namespace networking;
 
 void
 Client::update() {
-  ioService.poll();  
+  ioService.poll();
 }
 
 
@@ -84,4 +84,3 @@ Client::readMessage() {
       }
     });
 }
-

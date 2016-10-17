@@ -1,7 +1,6 @@
 
-add_library(networking
-  Server.cpp
-  Client.cpp
+add_library(model
+  ServerHelper.cpp
 )
 
 set_target_properties(networking
@@ -10,7 +9,9 @@ set_target_properties(networking
                       CXX_STANDARD 14
 )
 
-install(TARGETS networking
+install(TARGETS model
   ARCHIVE DESTINATION lib
 )
-set_property(TARGET networking PROPERTY CXX_STANDARD 14)
+
+
+set_property(TARGET model PROPERTY CXX_STANDARD 14)

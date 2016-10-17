@@ -1,13 +1,17 @@
 cmake_minimum_required(VERSION 3.2.2)
 
-add_library(BaseClass Object.cpp)
+add_library(BaseClass
+	Room.cpp
+	Door.cpp
+	Player.cpp
+	NPC.cpp
+	Object.cpp)
 
-set_target_properties(networking 
-					  PROPERTIES 
-					  LINKER_LANGUAGE CXX 
-					  CXX_STANDARD 14
-)
-
+	set_target_properties(networking
+	                      PROPERTIES
+	                      LINKER_LANGUAGE CXX
+	                      CXX_STANDARD 14
+	)
 #target_link_libraries(BaseClass)
 
 install(TARGETS BaseClass DESTINATION lib)
