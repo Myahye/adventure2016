@@ -74,17 +74,19 @@ Model::getPlayerCredentialsVector() const {
 //   yamlParse(path);
 // }
 std::string
-Model::getCurrentRoomDescription(const int& playerId) const{
-  int currentRoomId  = this->playerLocation[playerId];
-  return this->rooms[currentRoomId].getDesc();
+Model::getCurrentRoomDescription(const int& playerID) {
+  int currentRoomID = this->playerLocation[playerID];
+  std::string currentRoomDescription = this->rooms[currentRoomID].getDesc();
+  currentRoomDescription[0] = std::tolower(currentRoomDescription[0]);
+  return currentRoomDescription;
 }
 
 std::string
-Model::movePlayer(const int& playerId, const std::string& destDirection){
+Model::movePlayer(const int& playerID, const std::string& destDirection){
   std::cout << "Player wants to go " << destDirection <<endl;
-  int currentRoomId  = this->playerLocation[playerId];
-  std::cout << "Current room ID: " << currentRoomId << endl;
-  Room currentRoom = this->rooms[currentRoomId];
+  int currentRoomID  = this->playerLocation[playerID];
+  std::cout << "Current room ID: " << currentRoomID << endl;
+  Room currentRoom = this->rooms[currentRoomID];
   vector<Door> currentRoomDoors = currentRoom.getDoors();
   std::cout << "number of doors in room: " << currentRoomDoors.size() << endl;
 
@@ -93,13 +95,15 @@ Model::movePlayer(const int& playerId, const std::string& destDirection){
   }
 
   try{
-    int destRoomId = currentRoom.getRoomInDir(destDirection);
+    int destRoomID = currentRoom.getRoomInDir(destDirection);
     //throw custom_errors::NoSuchDoorException();
-    this->playerLocation[playerId] = destRoomId;
-    return "You are now in " + this->rooms[destRoomId].getDesc();
+    this->playerLocation[playerID] = destRoomID;
+    std::string currentRoomDescription = this->rooms[currentRoomID].getDesc();
+    currentRoomDescription[0] = std::tolower(currentRoomDescription[0]);
+    return this->players[playerID].getUsername() + "> " + "You are now in " + currentRoomDescription + "\n";
 
-  }catch (custom_errors::NoSuchDoorException& e){
-      return e.what();
+  } catch (custom_errors::NoSuchDoorException& e){
+    return this->players[playerID].getUsername() + "> " + e.what() + "\n";
   }
 }
 
@@ -109,3 +113,39 @@ Model::movePlayer(const int& playerId, const std::string& destDirection){
 //   this->npcs = YamlParse.parseBuildNpcs;
 //   this->objects = YamlParse.parseBuildObjects;
 // }
+
+
+/*********************Modified by Lawrence***********************************************************************/
+std::string
+Model::dummySayCommand(const int& playerID, const std::string& message){
+    return this->players[playerID].getUsername() + "> " + message.substr(4) + "\n";
+}
+
+
+std::string
+Model::lookCommand(const int& playerID, const std::string& command){
+  std::string message = command.substr(5);
+  std::transform(message.begin(), message.end(), message.begin(), ::tolower);
+  if(message == "around room") {
+    int currentRoomID = this->playerLocation[playerID];
+    vector<Door> currentRoomDoors = this->rooms[currentRoomID].getDoors();
+
+    if(currentRoomDoors.size() == 1) {
+      return this->players[playerID].getUsername() + ">\n     " + this->rooms[currentRoomID].getDesc() + ".\n\n" +
+                "     There is 1 obvious exit: " + currentRoomDoors[0].getDir() + ".\n";
+    }
+
+    std::string response = this->players[playerID].getUsername() + ">\n     " + this->rooms[currentRoomID].getDesc() + ".\n\n" +
+                              "     There are " + to_string(currentRoomDoors.size()) + " obvious exits: ";
+
+    for(auto it = currentRoomDoors.begin(); it != currentRoomDoors.end()-1;  ++it ){
+      response += it->getDir() + ", ";
+    }
+
+     response += "and " + currentRoomDoors[currentRoomDoors.size()-1].getDir() + ".\n";
+
+    return response;
+  } 
+  return this->players[playerID].getUsername() + "> " + "Cannot find " + message + ", no match. \n";
+}
+/*********************Modified by Lawrence***********************************************************************/

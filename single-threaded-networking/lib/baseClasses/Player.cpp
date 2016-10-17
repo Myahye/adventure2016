@@ -3,7 +3,10 @@
 //Player constructor
 Player::Player (int const pid, std::string const username, std::string const password):
     pid{pid}, username{username}, password{password}{};
-
+/*********************Modified by Lawrence***********************************************************************/
+Player::Player ():
+    pid{0}, username{""}, password{""}{};
+/*********************Modified by Lawrence***********************************************************************/
 //Getter and setter for Shortdesc
 std::string Player::getUsername() const {
     return username;

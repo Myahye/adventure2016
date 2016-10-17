@@ -41,10 +41,18 @@ public:
 
   //Methods for players to interact with room
   //These are inorder of importance and what needs to be implemented first
-  std::string movePlayer(const int& playerId, const std::string& direction);
+  std::string movePlayer(const int& playerID, const std::string& direction);
   //Model::getAvailableDoors
   //Model::getAvailableRoomCommands
   //
+
+  std::string getCurrentRoomDescription(const int& playerID);
+
+/*********************Modified by Lawrence***********************************************************************/
+  std::string dummySayCommand(const int& playerID, const std::string& message);
+
+  std::string lookCommand(const int& playerID, const std::string& destDirection);
+/*********************Modified by Lawrence***********************************************************************/
 
 };
 #endif /* commandparse_h */

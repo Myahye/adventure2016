@@ -16,7 +16,7 @@ namespace Authentication {
 
 	std::string authorizeClient(Message& message, Server& server, std::vector <Connection>& clients, ServerHelper& serverHelper);
 
-	std::string handleLogin(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players);
+	std::string handleLogin(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, ServerHelper& serverHelper);
 
 	std::string handleRegistration(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, ServerHelper& serverHelper);
 

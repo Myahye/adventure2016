@@ -27,6 +27,9 @@ public:
 
     // Constructor
     Player (int const pid, std::string const username, std::string const password);
+    /*********************Modified by Lawrence***********************************************************************/
+    Player ();
+    /*********************Modified by Lawrence***********************************************************************/
     //username
     std::string getUsername() const;
     void setUsername(const std::string& username);

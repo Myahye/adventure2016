@@ -1,5 +1,3 @@
-
-
 #include "Authentication.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/regex.hpp>
@@ -47,13 +45,13 @@ namespace Authentication {
     } else if (message.connection.currentState == ConnectionState::REGISTERING) {
       return handleRegistration(message, server, clients, players, serverHelper);
     } else if (message.connection.currentState == ConnectionState::LOGIN) {
-      return handleLogin(message, server, clients, players);
+      return handleLogin(message, server, clients, players, serverHelper);
     } else {
       return "Sorry that is not a valid command, please enter '1' to register a new character, enter '2' to login to an existing character, or enter 'quit' to quit\n";
     }
   }
 
-  std::string handleLogin(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players) {
+  std::string handleLogin(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, ServerHelper& serverHelper) {
     std::vector <std::string> playerCredentials;
     boost::trim_if(message.text, boost::is_any_of("\t "));
     boost::split(playerCredentials, message.text, boost::is_any_of("\t "), boost::token_compress_on);
@@ -77,7 +75,6 @@ namespace Authentication {
       } else if (!correctPassword(playerID, playerCredentials[1], players)) {
         return "Sorry wrong password, please try again: \n";
       }
-      //search vector for id
       server.setPlayerIDConnectedToClient(message.connection, playerID);
       server.setClientCurrentState(message.connection, ConnectionState::AUTHORIZED);
 
@@ -85,7 +82,7 @@ namespace Authentication {
       client-> playerIDConnectedToClientConnection = playerID;
       client-> currentState = ConnectionState::AUTHORIZED;
 
-      return "The adventurer " + playerCredentials[0] + " wakes up in a dimly lit room.\n";
+      return "The adventurer " + playerCredentials[0] + " wakes up in a " + serverHelper.getCurrentRoomDescription(playerID) + "\n";
     } else {
       return "Sorry that player does not exist, please enter an existing username: \n";
     }
@@ -120,7 +117,7 @@ namespace Authentication {
       client-> playerIDConnectedToClientConnection = playerID;
       client-> currentState = ConnectionState::AUTHORIZED;
 
-      return "The adventurer " + playerCredentials[0] + " wakes up in a dimly lit room.\n";
+      return "The adventurer " + playerCredentials[0] + " wakes up in a " + serverHelper.getCurrentRoomDescription(1) + "\n";
     }
   }
 }

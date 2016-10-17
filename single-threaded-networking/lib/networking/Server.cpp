@@ -44,7 +44,7 @@ public:
 /*********************Modified by Lawrence***********************************************************************/
 
 
-  void setConnectionState(ConnectionState state) {connection.currentState = state;}
+  void setConnectionState(const ConnectionState& state) {connection.currentState = state;}
   void setPlayerID(int ID) {connection.playerIDConnectedToClientConnection = ID;}
 
 
