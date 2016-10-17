@@ -54,6 +54,11 @@ ServerHelper::parseCommands(const std::deque<Message>& clientMessageQueue, std::
       return outgoing;
     }
 
+  std::string
+  ServerHelper::getCurrentRoomDescription(const int& playerId) const{
+    model.getCurrentRoomDescription(playerId);
+  }
+
   int ServerHelper::createPlayer(const std::string& username, const std::string& password) {
 
       return(this->model.createPlayer(username, password));
