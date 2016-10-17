@@ -73,10 +73,11 @@ Model::getPlayerCredentialsVector() const {
 // Model::Model(const std::string& path){
 //   yamlParse(path);
 // }
-// std::string
-// Model::getCurrentRoomDescription(const int& playerId) const{
-//
-// }
+std::string
+Model::getCurrentRoomDescription(const int& playerId) const{
+  int currentRoomId  = this->playerLocation[playerId];
+  return this->rooms[currentRoomId].getDesc();
+}
 
 std::string
 Model::movePlayer(const int& playerId, const std::string& destDirection){
@@ -95,7 +96,7 @@ Model::movePlayer(const int& playerId, const std::string& destDirection){
     int destRoomId = currentRoom.getRoomInDir(destDirection);
     //throw custom_errors::NoSuchDoorException();
     this->playerLocation[playerId] = destRoomId;
-    return this->rooms[destRoomId].getDesc();
+    return "You are now in " + this->rooms[destRoomId].getDesc();
 
   }catch (custom_errors::NoSuchDoorException& e){
       return e.what();
