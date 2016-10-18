@@ -12,11 +12,11 @@ class NPC {
 	int id;
 	int level;
 	int thac0;
-	
+
 	std::string damage;
 	std::string hit;
 	std::string shortdesc;
-	
+
 	std::vector<std::string> description;
 	std::vector<std::string> keywords;
 	std::vector<std::string> longdesc;
@@ -24,19 +24,18 @@ class NPC {
 public:
 	//NPC Constructor
 	NPC (int const id, std::string const shortdesc);
-	
+
 	//Armor
 	int getArmor() const;
 	void setArmor(int const armor);
-	
+
 	//Damage
 	std::string getDamage() const;
 	void setDamage(const std::string& damage);
-	
+
 	//Description
 	std::vector<std::string> getDesc() const;
 	void setDesc(const std::vector<std::string>& description);
-	void printDesc() const;
 
 	//Exp
 	int getExp() const;
@@ -57,7 +56,6 @@ public:
 	//Keywords
 	std::vector<std::string> getKeywords() const;
 	void setKeywords(const std::vector<std::string>& keywords);
-	void printKeywords() const;
 
 	//Level
 	int getLevel() const;
@@ -66,8 +64,7 @@ public:
 	//LongDesc
 	std::vector<std::string> getLongDesc() const;
 	void setLongDesc(const std::vector<std::string>& longdesc);
-	void printLongDesc() const;
-	
+
 	//ShortDesc
 	std::string getShortDesc() const;
 	void setShortDesc(const std::string& shortdesc);

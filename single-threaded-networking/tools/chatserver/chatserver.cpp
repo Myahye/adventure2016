@@ -77,7 +77,8 @@ addToClientMessageQueues(const auto& incoming) {
   }
 }
 
-std::deque<Message> processMessages(ServerHelper& serverHelper, std::deque<Message>& messages, Server& server) {
+std::deque<Message>
+processMessages(ServerHelper& serverHelper, std::deque<Message>& messages, Server& server) {
 
   std::deque<Message> outgoingAuthorizedMessages;
 

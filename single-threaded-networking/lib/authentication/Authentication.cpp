@@ -4,7 +4,8 @@
 
 namespace Authentication {
 
-  int findExistingPlayer(const std::string& username, const std::vector<std::tuple<int,std::string,std::string>>& players) {
+  int
+  findExistingPlayer(const std::string& username, const std::vector<std::tuple<int,std::string,std::string>>& players) {
     auto player = std::find_if(players.begin(), players.end(), [username] (auto credentials) { return std::get<1>(credentials) == username; });
     if(player != players.end()) {
       return std::get<0>(*player);
@@ -13,8 +14,8 @@ namespace Authentication {
     }
   }
 
-  bool currentlyLoggedIn(int playerID, const std::vector<Connection>& clients) {
-
+  bool
+  currentlyLoggedIn(int playerID, const std::vector<Connection>& clients) {
     auto player = std::find_if(clients.begin(), clients.end(), [playerID] (Connection c) { return c.playerIDConnectedToClientConnection == playerID; });
     if (player != clients.end()) {
       return player->currentState == ConnectionState::AUTHORIZED;
@@ -23,12 +24,14 @@ namespace Authentication {
 	}
   }
 
-  bool correctPassword(int playerID, const std::string& password, const std::vector<std::tuple<int,std::string,std::string>>& players) {
+  bool
+  correctPassword(int playerID, const std::string& password, const std::vector<std::tuple<int,std::string,std::string>>& players) {
   	auto player = std::find_if(players.begin(), players.end(), [playerID] (auto credentials) { return std::get<0>(credentials) == playerID; });
   	return std::get<2>(*player) == password;
   }
 
-  std::string authorizeClient(Message& message, Server& server, std::vector <Connection>& clients, ServerHelper& serverHelper) {
+  std::string
+  authorizeClient(Message& message, Server& server, std::vector <Connection>& clients, ServerHelper& serverHelper) {
 
   	std::vector<std::tuple<int,std::string,std::string>> players = serverHelper.getPlayerCredentialsVector();
 
@@ -51,7 +54,8 @@ namespace Authentication {
     }
   }
 
-  std::string handleLogin(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, ServerHelper& serverHelper) {
+  std::string
+  handleLogin(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, ServerHelper& serverHelper) {
     std::vector <std::string> playerCredentials;
     boost::trim_if(message.text, boost::is_any_of("\t "));
     boost::split(playerCredentials, message.text, boost::is_any_of("\t "), boost::token_compress_on);
@@ -88,7 +92,8 @@ namespace Authentication {
     }
   }
 
-  std::string handleRegistration(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, ServerHelper& serverHelper) {
+  std::string
+  handleRegistration(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, ServerHelper& serverHelper) {
     std::vector <std::string> playerCredentials;
     boost::trim_if(message.text, boost::is_any_of("\t "));
     boost::split(playerCredentials, message.text, boost::is_any_of("\t "), boost::token_compress_on);

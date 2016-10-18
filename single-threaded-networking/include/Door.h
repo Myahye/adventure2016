@@ -18,10 +18,10 @@ public:
     int getDoorId() const;
     int getDestinationId() const;
 
-    void setDesc(std::string& new_desc);
-    void setDir(std::string& new_dir);
-    void setKeywords(std::string& new_keywords);
-    void setDoorId(int new_door_id);
+    void setDesc(const std::string& new_desc);
+    void setDir(const std::string& new_dir);
+    void setKeywords(const std::string& new_keywords);
+    void setDoorId(const int new_door_id);
 
 
 private:

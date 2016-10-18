@@ -15,44 +15,40 @@
 class Model {
 
 private:
-std::unordered_map<int,Player> players;
-int assignedIDs = 1;
-//need to change these to temlpate values
-std::unordered_map<int,int> playerLocation;
-std::unordered_map<int,Room> rooms;
+  std::unordered_map<int,Player> players;
+  int assignedIDs = 1;
+  //need to change these to temlpate values
+  std::unordered_map<int,int> playerLocation;
+  std::unordered_map<int,Room> rooms;
 
-public:
-
-  //CommandParse(pathtoyaml);
-  Model();
-  //Model(const std::string& path);
-
-  int createPlayer(const std::string& username, const std::string& password);
-  std::vector<std::tuple<int,std::string,std::string>> getPlayerCredentialsVector() const;
-
+  //Still need to be implemented
   //map<int, Players>
   //map<int, rooms>
   //map<int, npcs>
   //map<int, objects>
 
+public:
+  Model();
 
-  //builds above member variables
-  //Model::yamlParse
+  int createPlayer(const std::string& username, const std::string& password);
+  std::vector<std::tuple<int,std::string,std::string>> getPlayerCredentialsVector() const;
 
-  //Methods for players to interact with room
-  //These are inorder of importance and what needs to be implemented first
+  //Model(const std::string& pathToYamlFile/s);
+  //Populates member variables
+  //Model::yamlParse()
+
+  //Methods for players to interact with world
   std::string movePlayer(const int& playerID, const std::string& direction);
+
+  //These still need to be implemented
   //Model::getAvailableDoors
   //Model::getAvailableRoomCommands
-  //
 
   std::string getCurrentRoomDescription(const int& playerID);
 
-/*********************Modified by Lawrence***********************************************************************/
   std::string dummySayCommand(const int& playerID, const std::string& message);
 
   std::string lookCommand(const int& playerID, const std::string& destDirection);
-/*********************Modified by Lawrence***********************************************************************/
 
 };
 #endif /* commandparse_h */

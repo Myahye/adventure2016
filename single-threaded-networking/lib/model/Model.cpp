@@ -39,6 +39,19 @@ Model::Model(){
 
 }
 
+//This is what construction will look like
+// Model::Model(const std::string& path){
+//   yamlParse(path);
+// }
+
+//Representation of what yamlParse will do
+// Model::yamlParse(){
+//   this->players = YamlParse.parseBuildPlayers;
+//   this->rooms = YamlParse.parseBuildRooms;
+//   this->npcs = YamlParse.parseBuildNpcs;
+//   this->objects = YamlParse.parseBuildObjects;
+// }
+
 int
 Model::createPlayer(const std::string& username, const std::string& password){
 
@@ -57,7 +70,6 @@ Model::createPlayer(const std::string& username, const std::string& password){
 
 }
 
-
 std::vector<std::tuple<int,std::string,std::string>>
 Model::getPlayerCredentialsVector() const {
 
@@ -70,9 +82,6 @@ Model::getPlayerCredentialsVector() const {
   return vector;
 }
 
-// Model::Model(const std::string& path){
-//   yamlParse(path);
-// }
 std::string
 Model::getCurrentRoomDescription(const int& playerID) {
   int currentRoomID = this->playerLocation[playerID];
@@ -107,20 +116,10 @@ Model::movePlayer(const int& playerID, const std::string& destDirection){
   }
 }
 
-// Model::yamlParse(){
-//   this->players = YamlParse.parseBuildPlayers;
-//   this->rooms = YamlParse.parseBuildRooms;
-//   this->npcs = YamlParse.parseBuildNpcs;
-//   this->objects = YamlParse.parseBuildObjects;
-// }
-
-
-/*********************Modified by Lawrence***********************************************************************/
 std::string
 Model::dummySayCommand(const int& playerID, const std::string& message){
     return this->players[playerID].getUsername() + "> " + message.substr(4) + "\n";
 }
-
 
 std::string
 Model::lookCommand(const int& playerID, const std::string& command){
@@ -145,7 +144,6 @@ Model::lookCommand(const int& playerID, const std::string& command){
      response += "and " + currentRoomDoors[currentRoomDoors.size()-1].getDir() + ".\n";
 
     return response;
-  } 
+  }
   return this->players[playerID].getUsername() + "> " + "Cannot find " + message + ", no match. \n";
 }
-/*********************Modified by Lawrence***********************************************************************/

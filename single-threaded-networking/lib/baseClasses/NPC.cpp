@@ -1,7 +1,7 @@
 #include "NPC.h"
 
 //NPC Constructor
-NPC::NPC (int const id, std::string const shortdesc): 
+NPC::NPC (int const id, std::string const shortdesc):
 	id{id}, shortdesc{shortdesc}{};
 
 //Getter and Setter for Armor
@@ -27,11 +27,7 @@ std::vector<std::string> NPC::getDesc() const {
 void NPC::setDesc(const std::vector<std::string>& description) {
 	this->description = description;
 }
-void NPC::printDesc() const{
-    for (auto &desc : description){
-        std::cout << desc << std::endl;
-    }
-}
+
 
 //Getter and Setter for Exp
 int NPC::getExp() const {
@@ -72,11 +68,7 @@ std::vector<std::string> NPC::getKeywords() const {
 void NPC::setKeywords(const std::vector<std::string>& keywords) {
 	this->keywords = keywords;
 }
-void NPC::printKeywords() const{
-    for (auto &word : keywords){
-        std::cout << word << std::endl;
-    }
-}
+
 
 //Getter and Setter for Level
 int NPC::getLevel() const {
@@ -92,11 +84,6 @@ std::vector<std::string> NPC::getLongDesc() const {
 }
 void NPC::setLongDesc(const std::vector<std::string>& longdesc) {
 	this->longdesc = longdesc;
-}
-void NPC::printLongDesc() const{
-    for (auto &desc : longdesc){
-        std::cout << desc << std::endl;
-    }
 }
 
 //Getter and Setter for Shordesc

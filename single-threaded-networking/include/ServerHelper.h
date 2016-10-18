@@ -15,11 +15,9 @@ public:
 
   std::deque<networking::Message>  parseCommands(const std::deque<networking::Message>& clientMessages,  std::vector<networking::Connection>& clients);
 
-/*********************Modified by Lawrence***********************************************************************/
   int createPlayer(const std::string& username, const std::string& password);
   std::vector<std::tuple<int,std::string,std::string>> getPlayerCredentialsVector() const;
   std::string getCurrentRoomDescription(const int& playerId);
-/*********************Modified by Lawrence***********************************************************************/
 };
 
 #endif /* serverhelper_h */

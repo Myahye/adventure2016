@@ -27,16 +27,15 @@ public:
 
     // Constructor
     Player (int const pid, std::string const username, std::string const password);
-    /*********************Modified by Lawrence***********************************************************************/
     Player ();
-    /*********************Modified by Lawrence***********************************************************************/
+
     //username
     std::string getUsername() const;
-    void setUsername(const std::string& username);
+    void setUsername(std::string& username);
 
     //password
     std::string getPassword() const;
-    void setPassword(const std::string& password);
+    void setPassword(std::string& password);
 
     //Armor
     int getArmor() const;
@@ -44,12 +43,11 @@ public:
 
     //Damage
     std::string getDamage() const;
-    void setDamage(const std::string& damage);
+    void setDamage(std::string& damage);
 
     //Description
     std::vector<std::string> getDesc() const;
-    void setDesc(const std::vector<std::string>& description);
-    void printDesc() const;
+    void setDesc(std::vector<std::string>& description);
 
     //Experience
     int getExp() const;
@@ -61,7 +59,7 @@ public:
 
     //Hit
     std::string getHit() const;
-    void setHit(const std::string& hit);
+    void setHit(std::string& hit);
 
     //Player ID
     int getId() const;
@@ -69,8 +67,7 @@ public:
 
     //Keywords
     std::vector<std::string> getKeywords() const;
-    void setKeywords(const std::vector<std::string>& keywords);
-    void printKeywords() const;
+    void setKeywords(std::vector<std::string>& keywords);
 
     //Levels
     int getLevel() const;
@@ -78,8 +75,7 @@ public:
 
     //Long Description
     std::vector<std::string> getLongDesc() const;
-    void setLongDesc(const std::vector<std::string>& longdesc);
-    void printLongDesc() const;
+    void setLongDesc(std::vector<std::string>& longdesc);
 
     //Thac0
     int getThac0() const;

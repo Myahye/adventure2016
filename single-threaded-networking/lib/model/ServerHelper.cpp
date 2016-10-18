@@ -60,10 +60,12 @@ ServerHelper::getCurrentRoomDescription(const int& playerID) {
   return this->model.getCurrentRoomDescription(playerID);
 }
 
-int ServerHelper::createPlayer(const std::string& username, const std::string& password) {
+int
+ServerHelper::createPlayer(const std::string& username, const std::string& password) {
   return(this->model.createPlayer(username, password));
 }
 
-std::vector<std::tuple<int,std::string,std::string>> ServerHelper::getPlayerCredentialsVector() const {
+std::vector<std::tuple<int,std::string,std::string>>
+ServerHelper::getPlayerCredentialsVector() const {
   return(this->model.getPlayerCredentialsVector());
 }
