@@ -32,6 +32,12 @@ void testObjectClass() {
 	cout << "Cost: " << treasure.getCost() << " Weight: " << treasure.getWeight() << endl;
 	cout << endl;
 
+	//shortDesc tests:
+	treasure.setShortDesc("OH hello there U migh be wondering why the red suit");
+	assert(treasure.getShortDesc()=="OH hello there U migh be wondering why the red suit");
+	cout <<"shortDesc: "<<treasure.getShortDesc()<<endl;
+	cout<<endl;
+
 	// Attributes tests:
 	assert(treasure.getAttributes().size() == 0);
 	vector<string>testAttributes;
@@ -68,17 +74,6 @@ void testObjectClass() {
 	cout << "LongDesc: " << endl;
 	printVectorContent(treasure.getLongDesc());
 
-	// ShortDesc tests:
-	assert(treasure.getShortDesc().size() == 0);
-	vector<string>testShortDesc;
-	testShortDesc.push_back("Test short description 1");
-	testShortDesc.push_back("Test short description 2");
-	treasure.setShortDesc(testShortDesc);
-	assert(treasure.getShortDesc().size() == 2);
-	treasure.addShortDesc("Test short description 3");
-	assert(treasure.getShortDesc().size() == 3);
-	cout << "ShortDesc: " << endl;
-	printVectorContent(treasure.getShortDesc());
 
 	// WearFlags tests:
 	assert(treasure.getWearFlags().size() == 0);
@@ -157,8 +152,8 @@ void testObjectClone(){
 }
 
 int main() {
-	//testObjectClass();
-	testObjectClone();
+	testObjectClass();
+	//testObjectClone();
 	/*
 
     vector<Room> rooms;

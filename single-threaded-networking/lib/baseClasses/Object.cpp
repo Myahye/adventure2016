@@ -12,12 +12,11 @@ Object::Object(const Object &ob){
   this->cost=ob.cost;
   this->weight=ob.weight;
   this->itemType=ob.itemType;
-
+  this->shortDesc=ob.shortDesc;
   /*clean all vectors of the objects before copy*/
   clear_vec(this->attributes);
   clear_vec(this->keyWords);
   clear_vec(this->longDesc);
-  clear_vec(this->shortDesc);
   clear_vec(this->wearFlags);
   clear_vec(this->extra);
 
@@ -25,7 +24,6 @@ Object::Object(const Object &ob){
   copy_vec(this->attributes,ob.getAttributes());
   copy_vec(this->keyWords,ob.getKeyWords());
   copy_vec(this->longDesc,ob.getLongDesc());
-  copy_vec(this->shortDesc,ob.getShortDesc());
   copy_vec(this->wearFlags,ob.getWearFlags());
   copy_vec(this->extra, ob.getExtra());
 }
@@ -35,12 +33,12 @@ Object& Object::operator =(const Object& ob){
   this->cost=ob.cost;
   this->weight=ob.weight;
   this->itemType=ob.itemType;
+  this->shortDesc=ob.shortDesc;
 
   /*clean all vectors of the objects before copy*/
   clear_vec(this->attributes);
   clear_vec(this->keyWords);
   clear_vec(this->longDesc);
-  clear_vec(this->shortDesc);
   clear_vec(this->wearFlags);
   clear_vec(this->extra);
 
@@ -48,7 +46,6 @@ Object& Object::operator =(const Object& ob){
   copy_vec(this->attributes,ob.getAttributes());
   copy_vec(this->keyWords,ob.getKeyWords());
   copy_vec(this->longDesc,ob.getLongDesc());
-  copy_vec(this->shortDesc,ob.getShortDesc());
   copy_vec(this->wearFlags,ob.getWearFlags());
   copy_vec(this->extra, ob.getExtra());
 
@@ -138,16 +135,12 @@ void Object::addLongDesc(const std::string& longDesc) {
 
 
 // Getter and setter for shortDesc:
-std::vector<std::string> Object::getShortDesc() const {
+std::string Object::getShortDesc() const {
   return shortDesc;
 }
 
-void Object::setShortDesc(const std::vector<std::string>& shortDesc) {
+void Object::setShortDesc(const std::string& shortDesc) {
   this->shortDesc = shortDesc;
-}
-
-void Object::addShortDesc(const std::string& shortDesc) {
-  this->shortDesc.push_back(shortDesc);
 }
 
 

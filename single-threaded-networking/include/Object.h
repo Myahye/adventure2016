@@ -17,7 +17,7 @@ private:
 	std::vector<std::string> attributes;
 	std::vector<std::string> keyWords;
 	std::vector<std::string> longDesc;
-	std::vector<std::string> shortDesc;
+	std::string shortDesc;
 	std::vector<std::string> wearFlags;
 	std::vector<std::string> extra;
 
@@ -63,9 +63,8 @@ public:
 	void addLongDesc(const std::string& longDesc);
 
   	// Getter and setter for shortDesc:
-  	std::vector<std::string> getShortDesc() const;
-	void setShortDesc(const std::vector<std::string>& shortDesc);
-	void addShortDesc(const std::string& shortDesc);
+  	std::string getShortDesc() const;
+	void setShortDesc(const std::string& shortDesc);
 
 	// Getter and setter or wearFlags:
 	  std::vector<std::string> getWearFlags() const;
