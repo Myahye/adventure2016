@@ -84,6 +84,7 @@ Model::getPlayerCredentialsVector() const {
 
 std::string
 Model::getCurrentRoomDescription(const int& playerID) {
+
   int currentRoomID = this->playerLocation[playerID];
   std::string currentRoomDescription = this->rooms[currentRoomID].getDesc();
   currentRoomDescription[0] = std::tolower(currentRoomDescription[0]);
@@ -99,15 +100,17 @@ Model::movePlayer(const int& playerID, const std::string& destDirection){
   vector<Door> currentRoomDoors = currentRoom.getDoors();
   std::cout << "number of doors in room: " << currentRoomDoors.size() << endl;
 
-  for(Door door : currentRoomDoors){
-    std::cout << "Dir: " << door.getDir() << endl;
-  }
+  // for(Door door : currentRoomDoors){
+  //   std::cout << "Dir: " << door.getDir() << endl;
+  // }
 
   try{
     int destRoomID = currentRoom.getRoomInDir(destDirection);
+    std::cout << "Destination room ID:: " << currentRoom.getRoomInDir(destDirection) << endl;
     //throw custom_errors::NoSuchDoorException();
     this->playerLocation[playerID] = destRoomID;
-    std::string currentRoomDescription = this->rooms[currentRoomID].getDesc();
+    //std::cout << "Current desc: " << this->rooms[destRoomID].getDesc() << endl;
+    std::string currentRoomDescription = this->rooms[destRoomID].getDesc();
     currentRoomDescription[0] = std::tolower(currentRoomDescription[0]);
     return this->players[playerID].getUsername() + "> " + "You are now in " + currentRoomDescription + "\n";
 
@@ -131,7 +134,7 @@ Model::lookCommand(const int& playerID, const std::string& command){
 
     if(currentRoomDoors.size() == 1) {
       return this->players[playerID].getUsername() + ">\n     " + this->rooms[currentRoomID].getDesc() + ".\n\n" +
-                "     There is 1 obvious exit: " + currentRoomDoors[0].getDir() + ".\n";
+                "     There is 1 obvious exit: " + currentRoomDoors[0].getDir() + ".\n\n";
     }
 
     std::string response = this->players[playerID].getUsername() + ">\n     " + this->rooms[currentRoomID].getDesc() + ".\n\n" +
@@ -141,7 +144,7 @@ Model::lookCommand(const int& playerID, const std::string& command){
       response += it->getDir() + ", ";
     }
 
-     response += "and " + currentRoomDoors[currentRoomDoors.size()-1].getDir() + ".\n";
+     response += "and " + currentRoomDoors[currentRoomDoors.size()-1].getDir() + ".\n\n";
 
     return response;
   }
