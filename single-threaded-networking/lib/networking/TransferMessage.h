@@ -35,4 +35,3 @@ extractMessage(std::streambuf &buffer) {
 
 
 #endif
-
