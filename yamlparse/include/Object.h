@@ -6,7 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-
+#include <utility> //std::pair
 class Object {
 private:
 	int id;
@@ -20,7 +20,7 @@ private:
 	std::vector<std::string> longDesc;
 	std::vector<std::string> shortDesc;
 	std::vector<std::string> wearFlags;
-	std::vector<std::string> extra;
+	std::pair<std::vector<std::string>, std::vector<std::string> > extra;
 
 public:
 	// Object constructor
@@ -74,9 +74,10 @@ public:
 	void addWearFlag(const std::string& wearFlags);
 
   	// Getter and setter for extra:
-  	std::vector<std::string> getExtra() const;
-	void setExtra(const std::vector<std::string>& exta);
-	void addExtra(const std::string& extra);
+  	std::pair<std::vector<std::string>, std::vector<std::string> > getExtra() const;
+	void setExtra(const std::pair<std::vector<std::string>, std::vector<std::string> >& extra);
+	void addExtraDesc(const std::string& desc);
+	void addExtraKeyword(const std::string& keyword);
 
 	void copy_vec(std::vector<std::string>& output, const std::vector<std::string> Alist );
 	void clear_vec(std::vector<std::string> Alist);

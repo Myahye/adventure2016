@@ -1,4 +1,5 @@
 #include "yamlParser.h"
+//#include <utility>
 
 yamlParser::yamlParser() {};
 
@@ -73,18 +74,19 @@ std::unordered_map<int,Object> yamlParser::parseBuildObjects(const std::string& 
 		std::vector<std::string> keywordsV = setStringVectorHelper(it["keywords"]);
 		std::vector<std::string> longdescV = setStringVectorHelper(it["longdesc"]);
 		std::vector<std::string> wearFlagsV = setStringVectorHelper(it["wear_flags"]);
-		
-		//const YAML::Node& extra_node = it["extra"];
-		/*for (auto& element : it["extra"]) {
-			objectClass{}
-
-		}*/
+		std::vector<std::string> extraDescV =setStringVectorHelper(it["extra"]["desc"]);
+		std::vector<std::string> extraKeywordsV =setStringVectorHelper(it["extra"]["keywords"]);
 
 		objectClass.setAttributes(attributesV); //change up
 		objectClass.setKeyWords(keywordsV);
 		objectClass.setLongDesc(longdescV);
 		objectClass.setWearFlags(wearFlagsV);
 		
+		//pair
+		std::pair< std::vector<std::string>, std::vector<std::string> > extraP(extraDescV, extraKeywordsV);
+
+		objectClass.setExtra(extraP);
+
 		//Add object to map
   		//allNPC[npcClass.getId()] = npcClass;
   		buildAllObjects.insert(std::make_pair(objectClass.getID(),objectClass));

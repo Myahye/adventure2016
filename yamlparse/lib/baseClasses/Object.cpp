@@ -19,7 +19,8 @@ Object::Object(const Object &ob){
   clear_vec(this->longDesc);
   clear_vec(this->shortDesc);
   clear_vec(this->wearFlags);
-  clear_vec(this->extra);
+  //clear_vec(this->extra.first);
+  //clear_vec(this->extra.second);
 
   /*------copy vectors------*/
   copy_vec(this->attributes,ob.getAttributes());
@@ -27,7 +28,7 @@ Object::Object(const Object &ob){
   copy_vec(this->longDesc,ob.getLongDesc());
   copy_vec(this->shortDesc,ob.getShortDesc());
   copy_vec(this->wearFlags,ob.getWearFlags());
-  copy_vec(this->extra, ob.getExtra());
+  //copy_vec(this->extra, ob.getExtra());
 }
 
 Object& Object::operator =(const Object& ob){
@@ -42,7 +43,7 @@ Object& Object::operator =(const Object& ob){
   clear_vec(this->longDesc);
   clear_vec(this->shortDesc);
   clear_vec(this->wearFlags);
-  clear_vec(this->extra);
+  //clear_vec(this->extra);
 
   /*------copy vectors------*/
   copy_vec(this->attributes,ob.getAttributes());
@@ -50,7 +51,7 @@ Object& Object::operator =(const Object& ob){
   copy_vec(this->longDesc,ob.getLongDesc());
   copy_vec(this->shortDesc,ob.getShortDesc());
   copy_vec(this->wearFlags,ob.getWearFlags());
-  copy_vec(this->extra, ob.getExtra());
+  //copy_vec(this->extra, ob.getExtra());
 
   return *this;
 }
@@ -166,16 +167,20 @@ void Object::addWearFlag(const std::string& wearFlags) {
 
 
 // Getter and setter for extra:
-std::vector<std::string> Object::getExtra() const {
+std::pair<std::vector<std::string>, std::vector<std::string> > Object::getExtra() const {
   return extra;
 }
 
-void Object::setExtra(const std::vector<std::string>& extra) {
+void Object::setExtra(const std::pair<std::vector<std::string>, std::vector<std::string> >& extra) {
   this->extra = extra;
 }
 
-void Object::addExtra(const std::string& extra) {
-  this->extra.push_back(extra);
+void Object::addExtraDesc(const std::string& desc){
+  this->extra.first.push_back(desc);
+}
+
+void Object::addExtraKeyword(const std::string& keyword){
+  this->extra.second.push_back(keyword);
 }
 
 void Object::copy_vec(std::vector<std::string>& output, const std::vector<std::string> Alist ){
