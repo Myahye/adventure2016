@@ -1,4 +1,5 @@
 #include "yamlParser.h"
+#include <typeinfo>
 //#include <utility>
 
 yamlParser::yamlParser() {};
@@ -49,7 +50,7 @@ std::unordered_map<int,NPC> yamlParser::parseBuildNpcs(const std::string& pathTo
 
 std::unordered_map<int,Object> yamlParser::parseBuildObjects(const std::string& pathToFile){
 	YAML::Node config = YAML::LoadFile(pathToFile);
-	const YAML::Node&  object_node= config["OBJECTS"];
+	const YAML::Node& object_node= config["OBJECTS"];
 	//initialize our map we will return
 	std::unordered_map<int,Object> buildAllObjects;
 
@@ -65,8 +66,9 @@ std::unordered_map<int,Object> yamlParser::parseBuildObjects(const std::string& 
 		
 		//strings
 		std::string item_type = it["item_type"].as<std::string>();
-		//std::string shortdesc = it["shortdesc"].as<std::string>();
+		std::string shortdesc = it["shortdesc"].as<std::string>();
 		objectClass.setItemType(item_type);
+		objectClass.setShortDesc(shortdesc);
 		//objectClass.setShortDesc(shortdesc);
 
 		//vectors
@@ -74,19 +76,28 @@ std::unordered_map<int,Object> yamlParser::parseBuildObjects(const std::string& 
 		std::vector<std::string> keywordsV = setStringVectorHelper(it["keywords"]);
 		std::vector<std::string> longdescV = setStringVectorHelper(it["longdesc"]);
 		std::vector<std::string> wearFlagsV = setStringVectorHelper(it["wear_flags"]);
-		std::vector<std::string> extraDescV =setStringVectorHelper(it["extra"]["desc"]);
-		std::vector<std::string> extraKeywordsV =setStringVectorHelper(it["extra"]["keywords"]);
-
 		objectClass.setAttributes(attributesV); //change up
 		objectClass.setKeyWords(keywordsV);
 		objectClass.setLongDesc(longdescV);
 		objectClass.setWearFlags(wearFlagsV);
-		
 		//pair
-		std::pair< std::vector<std::string>, std::vector<std::string> > extraP(extraDescV, extraKeywordsV);
+		const YAML::Node& extra_node = it["extra"];
 
+		std::vector<std::string> extraDescV;
+		std::vector<std::string> extraKeywordsV;	
+		
+		for (auto &j : extra_node){
+			extraDescV = setStringVectorHelper(j["desc"]);
+			extraKeywordsV = setStringVectorHelper(j["keywords"]);
+		}
+		//std::cout << "size: " << extraDescV.size() << std::endl;
+		//std::cout << "size: " << extraKeywordsV.size() << std::endl;
+		std::pair< std::vector<std::string>, std::vector<std::string> > extraP;
+
+		extraP = std::make_pair(extraDescV, extraKeywordsV);
 		objectClass.setExtra(extraP);
-
+		std::cout << "size of extra desc " << objectClass.getExtra().first.size() << std::endl;
+		std::cout << "size of extra keywords " << objectClass.getExtra().second.size() << std::endl;
 		//Add object to map
   		//allNPC[npcClass.getId()] = npcClass;
   		buildAllObjects.insert(std::make_pair(objectClass.getID(),objectClass));

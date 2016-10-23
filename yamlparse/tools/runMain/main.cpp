@@ -7,9 +7,9 @@
 
 int main() {
 	model testModelParseNpcs;
-	std::string path = "../../yamlparse/data/shire.yml";
+	std::string path = "../yamlparse/data/shire.yml";
 	// pracModel.yamlParseNPC(path);
 	testModelParseNpcs.yamlParseAndBuild(path);
-	testModelParseNpcs.printallNPCmap();
+	testModelParseNpcs.printAll();
 	return 0;
 }

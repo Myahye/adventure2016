@@ -10,8 +10,8 @@ private:
 	std::unordered_map<int,Object> allObjects;
 public:
 	model();
-	void printallNPCmap();
 	void yamlParseAndBuild(const std::string& pathToFile);
+	void printAll();
 	yamlParser yamlparse;
 	// void yamlParseNPC(std::string pathToFile);
 	// std::vector<std::string> setDescHelper( const YAML::Node& descNode);
