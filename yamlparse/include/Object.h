@@ -84,6 +84,7 @@ public:
 
 	//New function added in to test
 	void printClass(int n) const;
+	void printVector(std::vector<std::string> vec) const;
 };
 
 #endif

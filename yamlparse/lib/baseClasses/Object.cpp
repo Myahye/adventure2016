@@ -201,4 +201,25 @@ void Object::printClass(int n) const{
   std::cout << "\tcost: " << cost << std::endl;
   std::cout << "\tweight: " << weight << std::endl;
   std::cout << "\tItem Type: " << itemType << std::endl;
+  std::cout << "\tAttributes: " << std::endl;
+  printVector(attributes);
+  std::cout << "\tKeywords: " << std::endl;
+  printVector(keyWords);
+  std::cout << "\tLong Descriptions: " << std::endl;
+  printVector(longDesc);
+  std::cout << "\tShort Descriptions: " << std::endl;
+  printVector(shortDesc);
+  std::cout << "\tWear Flags: " << std::endl;
+  printVector(wearFlags);
+  std::cout << "\tExtra: " << std::endl;
+  std::cout << "\t\tDescription: " << std::endl; 
+  printVector(extra.first);
+  std::cout << "\t\tKeywords: " << std::endl; 
+  printVector(extra.second);
+}
+
+void Object::printVector(std::vector<std::string> vec) const{
+  for (auto& element : vec){
+    std::cout << "\t\t" << element << std::endl;
+  }
 }
