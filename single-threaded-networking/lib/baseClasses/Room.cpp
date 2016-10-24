@@ -13,27 +13,25 @@ Room::Room() {
 }
 
 //Temp constructor for testing and first iteration
-Room::Room(int id, std::string description, std::vector<Door> new_doors) {
-    std::vector<Door> doors;
-    string desc =description;
-    string ext_desc = "No extended description";
+Room::Room(int& id, std::vector<std::string>& description, std::vector<Door>& new_doors) {
+    std::vector<std::string> exended_description ;
     string name_room = "Empty Room";
     int id_room = id;
-    Room(desc, ext_desc, name_room, id_room, new_doors);
+    Room(description, exended_description, name_room, id_room, new_doors);
 }
 
 // Parameterized constructor
-Room::Room(string& new_desc, string& new_extended_desc, string& new_name,
-             int& new_room_id, std::vector<Door> new_doors)
+Room::Room(std::vector<std::string>& new_desc, std::vector<std::string>& new_extended_desc, string& new_name,
+             int& new_room_id, std::vector<Door>& new_doors)
             :mDesc{new_desc}, mExtendedDesc{new_extended_desc}, mName{new_name},
             mRoomId{static_cast<unsigned int>(new_room_id)}, doors{new_doors} {
 }
 
 // Accessors
-string Room::getDesc() const {
+std::vector<std::string> Room::getDesc() const {
     return this->mDesc;
 }
-string Room::getExtendedDesc() const {
+std::vector<std::string> Room::getExtendedDesc() const {
     return this->mExtendedDesc;
 
 }
@@ -63,11 +61,11 @@ int Room::getRoomInDir(std::string direction) const {
 }
 
 // Mutators
-void Room::setDescription(std::string& new_desc) {
+void Room::setDescription(std::vector<std::string>& new_desc) {
     this->mDesc = new_desc;
 
 }
-void Room::setExtendedDesc(std::string& new_extended_desc) {
+void Room::setExtendedDesc(std::vector<std::string>& new_extended_desc) {
     this->mExtendedDesc = new_extended_desc;
 }
 void Room::setName(std::string& new_name) {
