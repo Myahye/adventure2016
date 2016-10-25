@@ -1,0 +1,2 @@
+/usr/bin/ar cq ../libyamlParser.a  CMakeFiles/yamlParser.dir/yamlParser.cpp.o
+/usr/bin/ranlib ../libyamlParser.a

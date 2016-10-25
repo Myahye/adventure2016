@@ -1,9 +1,9 @@
 #include "yamlParser.h"
-#include <typeinfo>
 //#include <utility>
 
 yamlParser::yamlParser() {};
 
+//Parses and builds Npc's from yaml file
 std::unordered_map<int,NPC> yamlParser::parseBuildNpcs(const std::string& pathToFile){
 	YAML::Node config = YAML::LoadFile(pathToFile);
 	const YAML::Node&  NPC_node= config["NPCS"];
@@ -48,9 +48,10 @@ std::unordered_map<int,NPC> yamlParser::parseBuildNpcs(const std::string& pathTo
 }
 
 
+//Parses and builds Object's from yaml file
 std::unordered_map<int,Object> yamlParser::parseBuildObjects(const std::string& pathToFile){
 	YAML::Node config = YAML::LoadFile(pathToFile);
-	const YAML::Node& object_node= config["OBJECTS"];
+	const YAML::Node&  object_node= config["OBJECTS"];
 	//initialize our map we will return
 	std::unordered_map<int,Object> buildAllObjects;
 
@@ -60,7 +61,7 @@ std::unordered_map<int,Object> yamlParser::parseBuildObjects(const std::string& 
 		//constructing class
 		Object objectClass{it["id"].as<int>(), it["item_type"].as<std::string>()};
 		
-		//intergers
+		//integers
 		objectClass.setCost(it["cost"].as<int>());
 		objectClass.setWeight(it["weight"].as<int>());
 		
@@ -69,35 +70,26 @@ std::unordered_map<int,Object> yamlParser::parseBuildObjects(const std::string& 
 		std::string shortdesc = it["shortdesc"].as<std::string>();
 		objectClass.setItemType(item_type);
 		objectClass.setShortDesc(shortdesc);
-		//objectClass.setShortDesc(shortdesc);
 
 		//vectors
 		std::vector<std::string> attributesV = setStringVectorHelper(it["attributes"]);
 		std::vector<std::string> keywordsV = setStringVectorHelper(it["keywords"]);
 		std::vector<std::string> longdescV = setStringVectorHelper(it["longdesc"]);
 		std::vector<std::string> wearFlagsV = setStringVectorHelper(it["wear_flags"]);
+		std::vector<std::string> extraDescV =setStringVectorHelper(it["extra"]["desc"]);
+		std::vector<std::string> extraKeywordsV =setStringVectorHelper(it["extra"]["keywords"]);
+
 		objectClass.setAttributes(attributesV); //change up
 		objectClass.setKeyWords(keywordsV);
 		objectClass.setLongDesc(longdescV);
 		objectClass.setWearFlags(wearFlagsV);
-		//pair
-		const YAML::Node& extra_node = it["extra"];
-
-		std::vector<std::string> extraDescV;
-		std::vector<std::string> extraKeywordsV;	
 		
-		for (auto &j : extra_node){
-			extraDescV = setStringVectorHelper(j["desc"]);
-			extraKeywordsV = setStringVectorHelper(j["keywords"]);
-		}
-		//std::cout << "size: " << extraDescV.size() << std::endl;
-		//std::cout << "size: " << extraKeywordsV.size() << std::endl;
-		std::pair< std::vector<std::string>, std::vector<std::string> > extraP;
-
+		//pair
+		std::pair< std::vector<std::string>, std::vector<std::string> > extraP(extraDescV, extraKeywordsV);
 		extraP = std::make_pair(extraDescV, extraKeywordsV);
+		
 		objectClass.setExtra(extraP);
-		std::cout << "size of extra desc " << objectClass.getExtra().first.size() << std::endl;
-		std::cout << "size of extra keywords " << objectClass.getExtra().second.size() << std::endl;
+
 		//Add object to map
   		//allNPC[npcClass.getId()] = npcClass;
   		buildAllObjects.insert(std::make_pair(objectClass.getID(),objectClass));
@@ -106,7 +98,61 @@ std::unordered_map<int,Object> yamlParser::parseBuildObjects(const std::string& 
 	return buildAllObjects;
 }
 
-//helper classes for yamlParseNPC
+
+//Parses and builds Room's from yaml file
+std::unordered_map<int,Room> yamlParser::parseBuildRooms(const std::string& pathToFile){
+	YAML::Node config = YAML::LoadFile(pathToFile);
+	const YAML::Node&  room_node= config["ROOMS"];
+
+	//initialize our map we will return
+	std::unordered_map<int,Room> buildAllRooms;
+
+	for (auto& currentRoom : room_node) {
+		
+		//declaring vector of doors in room
+		std::vector<Door> doors;
+
+		//integers
+		int roomId = currentRoom["id"].as<int>();
+		
+		//strings
+		std::string roomName = currentRoom["name"].as<std::string>();
+
+		//vectors
+		std::vector<std::string> descV = setStringVectorHelper(currentRoom["desc"]);
+		std::vector<std::string> extendedDescV = setStringVectorHelper(currentRoom["extended_descriptions"]);
+
+		//iterate through all door Nodes
+		for (auto& currentDoor : currentRoom["doors"]) {
+		
+			//integers
+			int doorDestinationId = currentDoor["to"].as<int>();
+			
+			//strings
+			std::string doorDir = currentDoor["dir"].as<std::string>();
+
+			//vectors
+			std::vector<std::string> descV = setStringVectorHelper(currentDoor["desc"]);
+			std::vector<std::string> keywordsV = setStringVectorHelper(currentDoor["keywords"]);
+
+			//use parameterized constructor
+			Door doorClass{doorDir, descV, keywordsV, roomId, doorDestinationId}; //going off assumption roomId is doorId
+
+			doors.push_back(doorClass);
+		}
+		
+		//use parameterized constructor
+		Room roomClass{descV, extendedDescV, roomName, roomId, doors};
+
+		//Add object to map
+  		buildAllRooms.insert(std::make_pair(roomClass.getRoomId(),roomClass));
+	}
+
+	return buildAllRooms;
+}
+
+
+//helper classes for yamlParse
 std::vector<std::string> yamlParser::setStringVectorHelper( const YAML::Node& vectorNode){
 	std::vector<std::string> stringsV;
 	for(auto& it : vectorNode){
@@ -115,22 +161,3 @@ std::vector<std::string> yamlParser::setStringVectorHelper( const YAML::Node& ve
 
 	return stringsV;
 }
-
-
-/*std::vector<std::string> yamlParser::setStringHelper(const YAML::Node& stringNode){
-	std::vector<std::string> allKeywords;
-	for(auto it = keywordsNode.begin(); it != keywordsNode.end(); it++){
-		allKeywords.push_back((*it).as<std::string>());
-	}
-
-	return allKeywords;
-}
-
-std::vector<std::string> yamlParser::setLongDescHelper(const YAML::Node& longDescNode){
-	std::vector<std::string> allLongDesc;
-	for(auto it = longDescNode.begin(); it != longDescNode.end(); it++){
-		allLongDesc.push_back((*it).as<std::string>());
-	}
-
-	return allLongDesc;
-}*/

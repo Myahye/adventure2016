@@ -8,6 +8,8 @@ class model{
 private:
 	std::unordered_map<int,NPC> allNPC;
 	std::unordered_map<int,Object> allObjects;
+	std::unordered_map<int,Room> allRooms;
+	//std::unordered_map<int,Player> allPlayers
 public:
 	model();
 	void yamlParseAndBuild(const std::string& pathToFile);
