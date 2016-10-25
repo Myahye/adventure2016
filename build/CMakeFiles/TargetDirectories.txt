@@ -1,4 +1,0 @@
-/home/vagrant/projects/373/git/build/lib/model/CMakeFiles/model.dir
-/home/vagrant/projects/373/git/build/lib/baseClasses/CMakeFiles/baseClasses.dir
-/home/vagrant/projects/373/git/build/tools/runMain/CMakeFiles/adventure.dir
-/home/vagrant/projects/373/git/build/lib/yamlParser/CMakeFiles/yamlParser.dir
