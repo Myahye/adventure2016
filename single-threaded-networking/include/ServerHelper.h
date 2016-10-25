@@ -8,7 +8,7 @@
 class ServerHelper {
 
 private:
-	Model model;
+	Model model{"../data/shire.yml"};
 
 public:
   ServerHelper();

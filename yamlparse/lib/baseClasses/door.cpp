@@ -6,20 +6,20 @@ Door::Door() {
     this->destinationId = 0;
 }
 //Temp constructor for testing and first iteration
-Door::Door(std::string dir) {
+Door::Door(const std::string& dir) {
     this->dir = dir;
     this->Door_id = 0;
     this->destinationId = 0;
 }
 //Temp constructor for testing and first iteration
-Door::Door(std::string dir, std::vector<std::string>& description, int destinationId) {
+Door::Door(const std::string& dir, const std::vector<std::string>& description, int destinationId) {
     this->desc = description;
     this->dir = dir;
     this->keywords = {"none"};
     this->Door_id = 0;
     this->destinationId = destinationId;
 }
-Door::Door(std::string& new_dir, std::vector<std::string>& new_desc, std::vector<std::string>& new_keywords, int& new_door_id, int& new_destinationId)
+Door::Door(const std::string& new_dir, const std::vector<std::string>& new_desc, const std::vector<std::string>& new_keywords, int new_door_id, int new_destinationId)
         : desc{new_desc}
         , dir{new_dir}
         , keywords{new_keywords}

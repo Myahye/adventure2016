@@ -8,9 +8,9 @@
 class Door{
 public:
     Door();
-    Door(std::string dir);
-    Door(std::string dir, std::vector<std::string>& description, int destinationId);
-    Door(std::string& new_dir, std::vector<std::string>& new_desc, std::vector<std::string>& new_keywords, int& new_door_id, int& new_destinationId);
+    Door(const std::string& dir);
+    Door(const std::string& dir, const std::vector<std::string>& description, int destinationId);
+    Door(const std::string& new_dir, const std::vector<std::string>& new_desc, const std::vector<std::string>& new_keywords, int new_door_id, int new_destinationId);
 
     std::vector<std::string> getDesc() const;
     std::string getDir() const;

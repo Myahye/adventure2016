@@ -107,46 +107,46 @@ std::unordered_map<int,Room> yamlParser::parseBuildRooms(const std::string& path
 	//initialize our map we will return
 	std::unordered_map<int,Room> buildAllRooms;
 
-	// for (auto& currentRoom : room_node) {
+	for (auto& currentRoom : room_node) {
 		
-	// 	//declaring vector of doors in room
-	// 	std::vector<Door> doors;
+		//declaring vector of doors in room
+		std::vector<Door> doors;
 
-	// 	//integers
-	// 	int roomId = currentRoom["id"].as<int>();
+		//integers
+		int roomId = currentRoom["id"].as<int>();
 		
-	// 	//strings
-	// 	std::string roomName = currentRoom["name"].as<std::string>();
+		//strings
+		std::string roomName = currentRoom["name"].as<std::string>();
 
-	// 	//vectors
-	// 	std::vector<std::string> descV = setStringVectorHelper(currentRoom["desc"]);
-	// 	std::vector<std::string> extendedDescV = setStringVectorHelper(currentRoom["extended_descriptions"]);
+		//vectors
+		std::vector<std::string> descV = setStringVectorHelper(currentRoom["desc"]);
+		std::vector<std::string> extendedDescV = setStringVectorHelper(currentRoom["extended_descriptions"]);
 
-	// 	//iterate through all door Nodes
-	// 	for (auto& currentDoor : currentRoom["doors"]) {
+		//iterate through all door Nodes
+		for (auto& currentDoor : currentRoom["doors"]) {
 		
-	// 		//integers
-	// 		int doorDestinationId = currentDoor["to"].as<int>();
+			//integers
+			int doorDestinationId = currentDoor["to"].as<int>();
 			
-	// 		//strings
-	// 		std::string doorDir = currentDoor["dir"].as<std::string>();
+			//strings
+			std::string doorDir = currentDoor["dir"].as<std::string>();
 
-	// 		//vectors
-	// 		std::vector<std::string> descV = setStringVectorHelper(currentDoor["desc"]);
-	// 		std::vector<std::string> keywordsV = setStringVectorHelper(currentDoor["keywords"]);
+			//vectors
+			std::vector<std::string> descV = setStringVectorHelper(currentDoor["desc"]);
+			std::vector<std::string> keywordsV = setStringVectorHelper(currentDoor["keywords"]);
 
-	// 		//use parameterized constructor
-	// 		Door doorClass{doorDir, descV, keywordsV, roomId, doorDestinationId}; //going off assumption roomId is doorId
+			//use parameterized constructor
+			Door doorClass{doorDir, descV, keywordsV, roomId, doorDestinationId}; //going off assumption roomId is doorId
 
-	// 		doors.push_back(doorClass);
-	// 	}
+			doors.push_back(doorClass);
+		}
 		
-	// 	//use parameterized constructor
-	// 	Room roomClass{descV, extendedDescV, roomName, roomId, doors};
+		//use parameterized constructor
+		Room roomClass{descV, extendedDescV, roomName, roomId, doors};
 
-	// 	//Add object to map
- //  		buildAllRooms.insert(std::make_pair(roomClass.getRoomId(),roomClass));
-	// }
+		//Add object to map
+  		buildAllRooms.insert(std::make_pair(roomClass.getRoomId(),roomClass));
+	}
 
 	return buildAllRooms;
 }
