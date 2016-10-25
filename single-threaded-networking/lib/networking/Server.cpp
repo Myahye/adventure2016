@@ -5,17 +5,14 @@
 // for details.
 /////////////////////////////////////////////////////////////////////////////
 
-
 #include "Server.h"
 #include "TransferMessage.h"
 
 using namespace networking;
 
-
 /////////////////////////////////////////////////////////////////////////////
 // Channels (connections private to the implementation)
 /////////////////////////////////////////////////////////////////////////////
-
 
 namespace networking {
 
@@ -25,7 +22,7 @@ public:
           Server& server,
           std::deque<Message> &readBuffer)
     : disconnected{false},
-      connection{reinterpret_cast<uintptr_t>(this)},
+      connection{reinterpret_cast<uintptr_t>(this),0,ConnectionState::UNAUTHORIZED},
       socket{io_service},
       server{server},
       streamBuf{BUFFER_SIZE},
@@ -41,6 +38,9 @@ public:
 
   static constexpr unsigned BUFFER_SIZE = 256;
 
+  void setConnectionState(const ConnectionState& state) {connection.currentState = state;}
+  void setPlayerID(int ID) {connection.playerIDConnectedToClientConnection = ID;}
+
 private:
   void readLine();
 
@@ -55,12 +55,10 @@ private:
 
 }
 
-
 void
 Server::Channel::start() {
   readLine();
 }
-
 
 void
 Server::Channel::disconnect() {
@@ -68,7 +66,6 @@ Server::Channel::disconnect() {
   socket.cancel();
   socket.close();
 }
-
 
 void
 Server::Channel::send(std::string outgoing) {
@@ -89,7 +86,6 @@ Server::Channel::send(std::string outgoing) {
     });
 }
 
-
 void
 Server::Channel::readLine() {
   auto self = shared_from_this();
@@ -104,17 +100,14 @@ Server::Channel::readLine() {
     });
 }
 
-
 /////////////////////////////////////////////////////////////////////////////
 // Core Server
 /////////////////////////////////////////////////////////////////////////////
-
 
 void
 Server::update() {
   ioService.poll();
 }
-
 
 std::deque<Message>
 Server::receive() {
@@ -122,7 +115,6 @@ Server::receive() {
   incoming = std::deque<Message>{};
   return oldIncoming;
 }
-
 
 void
 Server::send(const std::deque<Message>& messages) {
@@ -134,7 +126,6 @@ Server::send(const std::deque<Message>& messages) {
   }
 }
 
-
 void
 Server::disconnect(Connection connection) {
   auto found = channels.find(connection);
@@ -144,7 +135,6 @@ Server::disconnect(Connection connection) {
     channels.erase(found);
   }
 }
-
 
 void
 Server::listenForConnections() {
@@ -163,3 +153,18 @@ Server::listenForConnections() {
   });
 }
 
+void
+Server::setPlayerIDConnectedToClient(const Connection& connection, int ID) {
+  auto found = channels.find(connection);
+  if (channels.end() != found) {
+    found->second->setPlayerID(ID);
+  }
+}
+
+void
+Server::setClientCurrentState(const Connection& connection, const ConnectionState& state) {
+  auto found = channels.find(connection);
+  if (channels.end() != found) {
+    found->second->setConnectionState(state);
+  }
+}
