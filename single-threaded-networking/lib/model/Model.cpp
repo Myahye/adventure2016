@@ -165,7 +165,7 @@ Model::movePlayer(const int& playerID, const std::string& destDirection){
     return this->players[playerID].getUsername() + "> " + "There is no door in that direction." + "\n";
   }
 }
-
+//-------------------lawrence Yu
 std::string
 Model::dummySayCommand(const int& playerID, const std::string& message){
     return this->players[playerID].getUsername() + "> " + message.substr(4) + "\n";
@@ -211,9 +211,19 @@ Model::lookCommand(const int& playerID, const std::string& command){
     }
     response += "\n";
     return response;
-  }
+  } 
 
   std::string response = this->players[playerID].getUsername() + "> ";
+
+  for(auto door : this->rooms[currentRoomID].getDoors()) {
+    if(message == door.getDir()) {
+      for(auto str : door.getDesc()) {
+        response += str + " ";
+      }
+      response += "\n";
+      return response;
+    }
+  }
 
   for(auto npc : this->rooms[currentRoomID].getNPCsInRoom()) {
     if(message == npc.second[0].getKeywords()[0]) {

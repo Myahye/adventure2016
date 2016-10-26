@@ -86,7 +86,7 @@ namespace Authentication {
       client-> playerIDConnectedToClientConnection = playerID;
       client-> currentState = ConnectionState::AUTHORIZED;
 
-      return "The adventurer " + playerCredentials[0] + " wakes up in " + serverHelper.getCurrentRoomDescription(playerID) + "\n";
+      return "Welcome back " + playerCredentials[0] + ", " + serverHelper.getCurrentRoomDescription(playerID) + "\n";
     } else {
       return "Sorry that player does not exist, please enter an existing username: \n";
     }
@@ -122,7 +122,7 @@ namespace Authentication {
       client-> playerIDConnectedToClientConnection = playerID;
       client-> currentState = ConnectionState::AUTHORIZED;
 
-      return "Your name is " + playerCredentials[0] + ", " + serverHelper.getCurrentRoomDescription(1) + "\n";
+      return "Your name is " + playerCredentials[0] + ", " + serverHelper.getCurrentRoomDescription(playerID) + "\n";
     }
   }
 }
