@@ -5,7 +5,9 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <unordered_map>
 #include "Door.h"
+#include "NPC.h"
 //#include "CustomError.h"
 
 
@@ -17,6 +19,9 @@ private:
     std::vector<std::string> mExtendedDesc;
     std::string mName;
     unsigned int mRoomId;
+
+    //--------------------------------------Lawrence Yu
+    std::unordered_map<int,std::vector<NPC>> npcsInRoom;
 
 public:
 
@@ -45,5 +50,11 @@ public:
 
     //New function added in to test
     void printClass(int n) const;
+
+    //--------------------------------------Lawrence Yu
+    void addNPC(const NPC& npc, int limit);
+    bool removeNPC(int npcID);
+    std::unordered_map<int,std::vector<NPC>> getNPCsInRoom() const;
+
 };
 #endif /* room_h */

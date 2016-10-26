@@ -50,6 +50,7 @@ void Model::yamlParseAndBuild(const std::string& pathToFile){
   this->NPCs = yamlparse.parseBuildNpcs(pathToFile);
   this->objects = yamlparse.parseBuildObjects(pathToFile);
   this->rooms = yamlparse.parseBuildRooms(pathToFile);
+  this->resets = yamlparse.parseBuildResets(pathToFile);
 
   printAll();
   //not yet implemented
@@ -77,6 +78,12 @@ void Model::printAll(){
   for ( auto it = rooms.begin(); it != rooms.end(); ++it ){
      std::cout << "Map 1\nid:" << it->first << "\n";
      (it->second).printClass(count);
+     std::cout << std::endl;
+     count++;
+  }
+   for ( auto it = resets.begin(); it != resets.end(); ++it ){
+     std::cout << "Map 2\nid:" << it->getId() << "\n";
+     it->printClass(count);
      std::cout << std::endl;
      count++;
   }
@@ -168,8 +175,8 @@ std::string
 Model::lookCommand(const int& playerID, const std::string& command){
   std::string message = command.substr(5);
   std::transform(message.begin(), message.end(), message.begin(), ::tolower);
-  if(message == "around room") {
-    int currentRoomID = this->playerLocation[playerID];
+  int currentRoomID = this->playerLocation[playerID];
+  if(message == "room") {
     std::vector<Door> currentRoomDoors = this->rooms[currentRoomID].getDoors();
 
     std::string currentRoomDescription = "";
@@ -193,6 +200,75 @@ Model::lookCommand(const int& playerID, const std::string& command){
      response += "and " + currentRoomDoors[currentRoomDoors.size()-1].getDir() + ".\n\n";
 
     return response;
+  } else if(message == "npc") {
+    int currentRoomID = this->playerLocation[playerID];
+
+    std::string response = this->players[playerID].getUsername() + ">\n\n     NPCs in room: ";
+    
+    for(auto npc : this->rooms[currentRoomID].getNPCsInRoom()) {
+      // printf("%ds",this->rooms[currentRoomID].getNPCsInRoom().size());
+      response += std::to_string(npc.second.size()) + " " + npc.second[0].getKeywords()[0] + ", ";
+    }
+    response += "\n";
+    return response;
   }
+
+  std::string response = this->players[playerID].getUsername() + "> ";
+
+  for(auto npc : this->rooms[currentRoomID].getNPCsInRoom()) {
+    if(message == npc.second[0].getKeywords()[0]) {
+      for(auto str : npc.second[0].getDesc()) {
+        // printf("%ds",this->rooms[currentRoomID].getNPCsInRoom().size());
+        response += str + " ";
+      }
+      response += "\n";
+      return response;
+    }
+  }
+
   return this->players[playerID].getUsername() + "> " + "Cannot find " + message + ", no match. \n";
 }
+
+//----------------------Lawrence Yu
+void Model::reset(){
+  for(auto reset : resets) {
+    if(reset.getAction() == "npc") {
+      resetNPC(reset);
+    } /*else if(reset.getAction() == "give") {
+      resetGive(reset);
+    } else if(reset.getAction() == "equip") {
+      resetEquip(reset);
+    } else if(reset.getAction() == "Object") {
+      resetObject(reset);
+    }*/
+  }
+}
+
+void Model::resetNPC(const Reset& reset) {
+  int limit = reset.getLimit();
+  NPC npc = NPCs[reset.getId()];
+  // NPC npcClone = clone(npc); 
+  rooms[reset.getRoom()].addNPC(npc, limit);
+}
+
+/*
+reset(){
+  for(auto reset : resets) {
+    Command* command = handlereset(reset);
+    
+      command->execute(*this,reset);
+  }
+}
+
+Command* handlereset(reset) {
+  if(reset == npc) return new Commands::resetNPC();
+  if(reset == object) return resetobject;
+}
+/*
+
+class resetnpc : Command{
+  resetnpc
+}
+
+Command* command = resetnpc();
+*/

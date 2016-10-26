@@ -52,6 +52,7 @@ ServerHelper::parseCommands(const std::deque<Message>& clientMessages, std::vect
       //   { if(c.currentState == ConnectionState::AUTHORIZED) { outgoing.push_back(Message{c,std::string(std::to_string(message.connection.playerIDConnectedToClientConnection) + "> " + message.text + "\n")}); } });
     }
   }
+  this->model.reset();
   return outgoing;
 }
 

@@ -4,7 +4,7 @@ add_library(BaseClass
 	Room.cpp
 	Door.cpp
 	Player.cpp
-	NPC.cpp Object.cpp)
+	NPC.cpp Object.cpp Reset.cpp Commands.cpp)
 
 	set_target_properties(networking
 	                      PROPERTIES

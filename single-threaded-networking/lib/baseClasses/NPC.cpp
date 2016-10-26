@@ -1,6 +1,9 @@
 #include "NPC.h"
 
 //NPC Constructor
+NPC::NPC():
+id{1}, shortdesc{""}{};
+
 NPC::NPC (int const id, std::string const shortdesc):
 	id{id}, shortdesc{shortdesc}{};
 

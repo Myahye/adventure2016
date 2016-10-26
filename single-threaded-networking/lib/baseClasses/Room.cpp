@@ -38,7 +38,7 @@ int Room::numberOfDoors() const{
     return doors.size();
 }
 int Room::getRoomInDir(std::string direction) const {
-  std::cout << "In getRoomInDir" << "\n";
+  // std::cout << "In getRoomInDir" << "\n";
   for(Door door : doors){
     std::cout << "Door in room goes to: " << door.getDir() <<"\n";
     if(door.getDir() == direction){
@@ -99,3 +99,20 @@ void Room::printClass(int n) const{
   }
   //std::cout << "\tthac0: " << thac0 << std::endl;
 }
+
+//--------------------------------------Lawrence Yu
+    void Room::addNPC(const NPC& npc, int limit) {
+      if(npcsInRoom[npc.getId()].size() == limit) {
+        return;
+      } else {
+        npcsInRoom[npc.getId()].push_back(npc);
+           //   std::cout << "Room id: " << mRoomId << "NPC id: " << npc.getId() << std::endl;
+      }
+    }
+    bool Room::removeNPC(int npcID) {
+      //remove if id == npc and hp == 0
+    }
+
+    std::unordered_map<int,std::vector<NPC>> Room::getNPCsInRoom() const {
+      return npcsInRoom;
+    }

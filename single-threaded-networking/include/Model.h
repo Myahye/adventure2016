@@ -10,6 +10,8 @@
 #include "Door.h"
 #include "CustomError.h"
 #include "yamlParser.h"
+#include "Reset.h"
+#include "NPC.h"
 
 //using namespace custom_errors;
 
@@ -20,12 +22,13 @@ private:
   std::unordered_map<int,Room> rooms;
   std::unordered_map<int,NPC> NPCs;
   std::unordered_map<int,Object> objects;
+  std::vector<Reset> resets;
 
   int assignedIDs = 1;
   //need to change these to temlpate values
   std::unordered_map<int,int> playerLocation;
 
-  yamlParser yamlparse;
+  YamlParser yamlparse;
   void yamlParseAndBuild(const std::string& pathToFile);
   void printAll();
   //Still need to be implemented
@@ -59,5 +62,9 @@ public:
   std::string dummySayCommand(const int& playerID, const std::string& message);
 
   std::string lookCommand(const int& playerID, const std::string& destDirection);
+
+  //-----------------------------Lawrence YU
+  void reset();
+  void resetNPC(const Reset& reset);
 };
 #endif /* commandparse_h */

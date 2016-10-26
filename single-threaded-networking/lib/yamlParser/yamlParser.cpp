@@ -1,10 +1,10 @@
 #include "yamlParser.h"
 //#include <utility>
 
-yamlParser::yamlParser() {};
+YamlParser::YamlParser() {};
 
 //Parses and builds Npc's from yaml file
-std::unordered_map<int,NPC> yamlParser::parseBuildNpcs(const std::string& pathToFile){
+std::unordered_map<int,NPC> YamlParser::parseBuildNpcs(const std::string& pathToFile){
 	YAML::Node config = YAML::LoadFile(pathToFile);
 	const YAML::Node&  NPC_node= config["NPCS"];
 	//initialize our map we will return
@@ -49,7 +49,7 @@ std::unordered_map<int,NPC> yamlParser::parseBuildNpcs(const std::string& pathTo
 
 
 //Parses and builds Object's from yaml file
-std::unordered_map<int,Object> yamlParser::parseBuildObjects(const std::string& pathToFile){
+std::unordered_map<int,Object> YamlParser::parseBuildObjects(const std::string& pathToFile){
 	YAML::Node config = YAML::LoadFile(pathToFile);
 	const YAML::Node&  object_node= config["OBJECTS"];
 	//initialize our map we will return
@@ -100,7 +100,7 @@ std::unordered_map<int,Object> yamlParser::parseBuildObjects(const std::string& 
 
 
 //Parses and builds Room's from yaml file
-std::unordered_map<int,Room> yamlParser::parseBuildRooms(const std::string& pathToFile){
+std::unordered_map<int,Room> YamlParser::parseBuildRooms(const std::string& pathToFile){
 	YAML::Node config = YAML::LoadFile(pathToFile);
 	const YAML::Node&  room_node= config["ROOMS"];
 
@@ -152,8 +152,40 @@ std::unordered_map<int,Room> yamlParser::parseBuildRooms(const std::string& path
 }
 
 
+std::vector<Reset> YamlParser::parseBuildResets(const std::string& pathToFile){
+	
+	YAML::Node config = YAML::LoadFile(pathToFile);
+	const YAML::Node& reset_node = config["RESETS"];
+
+	//initialize our map we will return
+	std::vector<Reset> buildAllResets;
+
+	for (auto& currentReset : reset_node) {
+
+		Reset reset{currentReset["action"].as<std::string>(), currentReset["id"].as<int>()};
+
+		if (currentReset["limit"]){
+			reset.setLimit(currentReset["limit"].as<int>());
+		}
+		if (currentReset["room"]){
+			reset.setRoom(currentReset["room"].as<int>());
+		}
+		if (currentReset["slot"]){
+			reset.setSlot(currentReset["slot"].as<int>());
+		}
+		if (currentReset["comment"]){
+			std::string comment = currentReset["comment"].as<std::string>();
+			reset.setComment(comment);
+		}
+		
+		buildAllResets.push_back(reset);
+	}
+	return buildAllResets;
+}
+
+
 //helper classes for yamlParse
-std::vector<std::string> yamlParser::setStringVectorHelper( const YAML::Node& vectorNode){
+std::vector<std::string> YamlParser::setStringVectorHelper( const YAML::Node& vectorNode){
 	std::vector<std::string> stringsV;
 	for(auto& it : vectorNode){
 		stringsV.push_back((it).as<std::string>());

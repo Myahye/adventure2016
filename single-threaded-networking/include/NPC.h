@@ -22,6 +22,7 @@ class NPC {
 	std::vector<std::string> longdesc;
 
 public:
+	NPC();
 	//NPC Constructor
 	NPC (int const id, std::string const shortdesc);
 
