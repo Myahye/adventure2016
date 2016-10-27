@@ -104,7 +104,6 @@ Model::createPlayer(const std::string& username, const std::string& password){
       std::cout << "Player ID: " << player.second.getId() << ", username: " << player.second.getUsername() << ", password: " << player.second.getPassword() << "\n";
   }
   return assignedIDs - 1;
-
 }
 
 std::vector<std::tuple<int,std::string,std::string>>
@@ -123,14 +122,39 @@ std::string
 Model::getCurrentRoomDescription(const int& playerID) {
 
   int currentRoomID = this->playerLocation[playerID];
+  std::vector<Door> currentRoomDoors = this->rooms[currentRoomID].getDoors();
   std::string currentRoomDescription = "";
+  std::string response = "";
 
-  for(auto text : this->rooms[currentRoomID].getDesc()) {
-    currentRoomDescription += text + " ";
+  //------------------------------------------------------------------room description
+  for(auto descriptionText : this->rooms[currentRoomID].getDesc()) {
+    currentRoomDescription += descriptionText + "\n";
   }
+  response = this->players[playerID].getUsername() + ">\n" + currentRoomDescription +
+  
+  //------------------------------------------------------------------npc descriptions
+  response += "\n";
+  for(auto npcIDVectorPair : this->rooms[currentRoomID].getNPCsInRoom()) {
+    // response += std::to_string(npc.second.size()) + " " + npc.second[0].getKeywords()[0] + ", ";
+    for(auto npc : npcIDVectorPair.second) {
+      response += "     " + npc.getLongDesc()[0] + "\n";
+    }
+  }
+  response += "\n";
 
-  currentRoomDescription[0] = std::tolower(currentRoomDescription[0]);
-  return currentRoomDescription;
+  //-----------------------------------------------------------------available doors/exits
+  // if(currentRoomDoors.size() == 1) {
+  //   return this->players[playerID].getUsername() + ">\n     " + currentRoomDescription + "\n\n" +
+  //               "     There is 1 obvious exit: " + currentRoomDoors[0].getDir() + ".\n\n";
+  // }
+
+  response += "     There are " + std::to_string(currentRoomDoors.size()) + " obvious exits: ";
+  for(auto currentDoor = currentRoomDoors.begin(); currentDoor != currentRoomDoors.end()-1;  ++currentDoor ){
+    response += currentDoor->getDir() + ", ";
+  }
+  response += /*"and "*/ currentRoomDoors[currentRoomDoors.size()-1].getDir() + ".\n\n";
+
+  return response;
 }
 
 std::string
@@ -146,97 +170,60 @@ Model::movePlayer(const int& playerID, const std::string& destDirection){
   //   std::cout << "Dir: " << door.getDir() << endl;
   // }
 
-  
   int destRoomID = currentRoom.getRoomInDir(destDirection);
 
   if(destRoomID != -1) {
     std::cout << "Destination room ID:: " << currentRoom.getRoomInDir(destDirection) << std::endl;
     //throw custom_errors::NoSuchDoorException();
     this->playerLocation[playerID] = destRoomID;
-    std::string currentRoomDescription = "";
-
-    for(auto text : this->rooms[destRoomID].getDesc()) {
-      currentRoomDescription += text + " ";
-    }
   
-    currentRoomDescription[0] = std::tolower(currentRoomDescription[0]);
-    return this->players[playerID].getUsername() + "> " + currentRoomDescription + "\n";
+    //currentRoomDescription[0] = std::tolower(currentRoomDescription[0]);
+    return getCurrentRoomDescription(playerID);
   } else {
-    return this->players[playerID].getUsername() + "> " + "There is no door in that direction." + "\n";
+    return this->players[playerID].getUsername() + "> " + "There is no door in that direction." + "\n\n";
   }
 }
 //-------------------lawrence Yu
 std::string
 Model::dummySayCommand(const int& playerID, const std::string& message){
-    return this->players[playerID].getUsername() + "> " + message.substr(4) + "\n";
+    return this->players[playerID].getUsername() + "> " + message.substr(4) + "\n\n";
 }
 
 std::string
 Model::lookCommand(const int& playerID, const std::string& command){
   std::string message = command.substr(5);
   std::transform(message.begin(), message.end(), message.begin(), ::tolower);
-  int currentRoomID = this->playerLocation[playerID];
   if(message == "room") {
-    std::vector<Door> currentRoomDoors = this->rooms[currentRoomID].getDoors();
+    return getCurrentRoomDescription(playerID);
+  }
 
-    std::string currentRoomDescription = "";
-
-    for(auto text : this->rooms[currentRoomID].getDesc()) {
-       currentRoomDescription += text + " ";
-    }
-
-    if(currentRoomDoors.size() == 1) {
-      return this->players[playerID].getUsername() + ">\n     " + currentRoomDescription + "\n\n" +
-                "     There is 1 obvious exit: " + currentRoomDoors[0].getDir() + ".\n\n";
-    }
-
-    std::string response = this->players[playerID].getUsername() + ">\n     " + currentRoomDescription + ".\n\n" +
-                              "     There are " + std::to_string(currentRoomDoors.size()) + " obvious exits: ";
-
-    for(auto it = currentRoomDoors.begin(); it != currentRoomDoors.end()-1;  ++it ){
-      response += it->getDir() + ", ";
-    }
-
-     response += "and " + currentRoomDoors[currentRoomDoors.size()-1].getDir() + ".\n\n";
-
-    return response;
-  } else if(message == "npc") {
-    int currentRoomID = this->playerLocation[playerID];
-
-    std::string response = this->players[playerID].getUsername() + ">\n\n     NPCs in room: ";
-    
-    for(auto npc : this->rooms[currentRoomID].getNPCsInRoom()) {
-      // printf("%ds",this->rooms[currentRoomID].getNPCsInRoom().size());
-      response += std::to_string(npc.second.size()) + " " + npc.second[0].getKeywords()[0] + ", ";
-    }
-    response += "\n";
-    return response;
-  } 
-
+  int currentRoomID = this->playerLocation[playerID];
   std::string response = this->players[playerID].getUsername() + "> ";
 
-  for(auto door : this->rooms[currentRoomID].getDoors()) {
-    if(message == door.getDir()) {
-      for(auto str : door.getDesc()) {
-        response += str + " ";
+  //-------------------------------------------------look "cardinal direction"
+  for(auto currentDoor : this->rooms[currentRoomID].getDoors()) {
+    if(message == currentDoor.getDir()) {
+      for(auto descriptionText : currentDoor.getDesc()) {
+        response += descriptionText + "\n";
       }
       response += "\n";
       return response;
     }
   }
 
-  for(auto npc : this->rooms[currentRoomID].getNPCsInRoom()) {
-    if(message == npc.second[0].getKeywords()[0]) {
-      for(auto str : npc.second[0].getDesc()) {
-        // printf("%ds",this->rooms[currentRoomID].getNPCsInRoom().size());
-        response += str + " ";
+  //-------------------------------------------------look "NPC keyword"
+  response += "\n";
+  for(auto npcIDVectorPair : this->rooms[currentRoomID].getNPCsInRoom()) {
+    if(message == npcIDVectorPair.second[0].getKeywords()[0]) {
+      for(auto descriptionText : npcIDVectorPair.second[0].getDesc()) {
+        response += descriptionText + "\n";
       }
       response += "\n";
       return response;
     }
   }
 
-  return this->players[playerID].getUsername() + "> " + "Cannot find " + message + ", no match. \n";
+  return this->players[playerID].getUsername() + "> " + "Cannot find " + message + ", no match. \n\n";
 }
 
 //----------------------Lawrence Yu

@@ -71,7 +71,7 @@ pullFromClientMessageQueues(Server &server, bool &quit) {
 }
 
 void
-addToClientMessageQueues(const auto& incoming) {
+addToClientMessageQueues(const std::deque<Message>& incoming) {
   for (auto& message : incoming) {
     clientMessageQueues[message.connection].push_front({message.connection,message.text});
   }

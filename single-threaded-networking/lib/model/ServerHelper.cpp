@@ -45,7 +45,7 @@ ServerHelper::parseCommands(const std::deque<Message>& clientMessages, std::vect
       outgoing.push_back(Message{message.connection, messageText});
     }
     else {
-      messageText = "That is an invalid command\n";
+      messageText = "That is an invalid command\n\n";
       outgoing.push_back(Message{message.connection, messageText});
       //Will output all other message types sent for now for testing purposes
       // std::for_each(clients.begin(), clients.end(), [&message,&outgoing] (Connection& c)
