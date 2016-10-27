@@ -36,6 +36,9 @@ private:
   //map<int, rooms>
   //map<int, npcs>
   //map<int, objects>
+  
+  //--------------Lawrence Yu
+  NPC* currentlySelectedNPC = NULL; 
 
 public:
 
@@ -67,5 +70,6 @@ public:
   void reset();
   void resetNPC(const Reset& reset);
   void resetObject(const Reset& reset);
+  void resetGive(const Reset& reset, NPC* npc);
 };
 #endif /* commandparse_h */

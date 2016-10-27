@@ -227,11 +227,15 @@ Model::lookCommand(const int& playerID, const std::string& command){
       for(auto descriptionText : npcIDVectorPair.second[0].getDesc()) {
         response += descriptionText + "\n";
       }
-      response += "\n";
+      response += "\n     Inventory is holding ";
+      auto Inventory = npcIDVectorPair.second[0].getNPCInventory();
+      std::cout << Inventory.size() << std::endl;
+      for(auto object : Inventory)
+        response += std::to_string(object.second.size()) + " " + object.second[0].getKeywords()[0] + ", ";
+      response += "\n\n";
       return response;
     }
   }
-  std::cout << objects[1102].getExtra().first.size() << std::endl;
   //-------------------------------------------------look "Object keyword"
   response += "\n";
   for(auto objectIDVectorPair : this->rooms[currentRoomID].getObjectsInRoom()) {
@@ -244,6 +248,8 @@ Model::lookCommand(const int& playerID, const std::string& command){
     }
   }
 
+  std::cout << "OIGJWEIOGJWO: " << objects[1102].getExtra().first.size() << std::endl;
+
   return this->players[playerID].getUsername() + "> " + "Cannot find " + message + ", no match. \n\n";
 }
 
@@ -254,26 +260,50 @@ void Model::reset(){
       resetNPC(reset);
     } else if(reset.getAction() == "object") {
       resetObject(reset);
-    } /*else if(reset.getAction() == "give") {
+    } else if(reset.getAction() == "give") {
+      resetGive(reset, currentlySelectedNPC);
+    } /*else if(reset.getAction() == "equip") {
       resetEquip(reset);
-    } else if(reset.getAction() == "equip") {
-      resetGive(reset);
     }*/
   }
 }
 
 void Model::resetNPC(const Reset& reset) {
   int limit = reset.getLimit();
-  NPC npc = NPCs[reset.getId()];
-  // NPC npcClone = clone(npc); 
-  rooms[reset.getRoom()].addNPC(npc, limit);
+
+  auto it = NPCs.find(reset.getId());
+
+  if(it != NPCs.end()) {
+    NPC npc = NPCs[reset.getId()];
+    // NPC npcClone = clone(npc); 
+    currentlySelectedNPC = rooms[reset.getRoom()].addNPC(npc, limit);
+  }
 }
 
 void Model::resetObject(const Reset& reset) {
   int limit = reset.getLimit();
-  Object object = objects[reset.getId()];
-  // NPC npcClone = clone(npc); 
-  rooms[reset.getRoom()].addObject(object, limit);
+
+  auto it = objects.find(reset.getId());
+  
+  if(it != objects.end()) {
+    Object object = objects[reset.getId()];
+    // NPC npcClone = clone(npc); 
+    rooms[reset.getRoom()].addObject(object, limit);
+  }
+}
+
+void Model::resetGive(const Reset& reset, NPC* npc) {
+  if(npc != NULL) {
+    int limit = reset.getLimit();
+
+    auto it = objects.find(reset.getId());
+  
+    if(it != objects.end()) {
+      Object object = objects[reset.getId()];
+      // NPC npcClone = clone(npc); 
+      npc->addObjectToInventory(object, limit);
+    }
+  }
 }
 
 /*

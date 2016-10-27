@@ -54,7 +54,7 @@ public:
     void printClass(int n) const;
 
     //--------------------------------------Lawrence Yu
-    void addNPC(const NPC& npc, int limit);
+    NPC* addNPC(const NPC& npc, int limit);
     void addObject(const Object& object, int limit);
 
     bool removeNPC(int npcID);

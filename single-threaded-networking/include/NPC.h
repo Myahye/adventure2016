@@ -4,6 +4,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "Object.h"
+#include <unordered_map>
 
 class NPC {
 	int armor;
@@ -22,7 +24,7 @@ class NPC {
 	std::vector<std::string> longdesc;
 
 	//----------------------------Lawrence Yu
-	std::unordered_map<int,std::vector<Object>> objectsHeldByNPC;
+	std::unordered_map<int,std::vector<Object>> NPCInventory;
 
 public:
 	NPC();
@@ -78,11 +80,11 @@ public:
 	void setThac0(int const thac0);
 
 	//--------------------------------------Lawrence Yu
-    void addObject(const Object& object, int limit);
+    void addObjectToInventory(const Object& object, int limit);
 
-    bool removeObject(int objectID);
+    bool removeObjectFromInventory(int objectID);
 
-    std::unordered_map<int,std::vector<Object>> getObjectsInRoom() const;
+    std::unordered_map<int,std::vector<Object>> getNPCInventory() const;
 };
 
 #endif

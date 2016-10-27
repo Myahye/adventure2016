@@ -101,11 +101,12 @@ void Room::printClass(int n) const{
 }
 
 //--------------------------------------Lawrence Yu
-    void Room::addNPC(const NPC& npc, int limit) {
+    NPC* Room::addNPC(const NPC& npc, int limit) {
       if(npcsInRoom[npc.getId()].size() == limit) {
-        return;
+        return NULL;
       } else {
         npcsInRoom[npc.getId()].push_back(npc);
+        return &npcsInRoom[npc.getId()].back();
            //   std::cout << "Room id: " << mRoomId << "NPC id: " << npc.getId() << std::endl;
       }
     }
