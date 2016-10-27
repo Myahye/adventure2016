@@ -80,7 +80,7 @@ std::unordered_map<int,Object> YamlParser::parseBuildObjects(const std::string& 
 		std::vector<std::string> extraKeywordsV =setStringVectorHelper(it["extra"]["keywords"]);
 
 		objectClass.setAttributes(attributesV); //change up
-		objectClass.setKeyWords(keywordsV);
+		objectClass.setKeywords(keywordsV);
 		objectClass.setLongDesc(longdescV);
 		objectClass.setWearFlags(wearFlagsV);
 		

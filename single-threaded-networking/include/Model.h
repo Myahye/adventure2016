@@ -66,5 +66,6 @@ public:
   //-----------------------------Lawrence YU
   void reset();
   void resetNPC(const Reset& reset);
+  void resetObject(const Reset& reset);
 };
 #endif /* commandparse_h */

@@ -5,7 +5,7 @@
 
 //Reset Constructor
 Reset::Reset(const std::string& action, int const id):
-	action{action}, id{id}, limit{0}{};
+	action{action}, id{id}, limit{1}{};
 
 //Getter and Setter for Action
 std::string Reset::getAction() const {

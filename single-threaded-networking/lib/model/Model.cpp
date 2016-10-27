@@ -67,26 +67,26 @@ void Model::printAll(){
   //   std::cout << std::endl;
   //   count++;
   // }
-  // count =1;
-  // std::cout << "=============================" << std::endl;
-  // for ( auto it = objects.begin(); it != objects.end(); ++it ){
-  //   std::cout << "Map 1\nid:" << it->first << "\n";
-  //   (it->second).printClass(count);
-  //   std::cout << std::endl;
-  //   count++;
+  count =1;
+  std::cout << "=============================" << std::endl;
+  for ( auto it = objects.begin(); it != objects.end(); ++it ){
+    std::cout << "Map 1\nid:" << it->first << "\n";
+    (it->second).printClass(count);
+    std::cout << std::endl;
+    count++;
+  }
+  // for ( auto it = rooms.begin(); it != rooms.end(); ++it ){
+  //    std::cout << "Map 1\nid:" << it->first << "\n";
+  //    (it->second).printClass(count);
+  //    std::cout << std::endl;
+  //    count++;
   // }
-  for ( auto it = rooms.begin(); it != rooms.end(); ++it ){
-     std::cout << "Map 1\nid:" << it->first << "\n";
-     (it->second).printClass(count);
-     std::cout << std::endl;
-     count++;
-  }
-   for ( auto it = resets.begin(); it != resets.end(); ++it ){
-     std::cout << "Map 2\nid:" << it->getId() << "\n";
-     it->printClass(count);
-     std::cout << std::endl;
-     count++;
-  }
+  //  for ( auto it = resets.begin(); it != resets.end(); ++it ){
+  //    std::cout << "Map 2\nid:" << it->getId() << "\n";
+  //    it->printClass(count);
+  //    std::cout << std::endl;
+  //    count++;
+  // }
 }
 
 int
@@ -138,6 +138,15 @@ Model::getCurrentRoomDescription(const int& playerID) {
     // response += std::to_string(npc.second.size()) + " " + npc.second[0].getKeywords()[0] + ", ";
     for(auto npc : npcIDVectorPair.second) {
       response += "     " + npc.getLongDesc()[0] + "\n";
+    }
+  }
+  response += "\n";
+
+  //------------------------------------------------------------------Object descriptions
+  for(auto objectIDVectorPair : this->rooms[currentRoomID].getObjectsInRoom()) {
+    // response += std::to_string(npc.second.size()) + " " + npc.second[0].getKeywords()[0] + ", ";
+    for(auto object : objectIDVectorPair.second) {
+      response += "     " + object.getLongDesc()[0] + "\n";
     }
   }
   response += "\n";
@@ -222,6 +231,18 @@ Model::lookCommand(const int& playerID, const std::string& command){
       return response;
     }
   }
+  std::cout << objects[1102].getExtra().first.size() << std::endl;
+  //-------------------------------------------------look "Object keyword"
+  response += "\n";
+  for(auto objectIDVectorPair : this->rooms[currentRoomID].getObjectsInRoom()) {
+    if(message == objectIDVectorPair.second[0].getKeywords()[0]) {
+      for(auto descriptionText : objectIDVectorPair.second[0].getExtra().first) {
+        response += descriptionText + "\n";
+      }
+      response += "\n";
+      return response;
+    }
+  }
 
   return this->players[playerID].getUsername() + "> " + "Cannot find " + message + ", no match. \n\n";
 }
@@ -231,12 +252,12 @@ void Model::reset(){
   for(auto reset : resets) {
     if(reset.getAction() == "npc") {
       resetNPC(reset);
-    } /*else if(reset.getAction() == "give") {
-      resetGive(reset);
-    } else if(reset.getAction() == "equip") {
-      resetEquip(reset);
-    } else if(reset.getAction() == "Object") {
+    } else if(reset.getAction() == "object") {
       resetObject(reset);
+    } /*else if(reset.getAction() == "give") {
+      resetEquip(reset);
+    } else if(reset.getAction() == "equip") {
+      resetGive(reset);
     }*/
   }
 }
@@ -246,6 +267,13 @@ void Model::resetNPC(const Reset& reset) {
   NPC npc = NPCs[reset.getId()];
   // NPC npcClone = clone(npc); 
   rooms[reset.getRoom()].addNPC(npc, limit);
+}
+
+void Model::resetObject(const Reset& reset) {
+  int limit = reset.getLimit();
+  Object object = objects[reset.getId()];
+  // NPC npcClone = clone(npc); 
+  rooms[reset.getRoom()].addObject(object, limit);
 }
 
 /*

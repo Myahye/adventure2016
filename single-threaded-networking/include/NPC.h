@@ -21,6 +21,9 @@ class NPC {
 	std::vector<std::string> keywords;
 	std::vector<std::string> longdesc;
 
+	//----------------------------Lawrence Yu
+	std::unordered_map<int,std::vector<Object>> objectsHeldByNPC;
+
 public:
 	NPC();
 	//NPC Constructor
@@ -73,6 +76,13 @@ public:
 	//Thac0
 	int getThac0() const;
 	void setThac0(int const thac0);
+
+	//--------------------------------------Lawrence Yu
+    void addObject(const Object& object, int limit);
+
+    bool removeObject(int objectID);
+
+    std::unordered_map<int,std::vector<Object>> getObjectsInRoom() const;
 };
 
 #endif

@@ -2,6 +2,9 @@
 #include "Object.h"
 
 // Constructor:
+Object::Object()
+: id(0), itemType{""} {};
+
 Object::Object(int id, std::string itemType)
 : id{id},
   itemType{itemType} {};
@@ -15,7 +18,7 @@ Object::Object(const Object &ob){
   this->shortDesc=ob.shortDesc;
   /*clean all vectors of the objects before copy*/
   clear_vec(this->attributes);
-  clear_vec(this->keyWords);
+  clear_vec(this->keywords);
   clear_vec(this->longDesc);
   //clear_vec(this->shortDesc);
   clear_vec(this->wearFlags);
@@ -24,7 +27,7 @@ Object::Object(const Object &ob){
 
   /*------copy vectors------*/
   copy_vec(this->attributes,ob.getAttributes());
-  copy_vec(this->keyWords,ob.getKeyWords());
+  copy_vec(this->keywords,ob.getKeywords());
   copy_vec(this->longDesc,ob.getLongDesc());
   //copy_vec(this->shortDesc,ob.getShortDesc());
   copy_vec(this->wearFlags,ob.getWearFlags());
@@ -40,7 +43,7 @@ Object& Object::operator =(const Object& ob){
 
   /*clean all vectors of the objects before copy*/
   clear_vec(this->attributes);
-  clear_vec(this->keyWords);
+  clear_vec(this->keywords);
   clear_vec(this->longDesc);
   //clear_vec(this->shortDesc);
   clear_vec(this->wearFlags);
@@ -48,7 +51,7 @@ Object& Object::operator =(const Object& ob){
 
   /*------copy vectors------*/
   copy_vec(this->attributes,ob.getAttributes());
-  copy_vec(this->keyWords,ob.getKeyWords());
+  copy_vec(this->keywords,ob.getKeywords());
   copy_vec(this->longDesc,ob.getLongDesc());
   //copy_vec(this->shortDesc,ob.getShortDesc());
   copy_vec(this->wearFlags,ob.getWearFlags());
@@ -111,17 +114,17 @@ void Object::addAttribute(const std::string& attribute) {
 }
 
 
-// Getter and setter for keyWords:
-std::vector<std::string> Object::getKeyWords() const {
-  return keyWords;
+// Getter and setter for keywords:
+std::vector<std::string> Object::getKeywords() const {
+  return keywords;
 }
 
-void Object::setKeyWords(const std::vector<std::string>& keyWords) {
-  this->keyWords = keyWords;
+void Object::setKeywords(const std::vector<std::string>& keywords) {
+  this->keywords = keywords;
 }
 
-void Object::addKeyWord(const std::string& keyWord) {
-  this->keyWords.push_back(keyWord);
+void Object::addKeyword(const std::string& keyword) {
+  this->keywords.push_back(keyword);
 }
 
 
@@ -201,7 +204,7 @@ void Object::printClass(int n) const{
   std::cout << "\tAttributes: " << std::endl;
   printVector(attributes);
   std::cout << "\tKeywords: " << std::endl;
-  printVector(keyWords);
+  printVector(keywords);
   std::cout << "\tLong Descriptions: " << std::endl;
   printVector(longDesc);
   std::cout << "\tWear Flags: " << std::endl;

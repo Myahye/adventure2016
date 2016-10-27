@@ -17,13 +17,15 @@ private:
 	std::string shortDesc;
 
 	std::vector<std::string> attributes;
-	std::vector<std::string> keyWords;
+	std::vector<std::string> keywords;
 	std::vector<std::string> longDesc;
 	//std::vector<std::string> shortDesc;
 	std::vector<std::string> wearFlags;
 	std::pair<std::vector<std::string>, std::vector<std::string> > extra;
 
 public:
+	// Default constructor
+	Object();
 	// Object constructor
 	Object(int id, std::string itemType);
 
@@ -54,10 +56,10 @@ public:
 	void setAttributes(const std::vector<std::string>& attributes);
 	void addAttribute(const std::string& attribute);
 
-	// Getter and setter for keyWords:
-	std::vector<std::string> getKeyWords() const;
-	void setKeyWords(const std::vector<std::string>& keyWords);
-  	void addKeyWord(const std::string& keyWord);
+	// Getter and setter for keywords:
+	std::vector<std::string> getKeywords() const;
+	void setKeywords(const std::vector<std::string>& keywords);
+  	void addKeyword(const std::string& keyword);
 
   	// Getter and setter for longDesc:
   	std::vector<std::string> getLongDesc() const;

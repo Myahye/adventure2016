@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include "Door.h"
 #include "NPC.h"
+#include "Object.h"
 //#include "CustomError.h"
 
 
@@ -22,6 +23,7 @@ private:
 
     //--------------------------------------Lawrence Yu
     std::unordered_map<int,std::vector<NPC>> npcsInRoom;
+    std::unordered_map<int,std::vector<Object>> objectsInRoom;
 
 public:
 
@@ -53,8 +55,13 @@ public:
 
     //--------------------------------------Lawrence Yu
     void addNPC(const NPC& npc, int limit);
+    void addObject(const Object& object, int limit);
+
     bool removeNPC(int npcID);
+    bool removeObject(int objectID);
+
     std::unordered_map<int,std::vector<NPC>> getNPCsInRoom() const;
+    std::unordered_map<int,std::vector<Object>> getObjectsInRoom() const;
 
 };
 #endif /* room_h */
