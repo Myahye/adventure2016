@@ -4,8 +4,7 @@ add_library(BaseClass
 	Room.cpp
 	Door.cpp
 	Player.cpp
-	NPC.cpp Object.cpp Reset.cpp Commands.cpp)
-
+	NPC.cpp Object.cpp Context.cpp)
 	set_target_properties(networking
 	                      PROPERTIES
 	                      LINKER_LANGUAGE CXX

@@ -23,7 +23,6 @@ std::vector<std::string> Room::getDesc() const {
 }
 std::vector<std::string> Room::getExtendedDesc() const {
     return this->mExtendedDesc;
-
 }
 std::string Room::getName() const {
     return this->mName;
@@ -52,7 +51,6 @@ int Room::getRoomInDir(std::string direction) const {
 // Mutators
 void Room::setDescription(std::vector<std::string>& new_desc) {
     this->mDesc = new_desc;
-
 }
 void Room::setExtendedDesc(std::vector<std::string>& new_extended_desc) {
     this->mExtendedDesc = new_extended_desc;
@@ -101,39 +99,33 @@ void Room::printClass(int n) const{
 }
 
 //--------------------------------------Lawrence Yu
-    NPC* Room::addNPC(const NPC& npc, int limit) {
-      if(npcsInRoom[npc.getId()].size() == limit) {
-        return NULL;
-      } else {
-        npcsInRoom[npc.getId()].push_back(npc);
-        return &npcsInRoom[npc.getId()].back();
-           //   std::cout << "Room id: " << mRoomId << "NPC id: " << npc.getId() << std::endl;
-      }
-    }
-
-    void Room::addObject(const Object& object, int limit) {
-      if(objectsInRoom[object.getID()].size() == limit) {
-        return;
-      } else {
-        objectsInRoom[object.getID()].push_back(object);
-           //   std::cout << "Room id: " << mRoomId << "NPC id: " << npc.getId() << std::endl;
-      }
-    }
-
-    bool Room::removeNPC(int npcID) {
-      //remove if id == npc and hp == 0
-    }
-
-    bool Room::removeObject(int objectID) {
-      //remove if id == object and pickedupflag==yes
-    }
-
-
-    std::unordered_map<int,std::vector<NPC>> Room::getNPCsInRoom() const {
-      return npcsInRoom;
-    }
-
-    std::unordered_map<int,std::vector<Object>> Room::getObjectsInRoom() const {
-      return objectsInRoom;
-    }
+NPC* Room::addNPC(const NPC& npc, int limit) {
+  if(npcsInRoom[npc.getId()].size() == limit) {
+    return NULL;
+  } else {
+    npcsInRoom[npc.getId()].push_back(npc);
+    return &npcsInRoom[npc.getId()].back();
+       //   std::cout << "Room id: " << mRoomId << "NPC id: " << npc.getId() << std::endl;
+  }
+}
+void Room::addObject(const Object& object, int limit) {
+  if(objectsInRoom[object.getID()].size() == limit) {
+    return;
+  } else {
+    objectsInRoom[object.getID()].push_back(object);
+       //   std::cout << "Room id: " << mRoomId << "NPC id: " << npc.getId() << std::endl;
+  }
+}
+bool Room::removeNPC(int npcID) {
+  //remove if id == npc and hp == 0
+}
+bool Room::removeObject(int objectID) {
+  //remove if id == object and pickedupflag==yes
+}
+std::unordered_map<int,std::vector<NPC>> Room::getNPCsInRoom() const {
+  return npcsInRoom;
+}
+std::unordered_map<int,std::vector<Object>> Room::getObjectsInRoom() const {
+  return objectsInRoom;
+}
 

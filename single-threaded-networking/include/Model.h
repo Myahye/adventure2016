@@ -10,8 +10,9 @@
 #include "Door.h"
 #include "CustomError.h"
 #include "yamlParser.h"
-#include "Reset.h"
+#include "Resets.h"
 #include "NPC.h"
+#include "Context.h"
 
 //using namespace custom_errors;
 
@@ -22,7 +23,7 @@ private:
   std::unordered_map<int,Room> rooms;
   std::unordered_map<int,NPC> NPCs;
   std::unordered_map<int,Object> objects;
-  std::vector<Reset> resets;
+  std::vector<std::shared_ptr<Reset>> resets;
 
   int assignedIDs = 1;
   //need to change these to temlpate values
@@ -38,8 +39,7 @@ private:
   //map<int, objects>
   
   //--------------Lawrence Yu
-  NPC* currentlySelectedNPC = NULL; 
-
+  Context context;
 public:
 
   //Model(); //temp
@@ -68,8 +68,5 @@ public:
 
   //-----------------------------Lawrence YU
   void reset();
-  void resetNPC(const Reset& reset);
-  void resetObject(const Reset& reset);
-  void resetGive(const Reset& reset, NPC* npc);
 };
 #endif /* commandparse_h */

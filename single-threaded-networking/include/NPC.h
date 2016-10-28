@@ -81,7 +81,6 @@ public:
 
 	//--------------------------------------Lawrence Yu
     void addObjectToInventory(const Object& object, int limit);
-
     bool removeObjectFromInventory(int objectID);
 
     std::unordered_map<int,std::vector<Object>> getNPCInventory() const;

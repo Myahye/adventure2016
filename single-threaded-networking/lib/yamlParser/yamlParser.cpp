@@ -152,33 +152,68 @@ std::unordered_map<int,Room> YamlParser::parseBuildRooms(const std::string& path
 }
 
 
-std::vector<Reset> YamlParser::parseBuildResets(const std::string& pathToFile){
+std::vector<std::shared_ptr<Reset>> YamlParser::parseBuildResets(const std::string& pathToFile){
 	
 	YAML::Node config = YAML::LoadFile(pathToFile);
 	const YAML::Node& reset_node = config["RESETS"];
 
 	//initialize our map we will return
-	std::vector<Reset> buildAllResets;
+	std::vector<std::shared_ptr<Reset>> buildAllResets;
 
 	for (auto& currentReset : reset_node) {
+		std::shared_ptr<Reset> reset;
 
-		Reset reset{currentReset["action"].as<std::string>(), currentReset["id"].as<int>()};
+		if(currentReset["action"].as<std::string>() == "npc") {
+			//ask woonsup is this null or something else?
+			// if (currentReset["limit"]){
+			// reset->setLimit(currentReset["limit"].as<int>());
+			// }
+			// if (currentReset["room"]){
+			// 	reset->setRoom(currentReset["room"].as<int>());
+			// }
 
-		if (currentReset["limit"]){
-			reset.setLimit(currentReset["limit"].as<int>());
+			if (currentReset["comment"]){
+				reset = std::make_shared<Resets::ResetNPC>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), currentReset["limit"].as<int>(), currentReset["room"].as<int>(), currentReset["comment"].as<std::string>());
+			}
+			else {
+				reset = std::make_shared<Resets::ResetNPC>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), currentReset["limit"].as<int>(), currentReset["room"].as<int>(), "");
+			}
+			buildAllResets.push_back(reset);
+		} else if(currentReset["action"].as<std::string>() == "object") {
+			if (currentReset["comment"]){
+				reset = std::make_shared<Resets::ResetObject>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), 1, currentReset["room"].as<int>(), currentReset["comment"].as<std::string>());
+			}
+			else {
+				reset = std::make_shared<Resets::ResetObject>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), 1, currentReset["room"].as<int>(), "");
+			}
+			buildAllResets.push_back(reset);
+		} else if(currentReset["action"].as<std::string>() == "give") {
+			if (currentReset["comment"]){
+				reset = std::make_shared<Resets::ResetGive>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), 1, 0, currentReset["comment"].as<std::string>());
+			}
+			else {
+				reset = std::make_shared<Resets::ResetGive>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), 1, 0, "");
+			}
+			buildAllResets.push_back(reset);
 		}
-		if (currentReset["room"]){
-			reset.setRoom(currentReset["room"].as<int>());
-		}
-		if (currentReset["slot"]){
-			reset.setSlot(currentReset["slot"].as<int>());
-		}
-		if (currentReset["comment"]){
-			std::string comment = currentReset["comment"].as<std::string>();
-			reset.setComment(comment);
-		}
+
+		// Reset reset{currentReset["action"].as<std::string>(), currentReset["id"].as<int>()};
+
+		// if (currentReset["limit"]){
+		// 	reset.setLimit(currentReset["limit"].as<int>());
+		// }
+		// if (currentReset["room"]){
+		// 	reset.setRoom(currentReset["room"].as<int>());
+		// }
+		// if (currentReset["slot"]){
+		// 	reset.setSlot(currentReset["slot"].as<int>());
+		// }
+		// if (currentReset["comment"]){
+		// 	std::string comment = currentReset["comment"].as<std::string>();
+		// 	reset.setComment(comment);
+		// }
 		
-		buildAllResets.push_back(reset);
+		// buildAllResets.push_back(reset);
 	}
 	return buildAllResets;
 }

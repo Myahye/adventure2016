@@ -106,19 +106,18 @@ void NPC::setThac0(int const thac0) {
 }
 
 //--------------------------------------Lawrence Yu
-    void NPC::addObjectToInventory(const Object& object, int limit) {
-      if(NPCInventory[object.getID()].size() == limit) {
-        return;
-      } else {
-        NPCInventory[object.getID()].push_back(object);
-              std::cout << "Object id: " << object.getID() << " NPC id: " << id << " Inventory size: " << NPCInventory.size() <<std::endl;
-      }
-    }
+void NPC::addObjectToInventory(const Object& object, int limit) {
+  if(NPCInventory[object.getID()].size() == limit) {
+    return;
+  } else {
+    NPCInventory[object.getID()].push_back(object);
+          std::cout << "Object id: " << object.getID() << " NPC id: " << id << " Inventory size: " << NPCInventory.size() <<std::endl;
+  }
+}
+bool NPC::removeObjectFromInventory(int objectID) {
+  //remove if id == object and pickedupflag==yes
+}
 
-    bool NPC::removeObjectFromInventory(int objectID) {
-      //remove if id == object and pickedupflag==yes
-    }
-
-    std::unordered_map<int,std::vector<Object>> NPC::getNPCInventory() const {
-      return NPCInventory;
-    }
+std::unordered_map<int,std::vector<Object>> NPC::getNPCInventory() const {
+  return NPCInventory;
+}

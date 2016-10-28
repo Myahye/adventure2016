@@ -42,6 +42,7 @@
 //This is what construction will look like
  Model::Model(const std::string& path){
    yamlParseAndBuild(path);
+   this->context = Context{&this->rooms,&this->NPCs,&this->objects};
  }
 
 //use subclass to build objects
@@ -67,26 +68,27 @@ void Model::printAll(){
   //   std::cout << std::endl;
   //   count++;
   // }
-  count =1;
-  std::cout << "=============================" << std::endl;
-  for ( auto it = objects.begin(); it != objects.end(); ++it ){
-    std::cout << "Map 1\nid:" << it->first << "\n";
-    (it->second).printClass(count);
-    std::cout << std::endl;
-    count++;
-  }
+  // count =1;
+  // std::cout << "=============================" << std::endl;
+  // for ( auto it = objects.begin(); it != objects.end(); ++it ){
+  //   std::cout << "Map 1\nid:" << it->first << "\n";
+  //   (it->second).printClass(count);
+  //   std::cout << std::endl;
+  //   count++;
+  // }
   // for ( auto it = rooms.begin(); it != rooms.end(); ++it ){
   //    std::cout << "Map 1\nid:" << it->first << "\n";
   //    (it->second).printClass(count);
   //    std::cout << std::endl;
   //    count++;
   // }
-  //  for ( auto it = resets.begin(); it != resets.end(); ++it ){
-  //    std::cout << "Map 2\nid:" << it->getId() << "\n";
-  //    it->printClass(count);
-  //    std::cout << std::endl;
-  //    count++;
-  // }
+   for ( auto it = resets.begin(); it != resets.end(); ++it ){
+     std::cout << "Map 3\nid:" << "\n";
+       auto r = *it;
+       r->printClass(count);
+     std::cout << std::endl;
+     count++;
+  }
 }
 
 int
@@ -185,8 +187,6 @@ Model::movePlayer(const int& playerID, const std::string& destDirection){
     std::cout << "Destination room ID:: " << currentRoom.getRoomInDir(destDirection) << std::endl;
     //throw custom_errors::NoSuchDoorException();
     this->playerLocation[playerID] = destRoomID;
-  
-    //currentRoomDescription[0] = std::tolower(currentRoomDescription[0]);
     return getCurrentRoomDescription(playerID);
   } else {
     return this->players[playerID].getUsername() + "> " + "There is no door in that direction." + "\n\n";
@@ -227,11 +227,11 @@ Model::lookCommand(const int& playerID, const std::string& command){
       for(auto descriptionText : npcIDVectorPair.second[0].getDesc()) {
         response += descriptionText + "\n";
       }
-      response += "\n     Inventory is holding ";
+      response += "\n     Carrying: ";
       auto Inventory = npcIDVectorPair.second[0].getNPCInventory();
       std::cout << Inventory.size() << std::endl;
       for(auto object : Inventory)
-        response += std::to_string(object.second.size()) + " " + object.second[0].getKeywords()[0] + ", ";
+        response += std::to_string(object.second.size()) + " " + object.second[0].getShortDesc() + ", ";
       response += "\n\n";
       return response;
     }
@@ -255,75 +255,8 @@ Model::lookCommand(const int& playerID, const std::string& command){
 
 //----------------------Lawrence Yu
 void Model::reset(){
-  for(auto reset : resets) {
-    if(reset.getAction() == "npc") {
-      resetNPC(reset);
-    } else if(reset.getAction() == "object") {
-      resetObject(reset);
-    } else if(reset.getAction() == "give") {
-      resetGive(reset, currentlySelectedNPC);
-    } /*else if(reset.getAction() == "equip") {
-      resetEquip(reset);
-    }*/
+  for(auto& reset : resets) {
+    reset->execute(this->context);
+    this->context.setCurrentlySelectedNPC(reset->getCurrentlySelectedNPC());
   }
 }
-
-void Model::resetNPC(const Reset& reset) {
-  int limit = reset.getLimit();
-
-  auto it = NPCs.find(reset.getId());
-
-  if(it != NPCs.end()) {
-    NPC npc = NPCs[reset.getId()];
-    // NPC npcClone = clone(npc); 
-    currentlySelectedNPC = rooms[reset.getRoom()].addNPC(npc, limit);
-  }
-}
-
-void Model::resetObject(const Reset& reset) {
-  int limit = reset.getLimit();
-
-  auto it = objects.find(reset.getId());
-  
-  if(it != objects.end()) {
-    Object object = objects[reset.getId()];
-    // NPC npcClone = clone(npc); 
-    rooms[reset.getRoom()].addObject(object, limit);
-  }
-}
-
-void Model::resetGive(const Reset& reset, NPC* npc) {
-  if(npc != NULL) {
-    int limit = reset.getLimit();
-
-    auto it = objects.find(reset.getId());
-  
-    if(it != objects.end()) {
-      Object object = objects[reset.getId()];
-      // NPC npcClone = clone(npc); 
-      npc->addObjectToInventory(object, limit);
-    }
-  }
-}
-
-/*
-reset(){
-  for(auto reset : resets) {
-    Command* command = handlereset(reset);
-    
-      command->execute(*this,reset);
-  }
-}
-
-Command* handlereset(reset) {
-  if(reset == npc) return new Commands::resetNPC();
-  if(reset == object) return resetobject;
-}
-/*
-
-class resetnpc : Command{
-  resetnpc
-}
-
-Command* command = resetnpc();
-*/
