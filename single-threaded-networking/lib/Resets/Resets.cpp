@@ -115,6 +115,39 @@ namespace Resets {
 
 //-----------------------------------------ResetEquip
 
+	//Reset Constructor
+	ResetEquip::ResetEquip(const std::string& action, int const id, int const slot, const std::string& comment)
+		: action{action}, id{id}, slot{slot}, comment{comment} {};
+	//Execute
+	void ResetEquip::execute(Context& context) {
+		// if(context.getCurrentlySelectedNPC() != NULL) {
+		// 	currentlySelectedNPC = context.getCurrentlySelectedNPC();
+		// 	auto objects = context.getObjects();
+
+	 //  		auto it = objects->find(this->id);
+		//   	if(it != objects->end()) {
+	 //    		Object object = (*objects)[this->id];
+	 //    		// object npcClone = clone(npc); 
+	 //    		currentlySelectedNPC->addObjectToEquipment(object, this->slot);
+	 //  		}
+  // 		}
+	}
+
+	//New function added in to test
+	void ResetEquip::printClass(int n) {
+		std::cout << "\n\n";
+		std::cout << "Reset: "<< n << "\n";
+		std::cout << "ID: " << id << std::endl;
+		std::cout << "\taction: " << action << std::endl;
+		std::cout << "\tcomment: " << comment << std::endl;
+		std::cout << "\tid: " << id << std::endl;
+		std::cout << "\tslot: " << slot<< std::endl;
+	}
+	//Get currentlySelectedNPC
+	NPC* ResetEquip::getCurrentlySelectedNPC() {
+		return this->currentlySelectedNPC;
+	}
+
 }
 
 #endif

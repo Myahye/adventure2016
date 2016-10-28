@@ -15,10 +15,10 @@ namespace Resets {
 	class ResetNPC : public Reset {
 	private:
 		std::string action;
-		std::string comment;
 		int id;
 		int limit;
 		int room;
+		std::string comment;
 		NPC* currentlySelectedNPC = NULL;
 	public:
 		ResetNPC(const std::string& action, int const id, int const limit, int const room, const std::string& comment);
@@ -35,10 +35,10 @@ namespace Resets {
 	class ResetObject : public Reset {
 	private:
 		std::string action;
-		std::string comment;
 		int id;
 		int limit;
 		int room;
+		std::string comment;
 		NPC* currentlySelectedNPC = NULL;
 	public:
 		ResetObject(const std::string& action, int const id, int const limit, int const room, const std::string& comment);
@@ -55,10 +55,10 @@ namespace Resets {
 	class ResetGive : public Reset {
 	private:
 		std::string action;
-		std::string comment;
 		int id;
 		int limit;
 		int room;
+		std::string comment;
 		NPC* currentlySelectedNPC = NULL;
 	public:
 		ResetGive(const std::string& action, int const id, int const limit, int const room, const std::string& comment);
@@ -71,6 +71,23 @@ namespace Resets {
 	};
 
 	//-----------------------------------------ResetEquip
+
+	class ResetEquip : public Reset {
+	private:
+		std::string action;
+		int id;
+		int slot;
+		std::string comment;
+		NPC* currentlySelectedNPC = NULL;
+	public:
+		ResetEquip(const std::string& action, int const id, int const slot, const std::string& comment);
+
+		void execute(Context& context);
+
+		NPC* getCurrentlySelectedNPC();
+
+		void printClass(int n);
+	};
 }
 
 #endif

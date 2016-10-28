@@ -195,6 +195,14 @@ std::vector<std::shared_ptr<Reset>> YamlParser::parseBuildResets(const std::stri
 				reset = std::make_shared<Resets::ResetGive>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), 1, 0, "");
 			}
 			buildAllResets.push_back(reset);
+		} else if(currentReset["action"].as<std::string>() == "equip") {
+			if (currentReset["comment"]){
+				reset = std::make_shared<Resets::ResetEquip>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), currentReset["slot"].as<int>(), currentReset["comment"].as<std::string>());
+			}
+			else {
+				reset = std::make_shared<Resets::ResetEquip>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), currentReset["slot"].as<int>(), "");
+			}
+			buildAllResets.push_back(reset);
 		}
 
 		// Reset reset{currentReset["action"].as<std::string>(), currentReset["id"].as<int>()};
