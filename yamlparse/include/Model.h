@@ -1,20 +1,21 @@
 #ifndef MODEL_H
 #define MODEL_H
 
-#include "yamlParser.h"
+#include "YamlParser.h"
 
-class model{
+class Model{
 
 private:
 	std::unordered_map<int,NPC> allNPC;
 	std::unordered_map<int,Object> allObjects;
 	std::unordered_map<int,Room> allRooms;
+	std::vector<Reset> allResets;
 	//std::unordered_map<int,Player> allPlayers
 public:
-	model();
+	Model();
 	void yamlParseAndBuild(const std::string& pathToFile);
 	void printAll();
-	yamlParser yamlparse;
+	YamlParser yamlparse;
 	// void yamlParseNPC(std::string pathToFile);
 	// std::vector<std::string> setDescHelper( const YAML::Node& descNode);
 	// std::vector<std::string> setKeywordsHelper( const YAML::Node& keywordsNode);

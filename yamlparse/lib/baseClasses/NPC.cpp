@@ -3,91 +3,106 @@
 
 #include "NPC.h"
 
-NPC::NPC (int id_, std::string shortdesc_): 
-	id{id_}, shortdesc{shortdesc_}{};
+//NPC Constructor
+NPC::NPC (int const id, std::string const shortdesc):
+	id{id}, shortdesc{shortdesc}{};
 
+//Getter and Setter for Armor
 int NPC::getArmor() const {
 	return armor;
 }
-void NPC::setArmor(int armor_) {
-	this->armor = armor_;
+void NPC::setArmor(int const armor) {
+	this->armor = armor;
 }
-	
+
+//Getter and Setter for	Damage
 std::string NPC::getDamage() const {
 	return damage;
 }
-void NPC::setDamage(std::string& damage_) {
-	this->damage = damage_;
+void NPC::setDamage(const std::string& damage) {
+	this->damage = damage;
 }
-	
+
+//Getter and Setter for	Description
 std::vector<std::string> NPC::getDesc() const {
 	return description;
 }
-void NPC::setDesc(std::vector<std::string>& description_) {
-	this->description = description_;
+void NPC::setDesc(const std::vector<std::string>& description) {
+	this->description = description;
 }
 
+
+//Getter and Setter for Exp
 int NPC::getExp() const {
 	return exp;
 }
-void NPC::setExp(int exp_) {
-	this->exp = exp_;
+void NPC::setExp(int const exp) {
+	this->exp = exp;
 }
 
+//Getter and Setter for Gold
 int NPC::getGold() const {
 	return gold;
 }
-void NPC::setGold(int gold_) {
-	this->gold = gold_;
+void NPC::setGold(int const gold) {
+	this->gold = gold;
 }
 
+//Getter and Setter for Hit
 std::string NPC::getHit() const {
 	return hit;
 }
-void NPC::setHit(std::string& hit_) {
-	this->hit = hit_;
+void NPC::setHit(const std::string& hit) {
+	this->hit = hit;
 }
 
+//Getter and Setter for Id
 int NPC::getId() const {
 	return id;
 }
-void NPC::setId(int id_) {
-	this->id = id_;
+void NPC::setId(int const id) {
+	this->id = id;
 }
 
+//Getter and Setter for Keywords
 std::vector<std::string> NPC::getKeywords() const {
 	return keywords;
 }
-void NPC::setKeywords(std::vector<std::string>& keywords_) {
-	this->keywords = keywords_;
+void NPC::setKeywords(const std::vector<std::string>& keywords) {
+	this->keywords = keywords;
 }
 
+
+//Getter and Setter for Level
 int NPC::getLevel() const {
 	return level;
 }
-void NPC::setLevel(int level_) {
-	this->level = level_;
+void NPC::setLevel(int const level) {
+	this->level = level;
 }
 
+//Getter and Setter for Longdesc
 std::vector<std::string> NPC::getLongDesc() const {
 	return longdesc;
 }
-void NPC::setLongDesc(std::vector<std::string>& longdesc_) {
-	this->longdesc = longdesc_;
+void NPC::setLongDesc(const std::vector<std::string>& longdesc) {
+	this->longdesc = longdesc;
 }
-	
+
+//Getter and Setter for Shordesc
 std::string NPC::getShortDesc() const {
 	return shortdesc;
 }
-void NPC::setShortDesc(std::string& shortdesc_) {
-	this->shortdesc = shortdesc_;
+void NPC::setShortDesc(const std::string& shortdesc) {
+	this->shortdesc = shortdesc;
 }
 
+//Getter and Setter for Thac0
 int NPC::getThac0() const {
 	return thac0;
 }
-void NPC::setThac0(int thac0_) {
-	this->thac0 = thac0_;
+void NPC::setThac0(int const thac0) {
+	this->thac0 = thac0;
 }
 
 //New function added in to test

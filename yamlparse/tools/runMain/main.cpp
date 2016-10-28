@@ -2,14 +2,14 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include "model.h"
+#include "Model.h"
 
 
 int main() {
-	model testModelParseNpcs;
+	Model testModelParse;
 	std::string path = "../yamlparse/data/shire.yml";
 	// pracModel.yamlParseNPC(path);
-	testModelParseNpcs.yamlParseAndBuild(path);
-	testModelParseNpcs.printAll();
+	testModelParse.yamlParseAndBuild(path);
+	testModelParse.printAll();
 	return 0;
 }
