@@ -17,18 +17,18 @@ Object::Object(const Object &ob){
   clear_vec(this->attributes);
   clear_vec(this->keyWords);
   clear_vec(this->longDesc);
-  //clear_vec(this->shortDesc);
   clear_vec(this->wearFlags);
-  //clear_vec(this->extra.first);
-  //clear_vec(this->extra.second);
+  clear_vec(this->extra.first);
+  clear_vec(this->extra.second);
 
   /*------copy vectors------*/
   copy_vec(this->attributes,ob.getAttributes());
   copy_vec(this->keyWords,ob.getKeyWords());
   copy_vec(this->longDesc,ob.getLongDesc());
-  //copy_vec(this->shortDesc,ob.getShortDesc());
   copy_vec(this->wearFlags,ob.getWearFlags());
-  //copy_vec(this->extra, ob.getExtra());
+
+  /*-----------copy extra---------------*/
+  this->extra=ob.getExtra();
 }
 
 Object& Object::operator =(const Object& ob){
@@ -42,18 +42,19 @@ Object& Object::operator =(const Object& ob){
   clear_vec(this->attributes);
   clear_vec(this->keyWords);
   clear_vec(this->longDesc);
-  //clear_vec(this->shortDesc);
   clear_vec(this->wearFlags);
-  //clear_vec(this->extra);
+  clear_vec(this->extra.first);
+  clear_vec(this->extra.second);
 
   /*------copy vectors------*/
   copy_vec(this->attributes,ob.getAttributes());
   copy_vec(this->keyWords,ob.getKeyWords());
   copy_vec(this->longDesc,ob.getLongDesc());
-  //copy_vec(this->shortDesc,ob.getShortDesc());
   copy_vec(this->wearFlags,ob.getWearFlags());
-  //copy_vec(this->extra, ob.getExtra());
 
+  /*-----------copy extra---------------*/
+  this->extra=ob.getExtra();
+  
   return *this;
 }
 
@@ -210,7 +211,7 @@ void Object::printClass(int n) const{
   std::cout << "\t\tDescription: " << std::endl;
   std::cout << "size of extra desc: " << extra.first.size() << std::endl;
   printVector(extra.first);
-  std::cout << "\t\tKeywords: " << std::endl; 
+  std::cout << "\t\tKeywords: " << std::endl;
   std::cout << "size of extra keywords: " << extra.second.size() << std::endl;
   printVector(extra.second);
 }
