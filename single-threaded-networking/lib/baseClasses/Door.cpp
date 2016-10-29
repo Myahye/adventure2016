@@ -27,9 +27,11 @@ Door::Door(const std::string& new_dir, const std::vector<std::string>& new_desc,
         , destinationId{static_cast<unsigned int>(new_destinationId)} {}
 
 //Accessor methods
-std::vector<std::string>
+std::string
 Door::getDesc() const {
-    return this -> desc;
+    std::string descString = "";
+    std::for_each(desc.begin(), desc.end(), [&descString](std::string i){descString += i + "\n";} );    
+    return descString;
 }
 std::string
 Door::getDir() const {

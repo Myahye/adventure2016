@@ -2,10 +2,10 @@
 
 //NPC Constructor
 NPC::NPC():
-id{0}, shortdesc{""}{};
+id{0}, shortdesc{""} {};
 
 NPC::NPC (int const id, std::string const shortdesc):
-	id{id}, shortdesc{shortdesc}{};
+	id{id}, shortdesc{shortdesc} {};
 
 //Getter and Setter for Armor
 int NPC::getArmor() const {
@@ -24,8 +24,10 @@ void NPC::setDamage(const std::string& damage) {
 }
 
 //Getter and Setter for	Description
-std::vector<std::string> NPC::getDesc() const {
-	return description;
+std::string NPC::getDesc() const {
+	std::string descString = "";
+	for_each(description.begin(), description.end(), [&descString](const std::string& i){descString += i + "\n";} );	
+	return descString;
 }
 void NPC::setDesc(const std::vector<std::string>& description) {
 	this->description = description;
@@ -82,8 +84,10 @@ void NPC::setLevel(int const level) {
 }
 
 //Getter and Setter for Longdesc
-std::vector<std::string> NPC::getLongDesc() const {
-	return longdesc;
+std::string NPC::getLongDesc() const {
+	std::string descString = "";
+	std::for_each(longdesc.begin(), longdesc.end(), [&descString](const std::string& i){descString += i + "\n";} );	
+	return descString;
 }
 void NPC::setLongDesc(const std::vector<std::string>& longdesc) {
 	this->longdesc = longdesc;
@@ -107,17 +111,51 @@ void NPC::setThac0(int const thac0) {
 
 //--------------------------------------Lawrence Yu
 void NPC::addObjectToInventory(const Object& object, int limit) {
-  if(NPCInventory[object.getID()].size() == limit) {
+  if(npcInventory[object.getId()].size() == limit) {
     return;
   } else {
-    NPCInventory[object.getID()].push_back(object);
-          std::cout << "Object id: " << object.getID() << " NPC id: " << id << " Inventory size: " << NPCInventory.size() <<std::endl;
+    npcInventory[object.getId()].push_back(object);
+          //std::cout << "Object id: " << object.getId() << " NPC id: " << id << " Inventory size: " << npcInventory.size() <<std::endl;
   }
 }
-bool NPC::removeObjectFromInventory(int objectID) {
-  //remove if id == object and pickedupflag==yes
+void NPC::removeObjectFromInventory(int objectId) {
+  // //remove if id == object and pickedupflag==yes
+  // npcInventory.erase(
+  //   std::remove_if(npcInventory.begin(), npcInventory.end(),
+  //       [objectId](Object& object) { return (object.getId() == objectId); }),
+  //   npcInventory.end());
 }
 
-std::unordered_map<int,std::vector<Object>> NPC::getNPCInventory() const {
-  return NPCInventory;
+void NPC::equipObject(const Object& object, int slot) {
+  if(npcEquipment.find(slot) != npcEquipment.end()) {
+    return;
+  } else {
+    npcEquipment[slot] = object;
+          std::cout << this << "Object id: " << npcEquipment[slot].getId() << " NPC id: " << id << " Equipment Desc: " << npcEquipment[slot].getShortDesc() << " Equipment size: " << npcEquipment.size() <<std::endl;
+  }
 }
+void NPC::unEquipObject(int objectId) {
+  //remove if id == object and pickedupflag==yes
+  npcEquipment.erase(objectId);
+}
+
+std::unordered_map<int,std::vector<Object>> NPC::getNpcInventory() const {
+  return this->npcInventory;
+}
+
+std::unordered_map<int,Object> NPC::getNpcEquipment() const {
+  return this->npcEquipment;
+}
+
+std::string NPC::getNpcEquipmentDesc() const {
+  std::string response = "";
+  for_each(npcEquipment.begin(), npcEquipment.end(), [&response](const auto& currentEquip){response += currentEquip.second.getShortDesc() + ", ";});	
+  return response;
+}
+std::string NPC::getNpcInventoryDesc() const {
+	std::string response = "";
+	std::for_each(npcInventory.begin(), npcInventory.end(), [&response](const auto& currentItem){response += currentItem.second[0].getShortDesc() + " (Quantity: " + std::to_string(currentItem.second.size()) + "), ";});	
+  return response;
+}
+
+

@@ -18,8 +18,10 @@ Room::Room(std::vector<std::string>& new_desc, std::vector<std::string>& new_ext
 }
 
 // Accessors
-std::vector<std::string> Room::getDesc() const {
-    return this->mDesc;
+std::string Room::getDesc() const {
+  std::string response = "";
+  for_each(mDesc.begin(), mDesc.end(), [&response](const std::string& descriptionText){response += descriptionText + "\n";} ); 
+  return response;
 }
 std::vector<std::string> Room::getExtendedDesc() const {
     return this->mExtendedDesc;
@@ -99,33 +101,81 @@ void Room::printClass(int n) const{
 }
 
 //--------------------------------------Lawrence Yu
-NPC* Room::addNPC(const NPC& npc, int limit) {
+NPC* Room::addNpc(const NPC& npc, int limit) {
   if(npcsInRoom[npc.getId()].size() == limit) {
     return NULL;
   } else {
     npcsInRoom[npc.getId()].push_back(npc);
+    std::cout << "Room id: " << mRoomId << "NPC id: " << npc.getId() << std::endl;
     return &npcsInRoom[npc.getId()].back();
-       //   std::cout << "Room id: " << mRoomId << "NPC id: " << npc.getId() << std::endl;
   }
 }
 void Room::addObject(const Object& object, int limit) {
-  if(objectsInRoom[object.getID()].size() == limit) {
+  if(objectsInRoom[object.getId()].size() == limit) {
     return;
   } else {
-    objectsInRoom[object.getID()].push_back(object);
+    objectsInRoom[object.getId()].push_back(object);
        //   std::cout << "Room id: " << mRoomId << "NPC id: " << npc.getId() << std::endl;
   }
 }
-bool Room::removeNPC(int npcID) {
+void Room::removeNPC(int npcId) {
   //remove if id == npc and hp == 0
+  if(npcsInRoom[npcId].size() != 0) {
+    npcsInRoom[npcId].pop_back();
+  }
 }
-bool Room::removeObject(int objectID) {
+void Room::removeObject(int objectId) {
   //remove if id == object and pickedupflag==yes
+  if(objectsInRoom[objectId].size() != 0) {
+    objectsInRoom[objectId].pop_back();
+  }
 }
-std::unordered_map<int,std::vector<NPC>> Room::getNPCsInRoom() const {
+std::unordered_map<int,std::vector<NPC>> Room::getNpcsInRoom() const {
   return npcsInRoom;
 }
 std::unordered_map<int,std::vector<Object>> Room::getObjectsInRoom() const {
   return objectsInRoom;
+}
+
+std::string Room::getNpcsInRoomDesc() const {
+  std::string response = "";
+  for(auto npcIdVectorPair : npcsInRoom) {
+    for(auto npc : npcIdVectorPair.second) {
+      response += "     " + npc.getLongDesc();
+    }
+  }
+  return response;
+}
+std::string Room::getObjectsInRoomDesc() const {
+  std::string response = "";
+  for(auto objectIdVectorPair : objectsInRoom) {
+    for(auto object : objectIdVectorPair.second) {
+      response += object.getLongDescStr();
+    }
+  }
+  return response;
+}
+std::string Room::getDoorsInRoomDesc() const {
+  std::string response = "";
+
+  if(doors.size() == 1) {
+    return  "There is 1 obvious exit: " + doors[0].getDir() + ".\n";
+  }
+
+  response += "There are " + std::to_string(doors.size()) + " obvious exits: ";
+
+  std::for_each(doors.begin(),doors.end()-1,[&response] (const auto& currentDoor) { response += currentDoor.getDir() + ", "; });
+  
+  response += "and " + doors[doors.size()-1].getDir() + ".\n";
+
+  return response;
+}
+
+std::string Room::getFullRoomDesc() const {
+  std::string response = getDesc() + "\n";
+  response += getNpcsInRoomDesc() + "\n\n";
+  response += "     " + getObjectsInRoomDesc() + "\n"; 
+  response += "     " + getDoorsInRoomDesc() + "\n";
+  return response;
 }
 

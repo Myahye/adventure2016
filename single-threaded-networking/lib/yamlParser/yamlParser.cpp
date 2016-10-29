@@ -92,7 +92,7 @@ std::unordered_map<int,Object> YamlParser::parseBuildObjects(const std::string& 
 
 		//Add object to map
   		//allNPC[npcClass.getId()] = npcClass;
-  		buildAllObjects.insert(std::make_pair(objectClass.getID(),objectClass));
+  		buildAllObjects.insert(std::make_pair(objectClass.getId(),objectClass));
 	}
 
 	return buildAllObjects;

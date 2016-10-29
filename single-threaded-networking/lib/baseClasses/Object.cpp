@@ -5,6 +5,7 @@
 Object::Object()
 : id(0), itemType{""} {};
 
+// Constructor:
 Object::Object(int id, std::string itemType)
 : id{id},
   itemType{itemType} {};
@@ -20,18 +21,18 @@ Object::Object(const Object &ob){
   clear_vec(this->attributes);
   clear_vec(this->keywords);
   clear_vec(this->longDesc);
-  //clear_vec(this->shortDesc);
   clear_vec(this->wearFlags);
-  //clear_vec(this->extra.first);
-  //clear_vec(this->extra.second);
+  clear_vec(this->extra.first);
+  clear_vec(this->extra.second);
 
   /*------copy vectors------*/
   copy_vec(this->attributes,ob.getAttributes());
   copy_vec(this->keywords,ob.getKeywords());
   copy_vec(this->longDesc,ob.getLongDesc());
-  //copy_vec(this->shortDesc,ob.getShortDesc());
   copy_vec(this->wearFlags,ob.getWearFlags());
-  //copy_vec(this->extra, ob.getExtra());
+
+  /*-----------copy extra---------------*/
+  this->extra=ob.getExtra();
 }
 
 Object& Object::operator =(const Object& ob){
@@ -45,27 +46,28 @@ Object& Object::operator =(const Object& ob){
   clear_vec(this->attributes);
   clear_vec(this->keywords);
   clear_vec(this->longDesc);
-  //clear_vec(this->shortDesc);
   clear_vec(this->wearFlags);
-  //clear_vec(this->extra);
+  clear_vec(this->extra.first);
+  clear_vec(this->extra.second);
 
   /*------copy vectors------*/
   copy_vec(this->attributes,ob.getAttributes());
   copy_vec(this->keywords,ob.getKeywords());
   copy_vec(this->longDesc,ob.getLongDesc());
-  //copy_vec(this->shortDesc,ob.getShortDesc());
   copy_vec(this->wearFlags,ob.getWearFlags());
-  //copy_vec(this->extra, ob.getExtra());
 
+  /*-----------copy extra---------------*/
+  this->extra=ob.getExtra();
+  
   return *this;
 }
 
-// Getter and setter for ID:
-int Object::getID() const {
+// Getter and setter for Id:
+int Object::getId() const {
   return id;
 }
 
-void Object::setID(int id) {
+void Object::setId(int id) {
   this->id = id;
 }
 
@@ -130,7 +132,12 @@ void Object::addKeyword(const std::string& keyword) {
 
 // Getter and setter for longDesc:
 std::vector<std::string> Object::getLongDesc() const {
-  return longDesc;
+  return this->longDesc;
+}
+std::string Object::getLongDescStr() const {
+  std::string descString = "";
+  std::for_each(longDesc.begin(), longDesc.end(), [&descString](const std::string& i){descString += i + "\n";} );  
+  return descString;
 }
 
 void Object::setLongDesc(const std::vector<std::string>& longDesc) {
@@ -196,7 +203,7 @@ void Object::clear_vec(std::vector<std::string> Alist){
 void Object::printClass(int n) const{
   std::cout << "\n\n";
   std::cout << "Object: "<< n << "\n";
-  std::cout << "Object ID: " << id << std::endl;
+  std::cout << "Object Id: " << id << std::endl;
   std::cout << "\tcost: " << cost << std::endl;
   std::cout << "\tweight: " << weight << std::endl;
   std::cout << "\tItem Type: " << itemType << std::endl;
@@ -213,7 +220,7 @@ void Object::printClass(int n) const{
   std::cout << "\t\tDescription: " << std::endl;
   std::cout << "size of extra desc: " << extra.first.size() << std::endl;
   printVector(extra.first);
-  std::cout << "\t\tKeywords: " << std::endl; 
+  std::cout << "\t\tKeywords: " << std::endl;
   std::cout << "size of extra keywords: " << extra.second.size() << std::endl;
   printVector(extra.second);
 }

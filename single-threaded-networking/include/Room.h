@@ -16,10 +16,10 @@ class Room {
 
 private:
     std::vector<std::string> mDesc;
-    std::vector<Door> doors;
     std::vector<std::string> mExtendedDesc;
     std::string mName;
     unsigned int mRoomId;
+    std::vector<Door> doors;
 
     //--------------------------------------Lawrence Yu
     std::unordered_map<int,std::vector<NPC>> npcsInRoom;
@@ -35,7 +35,7 @@ public:
     Room(std::vector<std::string>& new_desc, std::vector<std::string>& new_extended_desc, std::string& new_name, int& new_room_id, std::vector<Door>& new_doors);
 
     // Accessors
-    std::vector<std::string> getDesc() const;
+    std::string getDesc() const;
     std::vector<std::string> getExtendedDesc() const;
     std::string getName() const;
     int getRoomId() const;
@@ -54,14 +54,19 @@ public:
     void printClass(int n) const;
 
     //--------------------------------------Lawrence Yu
-    NPC* addNPC(const NPC& npc, int limit);
+    NPC* addNpc(const NPC& npc, int limit);
     void addObject(const Object& object, int limit);
 
-    bool removeNPC(int npcID);
-    bool removeObject(int objectID);
+    void removeNPC(int npcId);
+    void removeObject(int objectId);
 
-    std::unordered_map<int,std::vector<NPC>> getNPCsInRoom() const;
+    std::unordered_map<int,std::vector<NPC>> getNpcsInRoom() const;
     std::unordered_map<int,std::vector<Object>> getObjectsInRoom() const;
+
+    std::string getNpcsInRoomDesc() const;
+    std::string getObjectsInRoomDesc() const;
+    std::string getDoorsInRoomDesc() const;
+    std::string getFullRoomDesc() const;
 
 };
 #endif /* room_h */

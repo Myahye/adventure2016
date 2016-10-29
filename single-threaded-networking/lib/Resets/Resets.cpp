@@ -21,7 +21,7 @@ namespace Resets {
     		// NPC npcClone = clone(npc); 
     		auto it1 = rooms->find(this->id);
 	  		if(it1 != rooms->end()) {
-    			currentlySelectedNPC = (*rooms)[this->room].addNPC(npc, this->limit);
+    			currentlySelectedNPC = (*rooms)[this->room].addNpc(npc, this->limit);
     		}
   		}
 	}
@@ -120,17 +120,17 @@ namespace Resets {
 		: action{action}, id{id}, slot{slot}, comment{comment} {};
 	//Execute
 	void ResetEquip::execute(Context& context) {
-		// if(context.getCurrentlySelectedNPC() != NULL) {
-		// 	currentlySelectedNPC = context.getCurrentlySelectedNPC();
-		// 	auto objects = context.getObjects();
+		if(context.getCurrentlySelectedNPC() != NULL) {
+			currentlySelectedNPC = context.getCurrentlySelectedNPC();
+			auto objects = context.getObjects();
 
-	 //  		auto it = objects->find(this->id);
-		//   	if(it != objects->end()) {
-	 //    		Object object = (*objects)[this->id];
-	 //    		// object npcClone = clone(npc); 
-	 //    		currentlySelectedNPC->addObjectToEquipment(object, this->slot);
-	 //  		}
-  // 		}
+	  		auto it = objects->find(this->id);
+		  	if(it != objects->end()) {
+	    		Object object = (*objects)[this->id];
+	    		// object npcClone = clone(npc); 
+	    		currentlySelectedNPC->equipObject(object, this->slot);
+	  		}
+  		}
 	}
 
 	//New function added in to test

@@ -21,7 +21,7 @@ class Model {
 private:
   std::unordered_map<int,Player> players;
   std::unordered_map<int,Room> rooms;
-  std::unordered_map<int,NPC> NPCs;
+  std::unordered_map<int,NPC> npcs;
   std::unordered_map<int,Object> objects;
   std::vector<std::shared_ptr<Reset>> resets;
 
@@ -65,6 +65,9 @@ public:
   std::string dummySayCommand(const int& playerID, const std::string& message);
 
   std::string lookCommand(const int& playerID, const std::string& destDirection);
+
+  bool checkObjectKeywords(const std::string& message, std::pair<const int,std::vector<Object>>& objectIDVectorPair);
+  bool checkNpcKeywords(const std::string& message, std::pair<const int,std::vector<NPC>>& npcIDVectorPair);
 
   //-----------------------------Lawrence YU
   void reset();

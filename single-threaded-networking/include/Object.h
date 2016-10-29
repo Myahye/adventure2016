@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <utility> //std::pair
+#include <algorithm>
 class Object {
 private:
 	int id;
@@ -24,7 +25,6 @@ private:
 	std::pair<std::vector<std::string>, std::vector<std::string> > extra;
 
 public:
-	// Default constructor
 	Object();
 	// Object constructor
 	Object(int id, std::string itemType);
@@ -35,9 +35,9 @@ public:
 	//Object overloaed
 	Object& operator =(const Object& ob);
 
-	// Getter and setter for ID:
-  	int getID() const;
-  	void setID(int id);
+	// Getter and setter for Id:
+  	int getId() const;
+  	void setId(int id);
 
   	// Getter and setter for cost:
   	int getCost() const;
@@ -63,6 +63,7 @@ public:
 
   	// Getter and setter for longDesc:
   	std::vector<std::string> getLongDesc() const;
+  	std::string getLongDescStr() const;
 	void setLongDesc(const std::vector<std::string>& longDesc);
 	void addLongDesc(const std::string& longDesc);
 
