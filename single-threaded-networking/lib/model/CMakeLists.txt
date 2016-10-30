@@ -1,6 +1,6 @@
 
 add_library(model
-            ServerHelper.cpp
+            ServerInterface.cpp
             Model.cpp)
 
 set_target_properties(networking
@@ -15,3 +15,6 @@ install(TARGETS model
 
 
 set_property(TARGET model PROPERTY CXX_STANDARD 14)
+
+target_link_libraries(model yamlParser) 
+target_link_libraries(model Resets)

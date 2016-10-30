@@ -1,4 +1,4 @@
-#include "ServerHelper.h"
+#include "ServerInterface.h"
 #include <boost/algorithm/string/predicate.hpp>
 #include <iostream>
 
@@ -45,13 +45,14 @@ ServerHelper::parseCommands(const std::deque<Message>& clientMessages, std::vect
       outgoing.push_back(Message{message.connection, messageText});
     }
     else {
-      messageText = "That is an invalid command\n";
+      messageText = "That is an invalid command\n\n";
       outgoing.push_back(Message{message.connection, messageText});
       //Will output all other message types sent for now for testing purposes
       // std::for_each(clients.begin(), clients.end(), [&message,&outgoing] (Connection& c)
       //   { if(c.currentState == ConnectionState::AUTHORIZED) { outgoing.push_back(Message{c,std::string(std::to_string(message.connection.playerIDConnectedToClientConnection) + "> " + message.text + "\n")}); } });
     }
   }
+  this->model.reset();
   return outgoing;
 }
 

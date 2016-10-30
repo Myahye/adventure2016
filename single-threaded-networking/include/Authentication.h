@@ -2,7 +2,7 @@
 #define authentication_h
 
 #include "Server.h"
-#include "ServerHelper.h"
+#include "ServerInterface.h"
 
 using namespace networking;
 

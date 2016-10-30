@@ -1,11 +1,14 @@
-#ifndef NPC_H
-#define NPC_H
+#ifndef Npc_H
+#define Npc_H
 
 #include <iostream>
 #include <vector>
 #include <string>
+#include "Object.h"
+#include <unordered_map>
+#include <algorithm>
 
-class NPC {
+class Npc {
 	int armor;
 	int exp;
 	int gold;
@@ -21,9 +24,14 @@ class NPC {
 	std::vector<std::string> keywords;
 	std::vector<std::string> longdesc;
 
+	//----------------------------Lawrence Yu
+	std::unordered_map<int,std::vector<Object>> npcInventory;
+	std::unordered_map<int,Object> npcEquipment;
+
 public:
-	//NPC Constructor
-	NPC (int const id, std::string const shortdesc);
+	Npc();
+	//Npc Constructor
+	Npc(int const id, std::string const shortdesc);
 
 	//Armor
 	int getArmor() const;
@@ -34,7 +42,7 @@ public:
 	void setDamage(const std::string& damage);
 
 	//Description
-	std::vector<std::string> getDesc() const;
+	std::string getDesc() const;
 	void setDesc(const std::vector<std::string>& description);
 
 	//Exp
@@ -62,7 +70,7 @@ public:
 	void setLevel(int const level);
 
 	//LongDesc
-	std::vector<std::string> getLongDesc() const;
+	std::string getLongDesc() const;
 	void setLongDesc(const std::vector<std::string>& longdesc);
 
 	//ShortDesc
@@ -72,6 +80,20 @@ public:
 	//Thac0
 	int getThac0() const;
 	void setThac0(int const thac0);
+
+	//--------------------------------------Lawrence Yu
+    void addObjectToInventory(const Object& object, unsigned int limit);
+    void removeObjectFromInventory(int objectID);
+
+    void equipObject(const Object& object, int slot);
+    void unEquipObject(int objectId);
+    //bool unequipObject();
+
+    std::unordered_map<int,std::vector<Object>> getNpcInventory() const;
+    std::unordered_map<int,Object> getNpcEquipment() const;
+
+    std::string getNpcEquipmentDesc() const;
+    std::string getNpcInventoryDesc() const;
 };
 
 #endif

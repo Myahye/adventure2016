@@ -793,6 +793,48 @@ OBJECTS:
   - take
   - wield
   weight: 8
+# - attributes: []
+#   cost: 300
+#   extra: []
+#   id: 650
+#   item_type: weapon
+#   keywords:
+#   - port
+#   longdesc:
+#   - A flail is on the floor.
+#   shortdesc: port brew
+#   wear_flags:
+#   - take
+#   - wield
+#   weight: 8
+# - attributes: []
+#   cost: 300
+#   extra: []
+#   id: 649
+#   item_type: weapon
+#   keywords:
+#   - ale
+#   longdesc:
+#   - A flail is on the floor.
+#   shortdesc: a flail
+#   wear_flags:
+#   - take
+#   - wield
+#   weight: 8
+# - attributes: []
+#   cost: 300
+#   extra: []
+#   id: 648
+#   item_type: food
+#   keywords:
+#   - whiskey
+#   longdesc:
+#   - A flail is on the floor.
+#   shortdesc: a flail
+#   wear_flags:
+#   - take
+#   - wield
+#   weight: 8
 RESETS:
 - action: object
   comment: Sign
