@@ -1,4 +1,4 @@
 
 build
 
-single-threaded-networking\lib\yaml\libyaml-cpp.a
+single-threaded-networking/lib/yaml/*
