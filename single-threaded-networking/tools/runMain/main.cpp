@@ -5,7 +5,7 @@
 #include "Room.h"
 #include "Door.h"
 #include "Player.h"
-#include "NPC.h"
+#include "Npc.h"
 using namespace std;
 
 int main() {
