@@ -1,7 +1,7 @@
 #ifndef YAMLPARSER_H
 #define YAMLPARSER_H
 
-#include "NPC.h"
+#include "Npc.h"
 #include "Object.h"
 #include "Room.h"
 #include "Door.h"
@@ -13,7 +13,7 @@
 class YamlParser{
 public:
 	YamlParser();
-	std::unordered_map<int,NPC> parseBuildNpcs(const std::string& pathToFile);
+	std::unordered_map<int,Npc> parseBuildNpcs(const std::string& pathToFile);
 	std::unordered_map<int,Object> parseBuildObjects(const std::string& pathToFile);
 	std::unordered_map<int,Room> parseBuildRooms(const std::string& pathToFile);
 	std::vector<std::shared_ptr<Reset>> parseBuildResets(const std::string& pathToFile);

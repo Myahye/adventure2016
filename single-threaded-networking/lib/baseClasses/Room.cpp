@@ -101,24 +101,24 @@ void Room::printClass(int n) const{
 }
 
 //--------------------------------------Lawrence Yu
-NPC* Room::addNpc(const NPC& npc, int limit) {
+Npc* Room::addNpc(const Npc& npc, unsigned int limit) {
   if(npcsInRoom[npc.getId()].size() == limit) {
     return NULL;
   } else {
     npcsInRoom[npc.getId()].push_back(npc);
-    std::cout << "Room id: " << mRoomId << "NPC id: " << npc.getId() << std::endl;
+    // std::cout << "Room id: " << mRoomId << "Npc id: " << npc.getId() << std::endl;
     return &npcsInRoom[npc.getId()].back();
   }
 }
-void Room::addObject(const Object& object, int limit) {
+void Room::addObject(const Object& object, unsigned int limit) {
   if(objectsInRoom[object.getId()].size() == limit) {
     return;
   } else {
     objectsInRoom[object.getId()].push_back(object);
-       //   std::cout << "Room id: " << mRoomId << "NPC id: " << npc.getId() << std::endl;
+       //   std::cout << "Room id: " << mRoomId << "Npc id: " << npc.getId() << std::endl;
   }
 }
-void Room::removeNPC(int npcId) {
+void Room::removeNpc(int npcId) {
   //remove if id == npc and hp == 0
   if(npcsInRoom[npcId].size() != 0) {
     npcsInRoom[npcId].pop_back();
@@ -130,7 +130,7 @@ void Room::removeObject(int objectId) {
     objectsInRoom[objectId].pop_back();
   }
 }
-std::unordered_map<int,std::vector<NPC>> Room::getNpcsInRoom() const {
+std::unordered_map<int,std::vector<Npc>> Room::getNpcsInRoom() const {
   return npcsInRoom;
 }
 std::unordered_map<int,std::vector<Object>> Room::getObjectsInRoom() const {
@@ -143,7 +143,12 @@ std::string Room::getNpcsInRoomDesc() const {
     for(auto npc : npcIdVectorPair.second) {
       response += "     " + npc.getLongDesc();
     }
+  } 
+
+  if(!response.empty()) {
+    response += "\n";
   }
+
   return response;
 }
 std::string Room::getObjectsInRoomDesc() const {
@@ -153,6 +158,11 @@ std::string Room::getObjectsInRoomDesc() const {
       response += object.getLongDescStr();
     }
   }
+
+  if(!response.empty()) {
+    response += "\n";
+  }
+
   return response;
 }
 std::string Room::getDoorsInRoomDesc() const {
@@ -173,8 +183,8 @@ std::string Room::getDoorsInRoomDesc() const {
 
 std::string Room::getFullRoomDesc() const {
   std::string response = getDesc() + "\n";
-  response += getNpcsInRoomDesc() + "\n\n";
-  response += "     " + getObjectsInRoomDesc() + "\n"; 
+  response += getNpcsInRoomDesc();
+  response += "     " + getObjectsInRoomDesc(); 
   response += "     " + getDoorsInRoomDesc() + "\n";
   return response;
 }

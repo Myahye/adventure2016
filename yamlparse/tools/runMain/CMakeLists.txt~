@@ -1,8 +1,0 @@
-add_executable(adventure main.cpp)
-
-target_link_libraries(adventure model)
-target_link_libraries(adventure ${CMAKE_SOURCE_DIR}/lib/yaml/libyaml-cpp.a)
-
-set_property(TARGET adventure PROPERTY CXX_STANDARD 14)
-
-install(TARGETS adventure DESTINATION bin)

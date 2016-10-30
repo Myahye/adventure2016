@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <unordered_map>
 #include "Door.h"
-#include "NPC.h"
+#include "Npc.h"
 #include "Object.h"
 //#include "CustomError.h"
 
@@ -22,7 +22,7 @@ private:
     std::vector<Door> doors;
 
     //--------------------------------------Lawrence Yu
-    std::unordered_map<int,std::vector<NPC>> npcsInRoom;
+    std::unordered_map<int,std::vector<Npc>> npcsInRoom;
     std::unordered_map<int,std::vector<Object>> objectsInRoom;
 
 public:
@@ -54,13 +54,13 @@ public:
     void printClass(int n) const;
 
     //--------------------------------------Lawrence Yu
-    NPC* addNpc(const NPC& npc, int limit);
-    void addObject(const Object& object, int limit);
+    Npc* addNpc(const Npc& npc, unsigned int limit);
+    void addObject(const Object& object, unsigned int limit);
 
-    void removeNPC(int npcId);
+    void removeNpc(int npcId);
     void removeObject(int objectId);
 
-    std::unordered_map<int,std::vector<NPC>> getNpcsInRoom() const;
+    std::unordered_map<int,std::vector<Npc>> getNpcsInRoom() const;
     std::unordered_map<int,std::vector<Object>> getObjectsInRoom() const;
 
     std::string getNpcsInRoomDesc() const;

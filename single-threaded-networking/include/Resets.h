@@ -4,7 +4,7 @@
 #include <unordered_map>
 
 #include "ResetInterface.h"
-#include "NPC.h"
+#include "Npc.h"
 #include "Room.h"
 #include "Object.h"
 
@@ -12,20 +12,22 @@
 
 namespace Resets {
 
-	class ResetNPC : public Reset {
+	//-----------------------------------------ResetNpc
+
+	class ResetNpc : public Reset {
 	private:
 		std::string action;
 		int id;
-		int limit;
+		unsigned int limit;
 		int room;
 		std::string comment;
-		NPC* currentlySelectedNPC = NULL;
+		Npc* currentlySelectedNpc = NULL;
 	public:
-		ResetNPC(const std::string& action, int const id, int const limit, int const room, const std::string& comment);
+		ResetNpc(const std::string& action, int const id, unsigned int const limit, int const room, const std::string& comment);
 
 		void execute(Context& context);
 
-		NPC* getCurrentlySelectedNPC();
+		Npc* getCurrentlySelectedNpc();
 
 		void printClass(int n);
 	};
@@ -36,16 +38,16 @@ namespace Resets {
 	private:
 		std::string action;
 		int id;
-		int limit;
+		unsigned int limit;
 		int room;
 		std::string comment;
-		NPC* currentlySelectedNPC = NULL;
+		Npc* currentlySelectedNpc = NULL;
 	public:
-		ResetObject(const std::string& action, int const id, int const limit, int const room, const std::string& comment);
+		ResetObject(const std::string& action, int const id, unsigned int const limit, int const room, const std::string& comment);
 
 		void execute(Context& context);
 
-		NPC* getCurrentlySelectedNPC();
+		Npc* getCurrentlySelectedNpc();
 
 		void printClass(int n);
 	};
@@ -56,16 +58,16 @@ namespace Resets {
 	private:
 		std::string action;
 		int id;
-		int limit;
+		unsigned int limit;
 		int room;
 		std::string comment;
-		NPC* currentlySelectedNPC = NULL;
+		Npc* currentlySelectedNpc = NULL;
 	public:
-		ResetGive(const std::string& action, int const id, int const limit, int const room, const std::string& comment);
+		ResetGive(const std::string& action, int const id, unsigned int const limit, int const room, const std::string& comment);
 
 		void execute(Context& context);
 
-		NPC* getCurrentlySelectedNPC();
+		Npc* getCurrentlySelectedNpc();
 
 		void printClass(int n);
 	};
@@ -78,13 +80,13 @@ namespace Resets {
 		int id;
 		int slot;
 		std::string comment;
-		NPC* currentlySelectedNPC = NULL;
+		Npc* currentlySelectedNpc = NULL;
 	public:
 		ResetEquip(const std::string& action, int const id, int const slot, const std::string& comment);
 
 		void execute(Context& context);
 
-		NPC* getCurrentlySelectedNPC();
+		Npc* getCurrentlySelectedNpc();
 
 		void printClass(int n);
 	};

@@ -11,7 +11,7 @@
 #include "CustomError.h"
 #include "yamlParser.h"
 #include "Resets.h"
-#include "NPC.h"
+#include "Npc.h"
 #include "Context.h"
 
 //using namespace custom_errors;
@@ -21,11 +21,11 @@ class Model {
 private:
   std::unordered_map<int,Player> players;
   std::unordered_map<int,Room> rooms;
-  std::unordered_map<int,NPC> npcs;
+  std::unordered_map<int,Npc> npcs;
   std::unordered_map<int,Object> objects;
   std::vector<std::shared_ptr<Reset>> resets;
 
-  int assignedIDs = 1;
+  int assignedIds = 1;
   //need to change these to temlpate values
   std::unordered_map<int,int> playerLocation;
 
@@ -54,20 +54,20 @@ public:
   //Model::yamlParse()
 
   //Methods for players to interact with world
-  std::string movePlayer(const int& playerID, const std::string& direction);
+  std::string movePlayer(const int& playerId, const std::string& direction);
 
   //These still need to be implemented
   //Model::getAvailableDoors
   //Model::getAvailableRoomCommands
 
-  std::string getCurrentRoomDescription(const int& playerID);
+  std::string getCurrentRoomDescription(const int& playerId);
 
-  std::string dummySayCommand(const int& playerID, const std::string& message);
+  std::string dummySayCommand(const int& playerId, const std::string& message);
 
-  std::string lookCommand(const int& playerID, const std::string& destDirection);
+  std::string lookCommand(const int& playerId, const std::string& destDirection);
 
-  bool checkObjectKeywords(const std::string& message, std::pair<const int,std::vector<Object>>& objectIDVectorPair);
-  bool checkNpcKeywords(const std::string& message, std::pair<const int,std::vector<NPC>>& npcIDVectorPair);
+  bool checkObjectKeywords(const std::string& message, std::pair<const int,std::vector<Object>>& objectIdVectorPair);
+  bool checkNpcKeywords(const std::string& message, std::pair<const int,std::vector<Npc>>& npcIdVectorPair);
 
   //-----------------------------Lawrence YU
   void reset();

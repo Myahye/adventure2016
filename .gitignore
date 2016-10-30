@@ -1,2 +1,4 @@
 
 build
+
+single-threaded-networking\lib\yaml\libyaml-cpp.a

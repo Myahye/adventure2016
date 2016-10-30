@@ -4,18 +4,18 @@
 YamlParser::YamlParser() {};
 
 //Parses and builds Npc's from yaml file
-std::unordered_map<int,NPC> YamlParser::parseBuildNpcs(const std::string& pathToFile){
+std::unordered_map<int,Npc> YamlParser::parseBuildNpcs(const std::string& pathToFile){
 	YAML::Node config = YAML::LoadFile(pathToFile);
-	const YAML::Node&  NPC_node= config["NPCS"];
+	const YAML::Node&  Npc_node= config["NPCS"];
 	//initialize our map we will return
-	std::unordered_map<int,NPC> buildAllNpcs;
+	std::unordered_map<int,Npc> buildAllNpcs;
 
 
-	//iterate through all NPC Nodes
-	for (auto& it : NPC_node) {
+	//iterate through all Npc Nodes
+	for (auto& it : Npc_node) {
 		//constructing class
 		std::string shortdesc = it["shortdesc"].as<std::string>();
-		NPC npcClass{it["id"].as<int>(), shortdesc};
+		Npc npcClass{it["id"].as<int>(), shortdesc};
 		
 		//intergers
 		npcClass.setArmor(it["armor"].as<int>());
@@ -39,8 +39,8 @@ std::unordered_map<int,NPC> YamlParser::parseBuildNpcs(const std::string& pathTo
 		npcClass.setKeywords(keywordsV);
 		npcClass.setLongDesc(longdescV);
 		
-		//Add NPC to map
-  		//allNPC[npcClass.getId()] = npcClass;
+		//Add Npc to map
+  		//allNpc[npcClass.getId()] = npcClass;
   		buildAllNpcs.insert(std::make_pair(npcClass.getId(),npcClass));
 	}
 
@@ -56,7 +56,7 @@ std::unordered_map<int,Object> YamlParser::parseBuildObjects(const std::string& 
 	std::unordered_map<int,Object> buildAllObjects;
 
 
-	//iterate through all NPC Nodes
+	//iterate through all Npc Nodes
 	for (auto& it : object_node) {
 		//constructing class
 		Object objectClass{it["id"].as<int>(), it["item_type"].as<std::string>()};
@@ -76,22 +76,28 @@ std::unordered_map<int,Object> YamlParser::parseBuildObjects(const std::string& 
 		std::vector<std::string> keywordsV = setStringVectorHelper(it["keywords"]);
 		std::vector<std::string> longdescV = setStringVectorHelper(it["longdesc"]);
 		std::vector<std::string> wearFlagsV = setStringVectorHelper(it["wear_flags"]);
-		std::vector<std::string> extraDescV =setStringVectorHelper(it["extra"]["desc"]);
-		std::vector<std::string> extraKeywordsV =setStringVectorHelper(it["extra"]["keywords"]);
 
 		objectClass.setAttributes(attributesV); //change up
 		objectClass.setKeywords(keywordsV);
 		objectClass.setLongDesc(longdescV);
 		objectClass.setWearFlags(wearFlagsV);
 		
-		//pair
-		std::pair< std::vector<std::string>, std::vector<std::string> > extraP(extraDescV, extraKeywordsV);
-		extraP = std::make_pair(extraDescV, extraKeywordsV);
+		const YAML::Node& extra_node = it["extra"];
+
+		std::vector<std::string> extraDescV;
+		std::vector<std::string> extraKeywordsV;	
 		
+		for (auto &j : extra_node){
+			extraDescV = setStringVectorHelper(j["desc"]);
+			extraKeywordsV = setStringVectorHelper(j["keywords"]);
+		}
+		//std::cout << "size: " << extraDescV.size() << std::endl;
+		//std::cout << "size: " << extraKeywordsV.size() << std::endl;
+		std::pair< std::vector<std::string>, std::vector<std::string> > extraP;
+
+		extraP = std::make_pair(extraDescV, extraKeywordsV);
 		objectClass.setExtra(extraP);
 
-		//Add object to map
-  		//allNPC[npcClass.getId()] = npcClass;
   		buildAllObjects.insert(std::make_pair(objectClass.getId(),objectClass));
 	}
 
@@ -164,19 +170,11 @@ std::vector<std::shared_ptr<Reset>> YamlParser::parseBuildResets(const std::stri
 		std::shared_ptr<Reset> reset;
 
 		if(currentReset["action"].as<std::string>() == "npc") {
-			//ask woonsup is this null or something else?
-			// if (currentReset["limit"]){
-			// reset->setLimit(currentReset["limit"].as<int>());
-			// }
-			// if (currentReset["room"]){
-			// 	reset->setRoom(currentReset["room"].as<int>());
-			// }
-
 			if (currentReset["comment"]){
-				reset = std::make_shared<Resets::ResetNPC>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), currentReset["limit"].as<int>(), currentReset["room"].as<int>(), currentReset["comment"].as<std::string>());
+				reset = std::make_shared<Resets::ResetNpc>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), currentReset["limit"].as<int>(), currentReset["room"].as<int>(), currentReset["comment"].as<std::string>());
 			}
 			else {
-				reset = std::make_shared<Resets::ResetNPC>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), currentReset["limit"].as<int>(), currentReset["room"].as<int>(), "");
+				reset = std::make_shared<Resets::ResetNpc>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), currentReset["limit"].as<int>(), currentReset["room"].as<int>(), "");
 			}
 			buildAllResets.push_back(reset);
 		} else if(currentReset["action"].as<std::string>() == "object") {

@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include <algorithm>
 
-class NPC {
+class Npc {
 	int armor;
 	int exp;
 	int gold;
@@ -29,9 +29,9 @@ class NPC {
 	std::unordered_map<int,Object> npcEquipment;
 
 public:
-	NPC();
+	Npc();
 	//Npc Constructor
-	NPC(int const id, std::string const shortdesc);
+	Npc(int const id, std::string const shortdesc);
 
 	//Armor
 	int getArmor() const;
@@ -82,7 +82,7 @@ public:
 	void setThac0(int const thac0);
 
 	//--------------------------------------Lawrence Yu
-    void addObjectToInventory(const Object& object, int limit);
+    void addObjectToInventory(const Object& object, unsigned int limit);
     void removeObjectFromInventory(int objectID);
 
     void equipObject(const Object& object, int slot);

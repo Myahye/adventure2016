@@ -5,28 +5,28 @@
 
 namespace Resets {
 
-//-----------------------------------------ResetNPC
+//-----------------------------------------ResetNpc
 
 	//Reset Constructor
-	ResetNPC::ResetNPC(const std::string& action, int const id, int const limit, int const room, const std::string& comment)
+	ResetNpc::ResetNpc(const std::string& action, int const id, unsigned int const limit, int const room, const std::string& comment)
 		: action{action}, id{id}, limit{limit}, room{room}, comment{comment} {};
 	//Execute
-	void ResetNPC::execute(Context& context) {
-		auto npcs = context.getNPCs();
+	void ResetNpc::execute(Context& context) {
+		auto npcs = context.getNpcs();
 		auto rooms = context.getRooms();
 
   		auto it = npcs->find(this->id);
 	  	if(it != npcs->end()) {
-    		NPC npc = (*npcs)[this->id];
-    		// NPC npcClone = clone(npc); 
+    		Npc npc = (*npcs)[this->id];
+    		// Npc npcClone = clone(npc); 
     		auto it1 = rooms->find(this->id);
 	  		if(it1 != rooms->end()) {
-    			currentlySelectedNPC = (*rooms)[this->room].addNpc(npc, this->limit);
+    			currentlySelectedNpc = (*rooms)[this->room].addNpc(npc, this->limit);
     		}
   		}
 	}
 	//New function added in to test
-	void ResetNPC::printClass(int n) {
+	void ResetNpc::printClass(int n) {
 		std::cout << "\n\n";
 		std::cout << "Reset: "<< n << "\n";
 		std::cout << "ID: " << id << std::endl;
@@ -36,15 +36,15 @@ namespace Resets {
 		std::cout << "\tlimit: " << limit << std::endl;
 		std::cout << "\troom: " << room << std::endl;
 	}
-	//Get currentlySelectedNPC
-	NPC* ResetNPC::getCurrentlySelectedNPC() {
-		return this->currentlySelectedNPC;
+	//Get currentlySelectedNpc
+	Npc* ResetNpc::getCurrentlySelectedNpc() {
+		return this->currentlySelectedNpc;
 	}
 
 //-----------------------------------------ResetObject
 
 	//Reset Constructor
-	ResetObject::ResetObject(const std::string& action, int const id, int const limit, int const room, const std::string& comment)
+	ResetObject::ResetObject(const std::string& action, int const id, unsigned int const limit, int const room, const std::string& comment)
 		: action{action}, id{id}, limit{limit}, room{room}, comment{comment} {};
 	//Execute
 	void ResetObject::execute(Context& context) {
@@ -72,27 +72,27 @@ namespace Resets {
 		std::cout << "\tlimit: " << limit << std::endl;
 		std::cout << "\troom: " << room << std::endl;
 	}
-	//Get currentlySelectedNPC
-	NPC* ResetObject::getCurrentlySelectedNPC() {
-		return this->currentlySelectedNPC;
+	//Get currentlySelectedNpc
+	Npc* ResetObject::getCurrentlySelectedNpc() {
+		return this->currentlySelectedNpc;
 	}
 
 //-----------------------------------------ResetGive
 
 	//Reset Constructor
-	ResetGive::ResetGive(const std::string& action, int const id, int const limit, int const room, const std::string& comment)
+	ResetGive::ResetGive(const std::string& action, int const id, unsigned int const limit, int const room, const std::string& comment)
 		: action{action}, id{id}, limit{limit}, room{room}, comment{comment} {};
 	//Execute
 	void ResetGive::execute(Context& context) {
-		if(context.getCurrentlySelectedNPC() != NULL) {
-			currentlySelectedNPC = context.getCurrentlySelectedNPC();
+		if(context.getCurrentlySelectedNpc() != NULL) {
+			currentlySelectedNpc = context.getCurrentlySelectedNpc();
 			auto objects = context.getObjects();
 
 	  		auto it = objects->find(this->id);
 		  	if(it != objects->end()) {
 	    		Object object = (*objects)[this->id];
 	    		// object npcClone = clone(npc); 
-	    		currentlySelectedNPC->addObjectToInventory(object, this->limit);
+	    		currentlySelectedNpc->addObjectToInventory(object, this->limit);
 	  		}
   		}
 	}
@@ -108,9 +108,9 @@ namespace Resets {
 		std::cout << "\tlimit: " << limit << std::endl;
 		std::cout << "\troom: " << room << std::endl;
 	}
-	//Get currentlySelectedNPC
-	NPC* ResetGive::getCurrentlySelectedNPC() {
-		return this->currentlySelectedNPC;
+	//Get currentlySelectedNpc
+	Npc* ResetGive::getCurrentlySelectedNpc() {
+		return this->currentlySelectedNpc;
 	}
 
 //-----------------------------------------ResetEquip
@@ -120,15 +120,15 @@ namespace Resets {
 		: action{action}, id{id}, slot{slot}, comment{comment} {};
 	//Execute
 	void ResetEquip::execute(Context& context) {
-		if(context.getCurrentlySelectedNPC() != NULL) {
-			currentlySelectedNPC = context.getCurrentlySelectedNPC();
+		if(context.getCurrentlySelectedNpc() != NULL) {
+			currentlySelectedNpc = context.getCurrentlySelectedNpc();
 			auto objects = context.getObjects();
 
 	  		auto it = objects->find(this->id);
 		  	if(it != objects->end()) {
 	    		Object object = (*objects)[this->id];
 	    		// object npcClone = clone(npc); 
-	    		currentlySelectedNPC->equipObject(object, this->slot);
+	    		currentlySelectedNpc->equipObject(object, this->slot);
 	  		}
   		}
 	}
@@ -143,9 +143,9 @@ namespace Resets {
 		std::cout << "\tid: " << id << std::endl;
 		std::cout << "\tslot: " << slot<< std::endl;
 	}
-	//Get currentlySelectedNPC
-	NPC* ResetEquip::getCurrentlySelectedNPC() {
-		return this->currentlySelectedNPC;
+	//Get currentlySelectedNpc
+	Npc* ResetEquip::getCurrentlySelectedNpc() {
+		return this->currentlySelectedNpc;
 	}
 
 }

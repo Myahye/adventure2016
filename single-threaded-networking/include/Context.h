@@ -1,4 +1,4 @@
-#include "NPC.h"
+#include "Npc.h"
 #include "Room.h"
 #include "Object.h"
 
@@ -8,19 +8,19 @@
 class Context {
 private:
 	std::unordered_map<int,Room>* rooms;
-	std::unordered_map<int,NPC>* NPCs;
+	std::unordered_map<int,Npc>* Npcs;
 	std::unordered_map<int,Object>* objects;
-	NPC* currentlySelectedNPC = NULL;
+	Npc* currentlySelectedNpc = NULL;
 public:
 	Context();
-	Context(std::unordered_map<int,Room>* rooms_, std::unordered_map<int,NPC>* NPCs_, std::unordered_map<int,Object>* objects_);
+	Context(std::unordered_map<int,Room>* rooms_, std::unordered_map<int,Npc>* Npcs_, std::unordered_map<int,Object>* objects_);
 
 	std::unordered_map<int,Room>* getRooms();
-	std::unordered_map<int,NPC>* getNPCs();
+	std::unordered_map<int,Npc>* getNpcs();
 	std::unordered_map<int,Object>* getObjects();
 
-	void setCurrentlySelectedNPC(NPC* npc);
-	NPC* getCurrentlySelectedNPC();
+	void setCurrentlySelectedNpc(Npc* npc);
+	Npc* getCurrentlySelectedNpc();
 };
 
 #endif

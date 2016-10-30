@@ -6,7 +6,7 @@
 class Reset {
 public:
 	virtual void execute(Context& context) = 0;
-	virtual NPC* getCurrentlySelectedNPC() = 0;
+	virtual Npc* getCurrentlySelectedNpc() = 0;
 	virtual void printClass(int n) = 0;
 };
 

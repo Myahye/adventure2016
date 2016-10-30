@@ -24,7 +24,7 @@
 
 #include <iostream>
 
-#include "ServerHelper.h"
+#include "ServerInterface.h"
 #include "Authentication.h"
 
 
