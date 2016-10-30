@@ -1,15 +1,15 @@
-#include "ServerInterface.h"
+#include "ModelInterface.h"
 #include <boost/algorithm/string/predicate.hpp>
 #include <iostream>
 
 using namespace networking;
 
-ServerHelper::ServerHelper() {}
+ModelInterface::ModelInterface() {}
 
 std::unordered_map<std::string, std::string> commands {{"Create","create "},{"Look","look "},{"Walk","walk "},{"Read","read "},{"Go","go "},{"Attack","attack "},{"Say","say "},{"ListCommands","ls "},};
 
 std::deque<Message>
-ServerHelper::parseCommands(const std::deque<Message>& clientMessages, std::vector<Connection>& clients) {
+ModelInterface::parseCommands(const std::deque<Message>& clientMessages, std::vector<Connection>& clients) {
   std::deque<Message> outgoing;
 
   for (auto& message : clientMessages) {
@@ -57,16 +57,16 @@ ServerHelper::parseCommands(const std::deque<Message>& clientMessages, std::vect
 }
 
 std::string
-ServerHelper::getCurrentRoomDescription(const int& playerID) {
+ModelInterface::getCurrentRoomDescription(const int& playerID) {
   return this->model.getCurrentRoomDescription(playerID);
 }
 
 int
-ServerHelper::createPlayer(const std::string& username, const std::string& password) {
+ModelInterface::createPlayer(const std::string& username, const std::string& password) {
   return(this->model.createPlayer(username, password));
 }
 
 std::vector<std::tuple<int,std::string,std::string>>
-ServerHelper::getPlayerCredentialsVector() const {
+ModelInterface::getPlayerCredentialsVector() const {
   return(this->model.getPlayerCredentialsVector());
 }

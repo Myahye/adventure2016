@@ -2,7 +2,7 @@
 #define authentication_h
 
 #include "Server.h"
-#include "ServerInterface.h"
+#include "ModelInterface.h"
 
 using namespace networking;
 
@@ -14,11 +14,11 @@ namespace Authentication {
 
 	bool correctPassword(int playerID, const std::string& password, const std::vector<std::tuple<int,std::string,std::string>>& players);
 
-	std::string authorizeClient(Message& message, Server& server, std::vector <Connection>& clients, ServerHelper& serverHelper);
+	std::string authorizeClient(Message& message, Server& server, std::vector <Connection>& clients, ModelInterface& ModelInterface);
 
-	std::string handleLogin(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, ServerHelper& serverHelper);
+	std::string handleLogin(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, ModelInterface& modelInterface);
 
-	std::string handleRegistration(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, ServerHelper& serverHelper);
+	std::string handleRegistration(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, ModelInterface& modelInterface);
 
 }
 

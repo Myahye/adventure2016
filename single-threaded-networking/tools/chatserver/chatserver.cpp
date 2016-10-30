@@ -24,7 +24,7 @@
 
 #include <iostream>
 
-#include "ServerInterface.h"
+#include "ModelInterface.h"
 #include "Authentication.h"
 
 
@@ -78,19 +78,19 @@ addToClientMessageQueues(const std::deque<Message>& incoming) {
 }
 
 std::deque<Message>
-processMessages(ServerHelper& serverHelper, std::deque<Message>& messages, Server& server) {
+processMessages(ModelInterface& modelInterface, std::deque<Message>& messages, Server& server) {
 
   std::deque<Message> outgoingAuthorizedMessages;
 
   for(auto& message : messages) {
     if(message.connection.currentState != ConnectionState::AUTHORIZED) {
-      server.send(std::deque<Message>{Message{message.connection, Authentication::authorizeClient(message, server, clients, serverHelper)}});
+      server.send(std::deque<Message>{Message{message.connection, Authentication::authorizeClient(message, server, clients, modelInterface)}});
     } else {
       outgoingAuthorizedMessages.push_back(message);
     }
   }
 
-  return serverHelper.parseCommands(outgoingAuthorizedMessages, clients);
+  return modelInterface.parseCommands(outgoingAuthorizedMessages, clients);
 }
 
 int
@@ -106,7 +106,7 @@ main(int argc, char* argv[]) {
   unsigned short port = std::stoi(argv[1]);
   Server server{port, onConnect, onDisconnect};
 
-  ServerHelper serverHelper{};
+  ModelInterface modelInterface{};
 
   start = std::chrono::system_clock::now();
   while (!done) {
@@ -125,7 +125,7 @@ main(int argc, char* argv[]) {
     if(elapsed_seconds.count() >= 0.5){
        // std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
       std::deque<Message> messages = pullFromClientMessageQueues(server,done);
-      std::deque<Message> outgoing = processMessages(serverHelper, messages, server);
+      std::deque<Message> outgoing = processMessages(modelInterface, messages, server);
       server.send(outgoing);
       start = std::chrono::system_clock::now();
     }

@@ -1,17 +1,17 @@
-#ifndef serverhelper_h
-#define serverhelper_h
+#ifndef modelinterface_h
+#define modelinterface_h
 
 #include "Server.h"
 #include "Model.h"
 
 
-class ServerHelper {
+class ModelInterface {
 
 private:
 	Model model{"../data/shire.yml"};
 
 public:
-  ServerHelper();
+  ModelInterface();
 
   std::deque<networking::Message>  parseCommands(const std::deque<networking::Message>& clientMessages,  std::vector<networking::Connection>& clients);
 
@@ -20,4 +20,4 @@ public:
   std::string getCurrentRoomDescription(const int& playerId);
 };
 
-#endif /* serverhelper_h */
+#endif /* modelinterface_h */
