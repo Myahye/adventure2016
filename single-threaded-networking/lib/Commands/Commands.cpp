@@ -2,68 +2,122 @@
 
 namespace Commands {
 
-	LookCommand::LookCommand(int playerId_, const std::string& message_, int roomId_)
-	: playerId{playerId_}, message{message_}, roomId{roomId_} {}
+	LookCommand::LookCommand(networking::Connection connection_, const std::string& message_)
+	: connection{connection_}, message{message_} {}
 
 	std::string LookCommand::execute(Context& context) {
-		// std::string response = this->players[playerId].getUsername() + "> " + command;
-		// std::string message = command.substr(5);
-		// std::transform(message.begin(), message.end(), message.begin(), ::tolower);
+		std::cout << "D" << std::endl;
+		auto players = context.getPlayers();
+		auto rooms = context.getRooms();
+		auto playerLocations = context.getPlayerLocations();
 
-		// int currentRoomId = this->playerLocation[playerId];
+		int playerId = connection.playerIDConnectedToClientConnection;
 
-		// if(message == "room") {
-		// 	return response + getCurrentRoomDescription(playerId);
-		// }
+		std::cout << "E" << std::endl;
 
-		// //-------------------------------------------------look "cardinal direction"
+		std::string response = (*players)[playerId].getUsername() + "> " + message;
+		std::string lookMessage = message.substr(5);
+		std::cout << "FEEs" << std::endl;
+		std::transform(lookMessage.begin(), lookMessage.end(), lookMessage.begin(), ::tolower);
 
-		// //will move this to room class later as if isDirection return door.getDesc()
-		// auto doorsInRoom = this->rooms[currentRoomId].getDoors();
+		std::cout << "FEE" << std::endl;
 
-		// for(auto currentDoor : doorsInRoom) {
-		// 	if(message == currentDoor.getDir()) {
-		//   		response += "\n\n" + currentDoor.getDesc() += "\n";
+		int currentRoomId = (*playerLocations)[playerId];
+		Room currentRoom = (*rooms)[currentRoomId];
 
-		//   		return response;
-		// 	}
-		// }
+		if(lookMessage == "") {
+			std::cout << "FF" << std::endl;
+			return response + "\n\n" + currentRoom.getFullRoomDesc();
+		}
 
-		// //-------------------------------------------------look "Npc keyword"
+		//-------------------------------------------------look "cardinal direction"
 
-		// //will move this to room class later as if isNpc return npc.getfulldesc()
-		// auto npcsInRoom = this->rooms[currentRoomId].getNpcsInRoom();
-		// for(auto currentNpc : npcsInRoom) {
-		// 	if(checkNpcKeywords(message, currentNpc)) {
+		//will move this to room class later as if isDirection return door.getDesc()
+		auto doorsInRoom = currentRoom.getDoors();
 
-		//   		//change for look toddler 1 look toddler 2 look toddler 3 later since it only checks the description of the first duplicate npc?
-		//   		response += "\n\n" + currentNpc.second[0].getDesc();
-		//   		response += "\n     Wearing: "  + currentNpc.second[0].getNpcEquipmentDesc();
-		//   		response += "\n     Carrying: " + currentNpc.second[0].getNpcInventoryDesc() + "\n\n";
+		for(auto currentDoor : doorsInRoom) {
+			if(lookMessage == currentDoor.getDir()) {
+		  		response += "\n\n" + currentDoor.getDesc() += "\n";
 
-		//   		return response;
-		// 	}
-		// }
+		  		return response;
+			}
+		}
 
-		// //-------------------------------------------------look "Object keyword"
+		std::cout << "F" << std::endl;
 
-		// //will move this to room class later as if isobject return object.getfulldesc()
-		// for(auto objectIdVectorPair : this->rooms[currentRoomId].getObjectsInRoom()) {
-		// 	if(checkObjectKeywords(message, objectIdVectorPair)) {
-		// 		response += "\n";
-		//   		//change for look object 1 look object 2 look object 3 later since it only checks the description of the first duplicate object?
-		//   		for(auto descriptionText : objectIdVectorPair.second[0].getExtra().first) {
-		//     		response += descriptionText + "\n";
-		//   		}
-		//   		return response;
-		// 	}
-		// }
+		//-------------------------------------------------look "Npc keyword"
 
-		// return this->players[playerId].getUsername() + "> " + "Cannot find " + message + ", no match. \n\n";
+		Npc currentNpc = currentRoom.findNpc(lookMessage);
+			//will move this to room class later as if isNpc return npc.getfulldesc()
+		if(currentNpc.getId() != 0) {
+			response += "\n\n" + currentNpc.getDesc();
+			response += "\n     Wearing: "  + currentNpc.getNpcEquipmentDesc();
+			response += "\n     Carrying: " + currentNpc.getNpcInventoryDesc() + "\n\n";
+			return response;
+		}
+
+		//-------------------------------------------------look "Object keyword"
+
+		Object currentObject = currentRoom.findObject(lookMessage);
+		//will move this to room class later as if isobject return object.getfulldesc()
+		if(currentObject.getId() != 0) {
+			response += "\n";
+			//move loop out later;
+			for(auto descriptionText : currentObject.getExtra().first) {
+			  response += descriptionText + "\n";
+			}
+			return response;
+		}
+
+		std::cout << "G" << std::endl;
+
+		return (*players)[playerId].getUsername() + "> " + "Cannot find " + lookMessage + ", no match. \n\n";
 	}
 
-	GoCommand::GoCommand(int playerId_, const std::string& message_, int roomId_) {
+	int LookCommand::getId() const {
+		return this->connection.playerIDConnectedToClientConnection;
+	}
 
+	networking::Connection LookCommand::getConnection() const {
+		return this->connection;
+	}
+
+
+	GoCommand::GoCommand(networking::Connection connection_, const std::string& message_) 
+	: connection{connection_}, message{message_} {}
+
+	std::string GoCommand::execute(Context& context) {
+		auto players = context.getPlayers();
+		auto playerLocations = context.getPlayerLocations();
+		auto rooms = context.getRooms();
+
+		int playerId = connection.playerIDConnectedToClientConnection;
+
+		std::cout << "Player wants to go " << message << std::endl;
+		int currentRoomId  = (*playerLocations)[playerId];
+		std::cout << "Current room Id: " << currentRoomId << std::endl;
+		Room currentRoom = (*rooms)[currentRoomId];
+		std::vector<Door> currentRoomDoors = currentRoom.getDoors();
+		std::cout << "number of doors in room: " << currentRoomDoors.size() << std::endl;
+
+		int destRoomId = currentRoom.getRoomInDir(message);
+
+		if(destRoomId != -1) {
+			std::cout << "Destination room Id:: " << currentRoom.getRoomInDir(message) << std::endl;
+			//throw custom_errors::NoSuchDoorException();
+			(*playerLocations)[playerId] = destRoomId;
+			return (*players)[playerId].getUsername() + "> " + message + "\n\n" + (*rooms)[destRoomId].getFullRoomDesc();
+		} else {
+			return (*players)[playerId].getUsername() + "> " + "There is no door in the " + message + " direction." + "\n\n";
+		}
+	}
+
+	int GoCommand::getId() const {
+		return this->connection.playerIDConnectedToClientConnection;
+	}
+
+	networking::Connection GoCommand::getConnection() const {
+		return this->connection;
 	}
 
 }

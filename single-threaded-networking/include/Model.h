@@ -68,6 +68,8 @@ public:
 
   std::string stealCommand(const int& playerId, const std::string& command);
 
+  Context getContext() const;
+
   //-----------------------------Lawrence YU
   void reset();
 };

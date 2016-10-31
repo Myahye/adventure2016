@@ -121,6 +121,9 @@ void Npc::addObjectToInventory(const Object& object, unsigned int limit) {
 bool Npc::removeObjectFromInventory(int objectId) {
   if(npcInventory[objectId].size() != 0) {
     npcInventory[objectId].pop_back();
+    if(npcInventory[objectId].empty()) {
+    	npcInventory.erase(objectId);
+    }
     return true;
   }
   return false;
@@ -135,9 +138,18 @@ bool Npc::equipObject(const Object& object, int slot) {
     npcInventory[npcEquipment[slot].getId()].push_back(npcEquipment[slot]);
     npcEquipment[slot] = object;
     npcInventory[object.getId()].pop_back();
+    std::cout << "objz: " << object.getId() << std::endl;
     return true;
   } else {
     npcEquipment[slot] = object;
+	std::cout << "IW" << std::endl;
+
+    npcInventory[object.getId()].pop_back();
+    if(npcInventory[object.getId()].empty()) {
+    	npcInventory.erase(object.getId());
+    }
+
+    std::cout << "IWOEFJ|" << std::endl;
     return true;
           // std::cout << this << "Object id: " << npcEquipment[slot].getId() << " Npc id: " << id << " Equipment Desc: " << npcEquipment[slot].getShortDesc() << " Equipment size: " << npcEquipment.size() <<std::endl;
   }
@@ -161,11 +173,13 @@ std::unordered_map<int,Object> Npc::getNpcEquipment() const {
 
 std::string Npc::getNpcEquipmentDesc() const {
   std::string response = "";
-  for_each(npcEquipment.begin(), npcEquipment.end(), [&response](const auto& currentEquip){response += currentEquip.second.getShortDesc() + ", ";});	
+  for_each(npcEquipment.begin(), npcEquipment.end(), [&response](const auto& currentEquip){response += currentEquip.second.getShortDesc() + ", ";});
+    std::cout << "npe equip: " << npcEquipment.size() << std::endl;	
   return response;
 }
 std::string Npc::getNpcInventoryDesc() const {
 	std::string response = "";
+	  std::cout << "npe inv: " << npcInventory.size() << std::endl;
 	std::for_each(npcInventory.begin(), npcInventory.end(), [&response](const auto& currentItem){response += currentItem.second[0].getShortDesc() + " (Quantity: " + std::to_string(currentItem.second.size()) + "), ";});	
   return response;
 }

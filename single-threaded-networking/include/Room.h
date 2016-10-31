@@ -57,7 +57,7 @@ public:
     void printClass(int n) const;
 
     //--------------------------------------Lawrence Yu
-    Npc* addNpc(const Npc& npc, unsigned int limit);
+    Npc* addNpc(Npc& npc, unsigned int limit);
     bool removeNpc(int npcId);
 
     void addObject(const Object& object, unsigned int limit);

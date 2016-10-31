@@ -42,7 +42,7 @@
 //This is what construction will look like
  Model::Model(const std::string& path){
    yamlParseAndBuild(path);
-   this->context = Context{&this->rooms,&this->npcs,&this->objects};
+   this->context = Context{&this->rooms,&this->npcs,&this->objects,&this->players,&this->playerLocation};
  }
 
 //use subclass to build objects
@@ -99,7 +99,7 @@ Model::createPlayer(const std::string& username, const std::string& password){
 
   Player newPlayer{this->assignedIds, username, password};
   players.insert({this->assignedIds, newPlayer});
-  playerLocation[assignedIds] = 1100;
+  playerLocation[assignedIds] = 1137;
   assignedIds++;
   for (auto & player: players) {
       std::cout << "Player Id: " << player.second.getId() << ", username: " << player.second.getUsername() << ", password: " << player.second.getPassword() << "\n";
@@ -128,94 +128,94 @@ Model::getCurrentRoomDescription(const int& playerId) {
   return response;
 }
 
-std::string
-Model::movePlayer(const int& playerId, const std::string& destDirection){
-  std::cout << "Player wants to go " << destDirection << std::endl;
-  int currentRoomId  = this->playerLocation[playerId];
-  std::cout << "Current room Id: " << currentRoomId << std::endl;
-  Room currentRoom = this->rooms[currentRoomId];
-  std::vector<Door> currentRoomDoors = currentRoom.getDoors();
-  std::cout << "number of doors in room: " << currentRoomDoors.size() << std::endl;
+// std::string
+// Model::movePlayer(const int& playerId, const std::string& destDirection){
+//   std::cout << "Player wants to go " << destDirection << std::endl;
+//   int currentRoomId  = this->playerLocation[playerId];
+//   std::cout << "Current room Id: " << currentRoomId << std::endl;
+//   Room currentRoom = this->rooms[currentRoomId];
+//   std::vector<Door> currentRoomDoors = currentRoom.getDoors();
+//   std::cout << "number of doors in room: " << currentRoomDoors.size() << std::endl;
 
-  // for(Door door : currentRoomDoors){
-  //   std::cout << "Dir: " << door.getDir() << endl;
-  // }
+//   // for(Door door : currentRoomDoors){
+//   //   std::cout << "Dir: " << door.getDir() << endl;
+//   // }
 
-  int destRoomId = currentRoom.getRoomInDir(destDirection);
+//   int destRoomId = currentRoom.getRoomInDir(destDirection);
 
-  if(destRoomId != -1) {
-    std::cout << "Destination room Id:: " << currentRoom.getRoomInDir(destDirection) << std::endl;
-    //throw custom_errors::NoSuchDoorException();
-    this->playerLocation[playerId] = destRoomId;
-    return this->players[playerId].getUsername() + "> " + destDirection + getCurrentRoomDescription(playerId);
-  } else {
-    return this->players[playerId].getUsername() + "> " + "There is no door in the " + destDirection + " direction." + "\n\n";
-  }
-}
+//   if(destRoomId != -1) {
+//     std::cout << "Destination room Id:: " << currentRoom.getRoomInDir(destDirection) << std::endl;
+//     //throw custom_errors::NoSuchDoorException();
+//     this->playerLocation[playerId] = destRoomId;
+//     return this->players[playerId].getUsername() + "> " + destDirection + getCurrentRoomDescription(playerId);
+//   } else {
+//     return this->players[playerId].getUsername() + "> " + "There is no door in the " + destDirection + " direction." + "\n\n";
+//   }
+// }
 //---------------------------------------------------lawrence Yu
 std::string
 Model::dummySayCommand(const int& playerId, const std::string& message){
   return this->players[playerId].getUsername() + "> " + message.substr(4) + "\n\n";
 }
 
-std::string
-Model::lookCommand(const int& playerId, const std::string& command){
-  std::string response = this->players[playerId].getUsername() + "> " + command;
-  std::string message = command.substr(5);
-  std::transform(message.begin(), message.end(), message.begin(), ::tolower);
+// std::string
+// Model::lookCommand(const int& playerId, const std::string& command){
+//   std::string response = this->players[playerId].getUsername() + "> " + command;
+//   std::string message = command.substr(5);
+//   std::transform(message.begin(), message.end(), message.begin(), ::tolower);
 
-  int currentRoomId = this->playerLocation[playerId];
-  Room currentRoom = this->rooms[currentRoomId];
+//   int currentRoomId = this->playerLocation[playerId];
+//   Room currentRoom = this->rooms[currentRoomId];
 
-  if(message == "room") {
-    return response + getCurrentRoomDescription(playerId);
-  }
+//   if(message == "room") {
+//     return response + getCurrentRoomDescription(playerId);
+//   }
 
-  //-------------------------------------------------look "cardinal direction"
+//   //-------------------------------------------------look "cardinal direction"
 
-  //will move this to room class later as if isDirection return door.getDesc()
-  auto doorsInRoom = currentRoom.getDoors();
+//   //will move this to room class later as if isDirection return door.getDesc()
+//   auto doorsInRoom = currentRoom.getDoors();
 
-  for(auto currentDoor : doorsInRoom) {
-    if(message == currentDoor.getDir()) {
-      response += "\n\n" + currentDoor.getDesc() += "\n";
+//   for(auto currentDoor : doorsInRoom) {
+//     if(message == currentDoor.getDir()) {
+//       response += "\n\n" + currentDoor.getDesc() += "\n";
 
-      return response;
-    }
-  }
+//       return response;
+//     }
+//   }
 
-  //-------------------------------------------------look "Npc keyword"
+//   //-------------------------------------------------look "Npc keyword"
 
-  //will move this to room class later as if isNpc return npc.getfulldesc()
-  Npc currentNpc = currentRoom.findNpc(message);
+//   //will move this to room class later as if isNpc return npc.getfulldesc()
+//   Npc currentNpc = currentRoom.findNpc(message);
 
-  if(currentNpc.getId() != 0) {
+//   if(currentNpc.getId() != 0) {
 
-    //change for look toddler 1 look toddler 2 look toddler 3 later since it only checks the description of the first duplicate npc?
-    response += "\n\n" + currentNpc.getDesc();
-    response += "\n     Wearing: "  + currentNpc.getNpcEquipmentDesc();
-    response += "\n     Carrying: " + currentNpc.getNpcInventoryDesc() + "\n\n";
+//     //change for look toddler 1 look toddler 2 look toddler 3 later since it only checks the description of the first duplicate npc?
+//     response += "\n\n" + currentNpc.getDesc();
+//     response += "\n     Wearing: "  + currentNpc.getNpcEquipmentDesc();
+//     response += "\n     Carrying: " + currentNpc.getNpcInventoryDesc() + "\n\n";
 
-    return response;
-  }
+//     return response;
+//   }
 
-  //-------------------------------------------------look "Object keyword"
+//   //-------------------------------------------------look "Object keyword"
 
-  //will move this to room class later as if isobject return object.getfulldesc()
-  Object currentObject = currentRoom.findObject(message);
+//   //will move this to room class later as if isobject return object.getfulldesc()
+//   Object currentObject = currentRoom.findObject(message);
 
-  if(currentObject.getId() != 0) {
+//   if(currentObject.getId() != 0) {
 
-    response += "\n";
-    //change for look object 1 look object 2 look object 3 later since it only checks the description of the first duplicate object?
-    for(auto descriptionText : currentObject.getExtra().first) {
-      response += descriptionText + "\n";
-    }
-    return response;
-  }
+//     response += "\n";
+//     //change for look object 1 look object 2 look object 3 later since it only checks the description of the first duplicate object?
+//     for(auto descriptionText : currentObject.getExtra().first) {
+//       response += descriptionText + "\n";
+//     }
+//     return response;
+//   }
 
-  return this->players[playerId].getUsername() + "> " + "Cannot find " + message + ", no match. \n\n";
-}
+//   return this->players[playerId].getUsername() + "> " + "Cannot find " + message + ", no match. \n\n";
+// }
 
 //----------------------Lawrence Yu
 void Model::reset(){
@@ -224,6 +224,10 @@ void Model::reset(){
     this->context.setCurrentlySelectedNpc(reset->getCurrentlySelectedNpc());
   }
   this->context.setCurrentlySelectedNpc(NULL);
+}
+
+Context Model::getContext() const {
+  return this->context;
 }
 
 
@@ -273,12 +277,8 @@ Model::stealCommand(const int& playerId, const std::string& command){
 /*delete command to check if delete works on npc from npcs and npcs from room {
   
 
-IMPORTANT
+//////////////////IMPORTANT CHECK IF GAME WORKS EVEN AFTER DELETING OBJECTS/ NPCS//////////////////
 
 }
 
-ALSO CHANGE CONTEXT TO UNIQUE POINTER AND YAMLPARSE RESETS TO UNIQUE POINTER
-
-Change all pointers to unique-pointer
-change Npc* Room::addNpc(const Npc& npc, unsigned int limit) to unique
 */

@@ -3,6 +3,7 @@
 
 #include "Server.h"
 #include "Model.h"
+#include "Commands.h"
 
 
 class ServerHelper {

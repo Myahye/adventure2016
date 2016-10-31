@@ -101,12 +101,20 @@ void Room::printClass(int n) const{
 }
 
 //--------------------------------------Lawrence Yu
-Npc* Room::addNpc(const Npc& npc, unsigned int limit) {
+Npc* Room::addNpc(Npc& npc, unsigned int limit) {
   if(npcsInRoom[npc.getId()].size() == limit) {
     return NULL;
   } else {
-    npcsInRoom[npc.getId()].push_back(npc);
+    //TEST CODE FOR DUPLICATES
+    // auto desc = npc.getDesc();
+    // desc += " " + std::to_string(npcsInRoom[npc.getId()].size());
+    // npc.setDesc({desc});
+    // auto key = npc.getKeywords();
+    // key.push_back(npc.getKeywords()[0] + " " + std::to_string(npcsInRoom[npc.getId()].size()));
+    // npc.setKeywords(key);
+    // npcsInRoom[npc.getId()].push_back(npc);
     // std::cout << "Room id: " << mRoomId << "Npc id: " << npc.getId() << std::endl;
+    npcsInRoom[npc.getId()].push_back(npc);
     return &npcsInRoom[npc.getId()].back();
   }
 }
@@ -141,9 +149,7 @@ Npc Room::findNpc(const std::string& message) {
 
   auto it = std::find_if(npcsInRoom.begin(),npcsInRoom.end(), 
     [&currentlySelectedNpc,&message,this] (const std::pair<int,std::vector<Npc>>& npcIdVectorPair) { return checkNpcKeywords(currentlySelectedNpc, message, npcIdVectorPair); });
-  std::cout << "s" << std::endl;
   if(it != npcsInRoom.end()) {
-    std::cout << "d " << currentlySelectedNpc.getId() << std::endl;
     return currentlySelectedNpc;
   }
   return Npc();
@@ -170,14 +176,12 @@ std::unordered_map<int,std::vector<Object>> Room::getObjectsInRoom() const {
 bool Room::checkNpcKeywords(Npc& currentlySelectedNpc, const std::string& message, const std::pair<int,std::vector<Npc>>& npcIdVectorPair) {
 
   //check duplicates eg. dupl_object 1, dupl_object 2, dupl_object 3
-  for(auto& currentNpc : npcIdVectorPair.second) {
-    auto it = std::find_if(currentNpc.getKeywords().begin(), currentNpc.getKeywords().end(), [&message] (const std::string& keyword) {std::cout << keyword << " \n"; return message == keyword;});
-   
-    if(it != currentNpc.getKeywords().end()) {
-       std::cout << "e ";
-      currentlySelectedNpc = currentNpc;
-      std::cout << currentlySelectedNpc.getId() << std::endl;
-      return true;
+  for(auto currentNpc : npcIdVectorPair.second) {
+    for(auto currentKeyword : currentNpc.getKeywords()) {
+      if(message == currentKeyword) {
+        currentlySelectedNpc = currentNpc;
+        return true;
+      }
     }
   }
 
@@ -186,12 +190,19 @@ bool Room::checkNpcKeywords(Npc& currentlySelectedNpc, const std::string& messag
 bool Room::checkObjectKeywords(Object& currentlySelectedObject, const std::string& message, const std::pair<int,std::vector<Object>>& objectIdVectorPair) {
 
   //check duplicates eg. dupl_object 1, dupl_object 2, dupl_object 3
-  for(auto& currentObject : objectIdVectorPair.second) {
-    auto it = std::find_if(currentObject.getKeywords().begin(), currentObject.getKeywords().end(), [&message] (const std::string& keyword) { return message == keyword;});
-    if(it != currentObject.getKeywords().end()) {
-      currentlySelectedObject = currentObject;
-      return true;
+  for(auto currentObject : objectIdVectorPair.second) {
+    for(auto currentKeyword : currentObject.getKeywords()) {
+      if(message == currentKeyword) {
+        currentlySelectedObject = currentObject;
+        return true;
+      }
     }
+    //ONLY WORKS HALF THE TIME FOR SOME REASON
+    // auto it = std::find_if(currentObject.getKeywords().begin(), currentObject.getKeywords().end(), [&message] (const std::string& keyword) { return message == keyword;});
+    // if(it != currentObject.getKeywords().end()) {
+    //   currentlySelectedObject = currentObject;
+    //   return true;
+    // }
   }
 
   return false;

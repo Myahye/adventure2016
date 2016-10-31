@@ -12,6 +12,8 @@ std::deque<Message>
 ServerHelper::parseCommands(const std::deque<Message>& clientMessages, std::vector<Connection>& clients) {
   std::deque<Message> outgoing;
 
+  std::deque<std::unique_ptr<Command>> commandQueue;
+
   for (auto& message : clientMessages) {
 
     std::string messageText = message.text;
@@ -21,12 +23,16 @@ ServerHelper::parseCommands(const std::deque<Message>& clientMessages, std::vect
       outgoing.push_back(Message{message.connection, messageText});
     }
     else if (boost::istarts_with(messageText,commands["Look"])) {
-      messageText = this->model.lookCommand(message.connection.playerIDConnectedToClientConnection, message.text);
-      outgoing.push_back(Message{message.connection, messageText});
+      commandQueue.push_back(std::make_unique<Commands::LookCommand>(message.connection,message.text));
+
+      // messageText = this->model.lookCommand(message.connection.playerIDConnectedToClientConnection, message.text);
+      // outgoing.push_back(Message{message.connection, messageText});
     }
     else if (boost::istarts_with(messageText,commands["Go"])) {
-      messageText = this->model.movePlayer(message.connection.playerIDConnectedToClientConnection, message.text.substr(3));
-      outgoing.push_back(Message{message.connection, messageText});
+      commandQueue.push_back(std::make_unique<Commands::GoCommand>(message.connection,message.text.substr(3)));
+
+      // messageText = this->model.movePlayer(message.connection.playerIDConnectedToClientConnection, message.text.substr(3));
+      // outgoing.push_back(Message{message.connection, messageText});
     }
     else if (boost::istarts_with(messageText,commands["Read"])) {
       messageText = std::to_string(message.connection.playerIDConnectedToClientConnection) + "> " + /*handleCreateCommand(message)*/ + "\n";
@@ -56,6 +62,16 @@ ServerHelper::parseCommands(const std::deque<Message>& clientMessages, std::vect
       //   { if(c.currentState == ConnectionState::AUTHORIZED) { outgoing.push_back(Message{c,std::string(std::to_string(message.connection.playerIDConnectedToClientConnection) + "> " + message.text + "\n")}); } });
     }
   }
+
+  auto context = this->model.getContext();
+
+  for(auto& command : commandQueue) {
+    std::string response = command->execute(context);
+    Message message{command->getConnection(),response};
+    outgoing.push_back(message);
+  }
+
+
   this->model.reset();
   return outgoing;
 }

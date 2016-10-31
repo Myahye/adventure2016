@@ -7,37 +7,40 @@
 #include "Npc.h"
 #include "Room.h"
 #include "Object.h"
+#include "Player.h"
 
 namespace Commands {
 
 	class LookCommand : public Command {
 	private:
-		int playerId;
+		networking::Connection connection;
 		std::string message;
-		int roomId;
 		//Room* currentRoom; I want to have a pointer to the current room, but if that room is deleted before execute() is called then 
 		//there will be undefined behaviour as the Room* will point to garbage
 	public:
-		LookCommand(int playerId_, const std::string& message_, int roomId_);
+		LookCommand(networking::Connection connection_, const std::string& message_);
 
 		std::string execute(Context& context);
 
 		int getId() const;
+
+		networking::Connection getConnection() const;
 	};
 
 	class GoCommand : public Command {
 	private:
-		int playerId;
+		networking::Connection connection;
 		std::string message;
-		int roomId;
 		//Room* currentRoom; I want to have a pointer to the current room, but if that room is deleted before execute() is called then 
 		//there will be undefined behaviour as the Room* will point to garbage
 	public:
-		GoCommand(int playerId_, const std::string& message_, int roomId_);
+		GoCommand(networking::Connection connection_, const std::string& message_);
 
 		std::string execute(Context& context);
 
 		int getId() const;
+
+		networking::Connection getConnection() const;
 	};
 }
 

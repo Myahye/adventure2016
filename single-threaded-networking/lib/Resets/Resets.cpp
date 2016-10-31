@@ -128,7 +128,10 @@ namespace Resets {
 		  	if(it != objects->end()) {
 	    		Object object = (*objects)[this->id];
 	    		// object npcClone = clone(npc); 
-	    		currentlySelectedNpc->equipObject(object, this->slot);
+	    		if(currentlySelectedNpc->getNpcEquipment().find(slot) == currentlySelectedNpc->getNpcEquipment().end()) {
+	    			currentlySelectedNpc->addObjectToInventory(object,1);
+	    			currentlySelectedNpc->equipObject(object, this->slot);
+	    		}
 	  		}
   		}
 	}
