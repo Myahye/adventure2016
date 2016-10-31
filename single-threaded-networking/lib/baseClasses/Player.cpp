@@ -25,6 +25,26 @@ Player::setPassword(std::string& password) {
     this->password = password;
 }
 
+int
+Player::getHealth() const{
+    return health;
+}
+
+void
+Player::setHealth(int const health){
+    this->health = health;
+}
+
+int
+Player::getMana() const{
+    return mana;
+}
+
+void
+Player::setMana(int const manaa){
+    this->mana = mana;
+}
+
 //Getter and setter for Armor
 int
 Player::getArmor() const {

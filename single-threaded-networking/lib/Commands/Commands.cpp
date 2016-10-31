@@ -120,4 +120,28 @@ namespace Commands {
 		return this->connection;
 	}
 
+
+	/*Status*/
+	StatusCommand::StatusCommand(networking::Connection connection_, const std::string& message_) 
+	: connection{connection_}, message{message_} {}
+
+	std::string StatusCommand::execute(Context& context) {
+		auto players = context.getPlayers();
+		int playerId = connection.playerIDConnectedToClientConnection;
+		std::cout<<"status cout"<<std::endl;
+
+		return (*players)[playerId].getUsername()+ "> " + 
+				" Health: "+std::to_string((*players)[playerId].getHealth())+"\n\n"+
+				" Mana  : "+std::to_string((*players)[playerId].getMana())+"\n\n";
+
+
+	}
+
+	int StatusCommand::getId() const {
+		return this->connection.playerIDConnectedToClientConnection;
+	}
+
+	networking::Connection StatusCommand::getConnection() const {
+		return this->connection;
+	}
 }

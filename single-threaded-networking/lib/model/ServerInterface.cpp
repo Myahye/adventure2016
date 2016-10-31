@@ -6,7 +6,7 @@ using namespace networking;
 
 ServerHelper::ServerHelper() {}
 
-std::unordered_map<std::string, std::string> commands {{"Create","create "},{"Look","look "},{"Walk","walk "},{"Read","read "},{"Go","go "},{"Attack","attack "},{"Say","say "},{"ListCommands","ls "},};
+std::unordered_map<std::string, std::string> commands {{"Create","create "},{"Status","status "},{"Look","look "},{"Walk","walk "},{"Read","read "},{"Go","go "},{"Attack","attack "},{"Say","say "},{"ListCommands","ls "},};
 
 std::deque<Message>
 ServerHelper::parseCommands(const std::deque<Message>& clientMessages, std::vector<Connection>& clients) {
@@ -53,6 +53,10 @@ ServerHelper::parseCommands(const std::deque<Message>& clientMessages, std::vect
     else if (boost::iequals(messageText, commands["Steal"])) {
       messageText = this->model.stealCommand(message.connection.playerIDConnectedToClientConnection, message.text);
       outgoing.push_back(Message{message.connection, messageText});
+    }
+    else if (boost::iequals(messageText,commands["Status"])){
+      commandQueue.push_back(std::make_unique<Commands::StatusCommand>(message.connection,message.text));
+
     }
     else {
       messageText = "That is an invalid command\n\n";

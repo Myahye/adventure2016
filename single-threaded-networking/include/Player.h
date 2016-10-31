@@ -13,6 +13,8 @@ private:
     int level;
     int thac0;
     int pid;
+    int health=100;
+    int mana=100;
 
     std::string damage;
     std::string hit;
@@ -33,6 +35,12 @@ public:
     std::string getUsername() const;
     void setUsername(std::string& username);
 
+    int getHealth() const;
+    void setHealth(int const health);
+
+    int getMana() const;
+    void setMana(int const mana);
+         
     //password
     std::string getPassword() const;
     void setPassword(std::string& password);
