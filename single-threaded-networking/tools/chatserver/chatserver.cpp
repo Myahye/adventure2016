@@ -90,7 +90,7 @@ processMessages(ModelInterface& modelInterface, std::deque<Message>& messages, S
     }
   }
 
-  return modelInterface.parseCommands(outgoingAuthorizedMessages, clients);
+  return modelInterface.updateGame(outgoingAuthorizedMessages, clients);
 }
 
 int
@@ -100,7 +100,7 @@ main(int argc, char* argv[]) {
     return 1;
   }
 
-  std::chrono::time_point<std::chrono::system_clock> start, end;
+  //std::chrono::time_point<std::chrono::system_clock> start, end;
 
   bool done = false;
   unsigned short port = std::stoi(argv[1]);
@@ -108,7 +108,7 @@ main(int argc, char* argv[]) {
 
   ModelInterface modelInterface{};
 
-  start = std::chrono::system_clock::now();
+  //start = std::chrono::system_clock::now();
   while (!done) {
     try {
       server.update();
@@ -120,15 +120,15 @@ main(int argc, char* argv[]) {
     auto incoming = server.receive();
     addToClientMessageQueues(incoming);
 
-    end = std::chrono::system_clock::now();
-    std::chrono::duration<double> elapsed_seconds = end-start;
-    if(elapsed_seconds.count() >= 0.5){
+    // end = std::chrono::system_clock::now();
+    // std::chrono::duration<double> elapsed_seconds = end-start;
+    // if(elapsed_seconds.count() >= 0.5){
        // std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
       std::deque<Message> messages = pullFromClientMessageQueues(server,done);
       std::deque<Message> outgoing = processMessages(modelInterface, messages, server);
       server.send(outgoing);
-      start = std::chrono::system_clock::now();
-    }
+      //start = std::chrono::system_clock::now();
+    //}
   }
 
   return 0;
