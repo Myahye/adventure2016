@@ -157,51 +157,49 @@ std::unordered_map<int,Room> YamlParser::parseBuildRooms(const std::string& path
 	return buildAllRooms;
 }
 
-
-std::vector<std::shared_ptr<Reset>> YamlParser::parseBuildResets(const std::string& pathToFile){
+//maybe change to take in npc,object,room maps as parameters and pass in pointers to rooms/npc/objects to the constructors of resetNPC etc.
+//change to use unique_ptr and move ownership to vector
+std::vector<std::unique_ptr<Reset>> YamlParser::parseBuildResets(const std::string& pathToFile){
 	
 	YAML::Node config = YAML::LoadFile(pathToFile);
 	const YAML::Node& reset_node = config["RESETS"];
 
 	//initialize our map we will return
-	std::vector<std::shared_ptr<Reset>> buildAllResets;
+	std::vector<std::unique_ptr<Reset>> buildAllResets;
+
+	std::unique_ptr<Reset> reset;
 
 	for (auto& currentReset : reset_node) {
-		std::shared_ptr<Reset> reset;
-
 		if(currentReset["action"].as<std::string>() == "npc") {
 			if (currentReset["comment"]){
-				reset = std::make_shared<Resets::ResetNpc>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), currentReset["limit"].as<int>(), currentReset["room"].as<int>(), currentReset["comment"].as<std::string>());
+				reset = std::make_unique<Resets::ResetNpc>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), currentReset["limit"].as<int>(), currentReset["room"].as<int>(), currentReset["comment"].as<std::string>());
 			}
 			else {
-				reset = std::make_shared<Resets::ResetNpc>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), currentReset["limit"].as<int>(), currentReset["room"].as<int>(), "");
+				reset = std::make_unique<Resets::ResetNpc>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), currentReset["limit"].as<int>(), currentReset["room"].as<int>(), "");
 			}
-			buildAllResets.push_back(reset);
 		} else if(currentReset["action"].as<std::string>() == "object") {
 			if (currentReset["comment"]){
-				reset = std::make_shared<Resets::ResetObject>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), 1, currentReset["room"].as<int>(), currentReset["comment"].as<std::string>());
+				reset = std::make_unique<Resets::ResetObject>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), 1, currentReset["room"].as<int>(), currentReset["comment"].as<std::string>());
 			}
 			else {
-				reset = std::make_shared<Resets::ResetObject>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), 1, currentReset["room"].as<int>(), "");
+				reset = std::make_unique<Resets::ResetObject>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), 1, currentReset["room"].as<int>(), "");
 			}
-			buildAllResets.push_back(reset);
 		} else if(currentReset["action"].as<std::string>() == "give") {
 			if (currentReset["comment"]){
-				reset = std::make_shared<Resets::ResetGive>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), 1, 0, currentReset["comment"].as<std::string>());
+				reset = std::make_unique<Resets::ResetGive>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), 1, 0, currentReset["comment"].as<std::string>());
 			}
 			else {
-				reset = std::make_shared<Resets::ResetGive>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), 1, 0, "");
+				reset = std::make_unique<Resets::ResetGive>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), 1, 0, "");
 			}
-			buildAllResets.push_back(reset);
 		} else if(currentReset["action"].as<std::string>() == "equip") {
 			if (currentReset["comment"]){
-				reset = std::make_shared<Resets::ResetEquip>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), currentReset["slot"].as<int>(), currentReset["comment"].as<std::string>());
+				reset = std::make_unique<Resets::ResetEquip>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), currentReset["slot"].as<int>(), currentReset["comment"].as<std::string>());
 			}
 			else {
-				reset = std::make_shared<Resets::ResetEquip>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), currentReset["slot"].as<int>(), "");
+				reset = std::make_unique<Resets::ResetEquip>(currentReset["action"].as<std::string>(), currentReset["id"].as<int>(), currentReset["slot"].as<int>(), "");
 			}
-			buildAllResets.push_back(reset);
 		}
+		buildAllResets.push_back(std::move(reset));
 
 		// Reset reset{currentReset["action"].as<std::string>(), currentReset["id"].as<int>()};
 

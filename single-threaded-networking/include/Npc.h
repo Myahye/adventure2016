@@ -83,10 +83,10 @@ public:
 
 	//--------------------------------------Lawrence Yu
     void addObjectToInventory(const Object& object, unsigned int limit);
-    void removeObjectFromInventory(int objectID);
+    bool removeObjectFromInventory(int objectId);
 
-    void equipObject(const Object& object, int slot);
-    void unEquipObject(int objectId);
+    bool equipObject(const Object& object, int slot);
+    bool unEquipObject(int slot);
     //bool unequipObject();
 
     std::unordered_map<int,std::vector<Object>> getNpcInventory() const;

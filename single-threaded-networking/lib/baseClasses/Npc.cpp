@@ -118,25 +118,37 @@ void Npc::addObjectToInventory(const Object& object, unsigned int limit) {
           //std::cout << "Object id: " << object.getId() << " Npc id: " << id << " Inventory size: " << npcInventory.size() <<std::endl;
   }
 }
-void Npc::removeObjectFromInventory(int objectId) {
-  // //remove if id == object and pickedupflag==yes
-  // npcInventory.erase(
-  //   std::remove_if(npcInventory.begin(), npcInventory.end(),
-  //       [objectId](Object& object) { return (object.getId() == objectId); }),
-  //   npcInventory.end());
+bool Npc::removeObjectFromInventory(int objectId) {
+  if(npcInventory[objectId].size() != 0) {
+    npcInventory[objectId].pop_back();
+    return true;
+  }
+  return false;
 }
 
-void Npc::equipObject(const Object& object, int slot) {
+bool Npc::equipObject(const Object& object, int slot) {
+  if(npcInventory.find(object.getId()) == npcInventory.end()) {
+  	return false;
+  }
+
   if(npcEquipment.find(slot) != npcEquipment.end()) {
-    return;
+    npcInventory[npcEquipment[slot].getId()].push_back(npcEquipment[slot]);
+    npcEquipment[slot] = object;
+    npcInventory[object.getId()].pop_back();
+    return true;
   } else {
     npcEquipment[slot] = object;
+    return true;
           // std::cout << this << "Object id: " << npcEquipment[slot].getId() << " Npc id: " << id << " Equipment Desc: " << npcEquipment[slot].getShortDesc() << " Equipment size: " << npcEquipment.size() <<std::endl;
   }
 }
-void Npc::unEquipObject(int objectId) {
+bool Npc::unEquipObject(int slot) {
   //remove if id == object and pickedupflag==yes
-  npcEquipment.erase(objectId);
+  if(npcEquipment.find(slot) != npcEquipment.end()) {
+  	npcEquipment.erase(slot);
+  	return true;
+  }
+  return false;
 }
 
 std::unordered_map<int,std::vector<Object>> Npc::getNpcInventory() const {

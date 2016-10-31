@@ -23,7 +23,7 @@ private:
   std::unordered_map<int,Room> rooms;
   std::unordered_map<int,Npc> npcs;
   std::unordered_map<int,Object> objects;
-  std::vector<std::shared_ptr<Reset>> resets;
+  std::vector<std::unique_ptr<Reset>> resets;
 
   int assignedIds = 1;
   //need to change these to temlpate values
@@ -66,8 +66,7 @@ public:
 
   std::string lookCommand(const int& playerId, const std::string& destDirection);
 
-  bool checkObjectKeywords(const std::string& message, std::pair<const int,std::vector<Object>>& objectIdVectorPair);
-  bool checkNpcKeywords(const std::string& message, std::pair<const int,std::vector<Npc>>& npcIdVectorPair);
+  std::string stealCommand(const int& playerId, const std::string& command);
 
   //-----------------------------Lawrence YU
   void reset();

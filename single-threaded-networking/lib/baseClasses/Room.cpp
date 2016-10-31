@@ -110,6 +110,15 @@ Npc* Room::addNpc(const Npc& npc, unsigned int limit) {
     return &npcsInRoom[npc.getId()].back();
   }
 }
+bool Room::removeNpc(int npcId) {
+  //remove if id == npc and hp == 0
+  if(npcsInRoom[npcId].size() != 0) {
+    npcsInRoom[npcId].pop_back();
+    return true;
+  }
+  return false;
+}
+
 void Room::addObject(const Object& object, unsigned int limit) {
   if(objectsInRoom[object.getId()].size() == limit) {
     return;
@@ -118,23 +127,74 @@ void Room::addObject(const Object& object, unsigned int limit) {
        //   std::cout << "Room id: " << mRoomId << "Npc id: " << npc.getId() << std::endl;
   }
 }
-void Room::removeNpc(int npcId) {
-  //remove if id == npc and hp == 0
-  if(npcsInRoom[npcId].size() != 0) {
-    npcsInRoom[npcId].pop_back();
-  }
-}
-void Room::removeObject(int objectId) {
+bool Room::removeObject(int objectId) {
   //remove if id == object and pickedupflag==yes
   if(objectsInRoom[objectId].size() != 0) {
     objectsInRoom[objectId].pop_back();
+    return true;
   }
+  return false;
 }
+
+Npc Room::findNpc(const std::string& message) {
+  Npc currentlySelectedNpc;
+
+  auto it = std::find_if(npcsInRoom.begin(),npcsInRoom.end(), 
+    [&currentlySelectedNpc,&message,this] (const std::pair<int,std::vector<Npc>>& npcIdVectorPair) { return checkNpcKeywords(currentlySelectedNpc, message, npcIdVectorPair); });
+  std::cout << "s" << std::endl;
+  if(it != npcsInRoom.end()) {
+    std::cout << "d " << currentlySelectedNpc.getId() << std::endl;
+    return currentlySelectedNpc;
+  }
+  return Npc();
+}
+Object Room::findObject(const std::string& message) {
+  Object currentlySelectedObject;
+
+  auto it = std::find_if(objectsInRoom.begin(),objectsInRoom.end(), 
+    [&message,&currentlySelectedObject,this] (const std::pair<int,std::vector<Object>>& objectIdVectorPair) { return checkObjectKeywords(currentlySelectedObject, message, objectIdVectorPair); });
+
+  if(it != objectsInRoom.end()) {
+    return currentlySelectedObject;
+  }
+  return Object();
+}
+
 std::unordered_map<int,std::vector<Npc>> Room::getNpcsInRoom() const {
   return npcsInRoom;
 }
 std::unordered_map<int,std::vector<Object>> Room::getObjectsInRoom() const {
   return objectsInRoom;
+}
+
+bool Room::checkNpcKeywords(Npc& currentlySelectedNpc, const std::string& message, const std::pair<int,std::vector<Npc>>& npcIdVectorPair) {
+
+  //check duplicates eg. dupl_object 1, dupl_object 2, dupl_object 3
+  for(auto& currentNpc : npcIdVectorPair.second) {
+    auto it = std::find_if(currentNpc.getKeywords().begin(), currentNpc.getKeywords().end(), [&message] (const std::string& keyword) {std::cout << keyword << " \n"; return message == keyword;});
+   
+    if(it != currentNpc.getKeywords().end()) {
+       std::cout << "e ";
+      currentlySelectedNpc = currentNpc;
+      std::cout << currentlySelectedNpc.getId() << std::endl;
+      return true;
+    }
+  }
+
+  return false;
+}
+bool Room::checkObjectKeywords(Object& currentlySelectedObject, const std::string& message, const std::pair<int,std::vector<Object>>& objectIdVectorPair) {
+
+  //check duplicates eg. dupl_object 1, dupl_object 2, dupl_object 3
+  for(auto& currentObject : objectIdVectorPair.second) {
+    auto it = std::find_if(currentObject.getKeywords().begin(), currentObject.getKeywords().end(), [&message] (const std::string& keyword) { return message == keyword;});
+    if(it != currentObject.getKeywords().end()) {
+      currentlySelectedObject = currentObject;
+      return true;
+    }
+  }
+
+  return false;
 }
 
 std::string Room::getNpcsInRoomDesc() const {
@@ -152,18 +212,18 @@ std::string Room::getNpcsInRoomDesc() const {
   return response;
 }
 std::string Room::getObjectsInRoomDesc() const {
-  std::string response = "";
+  std::string response = "     ";
   for(auto objectIdVectorPair : objectsInRoom) {
     for(auto object : objectIdVectorPair.second) {
       response += object.getLongDescStr();
     }
   }
 
-  if(!response.empty()) {
-    response += "\n";
+  if(!response.substr(5).empty()) {
+    return response += "\n";
+  } else {
+    return "";
   }
-
-  return response;
 }
 std::string Room::getDoorsInRoomDesc() const {
   std::string response = "";
@@ -184,7 +244,7 @@ std::string Room::getDoorsInRoomDesc() const {
 std::string Room::getFullRoomDesc() const {
   std::string response = getDesc() + "\n";
   response += getNpcsInRoomDesc();
-  response += "     " + getObjectsInRoomDesc(); 
+  response += getObjectsInRoomDesc(); 
   response += "     " + getDoorsInRoomDesc() + "\n";
   return response;
 }

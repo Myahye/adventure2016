@@ -43,6 +43,10 @@ ServerHelper::parseCommands(const std::deque<Message>& clientMessages, std::vect
     else if (boost::iequals(messageText, commands["ListCommands"])) {
       messageText = std::to_string(message.connection.playerIDConnectedToClientConnection) + "> " + /*handleCreateCommand(message)*/ + "\n";
       outgoing.push_back(Message{message.connection, messageText});
+    } 
+    else if (boost::iequals(messageText, commands["Steal"])) {
+      messageText = this->model.stealCommand(message.connection.playerIDConnectedToClientConnection, message.text);
+      outgoing.push_back(Message{message.connection, messageText});
     }
     else {
       messageText = "That is an invalid command\n\n";

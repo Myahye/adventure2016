@@ -165,6 +165,7 @@ Model::lookCommand(const int& playerId, const std::string& command){
   std::transform(message.begin(), message.end(), message.begin(), ::tolower);
 
   int currentRoomId = this->playerLocation[playerId];
+  Room currentRoom = this->rooms[currentRoomId];
 
   if(message == "room") {
     return response + getCurrentRoomDescription(playerId);
@@ -173,7 +174,7 @@ Model::lookCommand(const int& playerId, const std::string& command){
   //-------------------------------------------------look "cardinal direction"
 
   //will move this to room class later as if isDirection return door.getDesc()
-  auto doorsInRoom = this->rooms[currentRoomId].getDoors();
+  auto doorsInRoom = currentRoom.getDoors();
 
   for(auto currentDoor : doorsInRoom) {
     if(message == currentDoor.getDir()) {
@@ -186,31 +187,31 @@ Model::lookCommand(const int& playerId, const std::string& command){
   //-------------------------------------------------look "Npc keyword"
 
   //will move this to room class later as if isNpc return npc.getfulldesc()
-  auto npcsInRoom = this->rooms[currentRoomId].getNpcsInRoom();
-  for(auto currentNpc : npcsInRoom) {
-    if(checkNpcKeywords(message, currentNpc)) {
+  Npc currentNpc = currentRoom.findNpc(message);
 
-      //change for look toddler 1 look toddler 2 look toddler 3 later since it only checks the description of the first duplicate npc?
-      response += "\n\n" + currentNpc.second[0].getDesc();
-      response += "\n     Wearing: "  + currentNpc.second[0].getNpcEquipmentDesc();
-      response += "\n     Carrying: " + currentNpc.second[0].getNpcInventoryDesc() + "\n\n";
+  if(currentNpc.getId() != 0) {
 
-      return response;
-    }
+    //change for look toddler 1 look toddler 2 look toddler 3 later since it only checks the description of the first duplicate npc?
+    response += "\n\n" + currentNpc.getDesc();
+    response += "\n     Wearing: "  + currentNpc.getNpcEquipmentDesc();
+    response += "\n     Carrying: " + currentNpc.getNpcInventoryDesc() + "\n\n";
+
+    return response;
   }
 
   //-------------------------------------------------look "Object keyword"
 
   //will move this to room class later as if isobject return object.getfulldesc()
-  for(auto objectIdVectorPair : this->rooms[currentRoomId].getObjectsInRoom()) {
-    if(checkObjectKeywords(message, objectIdVectorPair)) {
+  Object currentObject = currentRoom.findObject(message);
+
+  if(currentObject.getId() != 0) {
+
     response += "\n";
-      //change for look object 1 look object 2 look object 3 later since it only checks the description of the first duplicate object?
-      for(auto descriptionText : objectIdVectorPair.second[0].getExtra().first) {
-        response += descriptionText + "\n";
-      }
-      return response;
+    //change for look object 1 look object 2 look object 3 later since it only checks the description of the first duplicate object?
+    for(auto descriptionText : currentObject.getExtra().first) {
+      response += descriptionText + "\n";
     }
+    return response;
   }
 
   return this->players[playerId].getUsername() + "> " + "Cannot find " + message + ", no match. \n\n";
@@ -222,25 +223,62 @@ void Model::reset(){
     reset->execute(this->context);
     this->context.setCurrentlySelectedNpc(reset->getCurrentlySelectedNpc());
   }
+  this->context.setCurrentlySelectedNpc(NULL);
 }
 
-bool Model::checkObjectKeywords(const std::string& message, std::pair<const int,std::vector<Object>>& objectIdVectorPair) {
-  // return std::any_of(objectIdVectorPair.second[0].getKeywords().begin(), objectIdVectorPair.second[0].getKeywords().end(), 
-  // [&message] (const std::string& keyword) { return message == keyword;});
-  for(auto& keyword : objectIdVectorPair.second[0].getKeywords()) {
-    if(message == keyword) {
-      return true;
-    }
-  }
-  return false;
+
+std::string
+Model::stealCommand(const int& playerId, const std::string& command){
+  // std::string response = this->players[playerId].getUsername() + "> " + command;
+  // std::string message = command.substr(6);
+  // std::transform(message.begin(), message.end(), message.begin(), ::tolower);
+
+  // int currentRoomId = this->playerLocation[playerId];
+  // Room currentRoom = this->rooms[currentRoomId];
+
+
+  // //will move this to room class later as if isDirection return door.getDesc()
+
+  // Npc* currentNpc = currentRoom.findNpc(message);
+
+  // if(currentNpc != NULL) {
+
+  //   //change for look toddler 1 look toddler 2 look toddler 3 later since it only checks the description of the first duplicate npc?
+  //   response += "\n\n" + currentNpc->getDesc();
+  //   response += "\n     Wearing: "  + currentNpc->getNpcEquipmentDesc();
+  //   response += "\n     Carrying: " + currentNpc->getNpcInventoryDesc() + "\n\n";
+
+  //   return response;
+  // }
+
+  // //-------------------------------------------------look "Object keyword"
+
+  // //will move this to room class later as if isobject return object.getfulldesc()
+
+  // Object* currentObject = currentRoom.findObject(message);
+
+  // if(currentObject != NULL) {
+
+  //   response += "\n";
+  //   //change for look object 1 look object 2 look object 3 later since it only checks the description of the first duplicate object?
+  //   for(auto descriptionText : objectIdVectorPair.second[0].getExtra().first) {
+  //     response += descriptionText + "\n";
+  //   }
+  //   return response;
+  // }
+
+  // return this->players[playerId].getUsername() + "> " + "Cannot find " + message + ", no match. \n\n";
 }
-bool Model::checkNpcKeywords(const std::string& message, std::pair<const int,std::vector<Npc>>& npcIdVectorPair) {
-  // return std::any_of(npcIdVectorPair.second[0].getKeywords().begin(), npcIdVectorPair.second[0].getKeywords().end(), 
-  // [&message] (const std::string& keyword) { return message == keyword;});
-  for(auto& keyword : npcIdVectorPair.second[0].getKeywords()) {
-    if(message == keyword) {
-      return true;
-    }
-  }
-  return false;
+
+/*delete command to check if delete works on npc from npcs and npcs from room {
+  
+
+IMPORTANT
+
 }
+
+ALSO CHANGE CONTEXT TO UNIQUE POINTER AND YAMLPARSE RESETS TO UNIQUE POINTER
+
+Change all pointers to unique-pointer
+change Npc* Room::addNpc(const Npc& npc, unsigned int limit) to unique
+*/
