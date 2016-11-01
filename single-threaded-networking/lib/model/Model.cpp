@@ -210,7 +210,7 @@ Model::lookCommand(const int& playerId, const std::string& command){
   //-------------------------------------------------look "Object keyword"
 
   //will move this to room class later as if isobject return object.getfulldesc()
-  for(auto objectIdVectorPair : this->rooms[currentRoomId].getObjectsInRoom()) {
+  /*for(auto objectIdVectorPair : this->rooms[currentRoomId].getObjectsInRoom()) {
     if(checkObjectKeywords(message, objectIdVectorPair)) {
     response += "\n";
       //change for look object 1 look object 2 look object 3 later since it only checks the description of the first duplicate object?
@@ -219,7 +219,7 @@ Model::lookCommand(const int& playerId, const std::string& command){
       }
       return response;
     }
-  }
+  }*/
 
   return this->players[playerId].getUsername() + "> " + "Cannot find " + message + ", no match. \n\n";
 }

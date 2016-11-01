@@ -1,18 +1,18 @@
 #include "YamlParser.h"
 //#include <utility>
-YamlParseandBuild::YamlParseandBuild() {};
+YamlParseBuild::YamlParseBuild() {};
 
-void YamlParseandBuild::loadFile(const std::string& pathToFile){
+void YamlParseBuild::loadFile(const std::string& pathToFile){
 	this->fileNode = YAML::LoadFile(pathToFile);
 }
 
-const YAML::Node& YamlParseandBuild::returnNodeByName(const std::string& nodename){
+const YAML::Node& YamlParseBuild::returnNodeByName(const std::string& nodename){
 	return fileNode[nodename];
 }
 
 
 /*********Parses and builds Npc's from yaml file****************/
-std::pair<int,Npc> YamlParseandBuild::parseNpcs(const YAML::Node& node){
+std::pair<int,Npc> YamlParseBuild::parseNpcs(const YAML::Node& node){
 	std::string shortdesc = node["shortdesc"].as<std::string>();
 	Npc npcClass{node["id"].as<int>(), shortdesc};
 	if(node["armor"]){
@@ -53,7 +53,7 @@ std::pair<int,Npc> YamlParseandBuild::parseNpcs(const YAML::Node& node){
 	return std::make_pair(npcClass.getId(),npcClass);
 }
 
-void YamlParseandBuild::buildNpcs(std::unordered_map<int,Npc>& buildAllNpcs){
+void YamlParseBuild::buildNpcs(std::unordered_map<int,Npc>& buildAllNpcs){
 	const YAML::Node&  NPC_node = fileNode["NPCS"];
 	//std::unordered_map<int,Npc> buildAllNpcs;
 	std::transform(NPC_node.begin(),NPC_node.end(), std::inserter( buildAllNpcs, buildAllNpcs.end() ), 
@@ -65,7 +65,7 @@ void YamlParseandBuild::buildNpcs(std::unordered_map<int,Npc>& buildAllNpcs){
 
 
 /*********Parses and builds Object's from yaml file****************/
-std::pair<int,Object> YamlParseandBuild::parseObjects(const YAML::Node& node){
+std::pair<int,Object> YamlParseBuild::parseObjects(const YAML::Node& node){
 
 	//Object objectClass{node["id"].as<int>(), node["item_type"].as<std::string>()};
 	Object objectClass;
@@ -103,25 +103,25 @@ std::pair<int,Object> YamlParseandBuild::parseObjects(const YAML::Node& node){
 	}
 	if(node["extra"]){
 		const YAML::Node& extra_node = node["extra"];
-
+		std::vector < std::pair< std::vector<std::string>, std::vector<std::string> > > extraV;
+		std::pair< std::vector<std::string>, std::vector<std::string> > extraP;
 		std::vector<std::string> extraDescV;
 		std::vector<std::string> extraKeywordsV;	
 		
 		for (auto &j : extra_node){
 			extraDescV = setStringVectorHelper(j["desc"]);
 			extraKeywordsV = setStringVectorHelper(j["keywords"]);
+			extraP = std::make_pair(extraDescV, extraKeywordsV);
+			extraV.push_back(extraP);
 		}
 		//std::cout << "size: " << extraDescV.size() << std::endl;
 		//std::cout << "size: " << extraKeywordsV.size() << std::endl;
-		std::pair< std::vector<std::string>, std::vector<std::string> > extraP;
-
-		extraP = std::make_pair(extraDescV, extraKeywordsV);
-		objectClass.setExtra(extraP);
+		objectClass.setExtra(extraV);
 	}
 	return std::make_pair(objectClass.getId(),objectClass);
 }
 
-void YamlParseandBuild::buildObjects(std::unordered_map<int,Object>& buildAllObjects){
+void YamlParseBuild::buildObjects(std::unordered_map<int,Object>& buildAllObjects){
 	const YAML::Node&  Object_Node = fileNode["OBJECTS"];
 	//std::unordered_map<int,Object> buildAllObjects;
 	
@@ -132,7 +132,7 @@ void YamlParseandBuild::buildObjects(std::unordered_map<int,Object>& buildAllObj
 //maybe change to take in npc,object,room maps as parameters and pass in pointers to rooms/npc/objects to the constructors of resetNPC etc.
 //change to use unique_ptr and move ownership to vector
 /*
-std::vector<std::unique_ptr<Reset>> YamlParseandBuild::parseBuildResets(const std::string& pathToFile){
+std::vector<std::unique_ptr<Reset>> YamlParseBuild::parseBuildResets(const std::string& pathToFile){
 	
 	YAML::Node config = YAML::LoadFile(pathToFile);
 	const YAML::Node& reset_node = config["RESETS"];
@@ -198,7 +198,7 @@ std::vector<std::unique_ptr<Reset>> YamlParseandBuild::parseBuildResets(const st
 
 */
 
-std::unique_ptr<Reset> YamlParseandBuild::parseResets(const YAML::Node& node){
+std::unique_ptr<Reset> YamlParseBuild::parseResets(const YAML::Node& node){
 		std::unique_ptr<Reset> reset;
 
 
@@ -252,7 +252,7 @@ std::unique_ptr<Reset> YamlParseandBuild::parseResets(const YAML::Node& node){
 		// buildAllResets.push_back(reset);
 }
 
-void YamlParseandBuild::buildResets(std::vector< std::unique_ptr< Reset > >&  resets){
+void YamlParseBuild::buildResets(std::vector< std::unique_ptr< Reset > >&  resets){
 	const YAML::Node&  Reset_Node = fileNode["RESETS"];
 	//std::unordered_map<int,Object> buildAllObjects;
 	
@@ -262,7 +262,7 @@ void YamlParseandBuild::buildResets(std::vector< std::unique_ptr< Reset > >&  re
 }
 
 //helper classes for yamlParse
-std::vector<std::string> YamlParseandBuild::setStringVectorHelper( const YAML::Node& vectorNode){
+std::vector<std::string> YamlParseBuild::setStringVectorHelper( const YAML::Node& vectorNode){
 	std::vector<std::string> stringsV;
 	for(auto& it : vectorNode){
 		stringsV.push_back((it).as<std::string>());

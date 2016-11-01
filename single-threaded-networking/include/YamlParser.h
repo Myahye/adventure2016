@@ -1,7 +1,7 @@
-#ifndef YamlParseandBuild_H
-#define YamlParseandBuild_H
+#ifndef YamlParseBuild_H
+#define YamlParseBuild_H
 
-#include "NPC.h"
+#include "Npc.h"
 #include "Object.h"
 #include "Room.h"
 #include "Door.h"
@@ -10,11 +10,11 @@
 #include <unordered_map>
 
 
-class YamlParseandBuild{
+class YamlParseBuild{
 private:
 	YAML::Node fileNode;
 public:
-	YamlParseandBuild();
+	YamlParseBuild();
 	void loadFile(const std::string& filename);
 	const YAML::Node& returnNodeByName(const std::string& nodename);
 	
