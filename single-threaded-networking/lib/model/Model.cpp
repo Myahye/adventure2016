@@ -103,7 +103,7 @@ Model::createPlayer(const std::string& username, const std::string& password){
 
   Player newPlayer{this->assignedIds, username, password};
   players.insert({this->assignedIds, newPlayer});
-  playerLocation[assignedIds] = 3032;
+  playerLocation[assignedIds] = 3111;
   assignedIds++;
   for (auto & player: players) {
       std::cout << "Player Id: " << player.second.getId() << ", username: " << player.second.getUsername() << ", password: " << player.second.getPassword() << "\n";
