@@ -42,7 +42,7 @@ Player::getMana() const{
 
 void
 Player::setMana(int const manaa){
-    this->mana = mana;
+    this->mana = manaa;
 }
 
 //Getter and setter for Armor

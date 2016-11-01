@@ -56,6 +56,20 @@ namespace Commands {
 
 		networking::Connection getConnection() const;
 	};
+
+	class InvalidCommand : public Command {
+	private:
+		networking::Connection connection;
+		std::string message;
+	public:
+		InvalidCommand(networking::Connection connection_, const std::string& message_);
+		
+		std::string execute(Context& context);
+
+		int getId() const;
+
+		networking::Connection getConnection() const;
+	};
 }
 
 #endif

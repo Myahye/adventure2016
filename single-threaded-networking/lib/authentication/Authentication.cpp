@@ -31,9 +31,9 @@ namespace Authentication {
   }
 
   std::string
-  authorizeClient(Message& message, Server& server, std::vector <Connection>& clients, ServerHelper& serverHelper) {
+  authorizeClient(Message& message, Server& server, std::vector <Connection>& clients, ModelInterface& modelInterface) {
 
-  	std::vector<std::tuple<int,std::string,std::string>> players = serverHelper.getPlayerCredentialsVector();
+  	std::vector<std::tuple<int,std::string,std::string>> players = modelInterface.getPlayerCredentialsVector();
 
     if (message.text == "1" && message.connection.currentState == ConnectionState::UNAUTHORIZED) {
 
@@ -46,16 +46,16 @@ namespace Authentication {
 
       return "Please enter your username and password ex. 'Bob Bobpassword': \n";
     } else if (message.connection.currentState == ConnectionState::REGISTERING) {
-      return handleRegistration(message, server, clients, players, serverHelper);
+      return handleRegistration(message, server, clients, players, modelInterface);
     } else if (message.connection.currentState == ConnectionState::LOGIN) {
-      return handleLogin(message, server, clients, players, serverHelper);
+      return handleLogin(message, server, clients, players, modelInterface);
     } else {
       return "Sorry that is not a valid command, please enter '1' to register a new character, enter '2' to login to an existing character, or enter 'quit' to quit\n";
     }
   }
 
   std::string
-  handleLogin(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, ServerHelper& serverHelper) {
+  handleLogin(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, ModelInterface& modelInterface) {
     std::vector <std::string> playerCredentials;
     boost::trim_if(message.text, boost::is_any_of("\t "));
     boost::split(playerCredentials, message.text, boost::is_any_of("\t "), boost::token_compress_on);
@@ -86,14 +86,14 @@ namespace Authentication {
       client-> playerIDConnectedToClientConnection = playerID;
       client-> currentState = ConnectionState::AUTHORIZED;
 
-      return "Welcome back " + playerCredentials[0] + "," + serverHelper.getCurrentRoomDescription(playerID);
+      return "Welcome back " + playerCredentials[0] + "," + modelInterface.getCurrentRoomDescription(playerID);
     } else {
       return "Sorry that player does not exist, please enter an existing username: \n";
     }
   }
 
   std::string
-  handleRegistration(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, ServerHelper& serverHelper) {
+  handleRegistration(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, ModelInterface& modelInterface) {
     std::vector <std::string> playerCredentials;
     boost::trim_if(message.text, boost::is_any_of("\t "));
     boost::split(playerCredentials, message.text, boost::is_any_of("\t "), boost::token_compress_on);
@@ -113,7 +113,7 @@ namespace Authentication {
     } else if ((playerID = findExistingPlayer(playerCredentials[0], players)) != 0) {
       return "Sorry that username is in use. Please enter a different username: \n";
     } else {
-      playerID = serverHelper.createPlayer(playerCredentials[0],playerCredentials[1]);
+      playerID = modelInterface.createPlayer(playerCredentials[0],playerCredentials[1]);
 
       server.setPlayerIDConnectedToClient(message.connection,playerID);
       server.setClientCurrentState(message.connection, ConnectionState::AUTHORIZED);
@@ -122,7 +122,7 @@ namespace Authentication {
       client-> playerIDConnectedToClientConnection = playerID;
       client-> currentState = ConnectionState::AUTHORIZED;
 
-      return "Your name is " + playerCredentials[0] + "," + serverHelper.getCurrentRoomDescription(playerID);
+      return "Your name is " + playerCredentials[0] + "," + modelInterface.getCurrentRoomDescription(playerID);
     }
   }
 }

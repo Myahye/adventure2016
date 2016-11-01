@@ -9,11 +9,11 @@
 #include <algorithm>
 
 class Npc {
-	int armor;
-	int exp;
-	int gold;
-	int id;
-	int level;
+	int armor = 0;
+	int exp = 0;
+	int gold = 0;
+	int id = 0;
+	int level = 0;
 	int thac0;
 
 	std::string damage;

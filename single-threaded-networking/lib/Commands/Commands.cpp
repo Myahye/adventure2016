@@ -144,4 +144,24 @@ namespace Commands {
 	networking::Connection StatusCommand::getConnection() const {
 		return this->connection;
 	}
+
+	/*InvalidCommand*/
+	InvalidCommand::InvalidCommand(networking::Connection connection_, const std::string& message_) 
+	: connection{connection_}, message{message_} {}
+
+	std::string InvalidCommand::execute(Context& context) {
+		auto players = context.getPlayers();
+		int playerId = connection.playerIDConnectedToClientConnection;
+
+		return (*players)[playerId].getUsername()+ "> " + message +
+				" is an invalid command.\n\n";
+	}
+
+	int InvalidCommand::getId() const {
+		return this->connection.playerIDConnectedToClientConnection;
+	}
+
+	networking::Connection InvalidCommand::getConnection() const {
+		return this->connection;
+	}
 }

@@ -7,12 +7,12 @@
 
 class Player {
 private:
-    int armor;
-    int exp;
-    int gold;
-    int level;
+    int armor = 0;
+    int exp = 0;
+    int gold = 0;
+    int level = 0;
     int thac0;
-    int pid;
+    int pid = 0;
     int health=100;
     int mana=100;
 
