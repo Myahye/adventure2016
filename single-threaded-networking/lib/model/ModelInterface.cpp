@@ -6,7 +6,7 @@ using namespace networking;
 
 ModelInterface::ModelInterface() {}
 
-std::unordered_map<std::string, std::string> commands {{"Create","create "},{"Look","look "},{"Walk","walk "},{"Read","read "},{"Go","go "},{"Attack","attack "},{"Say","say "},{"ListCommands","ls "},{"Status","status "}};
+std::unordered_map<std::string, std::string> commands {{"Create","create "},{"Look","look "},{"Walk","walk "},{"Read","read "},{"Go","go "},{"Attack","attack "},{"Say","say "},{"ListCommands","ls "},{"Status","status "}, {"Steal","steal "}};
 
 void
 ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::vector<Connection>& clients) {
@@ -44,17 +44,16 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
       // std::for_each(clients.begin(), clients.end(), [&message,&outgoing,this] (Connection& c)
       //   { if(c.currentState == ConnectionState::AUTHORIZED) { outgoing.push_back(Message{c,std::string(this->model.dummySayCommand(message.connection.playerIDConnectedToClientConnection,message.text))}); } });
     }
-    else if (boost::iequals(messageText, commands["ListCommands"])) {
+    else if (boost::istarts_with(messageText, commands["ListCommands"])) {
       // messageText = std::to_string(message.connection.playerIDConnectedToClientConnection) + "> " + handleCreateCommand(message) + "\n";
       // outgoing.push_back(Message{message.connection, messageText});
     } 
-    else if (boost::iequals(messageText, commands["Steal"])) {
+    else if (boost::istarts_with(messageText, commands["Steal"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::LookCommand>(message.connection,message.text));
     }
-    else if (boost::iequals(messageText,commands["Status"])){
+    else if (boost::istarts_with(messageText,commands["Status"])){
       std::cout << "iowerjgio" << std::endl;
       this->basicCommandQueue.push_back(std::make_unique<Commands::StatusCommand>(message.connection,message.text));
-
     } else {
       this->basicCommandQueue.push_back(std::make_unique<Commands::InvalidCommand>(message.connection,message.text));
       //Will output all other message types sent for now for testing purposes

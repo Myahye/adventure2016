@@ -153,7 +153,7 @@ namespace Commands {
 		auto players = context.getPlayers();
 		int playerId = connection.playerIDConnectedToClientConnection;
 
-		return (*players)[playerId].getUsername()+ "> " + message +
+		return (*players)[playerId].getUsername()+ "> " + message + " " +
 				" is an invalid command.\n\n";
 	}
 
