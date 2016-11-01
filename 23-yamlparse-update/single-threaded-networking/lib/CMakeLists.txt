@@ -1,6 +1,0 @@
-add_subdirectory(networking)
-add_subdirectory(model)
-add_subdirectory(baseClasses)
-add_subdirectory(authentication)
-add_subdirectory(yamlParser)
-add_subdirectory(Resets)
