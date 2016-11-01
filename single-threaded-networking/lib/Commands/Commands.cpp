@@ -1,5 +1,10 @@
 #include "Commands.h"
+<<<<<<< HEAD
 #include <boost/algorithm/string.hpp>
+=======
+#include <boost/algorithm/string/classification.hpp> 
+#include <boost/algorithm/string/split.hpp>
+>>>>>>> 3ef45623265d9dddb26ac923acabf07f4118e5b8
 
 namespace Commands {
 
@@ -178,6 +183,7 @@ namespace Commands {
 		auto players = context.getPlayers();
 		auto rooms = context.getRooms();
 		auto playerLocations = context.getPlayerLocations();
+
 		// auto npcs = context.getNpcs();
 		// 		(*rooms)[3012].addNpc((*npcs)[3062],15);
 
@@ -213,6 +219,7 @@ namespace Commands {
 		// 	}
 		// }
 
+
 		// std::cout << "F" << std::endl;
 
 		//-------------------------------------------------look "Npc keyword"
@@ -228,6 +235,7 @@ namespace Commands {
 			currentNpc->removeObjectFromInventory(ObjectTargetPair[1]);
 				response += "Success!\n" + (*rooms)[currentRoomId].getNpcsInRoom()[3060][0].getNpcInventoryDesc();
 			//}
+
 			return response;
 		}
 
@@ -240,6 +248,7 @@ namespace Commands {
 			//move loop out later;
 			response += "\n Take: " + ObjectTargetPair[0] + "\n\n";
 			currentRoom.removeObject(ObjectTargetPair[0]);
+
 			return response;
 		}
 

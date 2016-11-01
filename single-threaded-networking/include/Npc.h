@@ -83,6 +83,7 @@ public:
 
 	//--------------------------------------Lawrence Yu
     void addObjectToInventory(const Object& object, unsigned int limit);
+    
     bool removeObjectFromInventory(const std::string& objectName);
 
     bool equipObject(const Object& object, int slot);

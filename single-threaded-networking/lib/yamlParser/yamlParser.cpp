@@ -13,6 +13,7 @@ void YamlParseandBuild::loadFile(const std::string& pathToFile){
 // }
 
 
+
 /*********Parses and builds Npc's from yaml file****************/
 std::pair<int,Npc> YamlParseandBuild::parseNpcs(const YAML::Node& node){
 	std::string shortdesc = node["shortdesc"].as<std::string>();
@@ -129,7 +130,6 @@ void YamlParseandBuild::parseBuildRooms(std::unordered_map<int,Room>& rooms){
 }
 
 
-
 /*********Parses and builds Object's from yaml file****************/
 std::pair<int,Object> YamlParseandBuild::parseObjects(const YAML::Node& node){
 
@@ -238,6 +238,70 @@ void YamlParseandBuild::buildResets(std::vector< std::unique_ptr< Reset > >&  re
 
 	std::transform(Reset_Node.begin(),Reset_Node.end(), std::back_inserter(resets), 
 					[this](const YAML::Node& node) { return this->parseResets(node); });
+}
+
+
+std::unique_ptr<Reset> YamlParseandBuild::parseResets(const YAML::Node& node){
+		std::unique_ptr<Reset> reset;
+
+
+		if(node["action"].as<std::string>() == "npc") {
+			if (node["comment"]){
+				reset = std::make_unique<Resets::ResetNpc>(node["action"].as<std::string>(), node["id"].as<int>(), node["limit"].as<int>(), node["room"].as<int>(), node["comment"].as<std::string>());
+			}
+			else {
+				reset = std::make_unique<Resets::ResetNpc>(node["action"].as<std::string>(), node["id"].as<int>(), node["limit"].as<int>(), node["room"].as<int>(), "");
+			}
+		} else if(node["action"].as<std::string>() == "object") {
+			if (node["comment"]){
+				reset = std::make_unique<Resets::ResetObject>(node["action"].as<std::string>(), node["id"].as<int>(), 1, node["room"].as<int>(), node["comment"].as<std::string>());
+			}
+			else {
+				reset = std::make_unique<Resets::ResetObject>(node["action"].as<std::string>(), node["id"].as<int>(), 1, node["room"].as<int>(), "");
+			}
+		} else if(node["action"].as<std::string>() == "give") {
+			if (node["comment"]){
+				reset = std::make_unique<Resets::ResetGive>(node["action"].as<std::string>(), node["id"].as<int>(), 1, 0, node["comment"].as<std::string>());
+			}
+			else {
+				reset = std::make_unique<Resets::ResetGive>(node["action"].as<std::string>(), node["id"].as<int>(), 1, 0, "");
+			}
+		} else if(node["action"].as<std::string>() == "equip") {
+			if (node["comment"]){
+				reset = std::make_unique<Resets::ResetEquip>(node["action"].as<std::string>(), node["id"].as<int>(), node["slot"].as<int>(), node["comment"].as<std::string>());
+			}
+			else {
+				reset = std::make_unique<Resets::ResetEquip>(node["action"].as<std::string>(), node["id"].as<int>(), node["slot"].as<int>(), "");
+			}
+		}
+		return std::move(reset);
+
+		// Reset reset{node["action"].as<std::string>(), node["id"].as<int>()};
+
+		// if (node["limit"]){
+		// 	reset.setLimit(node["limit"].as<int>());
+		// }
+		// if (node["room"]){
+		// 	reset.setRoom(node["room"].as<int>());
+		// }
+		// if (node["slot"]){
+		// 	reset.setSlot(node["slot"].as<int>());
+		// }
+		// if (node["comment"]){
+		// 	std::string comment = node["comment"].as<std::string>();
+		// 	reset.setComment(comment);
+		// }
+		
+		// buildAllResets.push_back(reset);
+}
+
+void YamlParseandBuild::buildResets(std::vector< std::unique_ptr< Reset > >&  resets){
+	const YAML::Node&  Reset_Node = fileNode["RESETS"];
+	//std::unordered_map<int,Object> buildAllObjects;
+	
+	std::transform(Reset_Node.begin(),Reset_Node.end(), std::back_inserter(resets), 
+					[this](const YAML::Node& node) { return this->parseResets(node); });
+	//return buildAllObjects;
 }
 
 //helper classes for yamlParse

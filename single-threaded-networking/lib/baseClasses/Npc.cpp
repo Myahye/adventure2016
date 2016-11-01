@@ -118,6 +118,7 @@ void Npc::addObjectToInventory(const Object& object, unsigned int limit) {
           //std::cout << "Object id: " << object.getId() << " Npc id: " << id << " Inventory size: " << npcInventory.size() <<std::endl;
   }
 }
+
 bool Npc::removeObjectFromInventory(const std::string& objectName) {
 
   int objectId = 0;
@@ -134,6 +135,7 @@ bool Npc::removeObjectFromInventory(const std::string& objectName) {
       }
     }
   }
+
 
   if(!this->npcInventory[objectId].empty()) {
   	std::cout << this->npcInventory[objectId].size() << std::endl;
