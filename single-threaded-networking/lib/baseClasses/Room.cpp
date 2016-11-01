@@ -103,6 +103,7 @@ void Room::printClass(int n) const{
 //--------------------------------------Lawrence Yu
 Npc* Room::addNpc(Npc& npc, unsigned int limit) {
   if(npcsInRoom[npc.getId()].size() == limit) {
+    //std::cout << "WOW" << std::endl;
     return NULL;
   } else {
     //TEST CODE FOR DUPLICATES
@@ -114,7 +115,9 @@ Npc* Room::addNpc(Npc& npc, unsigned int limit) {
     // npc.setKeywords(key);
     // npcsInRoom[npc.getId()].push_back(npc);
     // std::cout << "Room id: " << mRoomId << "Npc id: " << npc.getId() << std::endl;
+    //std::cout << "sd" << npc.getId() << std::endl;
     npcsInRoom[npc.getId()].push_back(npc);
+    std::cout << npcsInRoom[npc.getId()].back().getId() << std:: endl;
     return &npcsInRoom[npc.getId()].back();
   }
 }
@@ -223,18 +226,18 @@ std::string Room::getNpcsInRoomDesc() const {
   return response;
 }
 std::string Room::getObjectsInRoomDesc() const {
-  std::string response = "     ";
+  std::string response = "";
   for(auto objectIdVectorPair : objectsInRoom) {
     for(auto object : objectIdVectorPair.second) {
-      response += object.getLongDescStr();
+      response += "     " + object.getLongDescStr();
     }
   }
 
-  if(!response.substr(5).empty()) {
-    return response += "\n";
-  } else {
-    return "";
+  if(!response.empty()) {
+    response += "\n";
   }
+
+  return response;
 }
 std::string Room::getDoorsInRoomDesc() const {
   std::string response = "";

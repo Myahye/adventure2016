@@ -70,7 +70,7 @@ void YamlParseandBuild::parseBuildRooms(std::unordered_map<int,Room>& rooms){
 
 
 	for (auto& currentRoom : room_node) {
-		std::cout << currentRoom["id"].as<int>() << std::endl;
+		//std::cout << currentRoom["id"].as<int>() << std::endl;
 		//declaring vector of doors in room
 		std::vector<Door> doors;
 
@@ -83,7 +83,7 @@ void YamlParseandBuild::parseBuildRooms(std::unordered_map<int,Room>& rooms){
 		//vectors
 		std::vector<std::string> descV = setStringVectorHelper(currentRoom["desc"]);
 		//std::vector<std::string> extendedDescV = setStringVectorHelper(currentRoom["extended_descriptions"]);
-		std::cout << "s" << std::endl;
+		//std::cout << "s" << std::endl;
 		std::pair< std::vector<std::string>, std::vector<std::string> > extraP;
 		if(currentRoom["extended_descriptions"]){
 			const YAML::Node& extra_node = currentRoom["extended_descriptions"];
@@ -100,7 +100,7 @@ void YamlParseandBuild::parseBuildRooms(std::unordered_map<int,Room>& rooms){
 
 			extraP = std::make_pair(extraDescV, extraKeywordsV);
 		}
-std::cout << "y" << std::endl;
+//std::cout << "y" << std::endl;
 		//iterate through all door Nodes
 		for (auto& currentDoor : currentRoom["doors"]) {
 		
@@ -169,7 +169,7 @@ std::pair<int,Object> YamlParseandBuild::parseObjects(const YAML::Node& node){
 	}
 	if(node["extra"]){
 		const YAML::Node& extra_node = node["extra"];
-
+		//need to be vector of pair of vectors
 		std::vector<std::string> extraDescV;
 		std::vector<std::string> extraKeywordsV;	
 		
@@ -225,6 +225,10 @@ std::unique_ptr<Reset> YamlParseandBuild::parseResets(const YAML::Node& node){
 		else {
 			return std::make_unique<Resets::ResetEquip>(node["action"].as<std::string>(), node["id"].as<int>(), node["slot"].as<int>(), "");
 		}
+	} else if(node["action"].as<std::string>() == "door") {
+			return std::make_unique<Resets::ResetEquip>("", 0, 0, "");
+	} else if(node["action"].as<std::string>() == "put") {
+			return std::make_unique<Resets::ResetEquip>("", 0, 0, "");
 	}
 	return NULL;
 }

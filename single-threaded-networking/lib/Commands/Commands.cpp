@@ -10,6 +10,8 @@ namespace Commands {
 		auto players = context.getPlayers();
 		auto rooms = context.getRooms();
 		auto playerLocations = context.getPlayerLocations();
+		// auto npcs = context.getNpcs();
+		// 		(*rooms)[3012].addNpc((*npcs)[3062],15);
 
 		int playerId = connection.playerIDConnectedToClientConnection;
 

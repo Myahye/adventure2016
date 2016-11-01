@@ -121,7 +121,6 @@ namespace Authentication {
       auto client = std::find_if(clients.begin(), clients.end(), [message](Connection c) {return c == message.connection; });
       client-> playerIDConnectedToClientConnection = playerID;
       client-> currentState = ConnectionState::AUTHORIZED;
-
       return "Your name is " + playerCredentials[0] + "," + modelInterface.getCurrentRoomDescription(playerID);
     }
   }

@@ -4521,5 +4521,23 @@ ROOMS:
   extended_descriptions: []
   id: 3205
   name: On the River
+#Lawrence Yu
+- desc:
+  - '   Welcome to the Moman Express'
+  - head north to go to the shire or west to Midgaard
+  doors:
+  - desc:
+    - Goes to The Shire Area
+    dir: north
+    keywords: []
+    to: 1100
+  - desc: 
+    - Goes to The Midgaard Area
+    dir: west
+    keywords: []
+    to: 3001
+  extended_descriptions: []
+  id: 6000
+  name: Moman Express
 SHOPS: []
 
