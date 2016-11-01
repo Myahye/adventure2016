@@ -40,31 +40,32 @@
 // }
 
 //This is what construction will look like
- Model::Model(const std::string& path){
-   yamlParseAndBuild(path);
+ Model::Model(const std::vector<std::string>& paths){
+   yamlParseAndBuild(paths[0]);
    this->context = Context{&this->rooms,&this->npcs,&this->objects,&this->players,&this->playerLocation};
  }
 
-//use subclass to build objects
-//each subclass method returns an unordered_map?
 void Model::yamlParseAndBuild(const std::string& pathToFile){
-  this->npcs = yamlparse.parseBuildNpcs(pathToFile);
-  this->objects = yamlparse.parseBuildObjects(pathToFile);
-  this->rooms = yamlparse.parseBuildRooms(pathToFile);
-  this->resets = yamlparse.parseBuildResets(pathToFile);
+  std::cout << "DIFFERENT FILE\n\n\n\n\n\n\n";
+  yamlparse.loadFile(pathToFile);
+  yamlparse.buildNpcs(this->npcs);
+  yamlparse.buildObjects(this->objects);
+  yamlparse.buildResets(resets);
 
-  printAll();
+    printAll();
+  //this->rooms = yamlparse.parseBuildRooms(pathToFile);
+  //this->resets = yamlparse.parseBuildResets(pathToFile);
   //not yet implemented
   // this->allPlayers = yamlParse.parseBuildPlayers(pathToFile);
 
 }
 
 void Model::printAll(){
-  // std::cout << "Printing map contents \n";
-  // int count = 1;
+  std::cout << "Printing map contents \n";
+  int count = 1;
   // for ( auto it = npcs.begin(); it != npcs.end(); ++it ){
   //   std::cout << "Map 1\nid:" << it->first << "\n";
-  //   std::cout << it->first  << std::endl;
+  //   std::cout << (it->second).printClass(count);  << std::endl;
   //   count++;
   // }
   // count =1;
@@ -81,13 +82,13 @@ void Model::printAll(){
   //    std::cout << std::endl;
   //    count++;
   // }
-  //  for ( auto it = resets.begin(); it != resets.end(); ++it ){
-  //    std::cout << "Map 3\nid:" << "\n";
-  //      auto r = *it;
-  //      r->printClass(count);
-  //    std::cout << std::endl;
-  //    count++;
-  // }
+   for ( auto it = resets.begin(); it != resets.end(); ++it ){
+     std::cout << "Map 3\nid:" << "\n";
+        auto r = *it;
+      r->printClass(count);
+     std::cout << std::endl;
+     count++;
+  }
 }
 
 int

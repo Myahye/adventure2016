@@ -11,6 +11,7 @@ public:
 	virtual networking::Connection getConnection() const = 0;
 	//virtual Npc* getCurrentlySelectedNpc() = 0;
 	//virtual void printClass(int n) = 0;
+	virtual ~Command() {}
 };
 
 #endif

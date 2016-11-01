@@ -9,7 +9,8 @@
 class ModelInterface {
 
 private:
-	Model model{"../data/shire.yml"};
+	std::vector<std::string> filepath = {"../data/shire.yml"};
+	Model model{filepath};
 	std::deque<std::unique_ptr<Command>> basicCommandQueue;
 	std::deque<std::unique_ptr<Command>> combatCommandQueue;
 
