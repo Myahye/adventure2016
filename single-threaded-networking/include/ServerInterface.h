@@ -8,7 +8,8 @@
 class ServerHelper {
 
 private:
-	Model model{"../data/shire.yml"};
+	std::vector<std::string> filepath = {"../data/shire.yml"};
+	Model model{filepath};
 
 public:
   ServerHelper();

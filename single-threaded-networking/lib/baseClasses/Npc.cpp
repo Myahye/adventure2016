@@ -70,10 +70,14 @@ void Npc::setId(int const id) {
 std::vector<std::string> Npc::getKeywords() const {
 	return keywords;
 }
+std::string Npc::getKeywordstoString() const {
+	std::string descString = "";
+	std::for_each(keywords.begin(), keywords.end(), [&descString](const std::string& i){descString += i + "\n";} );	
+	return descString;
+}
 void Npc::setKeywords(const std::vector<std::string>& keywords) {
 	this->keywords = keywords;
 }
-
 
 //Getter and Setter for Level
 int Npc::getLevel() const {
@@ -155,7 +159,20 @@ std::string Npc::getNpcEquipmentDesc() const {
 std::string Npc::getNpcInventoryDesc() const {
 	std::string response = "";
 	std::for_each(npcInventory.begin(), npcInventory.end(), [&response](const auto& currentItem){response += currentItem.second[0].getShortDesc() + " (Quantity: " + std::to_string(currentItem.second.size()) + "), ";});	
-  return response;
+  	return response;
 }
 
-
+//New function added in to test
+void Npc::printClass(int n) const{
+	std::cout << "\n\n";
+	std::cout << "NPC: "<< n << "\n";
+	std::cout << "Npc id: " << id << std::endl;
+	std::cout << "\tarmor: " << armor << std::endl;
+	std::cout << "\texp: " << exp << std::endl;
+	std::cout << "\tgold: " << gold << std::endl;
+	std::cout << "\tlevel: " << level << std::endl;
+	std::cout << "\tthac0: " << thac0 << std::endl;
+	std::cout << "\tdescription: " << getDesc() << std::endl;
+	std::cout << "\tkeywords: " << getKeywordstoString() << std::endl;
+	std::cout << "\tlongdesc: " << getLongDesc()<< std::endl;
+}

@@ -9,20 +9,20 @@
 #include <algorithm>
 
 class Npc {
-	int armor;
-	int exp;
-	int gold;
-	int id;
-	int level;
-	int thac0;
+	int armor = 0;
+	int exp = 0;
+	int gold = 0;
+	int id = 0;
+	int level = 0;
+	int thac0 = 0;
 
-	std::string damage;
-	std::string hit;
+	std::string damage ;
+	std::string hit ;
 	std::string shortdesc;
 
-	std::vector<std::string> description;
-	std::vector<std::string> keywords;
-	std::vector<std::string> longdesc;
+	std::vector<std::string> description ;
+	std::vector<std::string> keywords ;
+	std::vector<std::string> longdesc ;
 
 	//----------------------------Lawrence Yu
 	std::unordered_map<int,std::vector<Object>> npcInventory;
@@ -63,6 +63,7 @@ public:
 
 	//Keywords
 	std::vector<std::string> getKeywords() const;
+	std::string getKeywordstoString() const;
 	void setKeywords(const std::vector<std::string>& keywords);
 
 	//Level
@@ -94,6 +95,9 @@ public:
 
     std::string getNpcEquipmentDesc() const;
     std::string getNpcInventoryDesc() const;
+
+    //New function added in to test
+	void printClass(int n) const;
 };
 
 #endif

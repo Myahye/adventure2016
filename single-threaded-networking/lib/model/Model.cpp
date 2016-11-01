@@ -40,37 +40,43 @@
 // }
 
 //This is what construction will look like
- Model::Model(const std::string& path){
-   yamlParseAndBuild(path);
-   this->context = Context{&this->rooms,&this->npcs,&this->objects};
+ Model::Model(const std::vector<std::string>& paths){
+    for_each(paths.begin(), paths.end(), [this](const std::string& pathToFile){this->yamlParseAndBuild(pathToFile);} );  
+    //for_each(paths.begin(), paths.end(), this->yamlParseAndBuild);  
+
+    //yamlParseAndBuild(path);
+    this->context = Context{&this->rooms,&this->npcs,&this->objects};
  }
 
 //use subclass to build objects
 //each subclass method returns an unordered_map?
 void Model::yamlParseAndBuild(const std::string& pathToFile){
-  this->npcs = yamlparse.parseBuildNpcs(pathToFile);
-  this->objects = yamlparse.parseBuildObjects(pathToFile);
-  this->rooms = yamlparse.parseBuildRooms(pathToFile);
-  this->resets = yamlparse.parseBuildResets(pathToFile);
+  std::cout << "DIFFERENT FILE\n\n\n\n\n\n\n";
+  yamlparse.loadFile(pathToFile);
+  yamlparse.buildNpcs(this->npcs);
+  yamlparse.buildObjects(this->objects);
+  //yamlparse.buildResets(this->resets);
 
-  printAll();
+
+  //this->rooms = yamlparse.parseBuildRooms(pathToFile);
+  //this->resets = yamlparse.parseBuildResets(pathToFile);
   //not yet implemented
   // this->allPlayers = yamlParse.parseBuildPlayers(pathToFile);
 
 }
 
 void Model::printAll(){
-  // std::cout << "Printing map contents \n";
-  // int count = 1;
-  // for ( auto it = npcs.begin(); it != npcs.end(); ++it ){
-  //   std::cout << "Map 1\nid:" << it->first << "\n";
-  //   std::cout << it->first  << std::endl;
-  //   count++;
-  // }
-  // count =1;
-  // std::cout << "=============================" << std::endl;
+  std::cout << "Printing NPC map contents \n";
+  int count = 1;
+  for ( auto it = npcs.begin(); it != npcs.end(); ++it ){
+    (it->second).printClass(count);
+    count++;
+  }
+  count =1;
+  std::cout << "=============================" << std::endl;
+  std::cout << "Printing OBJECT map contents" << std::endl;
+  objects[3031].printClass(count);
   // for ( auto it = objects.begin(); it != objects.end(); ++it ){
-  //   std::cout << "Map 1\nid:" << it->first << "\n";
   //   (it->second).printClass(count);
   //   std::cout << std::endl;
   //   count++;
@@ -81,12 +87,14 @@ void Model::printAll(){
   //    std::cout << std::endl;
   //    count++;
   // }
-  //  for ( auto it = resets.begin(); it != resets.end(); ++it ){
-  //    std::cout << "Map 3\nid:" << "\n";
-  //      auto r = *it;
-  //      r->printClass(count);
-  //    std::cout << std::endl;
-  //    count++;
+  // std::cout << "\n\n\n";
+  // count =1;
+  // std::cout << "Printing RESET vector contents" << std::endl;
+  // for ( auto it = resets.begin(); it != resets.end(); ++it ){
+  //     auto r = *it;
+  //     r->printClass(count);
+  //     std::cout << std::endl;
+  //     count++;
   // }
 }
 

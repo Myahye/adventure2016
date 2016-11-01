@@ -23,15 +23,14 @@ private:
   std::unordered_map<int,Room> rooms;
   std::unordered_map<int,Npc> npcs;
   std::unordered_map<int,Object> objects;
-  std::vector<std::shared_ptr<Reset>> resets;
+  std::vector<std::unique_ptr<Reset>>  resets;
 
   int assignedIds = 1;
   //need to change these to temlpate values
   std::unordered_map<int,int> playerLocation;
 
-  YamlParser yamlparse;
+  YamlParseandBuild yamlparse;
   void yamlParseAndBuild(const std::string& pathToFile);
-  void printAll();
   //Still need to be implemented
   //map<int, Players>
   //map<int, rooms>
@@ -44,7 +43,7 @@ public:
 
   //Model(); //temp
 
-  Model(const std::string& path);
+  Model(const std::vector<std::string>& paths);
 
   int createPlayer(const std::string& username, const std::string& password);
   std::vector<std::tuple<int,std::string,std::string>> getPlayerCredentialsVector() const;
@@ -68,6 +67,8 @@ public:
 
   bool checkObjectKeywords(const std::string& message, std::pair<const int,std::vector<Object>>& objectIdVectorPair);
   bool checkNpcKeywords(const std::string& message, std::pair<const int,std::vector<Npc>>& npcIdVectorPair);
+
+  void printAll();
 
   //-----------------------------Lawrence YU
   void reset();
