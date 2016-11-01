@@ -1,4 +1,5 @@
 #include "Commands.h"
+#include <boost/algorithm/string.hpp>
 
 namespace Commands {
 
@@ -49,12 +50,12 @@ namespace Commands {
 
 		//-------------------------------------------------look "Npc keyword"
 
-		Npc currentNpc = currentRoom.findNpc(lookMessage);
+		Npc* currentNpc = currentRoom.findNpc(lookMessage);
 			//will move this to room class later as if isNpc return npc.getfulldesc()
-		if(currentNpc.getId() != 0) {
-			response += "\n\n" + currentNpc.getDesc();
-			response += "\n     Wearing: "  + currentNpc.getNpcEquipmentDesc();
-			response += "\n     Carrying: " + currentNpc.getNpcInventoryDesc() + "\n\n";
+		if(currentNpc != NULL) {
+			response += "\n\n" + currentNpc->getDesc();
+			response += "\n     Wearing: "  + currentNpc->getNpcEquipmentDesc();
+			response += "\n     Carrying: " + currentNpc->getNpcInventoryDesc() + "\n\n";
 			return response;
 		}
 
@@ -164,6 +165,94 @@ namespace Commands {
 	}
 
 	networking::Connection InvalidCommand::getConnection() const {
+		return this->connection;
+	}
+
+
+
+	StealCommand::StealCommand(networking::Connection connection_, const std::string& message_)
+	: connection{connection_}, message{message_} {}
+
+	std::string StealCommand::execute(Context& context) {
+		std::cout << "D" << std::endl;
+		auto players = context.getPlayers();
+		auto rooms = context.getRooms();
+		auto playerLocations = context.getPlayerLocations();
+		// auto npcs = context.getNpcs();
+		// 		(*rooms)[3012].addNpc((*npcs)[3062],15);
+
+		int playerId = connection.playerIDConnectedToClientConnection;
+
+		std::cout << "E" << std::endl;
+
+		std::string response = (*players)[playerId].getUsername() + "> " + message;
+		std::string stealMessage = message.substr(6);
+		std::cout << "FEEs" << std::endl;
+		std::transform(stealMessage.begin(), stealMessage.end(), stealMessage.begin(), ::tolower);
+
+		std::cout << "FEE" << std::endl;
+
+		int currentRoomId = (*playerLocations)[playerId];
+		Room currentRoom = (*rooms)[currentRoomId];
+
+		// if(stealMessage == "") {
+		// 	std::cout << "FF" << std::endl;
+		// 	return response + "\n\n" + currentRoom.getFullRoomDesc();
+		// }
+
+		//-------------------------------------------------look "cardinal direction"
+
+		//will move this to room class later as if isDirection return door.getDesc()
+		// auto doorsInRoom = currentRoom.getDoors();
+
+		// for(auto currentDoor : doorsInRoom) {
+		// 	if(stealMessage == currentDoor.getDir()) {
+		//   		response += "\n\n" + currentDoor.getDesc() += "\n";
+
+		//   		return response;
+		// 	}
+		// }
+
+		// std::cout << "F" << std::endl;
+
+		//-------------------------------------------------look "Npc keyword"
+		std::vector<std::string> ObjectTargetPair;
+		boost::split(ObjectTargetPair, stealMessage, boost::is_any_of(" "));
+
+		Npc* currentNpc = (*rooms)[currentRoomId].findNpc(ObjectTargetPair[0]);
+			//will move this to room class later as if isNpc return npc.getfulldesc()
+		if(currentNpc != NULL) {
+			response += "\n Steal: " + ObjectTargetPair[0] + " From: " + ObjectTargetPair[1] + "\n\n";
+			// if((*rooms)[currentRoomId].removeNpc(3060)) {
+				//getNpcsInRoom()[3060][0].getNpcInventory().erase(3120)) {
+			currentNpc->removeObjectFromInventory(ObjectTargetPair[1]);
+				response += "Success!\n" + (*rooms)[currentRoomId].getNpcsInRoom()[3060][0].getNpcInventoryDesc();
+			//}
+			return response;
+		}
+
+		//-------------------------------------------------look "Object keyword"
+
+		Object currentObject = currentRoom.findObject(ObjectTargetPair[0]);
+		//will move this to room class later as if isobject return object.getfulldesc()
+		if(currentObject.getId() != 0) {
+
+			//move loop out later;
+			response += "\n Take: " + ObjectTargetPair[0] + "\n\n";
+			currentRoom.removeObject(ObjectTargetPair[0]);
+			return response;
+		}
+
+		std::cout << "G" << std::endl;
+
+		return (*players)[playerId].getUsername() + "> " + "Cannot steal " + stealMessage + ", no match. \n\n";
+	}
+
+	int StealCommand::getId() const {
+		return this->connection.playerIDConnectedToClientConnection;
+	}
+
+	networking::Connection StealCommand::getConnection() const {
 		return this->connection;
 	}
 }

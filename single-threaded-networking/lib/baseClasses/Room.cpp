@@ -138,24 +138,43 @@ void Room::addObject(const Object& object, unsigned int limit) {
        //   std::cout << "Room id: " << mRoomId << "Npc id: " << npc.getId() << std::endl;
   }
 }
-bool Room::removeObject(int objectId) {
+bool Room::removeObject(const std::string& objectName) {
+
+  int objectId = 0;
+
+  for(auto& objectIdVectorPair : objectsInRoom) {
+    for(auto& object : objectIdVectorPair.second){
+      for(auto& keyword : object.getKeywords()) {
+        if(objectName == keyword) {
+          objectId = objectIdVectorPair.first;
+        }
+      }
+    }
+  }
+
   //remove if id == object and pickedupflag==yes
   if(objectsInRoom[objectId].size() != 0) {
     objectsInRoom[objectId].pop_back();
+    if(objectsInRoom[objectId].empty()) {
+      objectsInRoom.erase(objectId);
+    }
     return true;
   }
   return false;
 }
 
-Npc Room::findNpc(const std::string& message) {
-  Npc currentlySelectedNpc;
+Npc* Room::findNpc(const std::string& message) {
+  Npc* currentlySelectedNpc = NULL;
 
   auto it = std::find_if(npcsInRoom.begin(),npcsInRoom.end(), 
-    [&currentlySelectedNpc,&message,this] (const std::pair<int,std::vector<Npc>>& npcIdVectorPair) { return checkNpcKeywords(currentlySelectedNpc, message, npcIdVectorPair); });
+    [&currentlySelectedNpc,&message,this] (const std::pair<int,std::vector<Npc>>& npcIdVectorPair) { 
+     currentlySelectedNpc = checkNpcKeywords(message, npcIdVectorPair); 
+     return currentlySelectedNpc != NULL;
+    });
   if(it != npcsInRoom.end()) {
     return currentlySelectedNpc;
   }
-  return Npc();
+  return NULL;
 }
 Object Room::findObject(const std::string& message) {
   Object currentlySelectedObject;
@@ -176,19 +195,20 @@ std::unordered_map<int,std::vector<Object>> Room::getObjectsInRoom() const {
   return objectsInRoom;
 }
 
-bool Room::checkNpcKeywords(Npc& currentlySelectedNpc, const std::string& message, const std::pair<int,std::vector<Npc>>& npcIdVectorPair) {
+Npc* Room::checkNpcKeywords(const std::string& message, const std::pair<int,std::vector<Npc>>& npcIdVectorPair) {
 
   //check duplicates eg. dupl_object 1, dupl_object 2, dupl_object 3
-  for(auto currentNpc : npcIdVectorPair.second) {
+  int i = 0;
+  for(auto& currentNpc : npcIdVectorPair.second) {
     for(auto currentKeyword : currentNpc.getKeywords()) {
       if(message == currentKeyword) {
-        currentlySelectedNpc = currentNpc;
-        return true;
+        return &this->npcsInRoom[currentNpc.getId()][i];
       }
     }
+    i++;
   }
 
-  return false;
+  return NULL;
 }
 bool Room::checkObjectKeywords(Object& currentlySelectedObject, const std::string& message, const std::pair<int,std::vector<Object>>& objectIdVectorPair) {
 

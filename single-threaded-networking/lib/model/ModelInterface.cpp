@@ -36,6 +36,7 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
     else if (boost::istarts_with(messageText,commands["Read"])) {
       // messageText = std::to_string(message.connection.playerIDConnectedToClientConnection) + "> " + handleCreateCommand(message) + "\n";
       // outgoing.push_back(Message{message.connection, messageText});
+      this->model.reset();
     }
     else if (boost::istarts_with(messageText,commands["Attack"])) {
       //this->combatCommandQueue.push_back(std::make_unique<Commands::LookCommand>(message.connection,message.text));
@@ -49,7 +50,7 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
       // outgoing.push_back(Message{message.connection, messageText});
     } 
     else if (boost::istarts_with(messageText, commands["Steal"])) {
-      this->basicCommandQueue.push_back(std::make_unique<Commands::LookCommand>(message.connection,message.text));
+      this->basicCommandQueue.push_back(std::make_unique<Commands::StealCommand>(message.connection,message.text));
     }
     else if (boost::istarts_with(messageText,commands["Status"])){
       std::cout << "iowerjgio" << std::endl;
@@ -89,7 +90,6 @@ ModelInterface::updateGame(){
     }
   }
 //std::cout << "AAA " << std::endl;
-  this->model.reset();
 //std::cout << "BBB " << std::endl;
   return outgoing;
 
