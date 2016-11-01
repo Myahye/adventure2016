@@ -118,7 +118,21 @@ void Npc::addObjectToInventory(const Object& object, unsigned int limit) {
           //std::cout << "Object id: " << object.getId() << " Npc id: " << id << " Inventory size: " << npcInventory.size() <<std::endl;
   }
 }
-bool Npc::removeObjectFromInventory(int objectId) {
+bool Npc::removeObjectFromInventory(std::string objectName) {
+  //std::find_if(npcInventory.begin(), npcInventory.end(), [&objectName] (const auto& itemPair) { return objectName == objectName });
+
+  int objectId = 0;
+
+  for(auto currentObjectIdVectorPair : npcInventory) {
+    for(auto currentObject : currentObjectIdVectorPair.second) {
+      for(auto currentKeyword : currentObject.getKeywords()) {
+        if(objectName == currentKeyword) {
+          objectId = currentObjectIdVectorPair.first;
+        }
+      }
+    }
+  }
+
   if(npcInventory[objectId].size() != 0) {
     npcInventory[objectId].pop_back();
     if(npcInventory[objectId].empty()) {

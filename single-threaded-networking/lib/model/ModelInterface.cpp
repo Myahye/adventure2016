@@ -49,7 +49,7 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
       // outgoing.push_back(Message{message.connection, messageText});
     } 
     else if (boost::istarts_with(messageText, commands["Steal"])) {
-      this->basicCommandQueue.push_back(std::make_unique<Commands::LookCommand>(message.connection,message.text));
+      this->basicCommandQueue.push_back(std::make_unique<Commands::StealCommand>(message.connection,message.text));
     }
     else if (boost::istarts_with(messageText,commands["Status"])){
       std::cout << "iowerjgio" << std::endl;
