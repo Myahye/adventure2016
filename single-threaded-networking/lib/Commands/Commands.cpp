@@ -1,10 +1,6 @@
 #include "Commands.h"
-<<<<<<< HEAD
 #include <boost/algorithm/string.hpp>
-=======
-#include <boost/algorithm/string/classification.hpp> 
-#include <boost/algorithm/string/split.hpp>
->>>>>>> 3ef45623265d9dddb26ac923acabf07f4118e5b8
+
 
 namespace Commands {
 
