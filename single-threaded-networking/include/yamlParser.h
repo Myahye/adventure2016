@@ -16,7 +16,7 @@ private:
 public:
 	YamlParseandBuild();
 	void loadFile(const std::string& filename);
-	const YAML::Node& returnNodeByName(const std::string& nodename);
+	//const YAML::Node& returnNodeByName(const std::string& nodename);
 	
 	std::pair<int,Npc> parseNpcs(const YAML::Node& node);
 	std::pair<int,Object> parseObjects(const YAML::Node& node);
@@ -31,6 +31,7 @@ public:
 	void buildResets(std::vector< std::unique_ptr< Reset > >&  resets);
 
 	//std::unordered_map<int,Room> buildRooms(); //doors will be built here as well
+	void parseBuildRooms(std::unordered_map<int,Room>& rooms);
 
 
 	//helper methods - maybe seperate this into another class?

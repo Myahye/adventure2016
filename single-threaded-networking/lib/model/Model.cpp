@@ -42,7 +42,10 @@
 //This is what construction will look like
  Model::Model(const std::vector<std::string>& paths){
    yamlParseAndBuild(paths[0]);
+   yamlParseAndBuild(paths[1]);
+   std::cout << "gei " << std::endl;
    this->context = Context{&this->rooms,&this->npcs,&this->objects,&this->players,&this->playerLocation};
+   std::cout << "goi " << std::endl;
  }
 
 void Model::yamlParseAndBuild(const std::string& pathToFile){
@@ -50,10 +53,10 @@ void Model::yamlParseAndBuild(const std::string& pathToFile){
   yamlparse.loadFile(pathToFile);
   yamlparse.buildNpcs(this->npcs);
   yamlparse.buildObjects(this->objects);
-  yamlparse.buildResets(resets);
-
-    printAll();
-  //this->rooms = yamlparse.parseBuildRooms(pathToFile);
+  yamlparse.buildResets(this->resets);
+  std::cout << "wwww " << std::endl;
+    //printAll();
+  yamlparse.parseBuildRooms(this->rooms);
   //this->resets = yamlparse.parseBuildResets(pathToFile);
   //not yet implemented
   // this->allPlayers = yamlParse.parseBuildPlayers(pathToFile);
@@ -84,8 +87,8 @@ void Model::printAll(){
   // }
    for ( auto it = resets.begin(); it != resets.end(); ++it ){
      std::cout << "Map 3\nid:" << "\n";
-        auto r = *it;
-      r->printClass(count);
+
+      (*it)->printClass(count);
      std::cout << std::endl;
      count++;
   }
@@ -220,11 +223,20 @@ Model::dummySayCommand(const int& playerId, const std::string& message){
 
 //----------------------Lawrence Yu
 void Model::reset(){
+      std::cout << "gerooooi " << std::endl;
   for(auto& reset : resets) {
-    reset->execute(this->context);
-    this->context.setCurrentlySelectedNpc(reset->getCurrentlySelectedNpc());
+        std::cout << "pppp " << std::endl;
+    if(reset != NULL) {
+          std::cout << "nnnn " << std::endl;
+      reset->execute(this->context);
+        std::cout << "lll " << std::endl;
+      this->context.setCurrentlySelectedNpc(reset->getCurrentlySelectedNpc());
+    std::cout << "geroi " << std::endl;
+    }
   }
+      std::cout << "roi " << std::endl;
   this->context.setCurrentlySelectedNpc(NULL);
+      std::cout << "oi " << std::endl;
 }
 
 Context Model::getContext() const {

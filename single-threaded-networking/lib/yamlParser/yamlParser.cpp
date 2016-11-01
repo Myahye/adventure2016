@@ -8,9 +8,9 @@ void YamlParseandBuild::loadFile(const std::string& pathToFile){
 	this->fileNode = YAML::LoadFile(pathToFile);
 }
 
-const YAML::Node& YamlParseandBuild::returnNodeByName(const std::string& nodename){
-	return fileNode[nodename];
-}
+// const YAML::Node& YamlParseandBuild::returnNodeByName(const std::string& nodename){
+// 	return fileNode[nodename];
+// }
 
 
 /*********Parses and builds Npc's from yaml file****************/
@@ -62,6 +62,70 @@ void YamlParseandBuild::buildNpcs(std::unordered_map<int,Npc>& buildAllNpcs){
 					[this](const YAML::Node& node) { return this->parseNpcs(node); }); //if we dont use [this] error:invalid use of non static member function
 	//return buildAllNpcs;
 																  
+}
+
+//Parses and builds Room's from yaml file
+void YamlParseandBuild::parseBuildRooms(std::unordered_map<int,Room>& rooms){
+	const YAML::Node&  room_node= fileNode["ROOMS"];
+
+
+	for (auto& currentRoom : room_node) {
+		std::cout << currentRoom["id"].as<int>() << std::endl;
+		//declaring vector of doors in room
+		std::vector<Door> doors;
+
+		//integers
+		int roomId = currentRoom["id"].as<int>();
+		
+		//strings
+		std::string roomName = currentRoom["name"].as<std::string>();
+
+		//vectors
+		std::vector<std::string> descV = setStringVectorHelper(currentRoom["desc"]);
+		//std::vector<std::string> extendedDescV = setStringVectorHelper(currentRoom["extended_descriptions"]);
+		std::cout << "s" << std::endl;
+		std::pair< std::vector<std::string>, std::vector<std::string> > extraP;
+		if(currentRoom["extended_descriptions"]){
+			const YAML::Node& extra_node = currentRoom["extended_descriptions"];
+
+			std::vector<std::string> extraDescV;
+			std::vector<std::string> extraKeywordsV;	
+			
+			for (auto &j : extra_node){
+				extraDescV = setStringVectorHelper(j["desc"]);
+				extraKeywordsV = setStringVectorHelper(j["keywords"]);
+			}
+			//std::cout << "size: " << extraDescV.size() << std::endl;
+			//std::cout << "size: " << extraKeywordsV.size() << std::endl;
+
+			extraP = std::make_pair(extraDescV, extraKeywordsV);
+		}
+std::cout << "y" << std::endl;
+		//iterate through all door Nodes
+		for (auto& currentDoor : currentRoom["doors"]) {
+		
+			//integers
+			int doorDestinationId = currentDoor["to"].as<int>();
+			
+			//strings
+			std::string doorDir = currentDoor["dir"].as<std::string>();
+
+			//vectors
+			std::vector<std::string> descV = setStringVectorHelper(currentDoor["desc"]);
+			std::vector<std::string> keywordsV = setStringVectorHelper(currentDoor["keywords"]);
+
+			//use parameterized constructor
+			Door doorClass{doorDir, descV, keywordsV, roomId, doorDestinationId}; //going off assumption roomId is doorId
+
+			doors.push_back(doorClass);
+		}
+		
+		//use parameterized constructor
+		Room roomClass{descV, extraP, roomName, roomId, doors};
+
+		//Add object to map
+  		rooms.insert(std::make_pair(roomClass.getRoomId(),roomClass));
+	}
 }
 
 
@@ -162,12 +226,12 @@ std::unique_ptr<Reset> YamlParseandBuild::parseResets(const YAML::Node& node){
 			return std::make_unique<Resets::ResetEquip>(node["action"].as<std::string>(), node["id"].as<int>(), node["slot"].as<int>(), "");
 		}
 	}
+	return NULL;
 }
 
 void YamlParseandBuild::buildResets(std::vector< std::unique_ptr< Reset > >&  resets){
 	const YAML::Node&  Reset_Node = fileNode["RESETS"];
-	std::unordered_map<int,Object> buildAllObjects;
-	
+
 	std::transform(Reset_Node.begin(),Reset_Node.end(), std::back_inserter(resets), 
 					[this](const YAML::Node& node) { return this->parseResets(node); });
 }

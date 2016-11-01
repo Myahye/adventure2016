@@ -2,16 +2,16 @@
 //include "CustomError.h"
 
 Room::Room()
-:mDesc{"No Description"}, mExtendedDesc{"No extended description"}, mName{"Empty Room"},
+:mDesc{"No Description"}, mExtendedDesc{std::make_pair(std::vector<std::string>{"No extended description"},std::vector<std::string>{""})}, mName{"Empty Room"},
             mRoomId{static_cast<unsigned int>(0)}, doors{Door()} {}
 
 //Temp constructor for testing and first iteration
 Room::Room(int& id, std::vector<std::string>& description, std::vector<Door>& new_doors) 
-:mDesc{description}, mExtendedDesc{"No extended description"}, mName{"Empty Room"},
+:mDesc{description}, mExtendedDesc{std::make_pair(std::vector<std::string>{"No extended description"},std::vector<std::string>{""})}, mName{"Empty Room"},
             mRoomId{static_cast<unsigned int>(id)}, doors{new_doors} {}
 
 // Parameterized constructor
-Room::Room(std::vector<std::string>& new_desc, std::vector<std::string>& new_extended_desc, std::string& new_name,
+Room::Room(std::vector<std::string>& new_desc, std::pair< std::vector<std::string>, std::vector<std::string> >& new_extended_desc, std::string& new_name,
              int& new_room_id, std::vector<Door>& new_doors)
             :mDesc{new_desc}, mExtendedDesc{new_extended_desc}, mName{new_name},
             mRoomId{static_cast<unsigned int>(new_room_id)}, doors{new_doors} {
@@ -23,7 +23,7 @@ std::string Room::getDesc() const {
   for_each(mDesc.begin(), mDesc.end(), [&response](const std::string& descriptionText){response += descriptionText + "\n";} ); 
   return response;
 }
-std::vector<std::string> Room::getExtendedDesc() const {
+std::pair< std::vector<std::string>, std::vector<std::string> > Room::getExtendedDesc() const {
     return this->mExtendedDesc;
 }
 std::string Room::getName() const {
@@ -54,7 +54,7 @@ int Room::getRoomInDir(std::string direction) const {
 void Room::setDescription(std::vector<std::string>& new_desc) {
     this->mDesc = new_desc;
 }
-void Room::setExtendedDesc(std::vector<std::string>& new_extended_desc) {
+void Room::setExtendedDesc(std::pair< std::vector<std::string>, std::vector<std::string> >& new_extended_desc) {
     this->mExtendedDesc = new_extended_desc;
 }
 void Room::setName(std::string& new_name) {
@@ -83,9 +83,9 @@ void Room::printClass(int n) const{
   for(auto i : mDesc) {
     std::cout << "\tShort Desc: " << i << std::endl;
   }
-  for(auto i : mExtendedDesc) {
-    std::cout << "\tExtended Desc: " << i << std::endl;
-  }
+  // for(auto i : mExtendedDesc) {
+  //   std::cout << "\tExtended Desc: " << i.first.size() << std::endl;
+  // }
   for(auto i : doors) {
     std::cout << "   Door dir: "<< i.getDir() << "\n";
     for(auto k : i.getDesc()) {

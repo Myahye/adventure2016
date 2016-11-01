@@ -12,9 +12,9 @@ void
 ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::vector<Connection>& clients) {
 
   std::deque<std::unique_ptr<Command>> commandQueue;
-
+std::cout << "s " << std::endl;
   for (auto& message : clientMessages) {
-
+std::cout << "v " << std::endl;
     std::string messageText = message.text;
 
     if (boost::istarts_with(messageText,commands["Create"])) {
@@ -88,9 +88,9 @@ ModelInterface::updateGame(){
       outgoing.push_back(message);
     }
   }
-
+std::cout << "AAA " << std::endl;
   this->model.reset();
-
+std::cout << "BBB " << std::endl;
   return outgoing;
 
 }
