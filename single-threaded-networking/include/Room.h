@@ -26,7 +26,7 @@ private:
     std::unordered_map<int,std::vector<Object>> objectsInRoom;
 
     Npc* checkNpcKeywords(const std::string& message, const std::pair<int,std::vector<Npc>>& npcIdVectorPair);
-    bool checkObjectKeywords(Object& currentlySelectedObject, const std::string& message, const std::pair<int,std::vector<Object>>& objectIdVectorPair);
+    Object* checkObjectKeywords(const std::string& message, const std::pair<int,std::vector<Object>>& objectIdVectorPair);
 
 public:
 
@@ -58,13 +58,13 @@ public:
 
     //--------------------------------------Lawrence Yu
     Npc* addNpc(Npc& npc, unsigned int limit);
-    bool removeNpc(int npcId);
+    bool removeNpc(const std::string& npcName);
 
     void addObject(const Object& object, unsigned int limit);
     bool removeObject(const std::string& objectName);
 
     Npc* findNpc(const std::string& message);
-    Object findObject(const std::string& message);
+    Object* findObject(const std::string& message);
 
     std::unordered_map<int,std::vector<Npc>> getNpcsInRoom() const;
     std::unordered_map<int,std::vector<Object>> getObjectsInRoom() const;

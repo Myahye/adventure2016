@@ -89,7 +89,7 @@ ModelInterface::updateGame(){
       outgoing.push_back(message);
     }
   }
-  this->model.reset();
+  //this->model.reset();
 //std::cout << "AAA " << std::endl;
 //std::cout << "BBB " << std::endl;
   return outgoing;

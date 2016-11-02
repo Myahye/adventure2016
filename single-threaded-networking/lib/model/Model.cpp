@@ -55,8 +55,8 @@ void Model::yamlParseAndBuild(const std::string& pathToFile){
   yamlparse.buildObjects(this->objects);
   yamlparse.buildResets(this->resets);
   std::cout << "wwww " << std::endl;
-    //printAll();
   yamlparse.parseBuildRooms(this->rooms);
+      printAll();
   //this->resets = yamlparse.parseBuildResets(pathToFile);
   //not yet implemented
   // this->allPlayers = yamlParse.parseBuildPlayers(pathToFile);
@@ -79,19 +79,19 @@ void Model::printAll(){
   //   std::cout << std::endl;
   //   count++;
   // }
-  // for ( auto it = rooms.begin(); it != rooms.end(); ++it ){
-  //    std::cout << "Map 1\nid:" << it->first << "\n";
-  //    (it->second).printClass(count);
-  //    std::cout << std::endl;
-  //    count++;
-  // }
-   for ( auto it = resets.begin(); it != resets.end(); ++it ){
-     std::cout << "Map 3\nid:" << "\n";
-
-      (*it)->printClass(count);
+  for ( auto it = rooms.begin(); it != rooms.end(); ++it ){
+     std::cout << "Map 1\nid:" << it->first << "\n";
+     (it->second).printClass(count);
      std::cout << std::endl;
      count++;
-   }
+  }
+   // for ( auto it = resets.begin(); it != resets.end(); ++it ){
+   //   std::cout << "Map 3\nid:" << "\n";
+
+   //    (*it)->printClass(count);
+   //   std::cout << std::endl;
+   //   count++;
+   // }
 }
 
 int
@@ -103,7 +103,7 @@ Model::createPlayer(const std::string& username, const std::string& password){
 
   Player newPlayer{this->assignedIds, username, password};
   players.insert({this->assignedIds, newPlayer});
-  playerLocation[assignedIds] = 3111;
+  playerLocation[assignedIds] = 3007;
   assignedIds++;
   for (auto & player: players) {
       std::cout << "Player Id: " << player.second.getId() << ", username: " << player.second.getUsername() << ", password: " << player.second.getPassword() << "\n";

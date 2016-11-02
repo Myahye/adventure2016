@@ -88,9 +88,9 @@ void Room::printClass(int n) const{
   // }
   for(auto i : doors) {
     std::cout << "   Door dir: "<< i.getDir() << "\n";
-    for(auto k : i.getDesc()) {
-      std::cout << "   Door desc: " << k << std::endl;
-    }
+    //for(auto k : i.getDesc()) {
+      std::cout << "   Door desc: " << i.getDesc() << std::endl;
+   // }
     for(auto k : i.getKeywords()) {
       std::cout << "   Door keywords: " << k << std::endl;
     }
@@ -117,15 +117,28 @@ Npc* Room::addNpc(Npc& npc, unsigned int limit) {
     // std::cout << "Room id: " << mRoomId << "Npc id: " << npc.getId() << std::endl;
     //std::cout << "sd" << npc.getId() << std::endl;
     npcsInRoom[npc.getId()].push_back(npc);
-    std::cout << npcsInRoom[npc.getId()].back().getId() << std:: endl;
+    //std::cout << npcsInRoom[npc.getId()].back().getId() << std:: endl;
     return &npcsInRoom[npc.getId()].back();
   }
 }
-bool Room::removeNpc(int npcId) {
+bool Room::removeNpc(const std::string& npcName) {
   //remove if id == npc and hp == 0
-  if(npcsInRoom[npcId].size() != 0) {
-    npcsInRoom[npcId].pop_back();
-    return true;
+  int npcId = 0;
+
+  for(auto& npcIdVectorPair : npcsInRoom) {
+    for(auto& keyword : npcIdVectorPair.second[0].getKeywords()) {
+      if(npcName.find(keyword) != std::string::npos) {
+        npcId = npcIdVectorPair.first;
+        //change to begin()+ selected npc number later
+        //if(npcIdVectorPair.second.size() >= selectednpcnumber) {
+          npcsInRoom[npcId].erase(npcIdVectorPair.second.begin());
+        //}
+        if(npcsInRoom[npcId].empty()) {
+          npcsInRoom.erase(npcId);
+        }
+        return true;
+      }
+    }
   }
   return false;
 }
@@ -143,22 +156,19 @@ bool Room::removeObject(const std::string& objectName) {
   int objectId = 0;
 
   for(auto& objectIdVectorPair : objectsInRoom) {
-    for(auto& object : objectIdVectorPair.second){
-      for(auto& keyword : object.getKeywords()) {
-        if(objectName == keyword) {
-          objectId = objectIdVectorPair.first;
+    for(auto& keyword : objectIdVectorPair.second[0].getKeywords()) {
+      if(objectName.find(keyword) != std::string::npos) {
+        objectId = objectIdVectorPair.first;
+        //change to begin()+ selected npc number later
+        //if(objectIdVectorPair.second.size() >= selectednpcnumber) {
+          objectsInRoom[objectId].erase(objectIdVectorPair.second.begin());
+        //}
+        if(objectsInRoom[objectId].empty()) {
+          objectsInRoom.erase(objectId);
         }
+        return true;
       }
     }
-  }
-
-  //remove if id == object and pickedupflag==yes
-  if(objectsInRoom[objectId].size() != 0) {
-    objectsInRoom[objectId].pop_back();
-    if(objectsInRoom[objectId].empty()) {
-      objectsInRoom.erase(objectId);
-    }
-    return true;
   }
   return false;
 }
@@ -176,16 +186,16 @@ Npc* Room::findNpc(const std::string& message) {
   }
   return NULL;
 }
-Object Room::findObject(const std::string& message) {
-  Object currentlySelectedObject;
+Object* Room::findObject(const std::string& message) {
+  Object* currentlySelectedObject = NULL;
 
   auto it = std::find_if(objectsInRoom.begin(),objectsInRoom.end(), 
-    [&message,&currentlySelectedObject,this] (const std::pair<int,std::vector<Object>>& objectIdVectorPair) { return checkObjectKeywords(currentlySelectedObject, message, objectIdVectorPair); });
+    [&currentlySelectedObject,&message,this] (const std::pair<int,std::vector<Object>>& objectIdVectorPair) { currentlySelectedObject = checkObjectKeywords(message, objectIdVectorPair); return currentlySelectedObject != NULL; });
 
   if(it != objectsInRoom.end()) {
     return currentlySelectedObject;
   }
-  return Object();
+  return NULL;
 }
 
 std::unordered_map<int,std::vector<Npc>> Room::getNpcsInRoom() const {
@@ -201,7 +211,7 @@ Npc* Room::checkNpcKeywords(const std::string& message, const std::pair<int,std:
   int i = 0;
   for(auto& currentNpc : npcIdVectorPair.second) {
     for(auto currentKeyword : currentNpc.getKeywords()) {
-      if(message == currentKeyword) {
+      if(message.find(currentKeyword) != std::string::npos) {
         return &this->npcsInRoom[currentNpc.getId()][i];
       }
     }
@@ -210,16 +220,17 @@ Npc* Room::checkNpcKeywords(const std::string& message, const std::pair<int,std:
 
   return NULL;
 }
-bool Room::checkObjectKeywords(Object& currentlySelectedObject, const std::string& message, const std::pair<int,std::vector<Object>>& objectIdVectorPair) {
+Object* Room::checkObjectKeywords(const std::string& message, const std::pair<int,std::vector<Object>>& objectIdVectorPair) {
 
   //check duplicates eg. dupl_object 1, dupl_object 2, dupl_object 3
+  int i = 0;
   for(auto currentObject : objectIdVectorPair.second) {
     for(auto currentKeyword : currentObject.getKeywords()) {
-      if(message == currentKeyword) {
-        currentlySelectedObject = currentObject;
-        return true;
+      if(message.find(currentKeyword) != std::string::npos) {
+        return &this->objectsInRoom[currentObject.getId()][i];
       }
     }
+    i++;
     //ONLY WORKS HALF THE TIME FOR SOME REASON
     // auto it = std::find_if(currentObject.getKeywords().begin(), currentObject.getKeywords().end(), [&message] (const std::string& keyword) { return message == keyword;});
     // if(it != currentObject.getKeywords().end()) {
@@ -228,7 +239,7 @@ bool Room::checkObjectKeywords(Object& currentlySelectedObject, const std::strin
     // }
   }
 
-  return false;
+  return NULL;
 }
 
 std::string Room::getNpcsInRoomDesc() const {
@@ -262,15 +273,17 @@ std::string Room::getObjectsInRoomDesc() const {
 std::string Room::getDoorsInRoomDesc() const {
   std::string response = "";
 
-  if(doors.size() == 1) {
-    return  "There is 1 obvious exit: " + doors[0].getDir() + ".\n";
+  if(!doors.empty()){
+    if(doors.size() == 1) {
+      return  "There is 1 obvious exit: " + doors[0].getDir() + ".\n";
+    }
+
+    response += "There are " + std::to_string(doors.size()) + " obvious exits: ";
+
+    std::for_each(doors.begin(),doors.end()-1,[&response] (const auto& currentDoor) { response += currentDoor.getDir() + ", "; });
+    
+    response += "and " + doors[doors.size()-1].getDir() + ".\n";
   }
-
-  response += "There are " + std::to_string(doors.size()) + " obvious exits: ";
-
-  std::for_each(doors.begin(),doors.end()-1,[&response] (const auto& currentDoor) { response += currentDoor.getDir() + ", "; });
-  
-  response += "and " + doors[doors.size()-1].getDir() + ".\n";
 
   return response;
 }

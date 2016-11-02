@@ -62,12 +62,12 @@ namespace Commands {
 
 		//-------------------------------------------------look "Object keyword"
 
-		Object currentObject = currentRoom.findObject(lookMessage);
+		Object* currentObject = currentRoom.findObject(lookMessage);
 		//will move this to room class later as if isobject return object.getfulldesc()
-		if(currentObject.getId() != 0) {
+		if(currentObject != NULL) {
 			response += "\n";
 			//move loop out later;
-			for(auto descriptionText : currentObject.getExtra().first) {
+			for(auto descriptionText : currentObject->getExtra().first) {
 			  response += descriptionText + "\n";
 			}
 			return response;
@@ -195,7 +195,7 @@ namespace Commands {
 		std::cout << "FEE" << std::endl;
 
 		int currentRoomId = (*playerLocations)[playerId];
-		Room currentRoom = (*rooms)[currentRoomId];
+		Room* currentRoom = &(*rooms)[currentRoomId];
 
 		// if(stealMessage == "") {
 		// 	std::cout << "FF" << std::endl;
@@ -222,14 +222,17 @@ namespace Commands {
 		std::vector<std::string> ObjectTargetPair;
 		boost::split(ObjectTargetPair, stealMessage, boost::is_any_of(" "));
 
-		Npc* currentNpc = (*rooms)[currentRoomId].findNpc(ObjectTargetPair[0]);
+		Npc* currentNpc = currentRoom->findNpc(ObjectTargetPair[1]);
 			//will move this to room class later as if isNpc return npc.getfulldesc()
 		if(currentNpc != NULL) {
 			response += "\n Steal: " + ObjectTargetPair[0] + " From: " + ObjectTargetPair[1] + "\n\n";
 			// if((*rooms)[currentRoomId].removeNpc(3060)) {
 				//getNpcsInRoom()[3060][0].getNpcInventory().erase(3120)) {
-			currentNpc->removeObjectFromInventory(ObjectTargetPair[1]);
-				response += "Success!\n" + (*rooms)[currentRoomId].getNpcsInRoom()[3060][0].getNpcInventoryDesc();
+			if(currentNpc->removeObjectFromInventory(ObjectTargetPair[0])) {
+				response += "Success!\n";
+			} else {
+				response += "Failure.\n";
+			}
 			//}
 
 			return response;
@@ -237,17 +240,19 @@ namespace Commands {
 
 		//-------------------------------------------------look "Object keyword"
 
-		Object currentObject = currentRoom.findObject(ObjectTargetPair[0]);
+		//Object* currentObject = currentRoom->findObject(ObjectTargetPair[0]);
 		//will move this to room class later as if isobject return object.getfulldesc()
-		if(currentObject.getId() != 0) {
 
-			//move loop out later;
+		if(currentRoom->removeObject(ObjectTargetPair[0])) {
 			response += "\n Take: " + ObjectTargetPair[0] + "\n\n";
-			currentRoom.removeObject(ObjectTargetPair[0]);
-
 			return response;
 		}
 
+		if(currentRoom->removeNpc(ObjectTargetPair[0])) {
+			response += "\n Take: " + ObjectTargetPair[0] + "\n\n";
+			return response;
+		}
+		
 		std::cout << "G" << std::endl;
 
 		return (*players)[playerId].getUsername() + "> " + "Cannot steal " + stealMessage + ", no match. \n\n";
