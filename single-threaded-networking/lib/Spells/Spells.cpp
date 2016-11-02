@@ -100,7 +100,7 @@ OffenseSpell::OffenseSpell(networking::connection, int duration,int mana, int mi
 	}
 
 	void OffenseSpell::setImmchar(std::vector<string> immchar) {
-		this->Immchar = wearOff;
+		this->Immchar = immchar;
 
 	std::vector<string> OffenseSpell::getWearoff() const {
 		return	this->Wearoff;	
