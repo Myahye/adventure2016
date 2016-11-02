@@ -5,8 +5,56 @@
 #include "Room.h"
 #include "Door.h"
 #include "Player.h"
-#include "Npc.h"
+#include "Person.h"
+#include "NPC.h"
+
 using namespace std;
+
+void testNPC() {
+    cout << "Testing NPC Class.. " << endl;
+
+    NPC* testNPC = new NPC(12345, "Test NPC");
+    cout << testNPC->getShortdesc() << " with id: " << testNPC->getId() << endl;
+    
+    testNPC->setArmor(100);
+    cout << "Armor: " << testNPC->getArmor() << endl;
+
+    testNPC->setExp(2500);
+    cout << "Exp: " << testNPC->getExp() << endl;
+
+    testNPC->setGold(500);
+    cout << "Gold: " << testNPC->getGold() << endl;
+
+    testNPC->setLevel(15);
+    cout << "Level: " << testNPC->getLevel() << endl;
+
+    testNPC->setThac0(10);
+    cout << "Thac0: " << testNPC->getThac0() << endl;
+
+    testNPC->setDamage("1d8+16");
+    cout << "Damage: " << testNPC->getDamage() << endl;
+
+    testNPC->setHit("19d19+190");
+    cout << "Hit: " << testNPC->getHit() << endl;
+
+    vector<string> testDescription;
+    testDescription.push_back("This is a test NPC class. ");
+    testDescription.push_back("Testing description getter/setter. ");
+    testNPC->setDescription(testDescription);
+    cout << "Description: " << testNPC->getDescription();
+
+    vector<string> testKeywords;
+    testKeywords.push_back("This is a test NPC Class. ");
+    testKeywords.push_back("Testing keyword getter/setter. ");
+    cout << "Keywords: " << testKeywords.at(0) << endl;
+    cout << testKeywords.at(1) << endl;
+
+    vector<string> testLongdesc;
+    testLongdesc.push_back("This is a test NPC class. ");
+    testLongdesc.push_back("Testing longdesc getter/setter. ");
+    testNPC->setLongdesc(testLongdesc);
+    cout << "Description: " << testNPC->getLongdesc() << endl;
+}
 
 int main() {
     // vector<Room> rooms;
