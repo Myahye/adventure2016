@@ -54,10 +54,8 @@ namespace Spells{
 		return this->connection;
 	}
 
-OffenseSpell::OffenseSpell(networking::connection_, int duration_,
-									int mana_, int minLevel_, std::string& name_)
-									: connection{connection_}, duration{duration_},
-									mana{mana_}, minLevel{minLevel_}, name{name_} {};
+OffenseSpell::OffenseSpell(networking::connection, int duration,int mana, int minLevel, std::string& name)
+: connection{connection}, duration{duration}, Mana{mana}, Minlevel{minLevel}, Name{name} {};
 	std::string OffenseSpell::getName() const {
 		return this->Name;
 	}

@@ -82,6 +82,8 @@ namespace Spells{
 		std::vector<string>  Immchar;
 		std::vector<string>  Wearoff;
 
+		networking::Connection connection;
+
 	public:
 		//Constructor
 		DefenseSpell()
