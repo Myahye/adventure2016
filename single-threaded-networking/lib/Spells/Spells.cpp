@@ -54,7 +54,66 @@ namespace Spells{
 		return this->connection;
 	}
 
+OffenseSpell::OffenseSpell(networking::connection_, int duration_,
+									int mana_, int minLevel_, std::string& name_)
+									: connection{connection_}, duration{duration_},
+									mana{mana_}, minLevel{minLevel_}, name{name_} {};
+	std::string OffenseSpell::getName() const {
+		return this->Name;
+	}
+	std::vector<string> OffenseSpell::getEffect() const {
+		return this->Effect;
+	}
+	void OffenseSpell::setEffect(std::vector<string> effect) {
+		this->Effect = effect;
+	}
+	std::vector<string> OffenseSpell::getDammsg() const {
+		return this->dammsg;
+	}
+	void OffenseSpell::setDammsg(std::vector<string> dammsg){
+		this->Dammsg = dammsg;
+	}
 
+	std::vector<string> OffenseSpell::getHitChar() const {
+		return this->Hitchar;
+	}
+
+	void OffenseSpell::setHitChar(std::vector<string> hitChar) {
+		this->Hitchar = hitChar;
+	}
+
+	std::vector<string> OffenseSpell::getHitRoom() const {
+		return this->HitRoom;
+
+	}
+	void OffenseSpell::setHitRoom(std::vector<string> hitRoom) {
+		this->HitRoom = hitRoom
+	}
+
+	std::vector<string> OffenseSpell::getHitVict() const {
+		return this->Hitvict;
+	}
+	void OffenseSpell::setHitVict(std::vector<string> hitVict){
+		this->Hitvict = hitVict;
+	}
+
+	std::vector<string> OffenseSpell::getImmchar() const {
+		return	this->Immchar;	
+	}
+
+	void OffenseSpell::setImmchar(std::vector<string> immchar) {
+		this->Immchar = wearOff;
+
+	std::vector<string> OffenseSpell::getWearoff() const {
+		return	this->Wearoff;	
+	}
+
+	void OffenseSpell::setWearoff(std::vector<string> wearOff) {
+		this->Wearoff = wearOff;
+	}
+	networking::Connection getConnection() const {
+		return this->connection;
+	}
 
 
 }
