@@ -18,35 +18,35 @@ std::pair<int,Npc> YamlParseBuild::parseNpcs(const YAML::Node& node){
 	if(node["armor"]){
 		npcClass.setArmor(node["armor"].as<int>());
 	}
-	if(node["exp"]){
+	else if(node["exp"]){
 		npcClass.setExp(node["exp"].as<int>());
 	}
-	if(node["gold"]){
+	else if(node["gold"]){
 		npcClass.setGold(node["gold"].as<int>());
 	}
-	if(node["level"]){
+	else if(node["level"]){
 		npcClass.setLevel(node["level"].as<int>());
 	}
-	if(node["thac0"]){
+	else if(node["thac0"]){
 		npcClass.setThac0(node["thac0"].as<int>());
 	}
-	if(node["damage"]){
+	else if(node["damage"]){
 		std::string damage = node["damage"].as<std::string>();
 		npcClass.setDamage(damage);
 	}
-	if(node["hit"]){
+	else if(node["hit"]){
 		std::string hit = node["hit"].as<std::string>();
 		npcClass.setHit(hit);
 	}
-	if(node["description"]){
+	else if(node["description"]){
 		std::vector<std::string> descV = setStringVectorHelper(node["description"]);
 		npcClass.setDesc(descV); 
 	}
-	if(node["keywords"]){
+	else if(node["keywords"]){
 		std::vector<std::string> keywordsV = setStringVectorHelper(node["keywords"]);
 		npcClass.setKeywords(keywordsV);
 	}
-	if(node["longdesc"]){
+	else if(node["longdesc"]){
 		std::vector<std::string> longdescV = setStringVectorHelper(node["longdesc"]);
 		npcClass.setLongDesc(longdescV);
 	}
@@ -196,7 +196,6 @@ std::vector<std::unique_ptr<Reset>> YamlParseBuild::parseBuildResets(const std::
 }
 
 
-*/
 
 std::unique_ptr<Reset> YamlParseBuild::parseResets(const YAML::Node& node){
 		std::unique_ptr<Reset> reset;
@@ -260,7 +259,52 @@ void YamlParseBuild::buildResets(std::vector< std::unique_ptr< Reset > >&  reset
 					[this](const YAML::Node& node) { return this->parseResets(node); });
 	//return buildAllObjects;
 }
+*/
 
+
+/*std::pair<int,Room> YamlParseBuild::parseRooms(const YAML::Node& node){
+	Room roomObject;
+
+	if(node["desc"]){
+		std::vector<std::string> descV = setStringVectorHelper(node["desc"]);
+		roomObject.setDesc(descV);
+	}
+	else if(node["doors"]){
+		std::vector<Door> doorsV;
+		buildDoors(node["doors"], doorsV);
+		roomObject.addVectorDoors(doorsV);
+	}
+}
+
+
+Door YamlParseBuild::parseDoors(const YAML::Node& node){
+	Door doorObject;
+
+	if(node["desc"]){
+		std::vector<std::string> descV = setStringVectorHelper(node["desc"]);
+		doorObject.setDesc(descV);
+	}
+	if(node["dir"]){
+		doorObject.setDir(node["dir"].as<std::string>());
+	}
+	if(node["keywords"]){
+		std::vector<std::string> keywordsV = setStringVectorHelper(node["keywords"]);
+		doorObject.setDesc(keywordsV);
+	}
+	if(node["to"]){
+		doorObject.setDoorId(node["to"].as<int>());
+	}
+	return doorObject;
+}
+
+void YamlParseBuild::buildDoors(const YAML::Node&  door_node, std::vector<Door>& doorsV){
+	//std::unordered_map<int,Object> buildAllObjects;
+	
+	std::transform(door_node.begin(),door_node.end(), std::inserter( doorsV, doorsV.end() ), 
+					[this](const YAML::Node& node) { return this->parseDoors(node); });
+	//return buildAllObjects;
+}
+*/
 //helper classes for yamlParse
 std::vector<std::string> YamlParseBuild::setStringVectorHelper( const YAML::Node& vectorNode){
 	std::vector<std::string> stringsV;

@@ -183,9 +183,14 @@ Model::lookCommand(const int& playerId, const std::string& command){
   //will move this to room class later as if isDirection return door.getDesc()
   auto doorsInRoom = this->rooms[currentRoomId].getDoors();
 
-  for(auto currentDoor : doorsInRoom) {
+  for(auto& currentDoor : doorsInRoom) {
     if(message == currentDoor.getDir()) {
-      response += "\n\n" + currentDoor.getDesc() += "\n";
+
+      response += "\n\n";
+      for (auto& each_desc : currentDoor.getDesc()){
+        response += each_desc;
+      }
+      response += "\n";
 
       return response;
     }

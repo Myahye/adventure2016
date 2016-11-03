@@ -13,7 +13,8 @@ public:
     Door(const std::string& dir, const std::vector<std::string>& description, int destinationId);
     Door(const std::string& new_dir, const std::vector<std::string>& new_desc, const std::vector<std::string>& new_keywords, int new_door_id, int new_destinationId);
 
-    std::string getDesc() const;
+    //std::string getDesc() const;
+    std::vector<std::string> getDesc() const;
     std::string getDir() const;
     std::vector<std::string> getKeywords() const;
     int getDoorId() const;

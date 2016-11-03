@@ -16,7 +16,8 @@ class Room {
 
 private:
     std::vector<std::string> mDesc;
-    std::vector<std::string> mExtendedDesc;
+    std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > > mExtendedDesc;
+    //std::vector<std::string> mExtendedDesc;
     std::string mName;
     unsigned int mRoomId;
     std::vector<Door> doors;
@@ -32,11 +33,11 @@ public:
     //Temp constructor for testing and first iteration
     Room(int& id, std::vector<std::string>& description, std::vector<Door> &new_doors);
     // Parameterized constructor
-    Room(std::vector<std::string>& new_desc, std::vector<std::string>& new_extended_desc, std::string& new_name, int& new_room_id, std::vector<Door>& new_doors);
+    Room(std::vector<std::string>& new_desc, std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > >& new_extended_desc, std::string& new_name, int& new_room_id, std::vector<Door>& new_doors);
 
     // Accessors
     std::string getDesc() const;
-    std::vector<std::string> getExtendedDesc() const;
+    std::vector< std::pair<std::vector<std::string>, std::vector<std::string> > > getExtendedDesc() const;
     std::string getName() const;
     int getRoomId() const;
     std::vector<Door> getDoors() const;
@@ -45,14 +46,15 @@ public:
 
     // Mutators
     void setDescription(std::vector<std::string>& new_desc);
-    void setExtendedDesc(std::vector<std::string>& new_extended_desc);
+    void setExtendedDesc(const std::vector< std::pair<std::vector<std::string>, std::vector<std::string> > >& new_extended_desc);
     void setName(std::string& new_name);
     void setRoomId(const int new_room_id);
     bool addDoor(const Door& new_door);
+    void addVectorDoors(std::vector<std::string>& new_vector_doors);
 
     //New function added in to test
     void printClass(int n) const;
-
+    void printVector(const std::vector<std::string>& vec) const;
     //--------------------------------------Lawrence Yu
     Npc* addNpc(const Npc& npc, unsigned int limit);
     void addObject(const Object& object, unsigned int limit);
