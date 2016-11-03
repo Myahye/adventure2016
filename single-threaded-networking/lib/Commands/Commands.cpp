@@ -8,36 +8,29 @@ namespace Commands {
 	: connection{connection_}, message{message_} {}
 
 	std::string LookCommand::execute(Context& context) {
-		std::cout << "D" << std::endl;
 		auto players = context.getPlayers();
 		auto rooms = context.getRooms();
 		auto playerLocations = context.getPlayerLocations();
-		// auto npcs = context.getNpcs();
-		// 		(*rooms)[3012].addNpc((*npcs)[3062],15);
-
 		int playerId = connection.playerIDConnectedToClientConnection;
 
-		std::cout << "E" << std::endl;
+		std::string lookMessage = message.substr(4);
+		std::transform(lookMessage.begin(), lookMessage.end(), lookMessage.begin(), ::tolower);
+	    boost::trim_if(lookMessage, boost::is_any_of("\t "));
 
 		std::string response = (*players)[playerId].getUsername() + "> " + message;
-		std::string lookMessage = message.substr(5);
-		std::cout << "FEEs" << std::endl;
-		std::transform(lookMessage.begin(), lookMessage.end(), lookMessage.begin(), ::tolower);
-
-		std::cout << "FEE" << std::endl;
 
 		int currentRoomId = (*playerLocations)[playerId];
-		Room currentRoom = (*rooms)[currentRoomId];
+		Room* currentRoom = &(*rooms)[currentRoomId];
 
 		if(lookMessage == "") {
 			std::cout << "FF" << std::endl;
-			return response + "\n\n" + currentRoom.getFullRoomDesc();
+			return response + "\n\n" + currentRoom->getFullRoomDesc();
 		}
 
 		//-------------------------------------------------look "cardinal direction"
 
 		//will move this to room class later as if isDirection return door.getDesc()
-		auto doorsInRoom = currentRoom.getDoors();
+		auto doorsInRoom = currentRoom->getDoors();
 
 		for(auto currentDoor : doorsInRoom) {
 			if(lookMessage == currentDoor.getDir()) {
@@ -51,7 +44,7 @@ namespace Commands {
 
 		//-------------------------------------------------look "Npc keyword"
 
-		Npc* currentNpc = currentRoom.findNpc(lookMessage);
+		Npc* currentNpc = currentRoom->findNpc(lookMessage);
 			//will move this to room class later as if isNpc return npc.getfulldesc()
 		if(currentNpc != NULL) {
 			response += "\n\n" + currentNpc->getDesc();
@@ -62,16 +55,20 @@ namespace Commands {
 
 		//-------------------------------------------------look "Object keyword"
 
-		Object* currentObject = currentRoom.findObject(lookMessage);
+
+		Object* currentObject = currentRoom->findObject(lookMessage);
 		//will move this to room class later as if isobject return object.getfulldesc()
 		if(currentObject != NULL) {
 			response += "\n";
 			//move loop out later;
+					//need look through all currentobject get extra for keyword
 			for(auto descriptionText : currentObject->getExtra().first) {
 			  response += descriptionText + "\n";
 			}
 			return response;
 		}
+
+		//look extended description in room
 
 		std::cout << "G" << std::endl;
 
@@ -97,22 +94,26 @@ namespace Commands {
 
 		int playerId = connection.playerIDConnectedToClientConnection;
 
-		std::cout << "Player wants to go " << message << std::endl;
+		std::string goMessage = message.substr(2);
+		std::transform(goMessage.begin(), goMessage.end(), goMessage.begin(), ::tolower);
+	    boost::trim_if(goMessage, boost::is_any_of("\t "));
+
+		std::cout << "Player wants to go " << goMessage << std::endl;
 		int currentRoomId  = (*playerLocations)[playerId];
 		std::cout << "Current room Id: " << currentRoomId << std::endl;
-		Room currentRoom = (*rooms)[currentRoomId];
-		std::vector<Door> currentRoomDoors = currentRoom.getDoors();
+		Room* currentRoom = &(*rooms)[currentRoomId];
+		std::vector<Door> currentRoomDoors = currentRoom->getDoors();
 		std::cout << "number of doors in room: " << currentRoomDoors.size() << std::endl;
 
-		int destRoomId = currentRoom.getRoomInDir(message);
+		int destRoomId = currentRoom->getRoomInDir(goMessage);
 
 		if(destRoomId != -1) {
-			std::cout << "Destination room Id:: " << currentRoom.getRoomInDir(message) << std::endl;
+			std::cout << "Destination room Id:: " << currentRoom->getRoomInDir(goMessage) << std::endl;
 			//throw custom_errors::NoSuchDoorException();
 			(*playerLocations)[playerId] = destRoomId;
 			return (*players)[playerId].getUsername() + "> " + message + "\n\n" + (*rooms)[destRoomId].getFullRoomDesc();
 		} else {
-			return (*players)[playerId].getUsername() + "> " + "There is no door in the " + message + " direction." + "\n\n";
+			return (*players)[playerId].getUsername() + "> " + "There is no door in the " + goMessage + " direction." + "\n\n";
 		}
 	}
 
@@ -171,44 +172,39 @@ namespace Commands {
 
 
 
-	StealCommand::StealCommand(networking::Connection connection_, const std::string& message_)
+	TakeCommand::TakeCommand(networking::Connection connection_, const std::string& message_)
 	: connection{connection_}, message{message_} {}
 
-	std::string StealCommand::execute(Context& context) {
-		std::cout << "D" << std::endl;
+	std::string TakeCommand::execute(Context& context) {
 		auto players = context.getPlayers();
 		auto rooms = context.getRooms();
 		auto playerLocations = context.getPlayerLocations();
-
-		// auto npcs = context.getNpcs();
-		// 		(*rooms)[3012].addNpc((*npcs)[3062],15);
-
 		int playerId = connection.playerIDConnectedToClientConnection;
 
-		std::cout << "E" << std::endl;
+		std::string messageText = message.substr(5);
+		std::transform(messageText.begin(), messageText.end(), messageText.begin(), ::tolower);
+
+		std::vector <std::string> takeMessage;
+	    boost::trim_if(messageText, boost::is_any_of("\t "));
+	    boost::split(takeMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
 
 		std::string response = (*players)[playerId].getUsername() + "> " + message;
-		std::string stealMessage = message.substr(6);
-		std::cout << "FEEs" << std::endl;
-		std::transform(stealMessage.begin(), stealMessage.end(), stealMessage.begin(), ::tolower);
-
-		std::cout << "FEE" << std::endl;
 
 		int currentRoomId = (*playerLocations)[playerId];
 		Room* currentRoom = &(*rooms)[currentRoomId];
 
-		// if(stealMessage == "") {
+		// if(takeMessage == "") {
 		// 	std::cout << "FF" << std::endl;
-		// 	return response + "\n\n" + currentRoom.getFullRoomDesc();
+		// 	return response + "\n\n" + currentRoom->getFullRoomDesc();
 		// }
 
 		//-------------------------------------------------look "cardinal direction"
 
 		//will move this to room class later as if isDirection return door.getDesc()
-		// auto doorsInRoom = currentRoom.getDoors();
+		// auto doorsInRoom = currentRoom->getDoors();
 
 		// for(auto currentDoor : doorsInRoom) {
-		// 	if(stealMessage == currentDoor.getDir()) {
+		// 	if(takeMessage == currentDoor.getDir()) {
 		//   		response += "\n\n" + currentDoor.getDesc() += "\n";
 
 		//   		return response;
@@ -219,16 +215,16 @@ namespace Commands {
 		// std::cout << "F" << std::endl;
 
 		//-------------------------------------------------look "Npc keyword"
-		std::vector<std::string> ObjectTargetPair;
-		boost::split(ObjectTargetPair, stealMessage, boost::is_any_of(" "));
 
-		Npc* currentNpc = currentRoom->findNpc(ObjectTargetPair[1]);
-			//will move this to room class later as if isNpc return npc.getfulldesc()
+		//OK findNpc/findRoom will return a Npc* object which we can use to directly modify the selected npc/object in the room 
+		Npc* currentNpc = currentRoom->findNpc(takeMessage[1]);
+
 		if(currentNpc != NULL) {
-			response += "\n Steal: " + ObjectTargetPair[0] + " From: " + ObjectTargetPair[1] + "\n\n";
-			// if((*rooms)[currentRoomId].removeNpc(3060)) {
-				//getNpcsInRoom()[3060][0].getNpcInventory().erase(3120)) {
-			if(currentNpc->removeObjectFromInventory(ObjectTargetPair[0])) {
+			response += "\n Steal: " + takeMessage[0] + " From: " + takeMessage[1] + "\n\n";
+
+			//Npc will use a currentNpc->findObject(objectTargetPair[0]) method which returns the object ID	of the object in inventory 
+			//Will change removeObjectfromInventory() to take in the objectID (maybe pass in selected index "eg. steal apple '1'");
+			if(currentNpc->removeObjectFromInventory(takeMessage[0])) {
 				response += "Success!\n";
 			} else {
 				response += "Failure.\n";
@@ -240,29 +236,34 @@ namespace Commands {
 
 		//-------------------------------------------------look "Object keyword"
 
-		//Object* currentObject = currentRoom->findObject(ObjectTargetPair[0]);
-		//will move this to room class later as if isobject return object.getfulldesc()
+		//Object* currentObject = currentRoom->>findObject(ObjectTargetPair[0]);
 
-		if(currentRoom->removeObject(ObjectTargetPair[0])) {
-			response += "\n Take: " + ObjectTargetPair[0] + "\n\n";
+		//Room will use a currentRoom->>findObject(objectTargetPair[0]) method which returns the object ID of the object in inventory 
+		//Will change removeObject() to take in the objectID (maybe pass in selected index "eg. steal apple '1'");
+		if(currentRoom->removeObject(takeMessage[0])) {
+			response += "\n Take: " + takeMessage[0] + "\n\n";
 			return response;
 		}
 
-		if(currentRoom->removeNpc(ObjectTargetPair[0])) {
-			response += "\n Take: " + ObjectTargetPair[0] + "\n\n";
+		//room will use a currentRoom->>findNpc(objectTargetPair[0]) method which returns the object ID	of the object in inventory 
+		//Will change removeNPC() to take in the npcID (maybe pass in selected duplicate index "eg. steal apple '1'");
+		if(currentRoom->removeNpc(takeMessage[0])) {
+			response += "\n Take: " + takeMessage[0] + "\n\n";
 			return response;
 		}
 		
 		std::cout << "G" << std::endl;
 
-		return (*players)[playerId].getUsername() + "> " + "Cannot steal " + stealMessage + ", no match. \n\n";
+		return (*players)[playerId].getUsername() + "> " + "Cannot steal " + takeMessage[0] + ", no match. \n\n";
 	}
 
-	int StealCommand::getId() const {
+	int TakeCommand::getId() const {
 		return this->connection.playerIDConnectedToClientConnection;
 	}
 
-	networking::Connection StealCommand::getConnection() const {
+	networking::Connection TakeCommand::getConnection() const {
 		return this->connection;
 	}
 }
+
+//Add teleport command to help testing

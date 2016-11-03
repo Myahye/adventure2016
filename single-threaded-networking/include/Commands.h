@@ -57,12 +57,12 @@ namespace Commands {
 		networking::Connection getConnection() const;
 	};
 
-	class StealCommand : public Command {
+	class TakeCommand : public Command {
 	private:
 		networking::Connection connection;
 		std::string message;
 	public:
-		StealCommand(networking::Connection connection_, const std::string& message_);
+		TakeCommand(networking::Connection connection_, const std::string& message_);
 		
 		std::string execute(Context& context);
 

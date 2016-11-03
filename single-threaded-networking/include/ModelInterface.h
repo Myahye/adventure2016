@@ -9,8 +9,8 @@
 class ModelInterface {
 
 private:
-	std::vector<std::string> filepath = {"../data/shire.yml", "../data/Midgaard.yml"};
-	Model model{filepath};
+	std::vector<std::string> filepaths = {"../data/shire.yml", "../data/Midgaard.yml"};
+	Model model{filepaths};
 	std::deque<std::unique_ptr<Command>> basicCommandQueue;
 	std::deque<std::unique_ptr<Command>> combatCommandQueue;
 
@@ -25,4 +25,4 @@ public:
   std::deque<networking::Message> updateGame();
 };
 
-#endif /* serverhelper_h */
+#endif

@@ -6,60 +6,36 @@ using namespace networking;
 
 ModelInterface::ModelInterface() {}
 
-std::unordered_map<std::string, std::string> commands {{"Create","create "},{"Look","look "},{"Walk","walk "},{"Read","read "},{"Go","go "},{"Attack","attack "},{"Say","say "},{"ListCommands","ls "},{"Status","status "}, {"Steal","steal "}};
+//load config file to map commands["Create"] = getcreatecommandstringfromfile etc.
+std::unordered_map<std::string, std::string> commands {{"Create","create"},{"Look","look"},{"Walk","walk"},{"Read","read"},{"Go","go"},{"Attack","attack"},{"Say","say"},{"ListCommands","ls"},{"Status","status"}, {"Take","take"}};
 
 void
 ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::vector<Connection>& clients) {
 
-  std::deque<std::unique_ptr<Command>> commandQueue;
-//std::cout << "s " << std::endl;
   for (auto& message : clientMessages) {
-//std::cout << "v " << std::endl;
+
     std::string messageText = message.text;
 
     if (boost::istarts_with(messageText,commands["Create"])) {
-      // messageText = std::to_string(message.connection.playerIDConnectedToClientConnection) + "> " + handleCreateCommand(message) + "\n";
-      // outgoing.push_back(Message{message.connection, messageText});
-    }
-    else if (boost::istarts_with(messageText,commands["Look"])) {
+      //this->basicCommandQueue.push_back(std::make_unique<Commands::LookCommand>(message.connection,message.text));
+    } else if (boost::istarts_with(messageText,commands["Look"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::LookCommand>(message.connection,message.text));
-
-      // messageText = this->model.lookCommand(message.connection.playerIDConnectedToClientConnection, message.text);
-      // outgoing.push_back(Message{message.connection, messageText});
-    }
-    else if (boost::istarts_with(messageText,commands["Go"])) {
-      this->basicCommandQueue.push_back(std::make_unique<Commands::GoCommand>(message.connection,message.text.substr(3)));
-
-      // messageText = this->model.movePlayer(message.connection.playerIDConnectedToClientConnection, message.text.substr(3));
-      // outgoing.push_back(Message{message.connection, messageText});
-    }
-    else if (boost::istarts_with(messageText,commands["Read"])) {
-      // messageText = std::to_string(message.connection.playerIDConnectedToClientConnection) + "> " + handleCreateCommand(message) + "\n";
-      // outgoing.push_back(Message{message.connection, messageText});
-      this->model.reset();
-    }
-    else if (boost::istarts_with(messageText,commands["Attack"])) {
-      //this->combatCommandQueue.push_back(std::make_unique<Commands::LookCommand>(message.connection,message.text));
-    }
-    else if (boost::istarts_with(messageText,commands["Say"])) {
-      // std::for_each(clients.begin(), clients.end(), [&message,&outgoing,this] (Connection& c)
-      //   { if(c.currentState == ConnectionState::AUTHORIZED) { outgoing.push_back(Message{c,std::string(this->model.dummySayCommand(message.connection.playerIDConnectedToClientConnection,message.text))}); } });
-    }
-    else if (boost::istarts_with(messageText, commands["ListCommands"])) {
-      // messageText = std::to_string(message.connection.playerIDConnectedToClientConnection) + "> " + handleCreateCommand(message) + "\n";
-      // outgoing.push_back(Message{message.connection, messageText});
-    } 
-    else if (boost::istarts_with(messageText, commands["Steal"])) {
-      this->basicCommandQueue.push_back(std::make_unique<Commands::StealCommand>(message.connection,message.text));
-    }
-    else if (boost::istarts_with(messageText,commands["Status"])){
-      std::cout << "iowerjgio" << std::endl;
+    } else if (boost::istarts_with(messageText,commands["Go"])) {
+      this->basicCommandQueue.push_back(std::make_unique<Commands::GoCommand>(message.connection,message.text));
+    } else if (boost::istarts_with(messageText,commands["Read"])) {
+      //this->basicCommandQueue.push_back(std::make_unique<Commands::ReadCommand>(message.connection,message.text));
+    } else if (boost::istarts_with(messageText,commands["Attack"])) {
+      //this->combatCommandQueue.push_back(std::make_unique<Commands::AttackCommand>(message.connection,message.text));
+    } else if (boost::istarts_with(messageText,commands["Say"])) {
+      //this->basicCommandQueue.push_back(std::make_unique<Commands::SayCommand>(message.connection,message.text));
+    } else if (boost::istarts_with(messageText, commands["ListCommands"])) {
+      //this->basicCommandQueue.push_back(std::make_unique<Commands::AttackCommand>(message.connection,message.text));
+    } else if (boost::istarts_with(messageText, commands["Take"])) {
+      this->basicCommandQueue.push_back(std::make_unique<Commands::TakeCommand>(message.connection,message.text));
+    } else if (boost::istarts_with(messageText,commands["Status"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::StatusCommand>(message.connection,message.text));
     } else {
       this->basicCommandQueue.push_back(std::make_unique<Commands::InvalidCommand>(message.connection,message.text));
-      //Will output all other message types sent for now for testing purposes
-      // std::for_each(clients.begin(), clients.end(), [&message,&outgoing] (Connection& c)
-      //   { if(c.currentState == ConnectionState::AUTHORIZED) { outgoing.push_back(Message{c,std::string(std::to_string(message.connection.playerIDConnectedToClientConnection) + "> " + message.text + "\n")}); } });
     }
   }
 }
@@ -69,8 +45,6 @@ ModelInterface::updateGame(){
 
   std::deque<Message> outgoing;
   auto context = this->model.getContext();
-
-  //buildCommands();
 
   if(true/*tickIsUpForCombatTimer()*/){
     for(auto& combatCommand : combatCommandQueue) {
@@ -89,9 +63,10 @@ ModelInterface::updateGame(){
       outgoing.push_back(message);
     }
   }
-  //this->model.reset();
-//std::cout << "AAA " << std::endl;
-//std::cout << "BBB " << std::endl;
+
+  //move out later
+  this->model.reset();
+
   return outgoing;
 
 }

@@ -102,7 +102,7 @@ void Room::printClass(int n) const{
 
 //--------------------------------------Lawrence Yu
 Npc* Room::addNpc(Npc& npc, unsigned int limit) {
-  if(npcsInRoom[npc.getId()].size() == limit) {
+  if(npcsInRoom[npc.getId()].size() >= limit) {
     //std::cout << "WOW" << std::endl;
     return NULL;
   } else {
@@ -129,9 +129,9 @@ bool Room::removeNpc(const std::string& npcName) {
     for(auto& keyword : npcIdVectorPair.second[0].getKeywords()) {
       if(npcName.find(keyword) != std::string::npos) {
         npcId = npcIdVectorPair.first;
-        //change to begin()+ selected npc number later
+        //change to end() - selected npc number later
         //if(npcIdVectorPair.second.size() >= selectednpcnumber) {
-          npcsInRoom[npcId].erase(npcIdVectorPair.second.begin());
+          npcsInRoom[npcId].erase(npcIdVectorPair.second.end());
         //}
         if(npcsInRoom[npcId].empty()) {
           npcsInRoom.erase(npcId);
@@ -159,9 +159,9 @@ bool Room::removeObject(const std::string& objectName) {
     for(auto& keyword : objectIdVectorPair.second[0].getKeywords()) {
       if(objectName.find(keyword) != std::string::npos) {
         objectId = objectIdVectorPair.first;
-        //change to begin()+ selected npc number later
+        //change to end() - selected npc number later
         //if(objectIdVectorPair.second.size() >= selectednpcnumber) {
-          objectsInRoom[objectId].erase(objectIdVectorPair.second.begin());
+          objectsInRoom[objectId].erase(objectIdVectorPair.second.end());
         //}
         if(objectsInRoom[objectId].empty()) {
           objectsInRoom.erase(objectId);
