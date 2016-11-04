@@ -87,7 +87,7 @@ namespace Spells{
 	public:
 		//Constructor
 		OffenseSpell()
-		OffenseSpell(int duration_, int mana_, int minLevel, std::string& name_);
+		OffenseSpell(int new_duration, int new_mana, int new_minLevel, std::string& new_name);
 		
 		std::string getName()const;
 		//
@@ -146,28 +146,28 @@ namespace Spells{
 	public:
 		//Constructor
 		ObjectSpell()
-		ObjectSpell(int duration_, int mana_, int minLevel, std::string& name_);
+		ObjectSpell(int new_duration, int new_mana, int new_minLevel, std::string& new_name);
 		
 		std::string getName()const;
 		//
 		std::vector<string> getEffect()const;
-		void setEffect(std::vector<string> effect);
+		void setEffect(std::vector<string> new_effect);
 
 		//
 		std::vector<string> getDammsg()const;
-		void setDammsg(std::vector<string> dammsg);
+		void setDammsg(std::vector<string> new_dammsg);
 
 		//
 		std::vector<string> getHitChar()const;
-		void setHitChar(std::vector<string> hitChar);
+		void setHitChar(std::vector<string> new_hitChar);
 
 		//
 		std::vector<string> getHitRoom()const;
-		void setHitRoom(std::vector<string> hitRoom);
+		void setHitRoom(std::vector<string> new_hitRoom);
 
 		//
 		std::vector<string> getHitVict()const;
-		void setHitVict(std::vector<string> hitvict);
+		void setHitVict(std::vector<string> new_hitvict);
 
 		//
 		// std::vector<string> getImmchar()const;

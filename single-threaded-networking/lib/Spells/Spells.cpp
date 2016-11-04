@@ -54,8 +54,8 @@ namespace Spells{
 		return this->connection;
 	}
 
-	OffenseSpell::OffenseSpell(networking::connection, int duration,int mana, int minLevel, std::string& name)
-	: connection{connection}, duration{duration}, mana{mana}, minlevel{minLevel}, name{name} {};
+	OffenseSpell::OffenseSpell(networking::connection, int new_duration,int new_mana, int new_minLevel, std::string& new_name)
+	: connection{connection}, duration{new_duration}, mana{new_mana}, minlevel{new_minLevel}, name{new_name} {};
 	std::string OffenseSpell::getName() const {
 		return this->name;
 	}
@@ -115,8 +115,8 @@ namespace Spells{
 
 	
 
-	ObjectSpell::ObjectSpell(networking::connection, int duration,int mana, int minLevel, std::string& name)
-	: connection{connection}, duration{duration}, mana{mana}, minlevel{minLevel}, name{name} {};
+	ObjectSpell::ObjectSpell(networking::connection, int new_duration,int new_mana, int new_minLevel, std::string& new_name)
+	: connection{connection}, duration{new_duration}, mana{new_mana}, minlevel{new_minLevel}, name{new_name} {};
 	std::string ObjectSpell::getName() const {
 		return this->name;
 	}
