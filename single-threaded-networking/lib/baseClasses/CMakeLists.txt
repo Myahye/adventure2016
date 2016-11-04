@@ -1,11 +1,12 @@
 cmake_minimum_required(VERSION 3.2.2)
 
 add_library(BaseClass
-	Person.cpp
+	CharacterImp.cpp
+	Character.cpp
 	Room.cpp
 	Door.cpp
 	Player.cpp
-	NPC.cpp Object.cpp Context.cpp)
+	Object.cpp Context.cpp)
 	set_target_properties(networking
 	                      PROPERTIES
 	                      LINKER_LANGUAGE CXX
