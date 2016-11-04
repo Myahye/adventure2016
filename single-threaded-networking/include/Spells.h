@@ -68,19 +68,19 @@ namespace Spells{
 	class OffenseSpell : public Spell {
 	private:
 		int duration;
-		int Mana;
-		int Minlevel;
+		int mana;
+		int minlevel;
 
-		std::string Name;
+		std::string name;
 
-		std::vector<string>  Dammsg;
-		std::vector<string>  Missromm;
-		std::vector<string>  Effect; 
-		std::vector<string>  Hitchar;
-		std::vector<string>  Hitroom;
-		std::vector<string>  Hitvict;
-		std::vector<string>  Immchar;
-		std::vector<string>  Wearoff;
+		std::vector<string>  dammsg;
+		std::vector<string>  missromm;
+		std::vector<string>  effect; 
+		std::vector<string>  hitchar;
+		std::vector<string>  hitroom;
+		std::vector<string>  hitvict;
+		std::vector<string>  immchar;
+		std::vector<string>  wearoff;
 
 		networking::Connection connection;
 
@@ -92,31 +92,31 @@ namespace Spells{
 		std::string getName()const;
 		//
 		std::vector<string> getEffect()const;
-		void setEffect(std::vector<string> effect);
+		void setEffect(std::vector<string> new_effect);
 
 		//
 		std::vector<string> getDammsg()const;
-		void setDammsg(std::vector<string> dammsg);
+		void setDammsg(std::vector<string> new_dammsg);
 
 		//
 		std::vector<string> getHitChar()const;
-		void setHitChar(std::vector<string> hitChar);
+		void setHitChar(std::vector<string> new_hitChar);
 
 		//
 		std::vector<string> getHitRoom()const;
-		void setHitRoom(std::vector<string> hitRoom);
+		void setHitRoom(std::vector<string> new_hitRoom);
 
 		//
 		std::vector<string> getHitVict()const;
-		void setHitVict(std::vector<string> hitvict);
+		void setHitVict(std::vector<string> new_hitvict);
 
 		//
 		std::vector<string> getImmchar()const;
-		void setImmchar(std::vector<string> immchar);
+		void setImmchar(std::vector<string> new_immchar);
 
 		//
 		std::vector<string> getWearoff()const;
-		void setWearoff(std::vector<string> wearoff);
+		void setWearoff(std::vector<string> new_wearoff);
 
 		DefenseSpell(networking::Connection_,);
 		std::string execute(Context& context);
@@ -127,17 +127,17 @@ namespace Spells{
 	class ObjectSpell : public Spell {
 	private:
 		int duration;
-		int Mana;
-		int Minlevel;
+		int mana;
+		int minlevel;
 
-		std::string Name;
+		std::string name;
 
-		std::vector<string>  Dammsg;
-		std::vector<string>  Missromm;
-		std::vector<string>  Effect; 
-		std::vector<string>  Hitchar;
-		std::vector<string>  Hitroom;
-		std::vector<string>  Hitvict;
+		std::vector<string>  dammsg;
+		std::vector<string>  missromm;
+		std::vector<string>  effect; 
+		std::vector<string>  hitchar;
+		std::vector<string>  hitroom;
+		std::vector<string>  hitvict;
 		// std::vector<string>  Immchar;
 		// std::vector<string>  Wearoff;
 
