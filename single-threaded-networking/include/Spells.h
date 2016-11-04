@@ -86,8 +86,8 @@ namespace Spells{
 
 	public:
 		//Constructor
-		DefenseSpell()
-		DefenseSpell(int duration_, int mana_, int minLevel, std::string& name_);
+		OffenseSpell()
+		OffenseSpell(int duration_, int mana_, int minLevel, std::string& name_);
 		
 		std::string getName()const;
 		//
@@ -117,6 +117,65 @@ namespace Spells{
 		//
 		std::vector<string> getWearoff()const;
 		void setWearoff(std::vector<string> wearoff);
+
+		DefenseSpell(networking::Connection_,);
+		std::string execute(Context& context);
+		networking::Connection getConnection() const;
+
+	};
+
+	class ObjectSpell : public Spell {
+	private:
+		int duration;
+		int Mana;
+		int Minlevel;
+
+		std::string Name;
+
+		std::vector<string>  Dammsg;
+		std::vector<string>  Missromm;
+		std::vector<string>  Effect; 
+		std::vector<string>  Hitchar;
+		std::vector<string>  Hitroom;
+		std::vector<string>  Hitvict;
+		// std::vector<string>  Immchar;
+		// std::vector<string>  Wearoff;
+
+		networking::Connection connection;
+
+	public:
+		//Constructor
+		ObjectSpell()
+		ObjectSpell(int duration_, int mana_, int minLevel, std::string& name_);
+		
+		std::string getName()const;
+		//
+		std::vector<string> getEffect()const;
+		void setEffect(std::vector<string> effect);
+
+		//
+		std::vector<string> getDammsg()const;
+		void setDammsg(std::vector<string> dammsg);
+
+		//
+		std::vector<string> getHitChar()const;
+		void setHitChar(std::vector<string> hitChar);
+
+		//
+		std::vector<string> getHitRoom()const;
+		void setHitRoom(std::vector<string> hitRoom);
+
+		//
+		std::vector<string> getHitVict()const;
+		void setHitVict(std::vector<string> hitvict);
+
+		//
+		// std::vector<string> getImmchar()const;
+		// void setImmchar(std::vector<string> immchar);
+
+		//
+		// std::vector<string> getWearoff()const;
+		// void setWearoff(std::vector<string> wearoff);
 
 		DefenseSpell(networking::Connection_,);
 		std::string execute(Context& context);

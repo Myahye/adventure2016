@@ -54,8 +54,8 @@ namespace Spells{
 		return this->connection;
 	}
 
-OffenseSpell::OffenseSpell(networking::connection, int duration,int mana, int minLevel, std::string& name)
-: connection{connection}, duration{duration}, Mana{mana}, Minlevel{minLevel}, Name{name} {};
+	OffenseSpell::OffenseSpell(networking::connection, int duration,int mana, int minLevel, std::string& name)
+	: connection{connection}, duration{duration}, Mana{mana}, Minlevel{minLevel}, Name{name} {};
 	std::string OffenseSpell::getName() const {
 		return this->Name;
 	}
@@ -113,5 +113,63 @@ OffenseSpell::OffenseSpell(networking::connection, int duration,int mana, int mi
 		return this->connection;
 	}
 
+	ObjectSpell::ObjectSpell(networking::connection, int duration,int mana, int minLevel, std::string& name)
+	: connection{connection}, duration{duration}, Mana{mana}, Minlevel{minLevel}, Name{name} {};
+	std::string ObjectSpell::getName() const {
+		return this->Name;
+	}
+	std::vector<string> ObjectSpell::getEffect() const {
+		return this->Effect;
+	}
+	void ObjectSpell::setEffect(std::vector<string> effect) {
+		this->Effect = effect;
+	}
+	std::vector<string> ObjectSpell::getDammsg() const {
+		return this->dammsg;
+	}
+	void ObjectSpell::setDammsg(std::vector<string> dammsg){
+		this->Dammsg = dammsg;
+	}
+
+	std::vector<string> ObjectSpell::getHitChar() const {
+		return this->Hitchar;
+	}
+
+	void ObjectSpell::setHitChar(std::vector<string> hitChar) {
+		this->Hitchar = hitChar;
+	}
+
+	std::vector<string> ObjectSpell::getHitRoom() const {
+		return this->HitRoom;
+
+	}
+	void ObjectSpell::setHitRoom(std::vector<string> hitRoom) {
+		this->HitRoom = hitRoom
+	}
+
+	std::vector<string> ObjectSpell::getHitVict() const {
+		return this->Hitvict;
+	}
+	void ObjectSpell::setHitVict(std::vector<string> hitVict){
+		this->Hitvict = hitVict;
+	}
+
+	// std::vector<string> ObjectSpell::getImmchar() const {
+	// 	return	this->Immchar;	
+	// }
+
+	// void ObjectSpell::setImmchar(std::vector<string> immchar) {
+	// 	this->Immchar = immchar;
+
+	// std::vector<string> ObjectSpell::getWearoff() const {
+	// 	return	this->Wearoff;	
+	// }
+
+	// void ObjectSpell::setWearoff(std::vector<string> wearOff) {
+	// 	this->Wearoff = wearOff;
+	}
+	networking::Connection getConnection() const {
+		return this->connection;
+	}
 
 }
