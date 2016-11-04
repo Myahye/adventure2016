@@ -23,6 +23,11 @@ std::string Room::getDesc() const {
   for_each(mDesc.begin(), mDesc.end(), [&response](const std::string& descriptionText){response += descriptionText + "\n";} ); 
   return response;
 }
+
+std::vector <std::string> Room::getDescV() const {
+  return this->mDesc;
+}
+
 std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > > Room::getExtendedDesc() const {
     return this->mExtendedDesc;
 }
@@ -75,7 +80,7 @@ bool Room::addDoor(const Door& new_door) {
   }
 }
 
-void Room::addVectorDoors(std::vector<std::string>& new_vector_doors){
+void Room::addVectorDoors(std::vector<Door>& new_vector_doors){
   for (auto& door : new_vector_doors){
     addDoor(door);
   }
@@ -100,7 +105,7 @@ void Room::printClass(int n) const{
     std::cout << "\tDoor dir: "<< i.getDir() << "\n";
     std::cout << "\tDoor Door_id: " << i.getDoorId() << std::endl;
     std::cout << "\tDoor destinationId: " << i.getDestinationId() << std::endl;  
-    printVector(i.getDesc());
+    printVector(i.getDescV());
     printVector(i.getKeywords());
   }
   //std::cout << "\tthac0: " << thac0 << std::endl;

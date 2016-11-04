@@ -55,6 +55,7 @@ void Model::yamlParseAndBuild(const std::string& pathToFile){
   yamlparse.loadFile(pathToFile);
   yamlparse.buildNpcs(this->npcs);
   yamlparse.buildObjects(this->objects);
+  yamlparse.buildRooms(this->rooms);
   //yamlparse.buildResets(this->resets);
 
 
@@ -66,16 +67,17 @@ void Model::yamlParseAndBuild(const std::string& pathToFile){
 }
 
 void Model::printAll(){
-  std::cout << "Printing NPC map contents \n";
+  /*std::cout << "Printing NPC map contents \n";
   int count = 1;
-  for ( auto it = npcs.begin(); it != npcs.end(); ++it ){
+  for ( auto& it : npcs ){
     (it->second).printClass(count);
     count++;
   }
   count =1;
   std::cout << "=============================" << std::endl;
   std::cout << "Printing OBJECT map contents" << std::endl;
-  objects[3031].printClass(count);
+  objects[3031].printClass(count);*/
+
   // for ( auto it = objects.begin(); it != objects.end(); ++it ){
   //   (it->second).printClass(count);
   //   std::cout << std::endl;
@@ -96,6 +98,12 @@ void Model::printAll(){
   //     std::cout << std::endl;
   //     count++;
   // }
+  int count = 1;
+  for (auto& it : rooms){
+    it.second.printClass(count);
+    count++;
+  }
+  std::cout << rooms.size() << " rooms printed" << std::endl;
 }
 
 int

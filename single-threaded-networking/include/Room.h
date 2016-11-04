@@ -37,6 +37,7 @@ public:
 
     // Accessors
     std::string getDesc() const;
+    std::vector<std::string> getDescV() const;
     std::vector< std::pair<std::vector<std::string>, std::vector<std::string> > > getExtendedDesc() const;
     std::string getName() const;
     int getRoomId() const;
@@ -50,7 +51,7 @@ public:
     void setName(std::string& new_name);
     void setRoomId(const int new_room_id);
     bool addDoor(const Door& new_door);
-    void addVectorDoors(std::vector<std::string>& new_vector_doors);
+    void addVectorDoors(std::vector<Door>& new_vector_doors);
 
     //New function added in to test
     void printClass(int n) const;
