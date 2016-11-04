@@ -108,15 +108,15 @@ namespace Spells{
 
 		//
 		std::vector<string> getHitVict()const;
-		void setHitVict(std::vector<string> new_hitvict);
+		void setHitVict(std::vector<string> new_hitVict);
 
 		//
 		std::vector<string> getImmchar()const;
-		void setImmchar(std::vector<string> new_immchar);
+		void setImmchar(std::vector<string> new_immChar);
 
 		//
 		std::vector<string> getWearoff()const;
-		void setWearoff(std::vector<string> new_wearoff);
+		void setWearoff(std::vector<string> new_wearOff);
 
 		DefenseSpell(networking::Connection_,);
 		std::string execute(Context& context);
@@ -167,7 +167,7 @@ namespace Spells{
 
 		//
 		std::vector<string> getHitVict()const;
-		void setHitVict(std::vector<string> new_hitvict);
+		void setHitVict(std::vector<string> new_hitVict);
 
 		//
 		// std::vector<string> getImmchar()const;

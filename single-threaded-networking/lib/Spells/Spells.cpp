@@ -98,7 +98,7 @@ namespace Spells{
 	std::vector<string> OffenseSpell::getImmchar() const {
 		return	this->immchar;	
 	}
-	void OffenseSpell::setImmchar(std::vector<string> new_immchar) {
+	void OffenseSpell::setImmchar(std::vector<string> new_immChar) {
 		this->immchar = new_immchar;
 	}
 
