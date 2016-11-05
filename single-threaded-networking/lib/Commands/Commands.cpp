@@ -1,6 +1,6 @@
 #include "Commands.h"
 #include <boost/algorithm/string.hpp>
-
+#include <random>
 
 namespace Commands {
 
@@ -122,6 +122,53 @@ namespace Commands {
 	}
 
 	networking::Connection GoCommand::getConnection() const {
+		return this->connection;
+	}
+
+	/*Flee command*/
+	FleeCommand::FleeCommand(networking::Connection connection_, const std::string& message_) 
+	: connection{connection_}, message{message_} {}
+
+	std::string FleeCommand::execute(Context& context) {
+		auto players = context.getPlayers();
+		auto playerLocations = context.getPlayerLocations();
+		auto rooms = context.getRooms();
+
+		int playerId = connection.playerIDConnectedToClientConnection;
+
+		std::cout << "Player wants to Flee " << message << std::endl;
+		int currentRoomId  = (*playerLocations)[playerId];
+		std::cout << "Current room Id: " << currentRoomId << std::endl;
+		Room currentRoom = (*rooms)[currentRoomId];
+		std::vector<Door> currentRoomDoors = currentRoom.getDoors();
+		std::cout << "number of doors in room: " << currentRoomDoors.size() << std::endl;
+
+		
+		/*select a random door from the avaliable doors*/
+		std::random_device seed ;
+			// generator
+  		 std::mt19937 engine( seed( ) ) ;
+   			// number distribution
+  		 std::uniform_int_distribution<int> choose( 0 , currentRoomDoors.size( ) - 1 ) ;
+  		 Door destination = currentRoomDoors[choose (engine)];
+
+		int destRoomId = currentRoom.getRoomInDir(destination.getDir());
+
+		if(destRoomId != -1) {
+			std::cout << " Flee Destination room Id:: " << currentRoom.getRoomInDir(destination.getDir()) << std::endl;
+			//throw custom_errors::NoSuchDoorException();
+			(*playerLocations)[playerId] = destRoomId;
+			return (*players)[playerId].getUsername() + "> Flee to " + destination.getDir() + "\n\n" + (*rooms)[destRoomId].getFullRoomDesc();
+		} else {
+			return (*players)[playerId].getUsername() + "> " + "There is no door to flee in any direction." + "\n\n";
+		}
+	}
+
+	int FleeCommand::getId() const {
+		return this->connection.playerIDConnectedToClientConnection;
+	}
+
+	networking::Connection FleeCommand::getConnection() const {
 		return this->connection;
 	}
 

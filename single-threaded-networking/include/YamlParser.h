@@ -1,7 +1,7 @@
 #ifndef YamlParseandBuild_H
 #define YamlParseandBuild_H
 
-#include "NPC.h"
+#include "Npc.h"
 #include "Object.h"
 #include "Room.h"
 #include "Door.h"

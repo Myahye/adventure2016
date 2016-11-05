@@ -9,7 +9,7 @@
 #include "Room.h"
 #include "Door.h"
 #include "CustomError.h"
-#include "yamlParser.h"
+#include "YamlParser.h"
 #include "Resets.h"
 #include "Npc.h"
 #include "Context.h"
