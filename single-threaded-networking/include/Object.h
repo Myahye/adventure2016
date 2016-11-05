@@ -10,7 +10,7 @@
 #include <algorithm>
 class Object {
 private:
-	int id;
+	int id = 0;
 	int cost = 0;
 	int weight = 0;
 

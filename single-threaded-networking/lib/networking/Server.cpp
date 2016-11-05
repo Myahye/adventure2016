@@ -39,7 +39,7 @@ public:
   static constexpr unsigned BUFFER_SIZE = 256;
 
   void setConnectionState(const ConnectionState& state) {connection.currentState = state;}
-  void setPlayerID(int ID) {connection.playerIDConnectedToClientConnection = ID;}
+  void setPlayerId(int ID) {connection.playerId = ID;}
 
 private:
   void readLine();
@@ -154,10 +154,10 @@ Server::listenForConnections() {
 }
 
 void
-Server::setPlayerIDConnectedToClient(const Connection& connection, int ID) {
+Server::setPlayerId(const Connection& connection, int ID) {
   auto found = channels.find(connection);
   if (channels.end() != found) {
-    found->second->setPlayerID(ID);
+    found->second->setPlayerId(ID);
   }
 }
 

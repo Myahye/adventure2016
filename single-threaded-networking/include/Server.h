@@ -26,13 +26,22 @@ enum class ConnectionState {
   AUTHORIZED
 };
 
+enum class UpdateTurn {
+    Combat,
+    Game
+};
+
+struct UpdateState {
+  UpdateTurn turn;
+};
+
 /**
  *  An identifier for a Client connected to a Server. The ID of a Connection is
  *  guaranteed to be unique across all actively connected Client instances.
  */
 struct Connection {
   uintptr_t id;
-   int playerIDConnectedToClientConnection;
+   int playerId;
    ConnectionState currentState;
 
   bool
@@ -124,7 +133,7 @@ public:
 
 
 
-  void setPlayerIDConnectedToClient(const Connection& client, int ID);
+  void setPlayerId(const Connection& client, int ID);
 
   void setClientCurrentState(const Connection& client, const ConnectionState& state);
 

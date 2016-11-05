@@ -1,35 +1,32 @@
-#ifndef modelinterface_h
-#define modelinterface_h
+#ifndef MODELINTERFACE_h
+#define MODELINTERFACE_h
 
 #include "Server.h"
 #include "Model.h"
-#include <chrono>
+#include "Commands.h"
 
 
 class ModelInterface {
 
 private:
-	Model model{"../data/shire.yml"};
-	std::chrono::time_point<std::chrono::system_clock> combatPrevious, nonCombatPrevious, combatCurrent, nonCombatCurrent;
-	std::chrono::duration<double> combatElapsed, nonCombatElapsed, combatLag, nonCombatLag, MS_PER_COMBAT_UPDATE, MS_PER_NONCOMBAT_UPDATE;
+	std::vector<std::string> filepaths = {"../data/shire.yml", "../data/Midgaard.yml"};
+	Model model{filepaths};
+	std::deque<std::unique_ptr<Command>> basicCommandQueue;
+	std::deque<std::unique_ptr<Command>> combatCommandQueue;
 
-	//place holders till commands are in place.
-	std::deque<networking::Message> mclientMessages;
-	std::vector<networking::Connection> mclients;
 public:
   ModelInterface();
 
-	void buildCommands(const std::deque<networking::Message>& clientMessages, std::vector<networking::Connection>& clients);
-
-  std::deque<networking::Message> parseCommands(const std::deque<networking::Message>& clientMessages,  std::vector<networking::Connection>& clients);
-	std::deque<networking::Message> updateGame(const std::deque<networking::Message>& clientMessages,  std::vector<networking::Connection>& clients);
-	std::deque<networking::Message> dequeConcatenate(const std::deque<networking::Message> left, const std::deque<networking::Message> right);
-	bool tickIsUpForCombatTimer();
-	bool tickIsUpForNonCombatTimer();
+  void  buildCommands(const std::deque<networking::Message>& clientMessages,  std::vector<networking::Connection>& clients);
+  void createSayCommandForGroup(std::deque<std::unique_ptr<Command>>& basicCommandQueue, std::vector<networking::Connection> clients, std::string messageText, int playerId);
 
   int createPlayer(const std::string& username, const std::string& password);
   std::vector<std::tuple<int,std::string,std::string>> getPlayerCredentialsVector() const;
   std::string getCurrentRoomDescription(const int& playerId);
+  std::deque<networking::Message> updateGame();
+	std::deque<networking::Message> updateCombat();
+  void playerDisconnected(networking::Connection c);
+  void playerConnect(networking::Connection c);
 };
 
-#endif /* modelinterface_h */
+#endif

@@ -7,12 +7,14 @@
 
 class Player {
 private:
-    int armor;
-    int exp;
-    int gold;
-    int level;
+    int armor = 0;
+    int exp = 0;
+    int gold = 0;
+    int level = 0;
     int thac0;
-    int pid;
+    int pid = 0;
+    int health=100;
+    int mana=100;
 
     std::string damage;
     std::string hit;
@@ -33,6 +35,12 @@ public:
     std::string getUsername() const;
     void setUsername(std::string& username);
 
+    int getHealth() const;
+    void setHealth(int const health);
+
+    int getMana() const;
+    void setMana(int const mana);
+         
     //password
     std::string getPassword() const;
     void setPassword(std::string& password);

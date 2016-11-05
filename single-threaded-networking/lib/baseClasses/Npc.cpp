@@ -112,31 +112,67 @@ void Npc::setThac0(int const thac0) {
 //--------------------------------------Lawrence Yu
 void Npc::addObjectToInventory(const Object& object, unsigned int limit) {
   if(npcInventory[object.getId()].size() == limit) {
-    return;
+  	//std::cout << "object id: " << object.getId()<< "size: " << npcInventory[object.getId()].size() << std::endl;
   } else {
     npcInventory[object.getId()].push_back(object);
           //std::cout << "Object id: " << object.getId() << " Npc id: " << id << " Inventory size: " << npcInventory.size() <<std::endl;
   }
 }
-void Npc::removeObjectFromInventory(int objectId) {
-  // //remove if id == object and pickedupflag==yes
-  // npcInventory.erase(
-  //   std::remove_if(npcInventory.begin(), npcInventory.end(),
-  //       [objectId](Object& object) { return (object.getId() == objectId); }),
-  //   npcInventory.end());
+
+bool Npc::removeObjectFromInventory(const std::string& objectName) {
+  int objectId = 0;
+
+  for(auto& objectIdVectorPair : npcInventory) {
+    for(auto& keyword : objectIdVectorPair.second[0].getKeywords()) {
+      if(objectName.find(keyword) != std::string::npos) {
+        objectId = objectIdVectorPair.first;
+        //change to begin()+ selected npc number later
+        //if(objectIdVectorPair.second.size() >= selectednpcnumber) {
+          npcInventory[objectId].erase(objectIdVectorPair.second.begin());
+        //}
+          std::cout << "objeect id: " << objectId << "size: " << npcInventory[objectId].size() << std::endl;
+        if(npcInventory[objectId].empty()) {
+          npcInventory.erase(objectId);
+        }
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
-void Npc::equipObject(const Object& object, int slot) {
+bool Npc::equipObject(const Object& object, int slot) {
+  if(npcInventory.find(object.getId()) == npcInventory.end()) {
+  	return false;
+  }
+
   if(npcEquipment.find(slot) != npcEquipment.end()) {
-    return;
+    npcInventory[npcEquipment[slot].getId()].push_back(npcEquipment[slot]);
+    npcEquipment[slot] = object;
+    npcInventory[object.getId()].pop_back();
+    //std::cout << "objz: " << object.getId() << std::endl;
+    return true;
   } else {
     npcEquipment[slot] = object;
+	//std::cout << "IW" << std::endl;
+
+    npcInventory[object.getId()].pop_back();
+    if(npcInventory[object.getId()].empty()) {
+    	npcInventory.erase(object.getId());
+    }
+
+    //std::cout << "IWOEFJ|" << std::endl;
+    return true;
           // std::cout << this << "Object id: " << npcEquipment[slot].getId() << " Npc id: " << id << " Equipment Desc: " << npcEquipment[slot].getShortDesc() << " Equipment size: " << npcEquipment.size() <<std::endl;
   }
 }
-void Npc::unEquipObject(int objectId) {
+bool Npc::unEquipObject(int slot) {
   //remove if id == object and pickedupflag==yes
-  npcEquipment.erase(objectId);
+  if(npcEquipment.find(slot) != npcEquipment.end()) {
+  	npcEquipment.erase(slot);
+  	return true;
+  }
+  return false;
 }
 
 std::unordered_map<int,std::vector<Object>> Npc::getNpcInventory() const {
@@ -149,11 +185,13 @@ std::unordered_map<int,Object> Npc::getNpcEquipment() const {
 
 std::string Npc::getNpcEquipmentDesc() const {
   std::string response = "";
-  for_each(npcEquipment.begin(), npcEquipment.end(), [&response](const auto& currentEquip){response += currentEquip.second.getShortDesc() + ", ";});	
+  for_each(npcEquipment.begin(), npcEquipment.end(), [&response](const auto& currentEquip){response += currentEquip.second.getShortDesc() + ", ";});
+    std::cout << "npe equip: " << npcEquipment.size() << std::endl;	
   return response;
 }
 std::string Npc::getNpcInventoryDesc() const {
 	std::string response = "";
+	  std::cout << "npe inv: " << npcInventory.size() << std::endl;
 	std::for_each(npcInventory.begin(), npcInventory.end(), [&response](const auto& currentItem){response += currentItem.second[0].getShortDesc() + " (Quantity: " + std::to_string(currentItem.second.size()) + "), ";});	
   return response;
 }
