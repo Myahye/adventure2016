@@ -101,6 +101,36 @@ namespace Commands {
 
 		networking::Connection getConnection() const;
 	};
+
+	class ListCommand : public Command {
+	private:
+		networking::Connection connection;
+		std::unordered_map<std::string, std::string> commands;
+	public:
+		ListCommand(networking::Connection connection_, const std::unordered_map<std::string, std::string>& commands_);
+		
+		std::string execute(Context& context);
+
+		int getId() const;
+
+		networking::Connection getConnection() const;
+	};
+
+	class SayCommand : public Command {
+	private:
+		networking::Connection connection;
+		std::string message;
+		int playerId;
+	public:
+		SayCommand(networking::Connection connection_, const std::string& message_, int playerId_);
+		
+		std::string execute(Context& context);
+
+		int getId() const;
+
+		networking::Connection getConnection() const;
+	};
+
 }
 
 #endif

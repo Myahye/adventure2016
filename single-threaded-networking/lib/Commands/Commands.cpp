@@ -339,12 +339,51 @@ namespace Commands {
 		return this->connection;
 	}
 	
-	
 	//Need to move out but don't know where
 	bool TakeCommand::is_number(const std::string& s)
 	{
 		return !s.empty() && std::find_if(s.begin(), 
 			s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
+	}
+
+
+	ListCommand::ListCommand(networking::Connection connection_, const std::unordered_map<std::string, std::string>& commands_) 
+	: connection{connection_}, commands{commands_} {}
+
+	std::string ListCommand::execute(Context& context) {
+		auto players = context.getPlayers();
+		int playerId = connection.playerId;
+		std::string allCommands = "";
+
+		for( const auto& i : commands){
+    		allCommands += i.second + "\n";
+  		}
+
+		return (*players)[playerId].getUsername()+ "> " + "All possible Commands:\n" + allCommands + "\n";
+	}
+
+	int ListCommand::getId() const {
+		return this->connection.playerId;
+	}
+
+	networking::Connection ListCommand::getConnection() const {
+		return this->connection;
+	}
+
+	SayCommand::SayCommand(networking::Connection connection_, const std::string& message_, int playerId_) 
+	: connection{connection_}, message{message_}, playerId{playerId_} {}
+
+	std::string SayCommand::execute(Context& context) {
+		auto players = context.getPlayers();
+		return (*players)[this->playerId].getUsername()+ "> " + message.substr(4) + "\n";
+	}
+
+	int SayCommand::getId() const {
+		return this->connection.playerId;
+	}
+
+	networking::Connection SayCommand::getConnection() const {
+		return this->connection;
 	}
 }
 
