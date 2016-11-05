@@ -62,13 +62,13 @@ namespace Spells{
 	std::vector<string> OffenseSpell::getEffect() const {
 		return this->effect;
 	}
-	void OffenseSpell::setEffect(std::vector<string> new_effect) {
+	void OffenseSpell::setEffect(std::vector<string>& new_effect) {
 		this->effect = new_effect;
 	}
 	std::vector<string> OffenseSpell::getDammsg() const {
 		return this->dammsg;
 	}
-	void OffenseSpell::setDammsg(std::vector<string> new_dammsg){
+	void OffenseSpell::setDammsg(std::vector<string>& new_dammsg){
 		this->dammsg = dammsg;
 	}
 
@@ -76,7 +76,7 @@ namespace Spells{
 		return this->hitchar;
 	}
 
-	void OffenseSpell::setHitChar(std::vector<string> new_hitChar) {
+	void OffenseSpell::setHitChar(std::vector<string>& new_hitChar) {
 		this->hitchar = new_hitChar;
 	}
 
@@ -84,21 +84,21 @@ namespace Spells{
 		return this->hitroom;
 
 	}
-	void OffenseSpell::setHitRoom(std::vector<string> new_hitRoom) {
+	void OffenseSpell::setHitRoom(std::vector<string>& new_hitRoom) {
 		this->hitroom = new_hitRoom
 	}
 
 	std::vector<string> OffenseSpell::getHitVict() const {
 		return this->hitvict;
 	}
-	void OffenseSpell::setHitVict(std::vector<string> new_hitVict){
+	void OffenseSpell::setHitVict(std::vector<string>& new_hitVict){
 		this->hitvict = new_hitVict;
 	}
 
 	std::vector<string> OffenseSpell::getImmchar() const {
 		return	this->immchar;	
 	}
-	void OffenseSpell::setImmchar(std::vector<string> new_immChar) {
+	void OffenseSpell::setImmchar(std::vector<string>& new_immChar) {
 		this->immchar = new_immchar;
 	}
 
@@ -106,7 +106,7 @@ namespace Spells{
 		return	this->wearoff;	
 	}
 
-	void OffenseSpell::setWearoff(std::vector<string> new_wearOff) {
+	void OffenseSpell::setWearoff(std::vector<string>& new_wearOff) {
 		this->wearoff = new_wearOff;
 	}
 	networking::Connection getConnection() const {
@@ -123,13 +123,13 @@ namespace Spells{
 	std::vector<string> ObjectSpell::getEffect() const {
 		return this->effect;
 	}
-	void ObjectSpell::setEffect(std::vector<string> new_effect) {
+	void ObjectSpell::setEffect(std::vector<string>& new_effect) {
 		this->effect = new_effect;
 	}
 	std::vector<string> ObjectSpell::getDammsg() const {
 		return this->dammsg;
 	}
-	void ObjectSpell::setDammsg(std::vector<string> new_dammsg){
+	void ObjectSpell::setDammsg(std::vector<string>& new_dammsg){
 		this->dammsg = new_dammsg;
 	}
 
@@ -137,7 +137,7 @@ namespace Spells{
 		return this->hitchar;
 	}
 
-	void ObjectSpell::setHitChar(std::vector<string> new_hitChar) {
+	void ObjectSpell::setHitChar(std::vector<string>& new_hitChar) {
 		this->hitchar = new_hitChar;
 	}
 
@@ -145,14 +145,14 @@ namespace Spells{
 		return this->hitroom;
 
 	}
-	void ObjectSpell::setHitRoom(std::vector<string> new_hitRoom) {
+	void ObjectSpell::setHitRoom(std::vector<string>& new_hitRoom) {
 		this->hitroom = new_hitRoom
 	}
 
 	std::vector<string> ObjectSpell::getHitVict() const {
 		return this->hitvict;
 	}
-	void ObjectSpell::setHitVict(std::vector<string> new_hitVict){
+	void ObjectSpell::setHitVict(std::vector<string>& new_hitVict){
 		this->hitvict = new_hitVict;
 	}
 
