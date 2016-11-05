@@ -41,7 +41,7 @@ std::unordered_map<Connection,std::deque<Message>, ConnectionHash> clientMessage
 //Made a global variable so onDisconnect can access it, any other solutions?
 ModelInterface modelInterface{};
 
-std::chrono::time_point<std::chrono::system_clock> lastGameUpate, lastCombatUpate;
+std::chrono::time_point<std::chrono::system_clock> lastGameUpdate, lastCombatUpdate;
 UpdateState updateState;
 std::chrono::milliseconds immediate = std::chrono::milliseconds(0);
 std::chrono::milliseconds combatUpdate = std::chrono::milliseconds(500);
@@ -120,18 +120,18 @@ processMessages(std::deque<Message>& messages, Server& server) {
 std::chrono::milliseconds
 timeTillNextUpdate(){
 
-  std::chrono::milliseconds nextGameUpdate = std::chrono::milliseconds((gameUpdate-std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastGameUpate)).count());
-  std::chrono::milliseconds nextCombatUpdate = std::chrono::milliseconds((combatUpdate-std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastCombatUpate)).count());
+  std::chrono::milliseconds nextGameUpdate = std::chrono::milliseconds((gameUpdate-std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastGameUpdate)).count());
+  std::chrono::milliseconds nextCombatUpdate = std::chrono::milliseconds((combatUpdate-std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastCombatUpdate)).count());
 
-  std::time_t lastGameUpate_c = std::chrono::system_clock::to_time_t(lastGameUpate);
+  std::time_t lastGameUpdate_c = std::chrono::system_clock::to_time_t(lastGameUpdate);
   std::cout << "lastUpate: "
-            <<  std::put_time(std::localtime(&lastGameUpate_c), "%F %T")
+            <<  std::put_time(std::localtime(&lastGameUpdate_c), "%F %T")
             << std::endl;
 
-  std::cout << "nextGameUpdate in: " <<  gameUpdate.count() << " - " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastGameUpate).count()<< std::endl;
+  std::cout << "nextGameUpdate in: " <<  gameUpdate.count() << " - " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastGameUpdate).count()<< std::endl;
   std::cout << "nextGameUpdate in: " <<  nextGameUpdate.count() << std::endl;
 
-std::cout << "nexCombatUpdate in: " <<  combatUpdate.count() << " - " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastCombatUpate).count()<< std::endl;
+std::cout << "nexCombatUpdate in: " <<  combatUpdate.count() << " - " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastCombatUpdate).count()<< std::endl;
 std::cout << "nexCombatUpdate in: " <<  nextCombatUpdate.count() << std::endl;
 
   //Game update turn
@@ -140,7 +140,7 @@ std::cout << "nexCombatUpdate in: " <<  nextCombatUpdate.count() << std::endl;
     if(updateState.turn==UpdateTurn::Game){
       std::cout << "updateState.turn==UpdateTurn::Game"<< std::endl;
     }
-    lastGameUpate=std::chrono::system_clock::now();
+    lastGameUpdate=std::chrono::system_clock::now();
     if(nextGameUpdate.count()<0){
       std::cout << "nextGameUpdate.count()<0"<< std::endl;
       return immediate;
@@ -156,7 +156,7 @@ std::cout << "nexCombatUpdate in: " <<  nextCombatUpdate.count() << std::endl;
     if(updateState.turn==UpdateTurn::Combat){
       std::cout << "updateState.turn==UpdateTurn::Combat"<< std::endl;
     }
-    lastCombatUpate=std::chrono::system_clock::now();
+    lastCombatUpdate=std::chrono::system_clock::now();
 
     if(nextCombatUpdate.count()<0){
       std::cout << "nextCombatUpdate.count()<0"<< std::endl;
@@ -179,8 +179,8 @@ main(int argc, char* argv[]) {
   }
 
   //std::chrono::time_point<std::chrono::system_clock> start, end;
-  lastGameUpate=std::chrono::system_clock::now();
-  lastCombatUpate=std::chrono::system_clock::now();
+  lastGameUpdate=std::chrono::system_clock::now();
+  lastCombatUpdate=std::chrono::system_clock::now();
   bool done = false;
   unsigned short port = std::stoi(argv[1]);
   Server server{port, onConnect, onDisconnect};
