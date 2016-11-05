@@ -11,7 +11,7 @@ namespace Commands {
 		auto players = context.getPlayers();
 		auto rooms = context.getRooms();
 		auto playerLocations = context.getPlayerLocations();
-		int playerId = connection.playerIDConnectedToClientConnection;
+		int playerId = connection.playerId;
 
 		std::string lookMessage = message.substr(4);
 		std::transform(lookMessage.begin(), lookMessage.end(), lookMessage.begin(), ::tolower);
@@ -76,7 +76,7 @@ namespace Commands {
 	}
 
 	int LookCommand::getId() const {
-		return this->connection.playerIDConnectedToClientConnection;
+		return this->connection.playerId;
 	}
 
 	networking::Connection LookCommand::getConnection() const {
@@ -92,7 +92,7 @@ namespace Commands {
 		auto playerLocations = context.getPlayerLocations();
 		auto rooms = context.getRooms();
 
-		int playerId = connection.playerIDConnectedToClientConnection;
+		int playerId = connection.playerId;
 
 		std::string goMessage = message.substr(2);
 		std::transform(goMessage.begin(), goMessage.end(), goMessage.begin(), ::tolower);
@@ -105,20 +105,27 @@ namespace Commands {
 		std::vector<Door> currentRoomDoors = currentRoom->getDoors();
 		std::cout << "number of doors in room: " << currentRoomDoors.size() << std::endl;
 
+		Player currentPlayer = (*players)[playerId];
+	
 		int destRoomId = currentRoom->getRoomInDir(goMessage);
+		Room* destRoom = &(*rooms)[destRoomId];
 
 		if(destRoomId != -1) {
 			std::cout << "Destination room Id:: " << currentRoom->getRoomInDir(goMessage) << std::endl;
 			//throw custom_errors::NoSuchDoorException();
 			(*playerLocations)[playerId] = destRoomId;
-			return (*players)[playerId].getUsername() + "> " + message + "\n\n" + (*rooms)[destRoomId].getFullRoomDesc();
+			
+			currentRoom->removePlayer(playerId);
+			destRoom->addPlayer(playerId, currentPlayer.getUsername());
+			
+			return currentPlayer.getUsername() + "> " + message + "\n\n" + destRoom->getFullRoomDesc();
 		} else {
-			return (*players)[playerId].getUsername() + "> " + "There is no door in the " + goMessage + " direction." + "\n\n";
+			return currentPlayer.getUsername() + "> " + "There is no door in the " + goMessage + " direction." + "\n\n";
 		}
 	}
 
 	int GoCommand::getId() const {
-		return this->connection.playerIDConnectedToClientConnection;
+		return this->connection.playerId;
 	}
 
 	networking::Connection GoCommand::getConnection() const {
@@ -132,7 +139,7 @@ namespace Commands {
 
 	std::string StatusCommand::execute(Context& context) {
 		auto players = context.getPlayers();
-		int playerId = connection.playerIDConnectedToClientConnection;
+		int playerId = connection.playerId;
 		std::cout<<"status cout"<<std::endl;
 
 		return (*players)[playerId].getUsername()+ "> " + 
@@ -143,7 +150,7 @@ namespace Commands {
 	}
 
 	int StatusCommand::getId() const {
-		return this->connection.playerIDConnectedToClientConnection;
+		return this->connection.playerId;
 	}
 
 	networking::Connection StatusCommand::getConnection() const {
@@ -156,14 +163,14 @@ namespace Commands {
 
 	std::string InvalidCommand::execute(Context& context) {
 		auto players = context.getPlayers();
-		int playerId = connection.playerIDConnectedToClientConnection;
+		int playerId = connection.playerId;
 
 		return (*players)[playerId].getUsername()+ "> " + message + " " +
 				" is an invalid command.\n\n";
 	}
 
 	int InvalidCommand::getId() const {
-		return this->connection.playerIDConnectedToClientConnection;
+		return this->connection.playerId;
 	}
 
 	networking::Connection InvalidCommand::getConnection() const {
@@ -179,9 +186,9 @@ namespace Commands {
 		auto players = context.getPlayers();
 		auto rooms = context.getRooms();
 		auto playerLocations = context.getPlayerLocations();
-		int playerId = connection.playerIDConnectedToClientConnection;
+		int playerId = connection.playerId;
 
-		std::string messageText = message.substr(5);
+		std::string messageText = message.substr(4);
 		std::transform(messageText.begin(), messageText.end(), messageText.begin(), ::tolower);
 
 		std::vector <std::string> takeMessage;
@@ -212,17 +219,16 @@ namespace Commands {
 		// }
 
 
-		// std::cout << "F" << std::endl;
+		 std::cout << "EHTH" << std::endl;
 
 		//-------------------------------------------------look "Npc keyword"
 
 		//OK findNpc/findRoom will return a Npc* object which we can use to directly modify the selected npc/object in the room 
 		Npc* currentNpc = currentRoom->findNpc(takeMessage[1]);
-
 		if(currentNpc != NULL) {
 			response += "\n Steal: " + takeMessage[0] + " From: " + takeMessage[1] + "\n\n";
 
-			//Npc will use a currentNpc->findObject(objectTargetPair[0]) method which returns the object ID	of the object in inventory 
+			//Npc will use a currentNpc->findObjectId(objectTargetPair[0]) method which returns the object ID	of the object in inventory 
 			//Will change removeObjectfromInventory() to take in the objectID (maybe pass in selected index "eg. steal apple '1'");
 			if(currentNpc->removeObjectFromInventory(takeMessage[0])) {
 				response += "Success!\n";
@@ -233,24 +239,45 @@ namespace Commands {
 
 			return response;
 		}
-
+		std::cout << "POIP" << std::endl;
 		//-------------------------------------------------look "Object keyword"
 
-		//Object* currentObject = currentRoom->>findObject(ObjectTargetPair[0]);
-
-		//Room will use a currentRoom->>findObject(objectTargetPair[0]) method which returns the object ID of the object in inventory 
+		//Room will use a currentRoom->findObjectId(objectTargetPair[0]) method which returns the object ID of the object in inventory 
 		//Will change removeObject() to take in the objectID (maybe pass in selected index "eg. steal apple '1'");
-		if(currentRoom->removeObject(takeMessage[0])) {
-			response += "\n Take: " + takeMessage[0] + "\n\n";
-			return response;
+		//if(std::isdigit(takeMessage.end()) )
+		
+		Object* currentObject = currentRoom->findObject(takeMessage[0]);
+		if(currentObject != NULL){
+			if(currentRoom->removeObject(currentObject->getId())) {
+				response += "\n Take: " + takeMessage[0] + "\n\n";
+				return response;
+			}
 		}
+		
+		std::cout << "EEEE" << std::endl;
 
-		//room will use a currentRoom->>findNpc(objectTargetPair[0]) method which returns the object ID	of the object in inventory 
+		//room will use a currentRoom->findNpcId(objectTargetPair[0]) method which returns the object ID	of the object in inventory 
 		//Will change removeNPC() to take in the npcID (maybe pass in selected duplicate index "eg. steal apple '1'");
-		if(currentRoom->removeNpc(takeMessage[0])) {
-			response += "\n Take: " + takeMessage[0] + "\n\n";
-			return response;
+		//if(is_number(takeMessage.end()) {}
+		
+		currentNpc = currentRoom->findNpc(takeMessage[0]);
+		if(currentNpc != NULL) {
+			if(currentRoom->removeNpc(currentNpc->getId())) {
+				response += "\n Take: " + takeMessage[0] + "\n\n";
+				return response;
+			}	
 		}
+		
+		//-----take player
+		
+		int currentPlayerId = currentRoom->findPlayerId(takeMessage[0]);
+		if(currentPlayerId != 0) {
+			if(currentRoom->removePlayer(currentPlayerId)) {
+				response += "\n Take: " + takeMessage[0] + "\n\n";
+				return response;
+			}	
+		}
+		std::cout << "size " << currentRoom->playersInRoom.size() << std::endl;
 		
 		std::cout << "G" << std::endl;
 
@@ -258,11 +285,19 @@ namespace Commands {
 	}
 
 	int TakeCommand::getId() const {
-		return this->connection.playerIDConnectedToClientConnection;
+		return this->connection.playerId;
 	}
 
 	networking::Connection TakeCommand::getConnection() const {
 		return this->connection;
+	}
+	
+	
+	//Need to move out but don't know where
+	bool TakeCommand::is_number(const std::string& s)
+	{
+		return !s.empty() && std::find_if(s.begin(), 
+			s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
 	}
 }
 

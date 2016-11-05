@@ -32,6 +32,8 @@ using namespace networking;
 
 std::vector<Connection> clients;
 std::unordered_map<Connection,std::deque<Message>, ConnectionHash> clientMessageQueues;
+//Made a global variable so onDisconnect can access it, any other solutions?
+ModelInterface modelInterface{};
 
 void
 onConnect(Connection c) {
@@ -46,6 +48,7 @@ onDisconnect(Connection c) {
   auto eraseBegin = std::remove(std::begin(clients), std::end(clients), c);
   clients.erase(eraseBegin, std::end(clients));
   clientMessageQueues.erase(c);
+  modelInterface.playerDisconnected(c);
 }
 
 std::deque<Message>
@@ -107,8 +110,6 @@ main(int argc, char* argv[]) {
   bool done = false;
   unsigned short port = std::stoi(argv[1]);
   Server server{port, onConnect, onDisconnect};
-
-  ModelInterface modelInterface{};
 
   start = std::chrono::system_clock::now();
   while (!done) {

@@ -90,14 +90,14 @@ namespace Resets {
 	//Execute
 	void ResetGive::execute(Context& context) {
 		  		currentlySelectedNpc = NULL;
-		if(id == 3000) {
-			printClass(1);
-		}
+		// if(id == 3000) {
+		// 	printClass(1);
+		// }
 		if(context.getCurrentlySelectedNpc() != NULL) {
 			currentlySelectedNpc = context.getCurrentlySelectedNpc();
-			if(id == 3000) {
-				std::cout << currentlySelectedNpc->getId() << std::endl;
-			}
+			// if(id == 3000) {
+			// 	std::cout << currentlySelectedNpc->getId() << std::endl;
+			// }
 			auto objects = context.getObjects();
 
 	  		auto it = objects->find(this->id);

@@ -9,6 +9,7 @@
 #include "Door.h"
 #include "Npc.h"
 #include "Object.h"
+#include "Player.h"
 //#include "CustomError.h"
 
 
@@ -24,12 +25,15 @@ private:
     //--------------------------------------Lawrence Yu
     std::unordered_map<int,std::vector<Npc>> npcsInRoom;
     std::unordered_map<int,std::vector<Object>> objectsInRoom;
-
+    //std::unordered_map<int,Player*> playersInRoom;
+    
+    //Maybe change to not use pointers
     Npc* checkNpcKeywords(const std::string& message, const std::pair<int,std::vector<Npc>>& npcIdVectorPair);
     Object* checkObjectKeywords(const std::string& message, const std::pair<int,std::vector<Object>>& objectIdVectorPair);
+    //Player* checkPlayerUsername(const std::string& message, const std::pair<int,Player*>& player);
 
 public:
-
+std::unordered_map<int, std::string> playersInRoom;
     // Default constructor
     Room();
     //Temp constructor for testing and first iteration
@@ -58,13 +62,17 @@ public:
 
     //--------------------------------------Lawrence Yu
     Npc* addNpc(Npc& npc, unsigned int limit);
-    bool removeNpc(const std::string& npcName);
+    bool removeNpc(const int npcId);
 
     void addObject(const Object& object, unsigned int limit);
-    bool removeObject(const std::string& objectName);
+    bool removeObject(const int objectId);
+    
+    void addPlayer(const int playerId, const std::string& username);
+    bool removePlayer(const int playerId);
 
-    Npc* findNpc(const std::string& message);
-    Object* findObject(const std::string& message);
+    Npc* findNpc(const std::string& name);
+    Object* findObject(const std::string& name);
+    int findPlayerId(const std::string& name);
 
     std::unordered_map<int,std::vector<Npc>> getNpcsInRoom() const;
     std::unordered_map<int,std::vector<Object>> getObjectsInRoom() const;

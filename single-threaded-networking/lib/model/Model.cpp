@@ -56,7 +56,7 @@ void Model::yamlParseAndBuild(const std::string& pathToFile){
   yamlparse.buildResets(this->resets);
   std::cout << "wwww " << std::endl;
   yamlparse.parseBuildRooms(this->rooms);
-      printAll();
+      // printAll();
   //this->resets = yamlparse.parseBuildResets(pathToFile);
   //not yet implemented
   // this->allPlayers = yamlParse.parseBuildPlayers(pathToFile);
@@ -244,54 +244,11 @@ Context Model::getContext() const {
 }
 
 
-std::string
-Model::stealCommand(const int& playerId, const std::string& command){
-  // std::string response = this->players[playerId].getUsername() + "> " + command;
-  // std::string message = command.substr(6);
-  // std::transform(message.begin(), message.end(), message.begin(), ::tolower);
-
-  // int currentRoomId = this->playerLocation[playerId];
-  // Room currentRoom = this->rooms[currentRoomId];
-
-
-  // //will move this to room class later as if isDirection return door.getDesc()
-
-  // Npc* currentNpc = currentRoom.findNpc(message);
-
-  // if(currentNpc != NULL) {
-
-  //   //change for look toddler 1 look toddler 2 look toddler 3 later since it only checks the description of the first duplicate npc?
-  //   response += "\n\n" + currentNpc->getDesc();
-  //   response += "\n     Wearing: "  + currentNpc->getNpcEquipmentDesc();
-  //   response += "\n     Carrying: " + currentNpc->getNpcInventoryDesc() + "\n\n";
-
-  //   return response;
-  // }
-
-  // //-------------------------------------------------look "Object keyword"
-
-  // //will move this to room class later as if isobject return object.getfulldesc()
-
-  // Object* currentObject = currentRoom.findObject(message);
-
-  // if(currentObject != NULL) {
-
-  //   response += "\n";
-  //   //change for look object 1 look object 2 look object 3 later since it only checks the description of the first duplicate object?
-  //   for(auto descriptionText : objectIdVectorPair.second[0].getExtra().first) {
-  //     response += descriptionText + "\n";
-  //   }
-  //   return response;
-  // }
-
-  // return this->players[playerId].getUsername() + "> " + "Cannot find " + message + ", no match. \n\n";
+void Model::playerDisconnected(const int playerId) {
+  this->rooms[playerLocation[playerId]].removePlayer(playerId);
 }
 
-/*delete command to check if delete works on npc from npcs and npcs from room {
-  
-
-//////////////////IMPORTANT CHECK IF GAME WORKS EVEN AFTER DELETING OBJECTS/ NPCS//////////////////
-
+void Model::playerConnect(const int playerId) {
+  std::cout << "s " << playerLocation[playerId] << std::endl;
+  this->rooms[playerLocation[playerId]].addPlayer(playerId, players[playerId].getUsername());
 }
-
-*/

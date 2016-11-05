@@ -23,6 +23,8 @@ public:
   std::vector<std::tuple<int,std::string,std::string>> getPlayerCredentialsVector() const;
   std::string getCurrentRoomDescription(const int& playerId);
   std::deque<networking::Message> updateGame();
+  void playerDisconnected(networking::Connection c);
+  void playerConnect(networking::Connection c);
 };
 
 #endif

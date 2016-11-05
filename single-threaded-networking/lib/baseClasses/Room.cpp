@@ -121,24 +121,16 @@ Npc* Room::addNpc(Npc& npc, unsigned int limit) {
     return &npcsInRoom[npc.getId()].back();
   }
 }
-bool Room::removeNpc(const std::string& npcName) {
-  //remove if id == npc and hp == 0
-  int npcId = 0;
-
-  for(auto& npcIdVectorPair : npcsInRoom) {
-    for(auto& keyword : npcIdVectorPair.second[0].getKeywords()) {
-      if(npcName.find(keyword) != std::string::npos) {
-        npcId = npcIdVectorPair.first;
-        //change to end() - selected npc number later
-        //if(npcIdVectorPair.second.size() >= selectednpcnumber) {
-          npcsInRoom[npcId].erase(npcIdVectorPair.second.end());
-        //}
-        if(npcsInRoom[npcId].empty()) {
-          npcsInRoom.erase(npcId);
-        }
-        return true;
-      }
+bool Room::removeNpc(const int npcId) {
+  if(!npcsInRoom[npcId].empty()) {
+    //change to end() - selected npc number later
+    //if(npcIdVectorPair.second.size() >= selectednpcnumber) {
+    npcsInRoom[npcId].erase(npcsInRoom[npcId].end()/*-num*/);
+    //}
+    if(npcsInRoom[npcId].empty()) {
+      npcsInRoom.erase(npcId);
     }
+    return true;
   }
   return false;
 }
@@ -151,34 +143,40 @@ void Room::addObject(const Object& object, unsigned int limit) {
        //   std::cout << "Room id: " << mRoomId << "Npc id: " << npc.getId() << std::endl;
   }
 }
-bool Room::removeObject(const std::string& objectName) {
-
-  int objectId = 0;
-
-  for(auto& objectIdVectorPair : objectsInRoom) {
-    for(auto& keyword : objectIdVectorPair.second[0].getKeywords()) {
-      if(objectName.find(keyword) != std::string::npos) {
-        objectId = objectIdVectorPair.first;
-        //change to end() - selected npc number later
-        //if(objectIdVectorPair.second.size() >= selectednpcnumber) {
-          objectsInRoom[objectId].erase(objectIdVectorPair.second.end());
-        //}
-        if(objectsInRoom[objectId].empty()) {
-          objectsInRoom.erase(objectId);
-        }
-        return true;
-      }
+bool Room::removeObject(const int objectId) {
+  if(!objectsInRoom[objectId].empty()) {
+    //change to end() - selected npc number later
+    //if(npcIdVectorPair.second.size() >= selectednpcnumber) {
+    objectsInRoom[objectId].erase(objectsInRoom[objectId].end()/*-num*/);
+    //}
+    if(objectsInRoom[objectId].empty()) {
+      objectsInRoom.erase(objectId);
     }
+    return true;
   }
   return false;
 }
 
-Npc* Room::findNpc(const std::string& message) {
+void Room::addPlayer(const int playerId, const std::string& username) {
+  playersInRoom[playerId] = username;
+      //   std::cout << "Room id: " << mRoomId << "Npc id: " << npc.getId() << std::endl;
+}
+bool Room::removePlayer(const int playerId) {
+
+  auto it = playersInRoom.erase(playerId);
+  
+  if(it == 0) {
+    return false;
+  }
+  return true;
+}
+
+Npc* Room::findNpc(const std::string& name) {
   Npc* currentlySelectedNpc = NULL;
 
   auto it = std::find_if(npcsInRoom.begin(),npcsInRoom.end(), 
-    [&currentlySelectedNpc,&message,this] (const std::pair<int,std::vector<Npc>>& npcIdVectorPair) { 
-     currentlySelectedNpc = checkNpcKeywords(message, npcIdVectorPair); 
+    [&currentlySelectedNpc,&name,this] (const std::pair<int,std::vector<Npc>>& npcIdVectorPair) { 
+     currentlySelectedNpc = checkNpcKeywords(name, npcIdVectorPair); 
      return currentlySelectedNpc != NULL;
     });
   if(it != npcsInRoom.end()) {
@@ -186,16 +184,27 @@ Npc* Room::findNpc(const std::string& message) {
   }
   return NULL;
 }
-Object* Room::findObject(const std::string& message) {
+Object* Room::findObject(const std::string& name) {
   Object* currentlySelectedObject = NULL;
 
   auto it = std::find_if(objectsInRoom.begin(),objectsInRoom.end(), 
-    [&currentlySelectedObject,&message,this] (const std::pair<int,std::vector<Object>>& objectIdVectorPair) { currentlySelectedObject = checkObjectKeywords(message, objectIdVectorPair); return currentlySelectedObject != NULL; });
+    [&currentlySelectedObject,&name,this] (const std::pair<int,std::vector<Object>>& objectIdVectorPair) { currentlySelectedObject = checkObjectKeywords(name, objectIdVectorPair); return currentlySelectedObject != NULL; });
 
   if(it != objectsInRoom.end()) {
     return currentlySelectedObject;
   }
   return NULL;
+}
+int Room::findPlayerId(const std::string& name) {
+  auto player = find_if(playersInRoom.begin(),playersInRoom.end(), 
+  [&name] (const auto& player) {
+    return player.second == name;
+  });
+  
+  if (player != playersInRoom.end()) {
+    return player->first;
+  }
+  return 0;
 }
 
 std::unordered_map<int,std::vector<Npc>> Room::getNpcsInRoom() const {
@@ -212,6 +221,7 @@ Npc* Room::checkNpcKeywords(const std::string& message, const std::pair<int,std:
   for(auto& currentNpc : npcIdVectorPair.second) {
     for(auto currentKeyword : currentNpc.getKeywords()) {
       if(message.find(currentKeyword) != std::string::npos) {
+        //need to change this later
         return &this->npcsInRoom[currentNpc.getId()][i];
       }
     }

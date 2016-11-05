@@ -9,7 +9,7 @@
 #include "Room.h"
 #include "Door.h"
 #include "CustomError.h"
-#include "yamlParser.h"
+#include "YamlParseAndBuild.h"
 #include "Resets.h"
 #include "Npc.h"
 #include "Context.h"
@@ -72,5 +72,8 @@ public:
 
   //-----------------------------Lawrence YU
   void reset();
+  
+  void playerDisconnected(const int playerId);
+  void playerConnect(const int playerId);
 };
 #endif /* commandparse_h */

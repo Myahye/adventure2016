@@ -69,6 +69,9 @@ namespace Commands {
 		int getId() const;
 
 		networking::Connection getConnection() const;
+		
+		//need to move out later
+		bool is_number(const std::string& s);
 	};
 
 	class InvalidCommand : public Command {

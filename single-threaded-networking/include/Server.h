@@ -32,7 +32,7 @@ enum class ConnectionState {
  */
 struct Connection {
   uintptr_t id;
-   int playerIDConnectedToClientConnection;
+   int playerId;
    ConnectionState currentState;
 
   bool
@@ -124,7 +124,7 @@ public:
 
 
 
-  void setPlayerIDConnectedToClient(const Connection& client, int ID);
+  void setPlayerId(const Connection& client, int ID);
 
   void setClientCurrentState(const Connection& client, const ConnectionState& state);
 

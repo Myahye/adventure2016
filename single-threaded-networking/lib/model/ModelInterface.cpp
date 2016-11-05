@@ -72,8 +72,8 @@ ModelInterface::updateGame(){
 }
 
 std::string
-ModelInterface::getCurrentRoomDescription(const int& playerID) {
-  return this->model.getCurrentRoomDescription(playerID);
+ModelInterface::getCurrentRoomDescription(const int& playerId) {
+  return this->model.getCurrentRoomDescription(playerId);
 }
 
 int
@@ -85,3 +85,13 @@ std::vector<std::tuple<int,std::string,std::string>>
 ModelInterface::getPlayerCredentialsVector() const {
   return(this->model.getPlayerCredentialsVector());
 }
+
+
+void ModelInterface::playerDisconnected(Connection c) {
+  this->model.playerDisconnected(c.playerId);
+}
+
+void ModelInterface::playerConnect(Connection c) {
+  this->model.playerConnect(c.playerId);
+}
+
