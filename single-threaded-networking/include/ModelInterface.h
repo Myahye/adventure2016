@@ -18,6 +18,7 @@ public:
   ModelInterface();
 
   void  buildCommands(const std::deque<networking::Message>& clientMessages,  std::vector<networking::Connection>& clients);
+  void createSayCommandForGroup(std::deque<std::unique_ptr<Command>>& basicCommandQueue, std::vector<networking::Connection> clients, std::string messageText, int playerId);
 
   int createPlayer(const std::string& username, const std::string& password);
   std::vector<std::tuple<int,std::string,std::string>> getPlayerCredentialsVector() const;

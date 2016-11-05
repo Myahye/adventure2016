@@ -311,6 +311,45 @@ namespace Commands {
 	networking::Connection TakeCommand::getConnection() const {
 		return this->connection;
 	}
+
+	ListCommand::ListCommand(networking::Connection connection_, const std::unordered_map<std::string, std::string>& commands_) 
+	: connection{connection_}, commands{commands_} {}
+
+	std::string ListCommand::execute(Context& context) {
+		auto players = context.getPlayers();
+		int playerId = connection.playerIDConnectedToClientConnection;
+		std::string allCommands = "";
+
+		for( const auto& i : commands){
+    		allCommands += i.second + "\n";
+  		}
+
+		return (*players)[playerId].getUsername()+ "> " + "All possible Commands:\n" + allCommands + "\n";
+	}
+
+	int ListCommand::getId() const {
+		return this->connection.playerIDConnectedToClientConnection;
+	}
+
+	networking::Connection ListCommand::getConnection() const {
+		return this->connection;
+	}
+
+	SayCommand::SayCommand(networking::Connection connection_, const std::string& message_, int playerId_) 
+	: connection{connection_}, message{message_}, playerId{playerId_} {}
+
+	std::string SayCommand::execute(Context& context) {
+		auto players = context.getPlayers();
+		return (*players)[this->playerId].getUsername()+ "> " + message.substr(4) + "\n";
+	}
+
+	int SayCommand::getId() const {
+		return this->connection.playerIDConnectedToClientConnection;
+	}
+
+	networking::Connection SayCommand::getConnection() const {
+		return this->connection;
+	}
 }
 
 //Add teleport command to help testing

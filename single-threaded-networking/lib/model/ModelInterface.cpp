@@ -7,7 +7,7 @@ using namespace networking;
 ModelInterface::ModelInterface() {}
 
 //load config file to map commands["Create"] = getcreatecommandstringfromfile etc.
-std::unordered_map<std::string, std::string> commands {{"Create","create"},{"Look","look"},{"Walk","walk"},{"Read","read"},{"Go","go"},{"Attack","attack"},{"Say","say"},{"ListCommands","ls"},{"Status","status"}, {"Take","take"}};
+std::unordered_map<std::string, std::string> commands {{"Create","create"},{"Look","look"},{"Walk","walk"},{"Read","read"},{"Go","go"},{"Attack","attack"},{"Say","say"},{"ListCommands","ls"},{"Status","status"}, {"Take","take"}, {"Flee","flee"}};
 
 void
 ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::vector<Connection>& clients) {
@@ -30,8 +30,9 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
       this->basicCommandQueue.push_back(std::make_unique<Commands::FleeCommand>(message.connection,message.text));
     }else if (boost::istarts_with(messageText,commands["Say"])) {
       //this->basicCommandQueue.push_back(std::make_unique<Commands::SayCommand>(message.connection,message.text));
+      createSayCommandForGroup(this->basicCommandQueue, clients, message.text, message.connection.playerIDConnectedToClientConnection);
     } else if (boost::istarts_with(messageText, commands["ListCommands"])) {
-      //this->basicCommandQueue.push_back(std::make_unique<Commands::AttackCommand>(message.connection,message.text));
+      this->basicCommandQueue.push_back(std::make_unique<Commands::ListCommand>(message.connection,commands));
     } else if (boost::istarts_with(messageText, commands["Take"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::TakeCommand>(message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Status"])) {
@@ -86,4 +87,13 @@ ModelInterface::createPlayer(const std::string& username, const std::string& pas
 std::vector<std::tuple<int,std::string,std::string>>
 ModelInterface::getPlayerCredentialsVector() const {
   return(this->model.getPlayerCredentialsVector());
+}
+
+void 
+ModelInterface::createSayCommandForGroup(std::deque<std::unique_ptr<Command>>& basicCommandQueue, std::vector<Connection> clients, std::string messageText, int playerId){
+  std::for_each(clients.begin(), clients.end(), [&messageText,&basicCommandQueue,&playerId,this] (Connection& c)
+        { if(c.currentState == ConnectionState::AUTHORIZED) { 
+            this->basicCommandQueue.push_back(std::make_unique<Commands::SayCommand>(c,messageText, playerId)); 
+          }
+        });
 }
