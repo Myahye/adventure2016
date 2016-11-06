@@ -44,35 +44,49 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
   }
 }
 
+
 std::deque<Message>
 ModelInterface::updateGame(){
 
   std::deque<Message> outgoing;
   auto context = this->model.getContext();
 
-  if(true/*tickIsUpForCombatTimer()*/){
+  for(auto& basicCommand : basicCommandQueue) {
+    std::string response = basicCommand->execute(context);
+    Message message{basicCommand->getConnection(),response};
+    basicCommandQueue.pop_front();
+    outgoing.push_back(message);
+  }
+
+  //move out later
+  //this->model.reset();
+
+  return outgoing;
+
+}
+
+std::deque<Message>
+ModelInterface::updateCombat(){
+
+  std::deque<Message> outgoing;
+  auto context = this->model.getContext();
+
     for(auto& combatCommand : combatCommandQueue) {
       std::string response = combatCommand->execute(context);
       Message message{combatCommand->getConnection(),response};
       combatCommandQueue.pop_front();
       outgoing.push_back(message);
     }
-  }
-
-  if(true/*tickIsUpForNonCombatTimer()*/){
-    for(auto& basicCommand : basicCommandQueue) {
-      std::string response = basicCommand->execute(context);
-      Message message{basicCommand->getConnection(),response};
-      basicCommandQueue.pop_front();
-      outgoing.push_back(message);
-    }
-  }
 
   //move out later
-  this->model.reset();
+  //this->model.reset();
 
   return outgoing;
 
+}
+
+void ModelInterface::resetWorld() {
+  this->model.reset();
 }
 
 std::string
