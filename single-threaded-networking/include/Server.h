@@ -28,7 +28,8 @@ enum class ConnectionState {
 
 enum class UpdateTurn {
     Combat,
-    Game
+    Game,
+    Reset
 };
 
 struct UpdateState {

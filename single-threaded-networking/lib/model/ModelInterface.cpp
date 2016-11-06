@@ -44,6 +44,7 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
   }
 }
 
+
 std::deque<Message>
 ModelInterface::updateGame(){
 
@@ -58,7 +59,7 @@ ModelInterface::updateGame(){
   }
 
   //move out later
-  this->model.reset();
+  //this->model.reset();
 
   return outgoing;
 
@@ -78,12 +79,14 @@ ModelInterface::updateCombat(){
     }
 
   //move out later
-  this->model.reset();
+  //this->model.reset();
 
   return outgoing;
 
 }
-
+void ModelInterface::resetWorld() {
+  this->model.reset();
+}
 
 std::string
 ModelInterface::getCurrentRoomDescription(const int& playerId) {

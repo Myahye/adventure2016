@@ -25,6 +25,7 @@ public:
   std::string getCurrentRoomDescription(const int& playerId);
   std::deque<networking::Message> updateGame();
 	std::deque<networking::Message> updateCombat();
+	void resetWorld();
   void playerDisconnected(networking::Connection c);
   void playerConnect(networking::Connection c);
 };

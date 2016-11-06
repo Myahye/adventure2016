@@ -41,12 +41,12 @@ std::unordered_map<Connection,std::deque<Message>, ConnectionHash> clientMessage
 //Made a global variable so onDisconnect can access it, any other solutions?
 ModelInterface modelInterface{};
 
-std::chrono::time_point<std::chrono::system_clock> lastGameUpdate, lastCombatUpdate;
+std::chrono::time_point<std::chrono::system_clock> lastGameUpdate, lastCombatUpdate, lastWorldReset;
 UpdateState updateState;
 std::chrono::milliseconds immediate = std::chrono::milliseconds(0);
 std::chrono::milliseconds combatUpdate = std::chrono::milliseconds(500);
 std::chrono::milliseconds gameUpdate = std::chrono::milliseconds(200);
-
+std::chrono::milliseconds worldReset = std::chrono::seconds(30);
 
 void
 onConnect(Connection c) {
@@ -112,8 +112,13 @@ processMessages(std::deque<Message>& messages, Server& server) {
     return modelInterface.updateGame();
   }
   //updateState.turn==UpdateTurn::Combat
-  else{
+  else if(updateState.turn==UpdateTurn::Combat){
     return modelInterface.updateCombat();
+  }
+  else{
+    std::deque<Message> outgoing;
+    modelInterface.resetWorld();
+    return outgoing;
   }
 }
 
@@ -122,6 +127,7 @@ timeTillNextUpdate(){
 
   std::chrono::milliseconds nextGameUpdate = std::chrono::milliseconds((gameUpdate-std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastGameUpdate)).count());
   std::chrono::milliseconds nextCombatUpdate = std::chrono::milliseconds((combatUpdate-std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastCombatUpdate)).count());
+  std::chrono::milliseconds nextWorldReset = std::chrono::milliseconds((worldReset-std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastWorldReset)).count());
 
   std::time_t lastGameUpdate_c = std::chrono::system_clock::to_time_t(lastGameUpdate);
   std::cout << "lastUpate: "
@@ -131,11 +137,15 @@ timeTillNextUpdate(){
   std::cout << "nextGameUpdate in: " <<  gameUpdate.count() << " - " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastGameUpdate).count()<< std::endl;
   std::cout << "nextGameUpdate in: " <<  nextGameUpdate.count() << std::endl;
 
-std::cout << "nexCombatUpdate in: " <<  combatUpdate.count() << " - " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastCombatUpdate).count()<< std::endl;
-std::cout << "nexCombatUpdate in: " <<  nextCombatUpdate.count() << std::endl;
+  std::cout << "nextCombatUpdate in: " <<  combatUpdate.count() << " - " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastCombatUpdate).count()<< std::endl;
+  std::cout << "nextCombatUpdate in: " <<  nextCombatUpdate.count() << std::endl;
+
+  std::cout << "nextWorldReset in: " <<  worldReset.count() << " - " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastWorldReset).count()<< std::endl;
+  std::cout << "nextWorldReset in: " <<  nextWorldReset.count() << std::endl;
+
 
   //Game update turn
-  if(nextGameUpdate.count() < nextCombatUpdate.count()){
+  if((nextGameUpdate.count() <= nextCombatUpdate.count()) && (nextGameUpdate.count() <= nextWorldReset.count())){
     updateState.turn=UpdateTurn::Game;
     if(updateState.turn==UpdateTurn::Game){
       std::cout << "updateState.turn==UpdateTurn::Game"<< std::endl;
@@ -150,8 +160,7 @@ std::cout << "nexCombatUpdate in: " <<  nextCombatUpdate.count() << std::endl;
 
 
   //Combat update turn
-  //else -- last nextGameUpdate > nextCombatUpdate
-  else{
+  else if((nextGameUpdate.count() > nextCombatUpdate.count()) && (nextCombatUpdate.count() < nextWorldReset.count())){
     updateState.turn=UpdateTurn::Combat;
     if(updateState.turn==UpdateTurn::Combat){
       std::cout << "updateState.turn==UpdateTurn::Combat"<< std::endl;
@@ -163,6 +172,20 @@ std::cout << "nexCombatUpdate in: " <<  nextCombatUpdate.count() << std::endl;
       return immediate;
     }
     return nextCombatUpdate;
+  }
+  //Reset world
+  else{
+    updateState.turn=UpdateTurn::Reset;
+    if(updateState.turn==UpdateTurn::Reset){
+      std::cout << "updateState.turn==UpdateTurn::Reset"<< std::endl;
+    }
+    lastWorldReset=std::chrono::system_clock::now();
+
+    if(nextWorldReset.count()<0){
+      std::cout << "nextCombatUpdate.count()<0"<< std::endl;
+      return immediate;
+    }
+    return nextWorldReset;
   }
 
   //return std::chrono::milliseconds(1000);
@@ -181,6 +204,7 @@ main(int argc, char* argv[]) {
   //std::chrono::time_point<std::chrono::system_clock> start, end;
   lastGameUpdate=std::chrono::system_clock::now();
   lastCombatUpdate=std::chrono::system_clock::now();
+  lastWorldReset=std::chrono::system_clock::now();
   bool done = false;
   unsigned short port = std::stoi(argv[1]);
   Server server{port, onConnect, onDisconnect};
