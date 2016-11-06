@@ -1,4 +1,6 @@
 // Character.h
+// Interface for Npc and Player classes
+
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
@@ -9,60 +11,54 @@
 #include <unordered_map>
 #include <algorithm>
 
-#include "CharacterImp.h"
-
 class Character {
-protected:
-	CharacterImp* character_;
-
 public:
-	// Constructors
-	Character();
-	Character(int const id);
-
 	// ID
-	virtual int getId() const;
-	virtual void setId(const int id);
+	virtual int getId() const = 0;
+	virtual void setId(const int id) = 0;
 
 	// Armor
-	virtual int getArmor() const;
-	virtual void setArmor(int const armor);
+	virtual int getArmor() const = 0;
+	virtual void setArmor(int const armor) = 0;
 
 	// Exp
-	virtual int getExp() const;
-	virtual void setExp(int const exp);
+	virtual int getExp() const = 0;
+	virtual void setExp(int const exp) = 0;
 
 	// Gold
-	virtual int getGold() const;
-	virtual void setGold(int const gold);
+	virtual int getGold() const = 0;
+	virtual void setGold(int const gold) = 0;
 
 	// Level
-	virtual int getLevel() const;
-	virtual void setLevel(int const level);
+	virtual int getLevel() const = 0;
+	virtual void setLevel(int const level) = 0;
 
 	// Thac0
-	virtual int getThac0() const;
-	virtual void setThac0(int const thac0);
+	virtual int getThac0() const = 0;
+	virtual void setThac0(int const thac0) = 0;
 
 	// Damage
-	virtual std::string getDamage() const;
-	virtual void setDamage(const std::string& damage);
+	virtual std::string getDamage() const = 0;
+	virtual void setDamage(const std::string& damage) = 0;
 
 	// Description
-	virtual std::string getDescription() const;
-	virtual void setDescription(const std::vector<std::string>& description);
+	virtual std::string getDescription() const = 0;
+	virtual void setDescription(const std::vector<std::string>& description) = 0;
 
 	// Hit
-	virtual std::string getHit() const;
-	virtual void setHit(const std::string& hit);
+	virtual std::string getHit() const = 0;
+	virtual void setHit(const std::string& hit) = 0;
 
 	// Keywords
-	virtual std::vector<std::string> getKeywords() const;
-	virtual void setKeywords(const std::vector<std::string>& keywords);
+	virtual std::vector<std::string> getKeywords() const = 0;
+	virtual void setKeywords(const std::vector<std::string>& keywords) = 0;
 
 	// LongDesc
-	virtual std::string getLongdesc() const;
-	virtual void setLongdesc(const std::vector<std::string>& longdesc);
+	virtual std::string getLongdesc() const = 0;
+	virtual void setLongdesc(const std::vector<std::string>& longdesc) = 0;
+
+	virtual void attack() = 0;
+
 }; 
 
 #endif 

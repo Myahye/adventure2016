@@ -1,7 +1,6 @@
-// Character.h
-
-#ifndef CHARACTER_IMP_h
-#define CHARACTER_IMP_H
+// Npc.h
+#ifndef NPC_H
+#define NPC_C
 
 #include <iostream>
 #include <vector>
@@ -10,30 +9,25 @@
 #include <unordered_map>
 #include <algorithm>
 
-class CharacterImp {
-protected:
-	int id;
-	int armor;
-	int exp;
-	int gold;
-	int level;
-	int thac0;
+#include "Character.h"
+#include "NpcImp.h"
 
-	std::string damage;
-	std::string hit;
-	std::vector<std::string> description;
-	std::vector<std::string> keywords;
-	std::vector<std::string> longdesc;
+class Npc : public Character {
+protected:
+	CharacterImp* character_;
+	std::string shortdesc;
 
 public:
-	// Constructor
-	CharacterImp();
-	CharacterImp(const int id);
+	Npc();
+	Npc(int const id, const std::string& shortdesc);
 
-	// Getter and setters:
 	// ID
 	int getId() const;
 	void setId(const int id);
+
+	// Shortdesc
+	std::string getShortdesc() const;
+	void setShortdesc(const std::string& shortdesc);
 
 	// Armor
 	int getArmor() const;
@@ -75,7 +69,8 @@ public:
 	std::string getLongdesc() const;
 	void setLongdesc(const std::vector<std::string>& longdesc);
 
-	virtual void attack() = 0;
+	// Other functions not yet implemented:
+	void attack();
 
 };
 

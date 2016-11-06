@@ -2,69 +2,88 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <assert.h>
+
 #include "Room.h"
 #include "Door.h"
 #include "Player.h"
 #include "CharacterImp.h"
+#include "NpcImp.h"
 #include "Character.h"
+#include "Npc.h"
 
 using namespace std;
 
-void characterTest() {
-    // Character test:
-    Character* character = new Character();
-    cout << "Initial character values: "<< endl;
-    cout << "ID: " << character->getId() << endl;
+void NpcTest() {
+    // Empty constructor test:
+    Npc* defaultNpc = new Npc();
+    assert(defaultNpc != NULL);
+    assert(defaultNpc->getId() == 0);
+    assert(defaultNpc->getShortdesc() == "");
 
-    character->setId(12345);
-    cout << "ID: " << character->getId() << endl;
+    cout << "Default NPC: " << endl;
+    cout << "ID: " << defaultNpc->getId() << endl;
+    cout << "shortdesc: " << defaultNpc->getShortdesc() << endl;
+    defaultNpc->attack();
+    cout << endl;
 
-    character->setArmor(100);
-    cout << "Armor: " << character->getArmor() << endl;
+    // Parameterized constructor test:
+    Npc* npc = new Npc(12345, "Test");
+    cout << "Parameterized NPC: " << endl;
+    cout << "ID: " << npc->getId() << endl;
+    cout << "shortdesc: " << npc->getShortdesc() << endl;
+    npc->attack();
 
-    character->setExp(2000);
-    cout << "Exp: " << character->getExp() << endl;
+    npc->setArmor(100);
+    assert(npc->getArmor() == 100);
+    cout << "Armor: " << npc->getArmor() << endl;
 
-    character->setGold(1000);
-    cout << "Gold: " << character->getGold() << endl;
+    npc->setExp(1000);
+    assert(npc->getExp() == 1000);
+    cout << "Exp: " << npc->getExp() << endl;
 
-    character->setLevel(5);
-    cout << "Level: " << character->getLevel() << endl;
+    npc->setGold(250);
+    assert(npc->getGold() == 250);
+    cout << "Gold: " << npc->getGold() << endl;
 
-    character->setThac0(25);
-    cout << "Thac0: " << character->getThac0() << endl;
+    npc->setLevel(1);
+    assert(npc->getLevel() == 1);
+    cout << "Level: " << npc->getLevel() << endl;
 
-    character->setDamage("1d6+4");
-    cout << "Damage: " << character->getDamage() << endl;
+    npc->setThac0(0);
+    assert(npc->getThac0() == 0);
+    cout << "Thac0: " << npc->getThac0() << endl;
+
+    npc->setDamage("1d8+4");
+    assert(npc->getDamage() == "1d8+4");
+    cout << "Damage: " << npc->getDamage() << endl;
 
     vector<string> testDescription;
-    testDescription.push_back("Test description 1");
-    testDescription.push_back("Test description 2");
-    testDescription.push_back("Test description 3");
-    character->setDescription(testDescription);
-    cout << "Description: " << endl; 
-    cout << character->getDescription();
+    testDescription.push_back("Test description 1..");
+    npc->setDescription(testDescription);
+    cout << "Description: " << endl;
+    cout << npc->getDescription();
 
-    character->setHit("10");
-    cout << "Hit: " << character->getHit() << endl;
+    npc->setHit("1d4+4");
+    assert(npc->getHit() == "1d4+4");
+    cout << "Hit: " << npc->getHit() << endl;
 
     vector<string> testKeywords;
-    testKeywords.push_back("Test keywords 1");
-    testKeywords.push_back("Test keywords 2");
-    testKeywords.push_back("Test keywords 3");
-    character->setKeywords(testKeywords);
-    cout << "keywords: " << endl;
-    cout << character->getKeywords().at(0) << endl;
-    cout << character->getKeywords().at(1) << endl;
-    cout << character->getKeywords().at(2) << endl;
+    testKeywords.push_back("Test keywords 1..");
+    testKeywords.push_back("Test keywords 2..");
+    npc->setKeywords(testKeywords);
+    assert(npc->getKeywords().size() > 0);
+    cout << "Keywords: " << endl;
+    cout << npc->getKeywords().at(0) << endl;
+    cout << npc->getKeywords().at(1) << endl;
 
     vector<string> testLongdesc;
-    testLongdesc.push_back("Test longdesc 1");
-    testLongdesc.push_back("Test longdesc 2");
-    testLongdesc.push_back("Test longdesc 3");
-    character->setLongdesc(testLongdesc);
+    testLongdesc.push_back("Test longdesc 1..");
+    testLongdesc.push_back("Test longdesc 2..");
+    npc->setLongdesc(testLongdesc);
+    assert(npc->getLongdesc().size() > 0);
     cout << "Longdesc: " << endl;
-    cout << character->getLongdesc() << endl;
+    cout << npc->getLongdesc() << endl;
 }
 
 int main() {

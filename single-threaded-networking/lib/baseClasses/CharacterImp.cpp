@@ -16,7 +16,6 @@ void CharacterImp::setId(const int id) {
 	this->id = id;
 }
 
-
 // Getter and setter for armor
 int CharacterImp::getArmor() const {
 	return armor;
