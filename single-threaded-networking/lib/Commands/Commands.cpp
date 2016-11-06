@@ -271,20 +271,24 @@ namespace Commands {
 		//-------------------------------------------------look "Npc keyword"
 
 		//OK findNpc/findRoom will return a Npc* object which we can use to directly modify the selected npc/object in the room 
-		Npc* currentNpc = currentRoom->findNpc(takeMessage[1]);
-		if(currentNpc != NULL) {
-			response += "\n Steal: " + takeMessage[0] + " From: " + takeMessage[1] + "\n\n";
+		if(takeMessage.size() == 2) {
+			Npc* currentNpc = currentRoom->findNpc(takeMessage[1]);
+			std::cout << takeMessage.size() << std::endl;
+			if(currentNpc != NULL) {
+				std::cout << "wewwr" << std::endl;
+				response += "\n Steal: " + takeMessage[0] + " From: " + takeMessage[1] + "\n\n";
+				std::cout << "wsfsdfer" << std::endl;
+				//Npc will use a currentNpc->findObjectId(objectTargetPair[0]) method which returns the object ID	of the object in inventory 
+				//Will change removeObjectfromInventory() to take in the objectID (maybe pass in selected index "eg. steal apple '1'");
+				if(currentNpc->removeObjectFromInventory(takeMessage[0])) {
+					response += "Success!\n";
+				} else {
+					response += "Failure.\n";
+				}
+				//}
 
-			//Npc will use a currentNpc->findObjectId(objectTargetPair[0]) method which returns the object ID	of the object in inventory 
-			//Will change removeObjectfromInventory() to take in the objectID (maybe pass in selected index "eg. steal apple '1'");
-			if(currentNpc->removeObjectFromInventory(takeMessage[0])) {
-				response += "Success!\n";
-			} else {
-				response += "Failure.\n";
+				return response;
 			}
-			//}
-
-			return response;
 		}
 		std::cout << "POIP" << std::endl;
 		//-------------------------------------------------look "Object keyword"
@@ -307,7 +311,7 @@ namespace Commands {
 		//Will change removeNPC() to take in the npcID (maybe pass in selected duplicate index "eg. steal apple '1'");
 		//if(is_number(takeMessage.end()) {}
 		
-		currentNpc = currentRoom->findNpc(takeMessage[0]);
+		Npc* currentNpc = currentRoom->findNpc(takeMessage[0]);
 		if(currentNpc != NULL) {
 			if(currentRoom->removeNpc(currentNpc->getId())) {
 				response += "\n Take: " + takeMessage[0] + "\n\n";

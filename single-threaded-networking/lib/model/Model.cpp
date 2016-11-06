@@ -46,6 +46,7 @@
    std::cout << "gei " << std::endl;
    this->context = Context{&this->rooms,&this->npcs,&this->objects,&this->players,&this->playerLocation};
    std::cout << "goi " << std::endl;
+   this->reset();
  }
 
 void Model::yamlParseAndBuild(const std::string& pathToFile){
