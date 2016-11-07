@@ -162,12 +162,17 @@ namespace Commands {
 			int currentTargetHealth=(*players)[targetPlayerId].getHealth();
 			
 			
-			(*players)[targetPlayerId].setHealth(currentTargetHealth-50);
 
 			if (currentTargetHealth==0){
-				int playerXP=(*players)[playerId].getExp();
-				(*players)[playerId].setExp(playerXP+100);
-				return response + " Defeated! Fatality \n";
+				return response + " Already Defeated! Fatality \n";
+			}else{
+				(*players)[targetPlayerId].setHealth(currentTargetHealth-50);
+				if ((*players)[targetPlayerId].getHealth()==0){
+					int playerXP=(*players)[playerId].getExp();
+					(*players)[playerId].setExp(100);
+					return response + " Defeated! Fatality \n";
+				}
+
 			}
 
 
