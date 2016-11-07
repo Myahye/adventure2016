@@ -56,6 +56,7 @@ void Model::yamlParseAndBuild(const std::string& pathToFile){
   yamlparse.buildNpcs(this->npcs);
   yamlparse.buildObjects(this->objects);
   yamlparse.buildRooms(this->rooms);
+  yamlparse.buildSpells(this->spellsDefenseV);
   //yamlparse.buildResets(this->resets);
 
 
@@ -104,6 +105,13 @@ void Model::printAll(){
     count++;
   }
   std::cout << rooms.size() << " rooms printed" << std::endl;
+
+  count = 1;
+  for (auto& it : spellsDefenseV){
+    it.printClass();
+    count++;
+  }
+  std::cout << spellsDefenseV.size() << " defense spells printed" << std::endl;
 }
 
 int

@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Room.h"
 #include "Door.h"
+#include "Spells.h"
 #include "CustomError.h"
 #include "YamlParser.h"
 #include "Resets.h"
@@ -23,8 +24,8 @@ private:
   std::unordered_map<int,Room> rooms;
   std::unordered_map<int,Npc> npcs;
   std::unordered_map<int,Object> objects;
-  std::vector<std::unique_ptr<Reset>>  resets;
-
+  std::vector<std::unique_ptr<Reset>> resets;
+  std::vector<Spells> spellsDefenseV;
   int assignedIds = 1;
   //need to change these to temlpate values
   std::unordered_map<int,int> playerLocation;

@@ -269,7 +269,8 @@ Door YamlParseBuild::parseDoors(const YAML::Node& node){
 		doorObject.setDesc(descV);
 	}
 	if(node["dir"]){
-		doorObject.setDir(node["dir"].as<std::string>());
+		std::string direction = node["dir"].as<std::string>();
+		doorObject.setDir(direction);
 	}
 	if(node["keywords"]){
 		std::vector<std::string> keywordsV = setStringVectorHelper(node["keywords"]);
@@ -334,6 +335,62 @@ void YamlParseBuild::buildRooms (std::unordered_map<int,Room>& buildAllRooms){
 					[this](const YAML::Node& node) { return this->parseRooms(node); });
 }
 
+Spells YamlParseBuild::parseSpells(const YAML::Node& node){
+								//the parameter is either 'defense', 'offesnse' or 'others'
+	Spells spellsObject;
+
+	if(node["Name"]){
+		std::string name = node["Name"].as<std::string>();
+		spellsObject.setName(name);
+	}
+	if(node["Effect"]){
+		std::string effect = node["Effect"].as<std::string>();
+		spellsObject.setEffect(effect);
+	}
+	if(node["Hitchar"]){
+		std::string hitchar = node["Hitchar"].as<std::string>();
+		spellsObject.setHitChar(hitchar);
+	}
+	if(node["Hitroom"]){
+		std::string hitroom = node["Hitroom"].as<std::string>();
+		spellsObject.setHitRoom(hitroom);
+	}
+	if(node["Hitvict"]){
+		std::string hitvict = node["Hitvict"].as<std::string>();
+		spellsObject.setHitVict(hitvict);
+	}
+	if(node["Wearoff"]){
+		std::string wearoff = node["Wearoff"].as<std::string>();
+		spellsObject.setWearOff(wearoff);
+	}
+	if(node["Dammsg"]){
+		std::string dammsg = node["Dammsg"].as<std::string>();
+		spellsObject.setDamMsg(dammsg);
+	}
+	if(node["Immchar"]){
+		std::string immchar = node["Immchar"].as<std::string>();
+		spellsObject.setImmChar(immchar);
+	}
+	if(node["Duration"]){
+		spellsObject.setDuration(node["Duration"].as<int>());
+	}
+	
+	if(node["Mana"]){
+		spellsObject.setMana(node["Mana"].as<int>());
+	}
+	if(node["Minlevel"]){
+		spellsObject.setMinLevel(node["Minlevel"].as<int>());
+	}
+	return spellsObject;
+}
+
+void YamlParseBuild::buildSpells(std::vector<Spells>& spellsV){
+	const YAML::Node& defense_node = fileNode["defense"];
+	//std::unordered_map<int,Object> buildAllObjects;
+	
+	std::transform(defense_node.begin(),defense_node.end(), std::inserter(spellsV, spellsV.end()), 
+					[this](const YAML::Node& node) { return this->parseSpells(node); });
+}
 
 //helper classes for yamlParse
 std::vector<std::string> YamlParseBuild::setStringVectorHelper( const YAML::Node& vectorNode){
