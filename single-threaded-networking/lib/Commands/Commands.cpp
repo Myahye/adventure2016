@@ -159,10 +159,19 @@ namespace Commands {
 		int targetPlayerId = currentRoom->findPlayerId(takeMessage[0]);
 		if(targetPlayerId != 0) {
 			std::cout<<(*players)[targetPlayerId].getUsername() +" is the target name for "+ (*players)[playerId].getUsername()<<std::endl;
-			int currentHealth=(*players)[targetPlayerId].getHealth();
-			(*players)[targetPlayerId].setHealth(currentHealth-10);
+			int currentTargetHealth=(*players)[targetPlayerId].getHealth();
+			
+			
+			(*players)[targetPlayerId].setHealth(currentTargetHealth-50);
 
-			return response + " target found \n";
+			if (currentTargetHealth==0){
+				int playerXP=(*players)[playerId].getExp();
+				(*players)[playerId].setExp(playerXP+100);
+				return response + " Defeated! Fatality \n";
+			}
+
+
+			return response + " target found Attack Success \n";
 		}
 		std::cout << "size " << currentRoom->playersInRoom.size() << std::endl;
 
@@ -238,9 +247,11 @@ namespace Commands {
 		int playerId = connection.playerId;
 		std::cout<<"status cout"<<std::endl;
 
-		return (*players)[playerId].getUsername()+ "> " + 
-				" Health: "+std::to_string((*players)[playerId].getHealth())+"\n\n"+
-				" Mana  : "+std::to_string((*players)[playerId].getMana())+"\n\n";
+		return (*players)[playerId].getUsername()+ "> \n" + 
+				" Health: "+std::to_string((*players)[playerId].getHealth())+"\n"+
+				" Mana  : "+std::to_string((*players)[playerId].getMana())+"\n"+
+				" EXP   : "+std::to_string((*players)[playerId].getExp())+"\n"+
+				" Level : "+std::to_string((*players)[playerId].getLevel())+"\n";
 
 
 	}
