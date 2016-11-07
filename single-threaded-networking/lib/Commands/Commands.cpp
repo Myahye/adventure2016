@@ -132,6 +132,55 @@ namespace Commands {
 		return this->connection;
 	}
 
+
+	/*Attack command*/
+	AttackCommand::AttackCommand(networking::Connection connection_, const std::string& message_) 
+	: connection{connection_}, message{message_} {}
+
+	std::string AttackCommand::execute(Context& context) {
+		auto players = context.getPlayers();
+		auto rooms = context.getRooms();
+		auto playerLocations = context.getPlayerLocations();
+		int playerId = connection.playerId;
+
+		std::string messageText = message.substr(7);
+		std::transform(messageText.begin(), messageText.end(), messageText.begin(), ::tolower);
+
+		std::vector <std::string> takeMessage;
+	    boost::trim_if(messageText, boost::is_any_of("\t "));
+	    boost::split(takeMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
+
+		std::string response = (*players)[playerId].getUsername() + "> " + takeMessage[0];
+
+		int currentRoomId = (*playerLocations)[playerId];
+		Room* currentRoom = &(*rooms)[currentRoomId];
+
+
+		int targetPlayerId = currentRoom->findPlayerId(takeMessage[0]);
+		if(targetPlayerId != 0) {
+			std::cout<<(*players)[targetPlayerId].getUsername() +" is the target name for "+ (*players)[playerId].getUsername()<<std::endl;
+			int currentHealth=(*players)[targetPlayerId].getHealth();
+			(*players)[targetPlayerId].setHealth(currentHealth-10);
+
+			return response + " target found \n";
+		}
+		std::cout << "size " << currentRoom->playersInRoom.size() << std::endl;
+
+
+
+
+		return response + " target not in room / not found \n" ;
+	}
+
+	int AttackCommand::getId() const {
+		return this->connection.playerId;
+	}
+
+	networking::Connection AttackCommand::getConnection() const {
+		return this->connection;
+	}
+
+
 	/*Flee command*/
 	FleeCommand::FleeCommand(networking::Connection connection_, const std::string& message_) 
 	: connection{connection_}, message{message_} {}
@@ -203,6 +252,7 @@ namespace Commands {
 	networking::Connection StatusCommand::getConnection() const {
 		return this->connection;
 	}
+
 
 	/*InvalidCommand*/
 	InvalidCommand::InvalidCommand(networking::Connection connection_, const std::string& message_) 

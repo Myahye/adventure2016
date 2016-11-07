@@ -26,7 +26,7 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
     } else if (boost::istarts_with(messageText,commands["Read"])) {
       //this->basicCommandQueue.push_back(std::make_unique<Commands::ReadCommand>(message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Attack"])) {
-      //this->combatCommandQueue.push_back(std::make_unique<Commands::AttackCommand>(message.connection,message.text));
+      this->combatCommandQueue.push_back(std::make_unique<Commands::AttackCommand>(message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Flee"])){
       this->basicCommandQueue.push_back(std::make_unique<Commands::FleeCommand>(message.connection,message.text));
     }else if (boost::istarts_with(messageText,commands["Say"])) {

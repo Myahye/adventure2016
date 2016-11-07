@@ -43,6 +43,21 @@ namespace Commands {
 		networking::Connection getConnection() const;
 	};
 
+	class AttackCommand : public Command {
+  	private:
+  		networking::Connection connection;
+  		std::string message;
+  	public:
+  		AttackCommand(networking::Connection connection_, const std::string& message_);
+
+  		std::string execute(Context& context);
+
+  		int getId() const;
+
+  		networking::Connection getConnection() const;
+  	};
+
+
 	class FleeCommand : public Command {
   	private:
   		networking::Connection connection;
