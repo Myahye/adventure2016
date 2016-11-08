@@ -96,4 +96,4 @@ public:
     void setThac0(int const thac0);
 };
 
-#endif /* PLAYER_H */
+#endif 

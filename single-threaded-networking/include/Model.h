@@ -14,7 +14,6 @@
 #include "Npc.h"
 #include "Context.h"
 
-//using namespace custom_errors;
 
 class Model {
 
@@ -32,33 +31,16 @@ private:
   YamlParseandBuild yamlparse;
   void yamlParseAndBuild(const std::string& pathToFile);
   void printAll();
-  //Still need to be implemented
-  //map<int, Players>
-  //map<int, rooms>
-  //map<int, npcs>
-  //map<int, objects>
-  
-  //--------------Lawrence Yu
   Context context;
 public:
 
-  //Model(); //temp
 
   Model(const std::vector<std::string>& paths);
 
   int createPlayer(const std::string& username, const std::string& password);
   std::vector<std::tuple<int,std::string,std::string>> getPlayerCredentialsVector() const;
 
-  //Model(const std::string& pathToYamlFile/s);
-  //Populates member variables
-  //Model::yamlParse()
-
-  //Methods for players to interact with world
   std::string movePlayer(const int& playerId, const std::string& direction);
-
-  //These still need to be implemented
-  //Model::getAvailableDoors
-  //Model::getAvailableRoomCommands
 
   std::string getCurrentRoomDescription(const int& playerId);
 
@@ -70,10 +52,9 @@ public:
 
   Context getContext() const;
 
-  //-----------------------------Lawrence YU
   void reset();
   
   void playerDisconnected(const int playerId);
   void playerConnect(const int playerId);
 };
-#endif /* commandparse_h */
+#endif 

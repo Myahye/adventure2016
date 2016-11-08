@@ -23,8 +23,6 @@ class Npc {
 	std::vector<std::string> description;
 	std::vector<std::string> keywords;
 	std::vector<std::string> longdesc;
-
-	//----------------------------Lawrence Yu
 	std::unordered_map<int,std::vector<Object>> npcInventory;
 	std::unordered_map<int,Object> npcEquipment;
 
@@ -81,15 +79,13 @@ public:
 	int getThac0() const;
 	void setThac0(int const thac0);
 
-	//--------------------------------------Lawrence Yu
-    void addObjectToInventory(const Object& object, unsigned int limit);
+	void addObjectToInventory(const Object& object, unsigned int limit);
     
     bool removeObjectFromInventory(const std::string& objectName);
 
     bool equipObject(const Object& object, int slot);
     bool unEquipObject(int slot);
-    //bool unequipObject();
-
+    
     std::unordered_map<int,std::vector<Object>> getNpcInventory() const;
     std::unordered_map<int,Object> getNpcEquipment() const;
 

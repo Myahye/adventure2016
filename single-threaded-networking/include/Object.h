@@ -20,7 +20,6 @@ private:
 	std::vector<std::string> attributes;
 	std::vector<std::string> keywords;
 	std::vector<std::string> longDesc;
-	//std::vector<std::string> shortDesc;
 	std::vector<std::string> wearFlags;
 	std::pair<std::vector<std::string>, std::vector<std::string> > extra;
 

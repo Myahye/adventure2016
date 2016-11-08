@@ -58,9 +58,6 @@ ModelInterface::updateGame(){
     outgoing.push_back(message);
   }
 
-  //move out later
-  //this->model.reset();
-
   return outgoing;
 
 }
@@ -80,10 +77,6 @@ ModelInterface::updateCombat(){
       combatCommandQueue.pop_front();
 
     }
-
-  //move out later
-  //this->model.reset();
-
   return outgoing;
 
 }

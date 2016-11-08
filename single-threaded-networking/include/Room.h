@@ -10,7 +10,6 @@
 #include "Npc.h"
 #include "Object.h"
 #include "Player.h"
-//#include "CustomError.h"
 
 
 class Room {
@@ -22,15 +21,10 @@ private:
     unsigned int mRoomId;
     std::vector<Door> doors;
 
-    //--------------------------------------Lawrence Yu
     std::unordered_map<int,std::vector<Npc>> npcsInRoom;
     std::unordered_map<int,std::vector<Object>> objectsInRoom;
-    //std::unordered_map<int,Player*> playersInRoom;
-    
-    //Maybe change to not use pointers
     Npc* checkNpcKeywords(const std::string& message, const std::pair<int,std::vector<Npc>>& npcIdVectorPair);
     Object* checkObjectKeywords(const std::string& message, const std::pair<int,std::vector<Object>>& objectIdVectorPair);
-    //Player* checkPlayerUsername(const std::string& message, const std::pair<int,Player*>& player);
 
 public:
 std::unordered_map<int, std::string> playersInRoom;
@@ -60,7 +54,6 @@ std::unordered_map<int, std::string> playersInRoom;
     //New function added in to test
     void printClass(int n) const;
 
-    //--------------------------------------Lawrence Yu
     Npc* addNpc(Npc& npc, unsigned int limit);
     bool removeNpc(const int npcId);
 
@@ -83,4 +76,4 @@ std::unordered_map<int, std::string> playersInRoom;
     std::string getFullRoomDesc() const;
 
 };
-#endif /* room_h */
+#endif 

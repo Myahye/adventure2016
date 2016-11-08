@@ -46,7 +46,6 @@ int Room::getRoomInDir(std::string direction) const {
       return door.getDestinationId();
     }
   }
-  //This will need to be changed as it doesnt work with multiple languages
   return -1;
 }
 
@@ -83,50 +82,28 @@ void Room::printClass(int n) const{
   for(auto i : mDesc) {
     std::cout << "\tShort Desc: " << i << std::endl;
   }
-  // for(auto i : mExtendedDesc) {
-  //   std::cout << "\tExtended Desc: " << i.first.size() << std::endl;
-  // }
   for(auto i : doors) {
     std::cout << "   Door dir: "<< i.getDir() << "\n";
-    //for(auto k : i.getDesc()) {
       std::cout << "   Door desc: " << i.getDesc() << std::endl;
-   // }
     for(auto k : i.getKeywords()) {
       std::cout << "   Door keywords: " << k << std::endl;
     }
     std::cout << "   Door Door_id: " << i.getDoorId() << std::endl;
     std::cout << "   Door destinationId: " << i.getDestinationId() << std::endl;
   }
-  //std::cout << "\tthac0: " << thac0 << std::endl;
 }
 
-//--------------------------------------Lawrence Yu
 Npc* Room::addNpc(Npc& npc, unsigned int limit) {
   if(npcsInRoom[npc.getId()].size() >= limit) {
-    //std::cout << "WOW" << std::endl;
     return NULL;
   } else {
-    //TEST CODE FOR DUPLICATES
-    // auto desc = npc.getDesc();
-    // desc += " " + std::to_string(npcsInRoom[npc.getId()].size());
-    // npc.setDesc({desc});
-    // auto key = npc.getKeywords();
-    // key.push_back(npc.getKeywords()[0] + " " + std::to_string(npcsInRoom[npc.getId()].size()));
-    // npc.setKeywords(key);
-    // npcsInRoom[npc.getId()].push_back(npc);
-    // std::cout << "Room id: " << mRoomId << "Npc id: " << npc.getId() << std::endl;
-    //std::cout << "sd" << npc.getId() << std::endl;
     npcsInRoom[npc.getId()].push_back(npc);
-    //std::cout << npcsInRoom[npc.getId()].back().getId() << std:: endl;
     return &npcsInRoom[npc.getId()].back();
   }
 }
 bool Room::removeNpc(const int npcId) {
   if(!npcsInRoom[npcId].empty()) {
-    //change to end() - selected npc number later
-    //if(npcIdVectorPair.second.size() >= selectednpcnumber) {
     npcsInRoom[npcId].erase(npcsInRoom[npcId].end()/*-num*/);
-    //}
     if(npcsInRoom[npcId].empty()) {
       npcsInRoom.erase(npcId);
     }
@@ -140,15 +117,11 @@ void Room::addObject(const Object& object, unsigned int limit) {
     return;
   } else {
     objectsInRoom[object.getId()].push_back(object);
-       //   std::cout << "Room id: " << mRoomId << "Npc id: " << npc.getId() << std::endl;
   }
 }
 bool Room::removeObject(const int objectId) {
   if(!objectsInRoom[objectId].empty()) {
-    //change to end() - selected npc number later
-    //if(npcIdVectorPair.second.size() >= selectednpcnumber) {
     objectsInRoom[objectId].erase(objectsInRoom[objectId].end()/*-num*/);
-    //}
     if(objectsInRoom[objectId].empty()) {
       objectsInRoom.erase(objectId);
     }
@@ -159,7 +132,6 @@ bool Room::removeObject(const int objectId) {
 
 void Room::addPlayer(const int playerId, const std::string& username) {
   playersInRoom[playerId] = username;
-      //   std::cout << "Room id: " << mRoomId << "Npc id: " << npc.getId() << std::endl;
 }
 bool Room::removePlayer(const int playerId) {
 
@@ -241,12 +213,6 @@ Object* Room::checkObjectKeywords(const std::string& message, const std::pair<in
       }
     }
     i++;
-    //ONLY WORKS HALF THE TIME FOR SOME REASON
-    // auto it = std::find_if(currentObject.getKeywords().begin(), currentObject.getKeywords().end(), [&message] (const std::string& keyword) { return message == keyword;});
-    // if(it != currentObject.getKeywords().end()) {
-    //   currentlySelectedObject = currentObject;
-    //   return true;
-    // }
   }
 
   return NULL;

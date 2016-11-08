@@ -1,17 +1,11 @@
 
 
 #include "YamlParseAndBuild.h"
-//#include <utility>
 YamlParseandBuild::YamlParseandBuild() {};
 
 void YamlParseandBuild::loadFile(const std::string& pathToFile){
 	this->fileNode = YAML::LoadFile(pathToFile);
 }
-
-// const YAML::Node& YamlParseandBuild::returnNodeByName(const std::string& nodename){
-// 	return fileNode[nodename];
-// }
-
 
 
 /*********Parses and builds Npc's from yaml file****************/
@@ -58,10 +52,8 @@ std::pair<int,Npc> YamlParseandBuild::parseNpcs(const YAML::Node& node){
 
 void YamlParseandBuild::buildNpcs(std::unordered_map<int,Npc>& buildAllNpcs){
 	const YAML::Node&  NPC_node = fileNode["NPCS"];
-	//std::unordered_map<int,Npc> buildAllNpcs;
 	std::transform(NPC_node.begin(),NPC_node.end(), std::inserter( buildAllNpcs, buildAllNpcs.end() ), 
 					[this](const YAML::Node& node) { return this->parseNpcs(node); }); //if we dont use [this] error:invalid use of non static member function
-	//return buildAllNpcs;
 																  
 }
 
@@ -71,8 +63,6 @@ void YamlParseandBuild::parseBuildRooms(std::unordered_map<int,Room>& rooms){
 
 
 	for (auto& currentRoom : room_node) {
-		//std::cout << currentRoom["id"].as<int>() << std::endl;
-		//declaring vector of doors in room
 		std::vector<Door> doors;
 
 		//integers
@@ -83,8 +73,6 @@ void YamlParseandBuild::parseBuildRooms(std::unordered_map<int,Room>& rooms){
 
 		//vectors
 		std::vector<std::string> descV = setStringVectorHelper(currentRoom["desc"]);
-		//std::vector<std::string> extendedDescV = setStringVectorHelper(currentRoom["extended_descriptions"]);
-		//std::cout << "s" << std::endl;
 		std::pair< std::vector<std::string>, std::vector<std::string> > extraP;
 		if(currentRoom["extended_descriptions"]){
 			const YAML::Node& extra_node = currentRoom["extended_descriptions"];
@@ -96,12 +84,8 @@ void YamlParseandBuild::parseBuildRooms(std::unordered_map<int,Room>& rooms){
 				extraDescV = setStringVectorHelper(j["desc"]);
 				extraKeywordsV = setStringVectorHelper(j["keywords"]);
 			}
-			//std::cout << "size: " << extraDescV.size() << std::endl;
-			//std::cout << "size: " << extraKeywordsV.size() << std::endl;
-
 			extraP = std::make_pair(extraDescV, extraKeywordsV);
 		}
-//std::cout << "y" << std::endl;
 		//iterate through all door Nodes
 		for (auto& currentDoor : currentRoom["doors"]) {
 		
@@ -133,7 +117,6 @@ void YamlParseandBuild::parseBuildRooms(std::unordered_map<int,Room>& rooms){
 /*********Parses and builds Object's from yaml file****************/
 std::pair<int,Object> YamlParseandBuild::parseObjects(const YAML::Node& node){
 
-	//Object objectClass{node["id"].as<int>(), node["item_type"].as<std::string>()};
 	Object objectClass;
 	objectClass.setId(node["id"].as<int>());
 
@@ -177,8 +160,6 @@ std::pair<int,Object> YamlParseandBuild::parseObjects(const YAML::Node& node){
 			extraDescV = setStringVectorHelper(j["desc"]);
 			extraKeywordsV = setStringVectorHelper(j["keywords"]);
 		}
-		//std::cout << "size: " << extraDescV.size() << std::endl;
-		//std::cout << "size: " << extraKeywordsV.size() << std::endl;
 		std::pair< std::vector<std::string>, std::vector<std::string> > extraP;
 
 		extraP = std::make_pair(extraDescV, extraKeywordsV);
@@ -189,11 +170,9 @@ std::pair<int,Object> YamlParseandBuild::parseObjects(const YAML::Node& node){
 
 void YamlParseandBuild::buildObjects(std::unordered_map<int,Object>& buildAllObjects){
 	const YAML::Node&  Object_Node = fileNode["OBJECTS"];
-	//std::unordered_map<int,Object> buildAllObjects;
 	
 	std::transform(Object_Node.begin(),Object_Node.end(), std::inserter( buildAllObjects, buildAllObjects.end() ), 
 					[this](const YAML::Node& node) { return this->parseObjects(node); });
-	//return buildAllObjects;
 }
 
 std::unique_ptr<Reset> YamlParseandBuild::parseResets(const YAML::Node& node){

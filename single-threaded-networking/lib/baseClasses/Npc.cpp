@@ -112,10 +112,8 @@ void Npc::setThac0(int const thac0) {
 //--------------------------------------Lawrence Yu
 void Npc::addObjectToInventory(const Object& object, unsigned int limit) {
   if(npcInventory[object.getId()].size() == limit) {
-  	//std::cout << "object id: " << object.getId()<< "size: " << npcInventory[object.getId()].size() << std::endl;
   } else {
     npcInventory[object.getId()].push_back(object);
-          //std::cout << "Object id: " << object.getId() << " Npc id: " << id << " Inventory size: " << npcInventory.size() <<std::endl;
   }
 }
 
@@ -126,8 +124,6 @@ bool Npc::removeObjectFromInventory(const std::string& objectName) {
     for(auto& keyword : objectIdVectorPair.second[0].getKeywords()) {
       if(objectName.find(keyword) != std::string::npos) {
         objectId = objectIdVectorPair.first;
-        //change to begin()+ selected npc number later
-        //if(objectIdVectorPair.second.size() >= selectednpcnumber) {
           npcInventory[objectId].erase(objectIdVectorPair.second.begin());
         //}
           std::cout << "objeect id: " << objectId << "size: " << npcInventory[objectId].size() << std::endl;
@@ -150,24 +146,18 @@ bool Npc::equipObject(const Object& object, int slot) {
     npcInventory[npcEquipment[slot].getId()].push_back(npcEquipment[slot]);
     npcEquipment[slot] = object;
     npcInventory[object.getId()].pop_back();
-    //std::cout << "objz: " << object.getId() << std::endl;
     return true;
   } else {
     npcEquipment[slot] = object;
-	//std::cout << "IW" << std::endl;
-
     npcInventory[object.getId()].pop_back();
     if(npcInventory[object.getId()].empty()) {
     	npcInventory.erase(object.getId());
     }
 
-    //std::cout << "IWOEFJ|" << std::endl;
     return true;
-          // std::cout << this << "Object id: " << npcEquipment[slot].getId() << " Npc id: " << id << " Equipment Desc: " << npcEquipment[slot].getShortDesc() << " Equipment size: " << npcEquipment.size() <<std::endl;
   }
 }
 bool Npc::unEquipObject(int slot) {
-  //remove if id == object and pickedupflag==yes
   if(npcEquipment.find(slot) != npcEquipment.end()) {
   	npcEquipment.erase(slot);
   	return true;

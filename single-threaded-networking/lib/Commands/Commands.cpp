@@ -135,68 +135,7 @@ namespace Commands {
 		return this->connection;
 	}
 
-
-	/*Attack command*/
-	/*AttackCommand::AttackCommand(networking::Connection connection_, const std::string& message_)
-	: connection{connection_}, message{message_} {}
-
-	std::string AttackCommand::execute(Context& context) {
-		auto players = context.getPlayers();
-		auto rooms = context.getRooms();
-		auto playerLocations = context.getPlayerLocations();
-		int playerId = connection.playerId;
-
-		std::string messageText = message.substr(7);
-		std::transform(messageText.begin(), messageText.end(), messageText.begin(), ::tolower);
-
-		std::vector <std::string> takeMessage;
-	    boost::trim_if(messageText, boost::is_any_of("\t "));
-	    boost::split(takeMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
-
-		std::string response = (*players)[playerId].getUsername() + "> " + takeMessage[0];
-
-		int currentRoomId = (*playerLocations)[playerId];
-		Room* currentRoom = &(*rooms)[currentRoomId];
-
-
-		int targetPlayerId = currentRoom->findPlayerId(takeMessage[0]);
-		if(targetPlayerId != 0) {
-			std::cout<<(*players)[targetPlayerId].getUsername() +" is the target name for "+ (*players)[playerId].getUsername()<<std::endl;
-			int currentTargetHealth=(*players)[targetPlayerId].getHealth();
-
-
-
-			if (currentTargetHealth==0){
-				return response + " Already Defeated! Fatality \n";
-			}else{
-				(*players)[targetPlayerId].setHealth(currentTargetHealth-50);
-				if ((*players)[targetPlayerId].getHealth()==0){
-					int playerXP=(*players)[playerId].getExp();
-					(*players)[playerId].setExp(100);
-					return response + " Defeated! Fatality \n";
-				}
-
-			}
-
-
-			return response + " target found Attack Success \n";
-		}
-		std::cout << "size " << currentRoom->playersInRoom.size() << std::endl;
-
-
-
-
-		return response + " target not in room / not found \n" ;
-	}
-
-	int AttackCommand::getId() const {
-		return this->connection.playerId;
-	}
-
-	networking::Connection AttackCommand::getConnection() const {
-		return this->connection;
-	}
-*//*Flee command*/
+/*Flee command*/
 	FleeCommand::FleeCommand(networking::Connection connection_, const std::string& message_)
 	: connection{connection_}, message{message_} {}
 
@@ -313,25 +252,6 @@ namespace Commands {
 
 		int currentRoomId = (*playerLocations)[playerId];
 		Room* currentRoom = &(*rooms)[currentRoomId];
-
-		// if(takeMessage == "") {
-		// 	std::cout << "FF" << std::endl;
-		// 	return response + "\n\n" + currentRoom->getFullRoomDesc();
-		// }
-
-		//-------------------------------------------------look "cardinal direction"
-
-		//will move this to room class later as if isDirection return door.getDesc()
-		// auto doorsInRoom = currentRoom->getDoors();
-
-		// for(auto currentDoor : doorsInRoom) {
-		// 	if(takeMessage == currentDoor.getDir()) {
-		//   		response += "\n\n" + currentDoor.getDesc() += "\n";
-
-		//   		return response;
-		// 	}
-		// }
-
 
 		 std::cout << "EHTH" << std::endl;
 

@@ -17,14 +17,10 @@ namespace Resets {
   		auto it = npcs->find(this->id);
 	  	if(it != npcs->end()) {
     		Npc npc = (*npcs)[this->id];
-    		// Npc npcClone = clone(npc); 
     		auto it1 = rooms->find(this->room);
 	  		if(it1 != rooms->end()) {
-	  			//this->printClass(1);
-    			currentlySelectedNpc = (*rooms)[this->room].addNpc(npc, this->limit);
-    			//std::cout << npc.getId() << std:: endl;
+	  			currentlySelectedNpc = (*rooms)[this->room].addNpc(npc, this->limit);
     			if(currentlySelectedNpc == NULL) {
-    				//std::cout << "ff" << currentlySelectedNpc->getId() << std:: endl;
     				currentlySelectedNpc = NULL;
     			}
     		}
@@ -41,7 +37,6 @@ namespace Resets {
 		std::cout << "\tlimit: " << limit << std::endl;
 		std::cout << "\troom: " << room << std::endl;
 	}
-	//Get currentlySelectedNpc
 	Npc* ResetNpc::getCurrentlySelectedNpc() {
 		return this->currentlySelectedNpc;
 	}
@@ -90,20 +85,13 @@ namespace Resets {
 	//Execute
 	void ResetGive::execute(Context& context) {
 		  		currentlySelectedNpc = NULL;
-		// if(id == 3000) {
-		// 	printClass(1);
-		// }
 		if(context.getCurrentlySelectedNpc() != NULL) {
 			currentlySelectedNpc = context.getCurrentlySelectedNpc();
-			// if(id == 3000) {
-			// 	std::cout << currentlySelectedNpc->getId() << std::endl;
-			// }
 			auto objects = context.getObjects();
 
 	  		auto it = objects->find(this->id);
 		  	if(it != objects->end()) {
 	    		Object object = (*objects)[this->id];
-	    		// object npcClone = clone(npc); 
 	    		currentlySelectedNpc->addObjectToInventory(object, this->limit);
 	  		}
   		}
@@ -120,7 +108,6 @@ namespace Resets {
 		std::cout << "\tlimit: " << limit << std::endl;
 		std::cout << "\troom: " << room << std::endl;
 	}
-	//Get currentlySelectedNpc
 	Npc* ResetGive::getCurrentlySelectedNpc() {
 		return this->currentlySelectedNpc;
 	}
@@ -140,11 +127,8 @@ namespace Resets {
 	  		auto it = objects->find(this->id);
 		  	if(it != objects->end()) {
 	    		Object object = (*objects)[this->id];
-	    		// object npcClone = clone(npc); 
-	    		//std::cout << "E: " << currentlySelectedNpc->getId() << std::endl;
-	    		if (currentlySelectedNpc->getId() > 0) {
+		   		if (currentlySelectedNpc->getId() > 0) {
 		    		if(currentlySelectedNpc->getNpcEquipment().find(this->slot) == currentlySelectedNpc->getNpcEquipment().end()) {
-		    			//this->printClass(1);
 		    			currentlySelectedNpc->addObjectToInventory(object,1);
 		    			currentlySelectedNpc->equipObject(object, this->slot);
 		    		}

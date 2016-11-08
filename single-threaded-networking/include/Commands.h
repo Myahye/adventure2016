@@ -15,8 +15,6 @@ namespace Commands {
 	private:
 		networking::Connection connection;
 		std::string message;
-		//Room* currentRoom; I want to have a pointer to the current room, but if that room is deleted before execute() is called then
-		//there will be undefined behaviour as the Room* will point to garbage
 	public:
 		LookCommand(networking::Connection connection_, const std::string& message_);
 
@@ -31,8 +29,6 @@ namespace Commands {
 	private:
 		networking::Connection connection;
 		std::string message;
-		//Room* currentRoom; I want to have a pointer to the current room, but if that room is deleted before execute() is called then
-		//there will be undefined behaviour as the Room* will point to garbage
 	public:
 		GoCommand(networking::Connection connection_, const std::string& message_);
 
