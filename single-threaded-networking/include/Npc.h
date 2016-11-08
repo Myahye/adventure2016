@@ -14,7 +14,6 @@
 
 class Npc : public Character {
 protected:
-	CharacterImp* character_;
 	std::string shortdesc;
 
 public:

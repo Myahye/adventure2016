@@ -11,7 +11,12 @@
 #include <unordered_map>
 #include <algorithm>
 
+class CharacterImp;
+
 class Character {
+protected:
+	CharacterImp* character_;
+	
 public:
 	// ID
 	virtual int getId() const = 0;

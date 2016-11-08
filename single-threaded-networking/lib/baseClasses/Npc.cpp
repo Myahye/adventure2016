@@ -3,10 +3,10 @@
 
 // Constructors:
 Npc::Npc():
-character_ {new NpcImp(0)}, shortdesc{""} {};
+shortdesc{shortdesc} { this->character_ = new NpcImp(0); }
 
 Npc::Npc(int const id, const std::string& shortdesc):
-character_ {new NpcImp(id)}, shortdesc{shortdesc} {};
+shortdesc{shortdesc} { this->character_ = new NpcImp(id); }
 
 // Getter and setter for id
 int Npc::getId() const {
