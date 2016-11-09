@@ -25,6 +25,26 @@ Player::setPassword(std::string& password) {
     this->password = password;
 }
 
+int
+Player::getHealth() const{
+    return health;
+}
+
+void
+Player::setHealth(int const health){
+    this->health = health;
+}
+
+int
+Player::getMana() const{
+    return mana;
+}
+
+void
+Player::setMana(int const manaa){
+    this->mana = manaa;
+}
+
 //Getter and setter for Armor
 int
 Player::getArmor() const {
@@ -55,9 +75,29 @@ void Player::setDesc(std::vector<std::string>& description) {
 int Player::getExp() const {
     return exp;
 }
-void Player::setExp(int const exp) {
-    this->exp = exp;
+void Player::setExp(int const XP) {
+    int baseXP = 95;
+    exp += XP;
+    if((baseXP*level)<=exp){
+        level+=1;
+        setNewStats();
+    }
 }
+
+/*helper functions to level up*/
+void Player::setNewStats(){
+    setNewHealth(level);
+    setNewMana(level);
+}
+
+void Player::setNewHealth(int const lvl){
+    health=100+lvl*lvl*2;
+}
+
+void Player::setNewMana(int const lvl){
+    mana=95+lvl*lvl*1.5;
+}
+
 
 //Getter and setter for Gold
 int Player::getGold() const {

@@ -6,7 +6,6 @@
 namespace Resets {
 
 //-----------------------------------------ResetNpc
-
 	//Reset Constructor
 	ResetNpc::ResetNpc(const std::string& action, int const id, unsigned int const limit, int const room, const std::string& comment)
 		: action{action}, id{id}, limit{limit}, room{room}, comment{comment} {};
@@ -19,9 +18,15 @@ namespace Resets {
 	  	if(it != npcs->end()) {
     		Npc npc = (*npcs)[this->id];
     		// Npc npcClone = clone(npc); 
-    		auto it1 = rooms->find(this->id);
+    		auto it1 = rooms->find(this->room);
 	  		if(it1 != rooms->end()) {
+	  			//this->printClass(1);
     			currentlySelectedNpc = (*rooms)[this->room].addNpc(npc, this->limit);
+    			//std::cout << npc.getId() << std:: endl;
+    			if(currentlySelectedNpc == NULL) {
+    				//std::cout << "ff" << currentlySelectedNpc->getId() << std:: endl;
+    				currentlySelectedNpc = NULL;
+    			}
     		}
   		}
 	}
@@ -55,7 +60,7 @@ namespace Resets {
 	  	if(it != objects->end()) {
     		Object object = (*objects)[this->id];
     		// objects npcClone = clone(npc); 
-    		auto it1 = rooms->find(this->id);
+    		auto it1 = rooms->find(this->room);
 	  		if(it1 != rooms->end()) {
     			(*rooms)[this->room].addObject(object, this->limit);
     		}
@@ -84,8 +89,15 @@ namespace Resets {
 		: action{action}, id{id}, limit{limit}, room{room}, comment{comment} {};
 	//Execute
 	void ResetGive::execute(Context& context) {
+		  		currentlySelectedNpc = NULL;
+		// if(id == 3000) {
+		// 	printClass(1);
+		// }
 		if(context.getCurrentlySelectedNpc() != NULL) {
 			currentlySelectedNpc = context.getCurrentlySelectedNpc();
+			// if(id == 3000) {
+			// 	std::cout << currentlySelectedNpc->getId() << std::endl;
+			// }
 			auto objects = context.getObjects();
 
 	  		auto it = objects->find(this->id);
@@ -120,6 +132,7 @@ namespace Resets {
 		: action{action}, id{id}, slot{slot}, comment{comment} {};
 	//Execute
 	void ResetEquip::execute(Context& context) {
+		currentlySelectedNpc = NULL;
 		if(context.getCurrentlySelectedNpc() != NULL) {
 			currentlySelectedNpc = context.getCurrentlySelectedNpc();
 			auto objects = context.getObjects();
@@ -128,7 +141,14 @@ namespace Resets {
 		  	if(it != objects->end()) {
 	    		Object object = (*objects)[this->id];
 	    		// object npcClone = clone(npc); 
-	    		currentlySelectedNpc->equipObject(object, this->slot);
+	    		//std::cout << "E: " << currentlySelectedNpc->getId() << std::endl;
+	    		if (currentlySelectedNpc->getId() > 0) {
+		    		if(currentlySelectedNpc->getNpcEquipment().find(this->slot) == currentlySelectedNpc->getNpcEquipment().end()) {
+		    			//this->printClass(1);
+		    			currentlySelectedNpc->addObjectToInventory(object,1);
+		    			currentlySelectedNpc->equipObject(object, this->slot);
+		    		}
+	    		}
 	  		}
   		}
 	}
@@ -147,6 +167,9 @@ namespace Resets {
 	Npc* ResetEquip::getCurrentlySelectedNpc() {
 		return this->currentlySelectedNpc;
 	}
+
+
+	///ADD DOOR RESET
 
 }
 

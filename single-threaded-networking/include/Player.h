@@ -7,12 +7,14 @@
 
 class Player {
 private:
-    int armor;
-    int exp;
-    int gold;
-    int level;
+    int armor = 0;
+    int exp = 0;
+    int gold = 0;
+    int level = 1;
     int thac0;
-    int pid;
+    int pid = 0;
+    int health=100;
+    int mana=100;
 
     std::string damage;
     std::string hit;
@@ -22,6 +24,12 @@ private:
     std::vector<std::string> description;
     std::vector<std::string> keywords;
     std::vector<std::string> longdesc;
+
+    void setNewHealth(int const level);
+    void setNewMana(int const level);
+    void setNewStats();
+    int nextLvl(int const XP,int const level) const;
+
 public:
 
 
@@ -33,6 +41,12 @@ public:
     std::string getUsername() const;
     void setUsername(std::string& username);
 
+    int getHealth() const;
+    void setHealth(int const health);
+
+    int getMana() const;
+    void setMana(int const mana);
+         
     //password
     std::string getPassword() const;
     void setPassword(std::string& password);
@@ -51,7 +65,7 @@ public:
 
     //Experience
     int getExp() const;
-    void setExp(int const exp);
+    void setExp(int const XP);
 
     //Gold
     int getGold() const;

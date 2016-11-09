@@ -1,8 +1,9 @@
-add_library(yamlParser yamlParser.cpp)
+add_library(yamlParser YamlParseAndBuild.cpp)
 target_link_libraries(yamlParser ${CMAKE_SOURCE_DIR}/lib/yaml/libyaml-cpp.a)
 install(TARGETS yamlParser DESTINATION lib)
 set_property(TARGET yamlParser PROPERTY CXX_STANDARD 14)
 target_link_libraries(yamlParser BaseClass) 
 target_link_libraries(yamlParser Resets)
+target_link_libraries(yamlParser Commands)
 
 
