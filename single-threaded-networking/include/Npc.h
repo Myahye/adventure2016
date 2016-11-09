@@ -1,76 +1,38 @@
-// Npc.h
 #ifndef NPC_H
-#define NPC_C
-
-#include <iostream>
-#include <vector>
-#include <string>
-// #include "Object.h"
-#include <unordered_map>
-#include <algorithm>
+#define NPC_H
 
 #include "Character.h"
-#include "NpcImp.h"
 
-class Npc : public Character {
-protected:
+class Npc {
+
 	std::string shortdesc;
 
+	std::unordered_map<int,std::vector<Object>> npcInventory;
+	std::unordered_map<int,Object> npcEquipment;
+
 public:
+	Character npcCharacter;
 	Npc();
-	Npc(int const id, const std::string& shortdesc);
+	//Npc Constructor
+	Npc(int const id, std::string const shortdesc);
 
-	// ID
-	int getId() const;
-	void setId(const int id);
+	std::string getShortDesc() const;
+	void setShortDesc(const std::string& shortdesc);
 
-	// Shortdesc
-	std::string getShortdesc() const;
-	void setShortdesc(const std::string& shortdesc);
+	//--------------------------------------Lawrence Yu
+    void addObjectToInventory(const Object& object, unsigned int limit);
+    
+    bool removeObjectFromInventory(const std::string& objectName);
 
-	// Armor
-	int getArmor() const;
-	void setArmor(int const armor);
+    bool equipObject(const Object& object, int slot);
+    bool unEquipObject(int slot);
+    //bool unequipObject();
 
-	// Exp
-	int getExp() const;
-	void setExp(int const exp);
+    std::unordered_map<int,std::vector<Object>> getNpcInventory() const;
+    std::unordered_map<int,Object> getNpcEquipment() const;
 
-	// Gold
-	int getGold() const;
-	void setGold(int const gold);
-
-	// Level
-	int getLevel() const;
-	void setLevel(int const level);
-
-	// Thac0
-	int getThac0() const;
-	void setThac0(int const thac0);
-
-	// Damage
-	std::string getDamage() const;
-	void setDamage(const std::string& damage);
-
-	// Description
-	std::string getDescription() const;
-	void setDescription(const std::vector<std::string>& description);
-
-	// Hit
-	std::string getHit() const;
-	void setHit(const std::string& hit);
-
-	// Keywords
-	std::vector<std::string> getKeywords() const;
-	void setKeywords(const std::vector<std::string>& keywords);
-
-	// LongDesc
-	std::string getLongdesc() const;
-	void setLongdesc(const std::vector<std::string>& longdesc);
-
-	// Other functions not yet implemented:
-	void attack();
-
+    std::string getNpcEquipmentDesc() const;
+    std::string getNpcInventoryDesc() const;
 };
 
 #endif

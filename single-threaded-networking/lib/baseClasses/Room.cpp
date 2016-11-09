@@ -102,12 +102,12 @@ void Room::printClass(int n) const{
 
 //--------------------------------------Lawrence Yu
 Npc* Room::addNpc(const Npc& npc, unsigned int limit) {
-  if(npcsInRoom[npc.getId()].size() == limit) {
+  if(npcsInRoom[(npc.npcCharacter).getId()].size() == limit) {
     return NULL;
   } else {
-    npcsInRoom[npc.getId()].push_back(npc);
+    npcsInRoom[(npc.npcCharacter).getId()].push_back(npc);
     // std::cout << "Room id: " << mRoomId << "Npc id: " << npc.getId() << std::endl;
-    return &npcsInRoom[npc.getId()].back();
+    return &npcsInRoom[(npc.npcCharacter).getId()].back();
   }
 }
 void Room::addObject(const Object& object, unsigned int limit) {
@@ -141,7 +141,7 @@ std::string Room::getNpcsInRoomDesc() const {
   std::string response = "";
   for(auto npcIdVectorPair : npcsInRoom) {
     for(auto npc : npcIdVectorPair.second) {
-      response += "     " + npc.getLongDesc();
+      response += "     " + (npc.npcCharacter).getLongdesc();
     }
   } 
 

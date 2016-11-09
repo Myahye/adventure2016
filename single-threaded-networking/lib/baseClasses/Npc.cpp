@@ -1,123 +1,107 @@
-// Npc.cpp
+#ifndef NPC_CPP
+#define NPC_CPP
+
 #include "Npc.h"
 
-// Constructors:
+//Npc Constructor
 Npc::Npc():
-shortdesc{shortdesc} { this->character_ = new NpcImp(0); }
+	npcCharacter{0}, shortdesc{""} {};
 
-Npc::Npc(int const id, const std::string& shortdesc):
-shortdesc{shortdesc} { this->character_ = new NpcImp(id); }
+Npc::Npc (int const id, std::string const shortdesc):
+	npcCharacter{id}, shortdesc{shortdesc} {};
 
-// Getter and setter for id
-int Npc::getId() const {
-	return character_->getId();
-}
-
-void Npc::setId(int const id) {
-	character_->setId(id);
-}
-
-// Getter and setter for shortdesc
-std::string Npc::getShortdesc() const {
+std::string Npc::getShortDesc() const {
 	return shortdesc;
 }
-
-void Npc::setShortdesc(const std::string& shortdesc) {
+void Npc::setShortDesc(const std::string& shortdesc) {
 	this->shortdesc = shortdesc;
 }
 
-// Getter and setter for armor
-int Npc::getArmor() const {
-	return character_->getArmor();
+//--------------------------------------Lawrence Yu
+void Npc::addObjectToInventory(const Object& object, unsigned int limit) {
+  if(npcInventory[object.getId()].size() == limit) {
+  	//std::cout << "object id: " << object.getId()<< "size: " << npcInventory[object.getId()].size() << std::endl;
+  } else {
+    npcInventory[object.getId()].push_back(object);
+          //std::cout << "Object id: " << object.getId() << " Npc id: " << id << " Inventory size: " << npcInventory.size() <<std::endl;
+  }
 }
 
-void Npc::setArmor(int const armor) {
-	character_->setArmor(armor);
+bool Npc::removeObjectFromInventory(const std::string& objectName) {
+  int objectId = 0;
+
+  for(auto& objectIdVectorPair : npcInventory) {
+    for(auto& keyword : objectIdVectorPair.second[0].getKeywords()) {
+      if(objectName.find(keyword) != std::string::npos) {
+        objectId = objectIdVectorPair.first;
+        //change to begin()+ selected npc number later
+        //if(objectIdVectorPair.second.size() >= selectednpcnumber) {
+          npcInventory[objectId].erase(objectIdVectorPair.second.begin());
+        //}
+          std::cout << "objeect id: " << objectId << "size: " << npcInventory[objectId].size() << std::endl;
+        if(npcInventory[objectId].empty()) {
+          npcInventory.erase(objectId);
+        }
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
-// Getter and setter for exp
-int Npc::getExp() const {
-	return character_->getExp();
+bool Npc::equipObject(const Object& object, int slot) {
+  if(npcInventory.find(object.getId()) == npcInventory.end()) {
+  	return false;
+  }
+
+  if(npcEquipment.find(slot) != npcEquipment.end()) {
+    npcInventory[npcEquipment[slot].getId()].push_back(npcEquipment[slot]);
+    npcEquipment[slot] = object;
+    npcInventory[object.getId()].pop_back();
+    //std::cout << "objz: " << object.getId() << std::endl;
+    return true;
+  } else {
+    npcEquipment[slot] = object;
+	//std::cout << "IW" << std::endl;
+
+    npcInventory[object.getId()].pop_back();
+    if(npcInventory[object.getId()].empty()) {
+    	npcInventory.erase(object.getId());
+    }
+
+    //std::cout << "IWOEFJ|" << std::endl;
+    return true;
+          // std::cout << this << "Object id: " << npcEquipment[slot].getId() << " Npc id: " << id << " Equipment Desc: " << npcEquipment[slot].getShortDesc() << " Equipment size: " << npcEquipment.size() <<std::endl;
+  }
+}
+bool Npc::unEquipObject(int slot) {
+  //remove if id == object and pickedupflag==yes
+  if(npcEquipment.find(slot) != npcEquipment.end()) {
+  	npcEquipment.erase(slot);
+  	return true;
+  }
+  return false;
 }
 
-void Npc::setExp(int const exp) {
-	character_->setExp(exp);
+std::unordered_map<int,std::vector<Object>> Npc::getNpcInventory() const {
+  return this->npcInventory;
 }
 
-// Getter and setter for gold
-int Npc::getGold() const {
-	return character_->getGold();
+std::unordered_map<int,Object> Npc::getNpcEquipment() const {
+  return this->npcEquipment;
 }
 
-void Npc::setGold(int const gold) {
-	character_->setGold(gold);
+std::string Npc::getNpcEquipmentDesc() const {
+  std::string response = "";
+  for_each(npcEquipment.begin(), npcEquipment.end(), [&response](const auto& currentEquip){response += currentEquip.second.getShortDesc() + ", ";});
+    std::cout << "npe equip: " << npcEquipment.size() << std::endl;	
+  return response;
+}
+std::string Npc::getNpcInventoryDesc() const {
+	std::string response = "";
+	  std::cout << "npe inv: " << npcInventory.size() << std::endl;
+	std::for_each(npcInventory.begin(), npcInventory.end(), [&response](const auto& currentItem){response += currentItem.second[0].getShortDesc() + " (Quantity: " + std::to_string(currentItem.second.size()) + "), ";});	
+  return response;
 }
 
-// Getter and setter for level
-int Npc::getLevel() const {
-	return character_->getLevel();
-}
-
-void Npc::setLevel(int const level) {
-	character_->setLevel(level);
-}
-
-// Getter and setter for thac0
-int Npc::getThac0() const {
-	return character_->getThac0();
-}
-
-void Npc::setThac0(int const thac0) {
-	character_->setThac0(thac0);
-}
-
-// Getter and setter for damage
-std::string Npc::getDamage() const {
-	return character_->getDamage();
-}
-	
-void Npc::setDamage(const std::string& damage) {
-	character_->setDamage(damage); 
-}
-
-// Getter and setter for hit
-std::string Npc::getHit() const {
-	return character_->getHit();
-}
-
-void Npc::setHit(const std::string& hit) {
-	character_->setHit(hit);
-}
-
-// Getter and setter for description
-std::string Npc::getDescription() const {
-	return character_->getDescription();
-}
-
-void Npc::setDescription(const std::vector<std::string>& description) {
-	character_->setDescription(description);
-}
-
-// Getter and setter for keywords
-std::vector<std::string> Npc::getKeywords() const {
-	return character_->getKeywords();
-}
-
-void Npc::setKeywords(const std::vector<std::string>& keywords) {
-	character_->setKeywords(keywords);
-}
-
-// Getter and setter for longdesc
-std::string Npc::getLongdesc() const {
-	return character_->getLongdesc();
-}
-
-void Npc::setLongdesc(const std::vector<std::string>& longdesc) {
-	character_->setLongdesc(longdesc);
-}
-
-
-// Other functions not yet implemented:
-void Npc::attack() {
-	character_->attack();
-}
+#endif

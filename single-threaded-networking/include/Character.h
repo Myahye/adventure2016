@@ -1,69 +1,64 @@
-// Character.h
-// Interface for Npc and Player classes
-
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
 #include <iostream>
 #include <vector>
 #include <string>
-// #include "Object.h"
+#include "Object.h"
 #include <unordered_map>
 #include <algorithm>
 
-class CharacterImp;
-
 class Character {
-protected:
-	CharacterImp* character_;
-	
+	int armor = 0;
+	int exp = 0;
+	int gold = 0;
+	int id = 0;
+	int level = 0;
+	int thac0;
+
+	std::string damage;
+	std::string hit;
+
+	std::vector<std::string> description;
+	std::vector<std::string> keywords;
+	std::vector<std::string> longdesc;
+
 public:
-	// ID
-	virtual int getId() const = 0;
-	virtual void setId(const int id) = 0;
+	Character();
+	Character(const int id);
 
-	// Armor
-	virtual int getArmor() const = 0;
-	virtual void setArmor(int const armor) = 0;
+	int getArmor() const;
+	void setArmor(const int armor);
 
-	// Exp
-	virtual int getExp() const = 0;
-	virtual void setExp(int const exp) = 0;
+	int getExp() const;
+	void setExp(const int exp);
 
-	// Gold
-	virtual int getGold() const = 0;
-	virtual void setGold(int const gold) = 0;
+	int getGold() const;
+    void setGold(const int gold);
 
-	// Level
-	virtual int getLevel() const = 0;
-	virtual void setLevel(int const level) = 0;
+	int getId() const;
+	void setId(const int id);
 
-	// Thac0
-	virtual int getThac0() const = 0;
-	virtual void setThac0(int const thac0) = 0;
+	int getLevel() const;
+	void setLevel(const int level);
 
-	// Damage
-	virtual std::string getDamage() const = 0;
-	virtual void setDamage(const std::string& damage) = 0;
+	int getThac0() const;
+	void setThac0(int const thac0);
+	
+	std::string getDamage() const;
+	void setDamage(const std::string& damage);
 
-	// Description
-	virtual std::string getDescription() const = 0;
-	virtual void setDescription(const std::vector<std::string>& description) = 0;
+	std::string getHit() const;
+	void setHit(const std::string& hit);
 
-	// Hit
-	virtual std::string getHit() const = 0;
-	virtual void setHit(const std::string& hit) = 0;
+	std::string getDescription() const;
+	void setDescription(const std::vector<std::string>& description);
 
-	// Keywords
-	virtual std::vector<std::string> getKeywords() const = 0;
-	virtual void setKeywords(const std::vector<std::string>& keywords) = 0;
+	std::vector<std::string> getKeywords() const;
+	void setKeywords(const std::vector<std::string>& keywords);
 
-	// LongDesc
-	virtual std::string getLongdesc() const = 0;
-	virtual void setLongdesc(const std::vector<std::string>& longdesc) = 0;
-
-	virtual void attack() = 0;
-
+	std::string getLongdesc() const;
+	void setLongdesc(const std::vector<std::string>& longdesc);
 }; 
 
 #endif 
