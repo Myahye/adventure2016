@@ -59,54 +59,54 @@ namespace Spells{
 	std::string OffenseSpell::getName() const {
 		return this->name;
 	}
-	std::vector<string> OffenseSpell::getEffect() const {
+	std::vector<std::string> OffenseSpell::getEffect() const {
 		return this->effect;
 	}
-	void OffenseSpell::setEffect(std::vector<string>& new_effect) {
+	void OffenseSpell::setEffect(std::vector<std::string>& new_effect) {
 		this->effect = new_effect;
 	}
-	std::vector<string> OffenseSpell::getDammsg() const {
+	std::vector<std::string> OffenseSpell::getDammsg() const {
 		return this->dammsg;
 	}
-	void OffenseSpell::setDammsg(std::vector<string>& new_dammsg){
+	void OffenseSpell::setDammsg(std::vector<std::string>& new_dammsg){
 		this->dammsg = dammsg;
 	}
 
-	std::vector<string> OffenseSpell::getHitChar() const {
+	std::vector<std::string> OffenseSpell::getHitChar() const {
 		return this->hitchar;
 	}
 
-	void OffenseSpell::setHitChar(std::vector<string>& new_hitChar) {
+	void OffenseSpell::setHitChar(std::vector<std::string>& new_hitChar) {
 		this->hitchar = new_hitChar;
 	}
 
-	std::vector<string> OffenseSpell::getHitRoom() const {
+	std::vector<std::string> OffenseSpell::getHitRoom() const {
 		return this->hitroom;
 
 	}
-	void OffenseSpell::setHitRoom(std::vector<string>& new_hitRoom) {
+	void OffenseSpell::setHitRoom(std::vector<std::string>& new_hitRoom) {
 		this->hitroom = new_hitRoom
 	}
 
-	std::vector<string> OffenseSpell::getHitVict() const {
+	std::vector<std::string> OffenseSpell::getHitVict() const {
 		return this->hitvict;
 	}
-	void OffenseSpell::setHitVict(std::vector<string>& new_hitVict){
+	void OffenseSpell::setHitVict(std::vector<std::string>& new_hitVict){
 		this->hitvict = new_hitVict;
 	}
 
-	std::vector<string> OffenseSpell::getImmchar() const {
+	std::vector<std::string> OffenseSpell::getImmchar() const {
 		return	this->immchar;	
 	}
-	void OffenseSpell::setImmchar(std::vector<string>& new_immChar) {
+	void OffenseSpell::setImmchar(std::vector<std::string>& new_immChar) {
 		this->immchar = new_immchar;
 	}
 
-	std::vector<string> OffenseSpell::getWearoff() const {
+	std::vector<std::string> OffenseSpell::getWearoff() const {
 		return	this->wearoff;	
 	}
 
-	void OffenseSpell::setWearoff(std::vector<string>& new_wearOff) {
+	void OffenseSpell::setWearoff(std::vector<std::string>& new_wearOff) {
 		this->wearoff = new_wearOff;
 	}
 	networking::Connection getConnection() const {
@@ -120,39 +120,39 @@ namespace Spells{
 	std::string ObjectSpell::getName() const {
 		return this->name;
 	}
-	std::vector<string> ObjectSpell::getEffect() const {
+	std::vector<std::string> ObjectSpell::getEffect() const {
 		return this->effect;
 	}
-	void ObjectSpell::setEffect(std::vector<string>& new_effect) {
+	void ObjectSpell::setEffect(std::vector<std::string>& new_effect) {
 		this->effect = new_effect;
 	}
-	std::vector<string> ObjectSpell::getDammsg() const {
+	std::vector<std::string> ObjectSpell::getDammsg() const {
 		return this->dammsg;
 	}
-	void ObjectSpell::setDammsg(std::vector<string>& new_dammsg){
+	void ObjectSpell::setDammsg(std::vector<std::string>& new_dammsg){
 		this->dammsg = new_dammsg;
 	}
 
-	std::vector<string> ObjectSpell::getHitChar() const {
+	std::vector<std::string> ObjectSpell::getHitChar() const {
 		return this->hitchar;
 	}
 
-	void ObjectSpell::setHitChar(std::vector<string>& new_hitChar) {
+	void ObjectSpell::setHitChar(std::vector<std::string>& new_hitChar) {
 		this->hitchar = new_hitChar;
 	}
 
-	std::vector<string> ObjectSpell::getHitRoom() const {
+	std::vector<std::string> ObjectSpell::getHitRoom() const {
 		return this->hitroom;
 
 	}
-	void ObjectSpell::setHitRoom(std::vector<string>& new_hitRoom) {
+	void ObjectSpell::setHitRoom(std::vector<std::string>& new_hitRoom) {
 		this->hitroom = new_hitRoom
 	}
 
-	std::vector<string> ObjectSpell::getHitVict() const {
+	std::vector<std::string> ObjectSpell::getHitVict() const {
 		return this->hitvict;
 	}
-	void ObjectSpell::setHitVict(std::vector<string>& new_hitVict){
+	void ObjectSpell::setHitVict(std::vector<std::string>& new_hitVict){
 		this->hitvict = new_hitVict;
 	}
 
