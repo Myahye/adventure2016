@@ -156,20 +156,6 @@ namespace Spells{
 		this->hitvict = new_hitVict;
 	}
 
-	// std::vector<string> ObjectSpell::getImmchar() const {
-	// 	return	this->Immchar;	
-	// }
-
-	// void ObjectSpell::setImmchar(std::vector<string> immchar) {
-	// 	this->Immchar = immchar;
-
-	// std::vector<string> ObjectSpell::getWearoff() const {
-	// 	return	this->Wearoff;	
-	// }
-
-	// void ObjectSpell::setWearoff(std::vector<string> wearOff) {
-	// 	this->Wearoff = wearOff;
-	// }
 	networking::Connection getConnection() const {
 		return this->connection;
 	}

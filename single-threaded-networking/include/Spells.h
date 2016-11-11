@@ -92,31 +92,31 @@ namespace Spells{
 		std::string getName()const;
 		//
 		std::vector<string> getEffect()const;
-		void setEffect(std::vector<string> new_effect);
+		void setEffect(std::vector<string>& new_effect);
 
 		//
 		std::vector<string> getDammsg()const;
-		void setDammsg(std::vector<string> new_dammsg);
+		void setDammsg(std::vector<string>& new_dammsg);
 
 		//
 		std::vector<string> getHitChar()const;
-		void setHitChar(std::vector<string> new_hitChar);
+		void setHitChar(std::vector<string>& new_hitChar);
 
 		//
 		std::vector<string> getHitRoom()const;
-		void setHitRoom(std::vector<string> new_hitRoom);
+		void setHitRoom(std::vector<string>& new_hitRoom);
 
 		//
 		std::vector<string> getHitVict()const;
-		void setHitVict(std::vector<string> new_hitVict);
+		void setHitVict(std::vector<string>& new_hitVict);
 
 		//
 		std::vector<string> getImmchar()const;
-		void setImmchar(std::vector<string> new_immChar);
+		void setImmchar(std::vector<string>& new_immChar);
 
 		//
 		std::vector<string> getWearoff()const;
-		void setWearoff(std::vector<string> new_wearOff);
+		void setWearoff(std::vector<string>& new_wearOff);
 
 		DefenseSpell(networking::Connection_,);
 		std::string execute(Context& context);
@@ -138,8 +138,6 @@ namespace Spells{
 		std::vector<string>  hitchar;
 		std::vector<string>  hitroom;
 		std::vector<string>  hitvict;
-		// std::vector<string>  Immchar;
-		// std::vector<string>  Wearoff;
 
 		networking::Connection connection;
 
@@ -151,31 +149,23 @@ namespace Spells{
 		std::string getName()const;
 		//
 		std::vector<string> getEffect()const;
-		void setEffect(std::vector<string> new_effect);
+		void setEffect(std::vector<string>& new_effect);
 
 		//
 		std::vector<string> getDammsg()const;
-		void setDammsg(std::vector<string> new_dammsg);
+		void setDammsg(std::vector<string>& new_dammsg);
 
 		//
 		std::vector<string> getHitChar()const;
-		void setHitChar(std::vector<string> new_hitChar);
+		void setHitChar(std::vector<string>& new_hitChar);
 
 		//
 		std::vector<string> getHitRoom()const;
-		void setHitRoom(std::vector<string> new_hitRoom);
+		void setHitRoom(std::vector<string>& new_hitRoom);
 
 		//
 		std::vector<string> getHitVict()const;
-		void setHitVict(std::vector<string> new_hitVict);
-
-		//
-		// std::vector<string> getImmchar()const;
-		// void setImmchar(std::vector<string> immchar);
-
-		//
-		// std::vector<string> getWearoff()const;
-		// void setWearoff(std::vector<string> wearoff);
+		void setHitVict(std::vector<string>& new_hitVict);
 
 		DefenseSpell(networking::Connection_,);
 		std::string execute(Context& context);
