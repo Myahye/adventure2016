@@ -10,7 +10,7 @@ private:
     int armor = 0;
     int exp = 0;
     int gold = 0;
-    int level = 0;
+    int level = 1;
     int thac0;
     int pid = 0;
     int health=100;
@@ -24,6 +24,12 @@ private:
     std::vector<std::string> description;
     std::vector<std::string> keywords;
     std::vector<std::string> longdesc;
+
+    void setNewHealth(int const level);
+    void setNewMana(int const level);
+    void setNewStats();
+    int nextLvl(int const XP,int const level) const;
+
 public:
 
 
@@ -59,7 +65,7 @@ public:
 
     //Experience
     int getExp() const;
-    void setExp(int const exp);
+    void setExp(int const XP);
 
     //Gold
     int getGold() const;

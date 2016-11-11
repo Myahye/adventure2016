@@ -40,20 +40,25 @@
 // }
 
 //This is what construction will look like
- Model::Model(const std::string& path){
-   yamlParseAndBuild(path);
+ Model::Model(const std::vector<std::string>& paths){
+   yamlParseAndBuild(paths[0]);
+   yamlParseAndBuild(paths[1]);
+   std::cout << "gei " << std::endl;
    this->context = Context{&this->rooms,&this->npcs,&this->objects,&this->players,&this->playerLocation};
+   std::cout << "goi " << std::endl;
+   this->reset();
  }
 
-//use subclass to build objects
-//each subclass method returns an unordered_map?
 void Model::yamlParseAndBuild(const std::string& pathToFile){
-  this->npcs = yamlparse.parseBuildNpcs(pathToFile);
-  this->objects = yamlparse.parseBuildObjects(pathToFile);
-  this->rooms = yamlparse.parseBuildRooms(pathToFile);
-  this->resets = yamlparse.parseBuildResets(pathToFile);
-
-  printAll();
+  std::cout << "DIFFERENT FILE\n\n\n\n\n\n\n";
+  yamlparse.loadFile(pathToFile);
+  yamlparse.buildNpcs(this->npcs);
+  yamlparse.buildObjects(this->objects);
+  yamlparse.buildResets(this->resets);
+  std::cout << "wwww " << std::endl;
+  yamlparse.parseBuildRooms(this->rooms);
+      // printAll();
+  //this->resets = yamlparse.parseBuildResets(pathToFile);
   //not yet implemented
   // this->allPlayers = yamlParse.parseBuildPlayers(pathToFile);
 
@@ -61,7 +66,7 @@ void Model::yamlParseAndBuild(const std::string& pathToFile){
 
 void Model::printAll(){
   // std::cout << "Printing map contents \n";
-  // int count = 1;
+   int count = 1;
   // for ( auto it = npcs.begin(); it != npcs.end(); ++it ){
   //   std::cout << "Map 1\nid:" << it->first << "\n";
   //   std::cout << it->first  << std::endl;
@@ -75,19 +80,19 @@ void Model::printAll(){
   //   std::cout << std::endl;
   //   count++;
   // }
-  // for ( auto it = rooms.begin(); it != rooms.end(); ++it ){
-  //    std::cout << "Map 1\nid:" << it->first << "\n";
-  //    (it->second).printClass(count);
-  //    std::cout << std::endl;
-  //    count++;
-  // }
-  //  for ( auto it = resets.begin(); it != resets.end(); ++it ){
-  //    std::cout << "Map 3\nid:" << "\n";
-  //      auto r = *it;
-  //      r->printClass(count);
-  //    std::cout << std::endl;
-  //    count++;
-  // }
+  for ( auto it = rooms.begin(); it != rooms.end(); ++it ){
+     std::cout << "Map 1\nid:" << it->first << "\n";
+     (it->second).printClass(count);
+     std::cout << std::endl;
+     count++;
+  }
+   // for ( auto it = resets.begin(); it != resets.end(); ++it ){
+   //   std::cout << "Map 3\nid:" << "\n";
+
+   //    (*it)->printClass(count);
+   //   std::cout << std::endl;
+   //   count++;
+   // }
 }
 
 int
@@ -99,7 +104,7 @@ Model::createPlayer(const std::string& username, const std::string& password){
 
   Player newPlayer{this->assignedIds, username, password};
   players.insert({this->assignedIds, newPlayer});
-  playerLocation[assignedIds] = 1137;
+  playerLocation[assignedIds] = 3007;
   assignedIds++;
   for (auto & player: players) {
       std::cout << "Player Id: " << player.second.getId() << ", username: " << player.second.getUsername() << ", password: " << player.second.getPassword() << "\n";
@@ -219,11 +224,20 @@ Model::dummySayCommand(const int& playerId, const std::string& message){
 
 //----------------------Lawrence Yu
 void Model::reset(){
+    //  std::cout << "gerooooi " << std::endl;
   for(auto& reset : resets) {
-    reset->execute(this->context);
-    this->context.setCurrentlySelectedNpc(reset->getCurrentlySelectedNpc());
+  //      std::cout << "pppp " << std::endl;
+    if(reset != NULL) {
+           //reset->printClass(1);
+      reset->execute(this->context);
+   //     std::cout << "lll " << std::endl;
+      this->context.setCurrentlySelectedNpc(reset->getCurrentlySelectedNpc());
+  //  std::cout << "geroi " << std::endl;
+    }
   }
+   //   std::cout << "roi " << std::endl;
   this->context.setCurrentlySelectedNpc(NULL);
+    //  std::cout << "oi " << std::endl;
 }
 
 Context Model::getContext() const {
@@ -231,54 +245,11 @@ Context Model::getContext() const {
 }
 
 
-std::string
-Model::stealCommand(const int& playerId, const std::string& command){
-  // std::string response = this->players[playerId].getUsername() + "> " + command;
-  // std::string message = command.substr(6);
-  // std::transform(message.begin(), message.end(), message.begin(), ::tolower);
-
-  // int currentRoomId = this->playerLocation[playerId];
-  // Room currentRoom = this->rooms[currentRoomId];
-
-
-  // //will move this to room class later as if isDirection return door.getDesc()
-
-  // Npc* currentNpc = currentRoom.findNpc(message);
-
-  // if(currentNpc != NULL) {
-
-  //   //change for look toddler 1 look toddler 2 look toddler 3 later since it only checks the description of the first duplicate npc?
-  //   response += "\n\n" + currentNpc->getDesc();
-  //   response += "\n     Wearing: "  + currentNpc->getNpcEquipmentDesc();
-  //   response += "\n     Carrying: " + currentNpc->getNpcInventoryDesc() + "\n\n";
-
-  //   return response;
-  // }
-
-  // //-------------------------------------------------look "Object keyword"
-
-  // //will move this to room class later as if isobject return object.getfulldesc()
-
-  // Object* currentObject = currentRoom.findObject(message);
-
-  // if(currentObject != NULL) {
-
-  //   response += "\n";
-  //   //change for look object 1 look object 2 look object 3 later since it only checks the description of the first duplicate object?
-  //   for(auto descriptionText : objectIdVectorPair.second[0].getExtra().first) {
-  //     response += descriptionText + "\n";
-  //   }
-  //   return response;
-  // }
-
-  // return this->players[playerId].getUsername() + "> " + "Cannot find " + message + ", no match. \n\n";
+void Model::playerDisconnected(const int playerId) {
+  this->rooms[playerLocation[playerId]].removePlayer(playerId);
 }
 
-/*delete command to check if delete works on npc from npcs and npcs from room {
-  
-
-//////////////////IMPORTANT CHECK IF GAME WORKS EVEN AFTER DELETING OBJECTS/ NPCS//////////////////
-
+void Model::playerConnect(const int playerId) {
+  std::cout << "s " << playerLocation[playerId] << std::endl;
+  this->rooms[playerLocation[playerId]].addPlayer(playerId, players[playerId].getUsername());
 }
-
-*/

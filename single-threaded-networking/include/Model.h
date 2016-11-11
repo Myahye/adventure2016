@@ -9,7 +9,7 @@
 #include "Room.h"
 #include "Door.h"
 #include "CustomError.h"
-#include "yamlParser.h"
+#include "YamlParseAndBuild.h"
 #include "Resets.h"
 #include "Npc.h"
 #include "Context.h"
@@ -29,7 +29,7 @@ private:
   //need to change these to temlpate values
   std::unordered_map<int,int> playerLocation;
 
-  YamlParser yamlparse;
+  YamlParseandBuild yamlparse;
   void yamlParseAndBuild(const std::string& pathToFile);
   void printAll();
   //Still need to be implemented
@@ -44,7 +44,7 @@ public:
 
   //Model(); //temp
 
-  Model(const std::string& path);
+  Model(const std::vector<std::string>& paths);
 
   int createPlayer(const std::string& username, const std::string& password);
   std::vector<std::tuple<int,std::string,std::string>> getPlayerCredentialsVector() const;
@@ -72,5 +72,8 @@ public:
 
   //-----------------------------Lawrence YU
   void reset();
+  
+  void playerDisconnected(const int playerId);
+  void playerConnect(const int playerId);
 };
 #endif /* commandparse_h */
