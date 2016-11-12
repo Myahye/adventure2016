@@ -5,10 +5,10 @@
 
 //Npc Constructor
 Npc::Npc():
-	npcCharacter{0}, shortdesc{""} {};
+	shortdesc{""} {};
 
-Npc::Npc (int const id, std::string const shortdesc):
-	npcCharacter{id}, shortdesc{shortdesc} {};
+Npc::Npc (std::string const shortdesc):
+	shortdesc{shortdesc} {};
 
 std::string Npc::getShortDesc() const {
 	return shortdesc;
@@ -83,25 +83,34 @@ bool Npc::unEquipObject(int slot) {
   return false;
 }
 
-std::unordered_map<int,std::vector<Object>> Npc::getNpcInventory() const {
+std::unordered_map<int,std::vector<Object>> Npc::getInventory() const {
   return this->npcInventory;
 }
 
-std::unordered_map<int,Object> Npc::getNpcEquipment() const {
+std::unordered_map<int,Object> Npc::getEquipment() const {
   return this->npcEquipment;
 }
 
-std::string Npc::getNpcEquipmentDesc() const {
+std::string Npc::getEquipmentDesc() const {
   std::string response = "";
   for_each(npcEquipment.begin(), npcEquipment.end(), [&response](const auto& currentEquip){response += currentEquip.second.getShortDesc() + ", ";});
     std::cout << "npe equip: " << npcEquipment.size() << std::endl;	
   return response;
 }
-std::string Npc::getNpcInventoryDesc() const {
+std::string Npc::getInventoryDesc() const {
 	std::string response = "";
 	  std::cout << "npe inv: " << npcInventory.size() << std::endl;
 	std::for_each(npcInventory.begin(), npcInventory.end(), [&response](const auto& currentItem){response += currentItem.second[0].getShortDesc() + " (Quantity: " + std::to_string(currentItem.second.size()) + "), ";});	
   return response;
+}
+
+//THE FORMULAS NEED TO BE CHANGED (COPIED FROM PLAYER)
+int Npc::newHealth(const int lvl){
+    return DEFAULT_NPC_HEALTH+lvl*lvl*2;
+}
+
+int Npc::newMana(const int lvl){
+    return 95+lvl*lvl*1.5;
 }
 
 #endif

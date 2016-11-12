@@ -1,20 +1,22 @@
 #ifndef NPC_H
 #define NPC_H
 
-#include "Character.h"
+#include "CharacterType.h"
 
-class Npc {
-
+class Npc : public CharacterType {
+protected:
 	std::string shortdesc;
 
 	std::unordered_map<int,std::vector<Object>> npcInventory;
 	std::unordered_map<int,Object> npcEquipment;
 
 public:
-	Character npcCharacter;
+    const int DEFAULT_NPC_LEVEL = 2;
+    const int DEFAULT_NPC_HEALTH = 100;
+    const int DEFAULT_NPC_MANA = 50;
 	Npc();
 	//Npc Constructor
-	Npc(int const id, std::string const shortdesc);
+	Npc(std::string const shortdesc);
 
 	std::string getShortDesc() const;
 	void setShortDesc(const std::string& shortdesc);
@@ -28,11 +30,14 @@ public:
     bool unEquipObject(int slot);
     //bool unequipObject();
 
-    std::unordered_map<int,std::vector<Object>> getNpcInventory() const;
-    std::unordered_map<int,Object> getNpcEquipment() const;
+    std::unordered_map<int,std::vector<Object>> getInventory() const;
+    std::unordered_map<int,Object> getEquipment() const;
 
-    std::string getNpcEquipmentDesc() const;
-    std::string getNpcInventoryDesc() const;
+    std::string getEquipmentDesc() const;
+    std::string getInventoryDesc() const;
+    int newHealth(const int lvl);
+    int newMana(const int lvl);
+
 };
 
 #endif

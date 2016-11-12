@@ -6,15 +6,11 @@
 
 #include "Room.h"
 #include "Door.h"
-#include "Player.h"
-#include "CharacterImp.h"
-#include "NpcImp.h"
 #include "Character.h"
-#include "Npc.h"
 
 using namespace std;
 
-void NpcTest() {
+/*void NpcTest() {
     // Empty constructor test:
     Npc* defaultNpc = new Npc();
     assert(defaultNpc != NULL);
@@ -84,7 +80,17 @@ void NpcTest() {
     assert(npc->getLongdesc().size() > 0);
     cout << "Longdesc: " << endl;
     cout << npc->getLongdesc() << endl;
-}
+}*/
+
+void refactoringTest(){
+    Character playerChar(1234, "abc", "123");
+    Character npcChar(123, "short desc");
+
+    playerChar.setArmor(5);
+    npcChar.setArmor(1);
+
+    cout << "Player armor: " << playerChar.getArmor() << endl;
+}   cout << "NPC armor: " << npcChar.getArmor() << endl;
 
 int main() {
     // vector<Room> rooms;

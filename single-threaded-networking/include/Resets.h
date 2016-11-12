@@ -21,13 +21,13 @@ namespace Resets {
 		unsigned int limit;
 		int room;
 		std::string comment;
-		Npc* currentlySelectedNpc = NULL;
+		Character* currentlySelectedNpc = NULL;
 	public:
 		ResetNpc(const std::string& action, int const id, unsigned int const limit, int const room, const std::string& comment);
 
 		void execute(Context& context);
 
-		Npc* getCurrentlySelectedNpc();
+		Character* getCurrentlySelectedNpc();
 
 		void printClass(int n);
 	};
@@ -41,13 +41,13 @@ namespace Resets {
 		unsigned int limit;
 		int room;
 		std::string comment;
-		Npc* currentlySelectedNpc = NULL;
+		Character* currentlySelectedNpc = NULL;
 	public:
 		ResetObject(const std::string& action, int const id, unsigned int const limit, int const room, const std::string& comment);
 
 		void execute(Context& context);
 
-		Npc* getCurrentlySelectedNpc();
+		Character* getCurrentlySelectedNpc();
 
 		void printClass(int n);
 	};

@@ -15,8 +15,8 @@ namespace Authentication {
   }
 
   bool
-  currentlyLoggedIn(int playerID, const std::vector<Connection>& clients) {
-    auto player = std::find_if(clients.begin(), clients.end(), [playerID] (Connection c) { return c.playerIDConnectedToClientConnection == playerID; });
+  currentlyLoggedIn(int playerId, const std::vector<Connection>& clients) {
+    auto player = std::find_if(clients.begin(), clients.end(), [playerId] (Connection c) { return c.playerId == playerId; });
     if (player != clients.end()) {
       return player->currentState == ConnectionState::AUTHORIZED;
     } else {
@@ -25,15 +25,15 @@ namespace Authentication {
   }
 
   bool
-  correctPassword(int playerID, const std::string& password, const std::vector<std::tuple<int,std::string,std::string>>& players) {
-  	auto player = std::find_if(players.begin(), players.end(), [playerID] (auto credentials) { return std::get<0>(credentials) == playerID; });
+  correctPassword(int playerId, const std::string& password, const std::vector<std::tuple<int,std::string,std::string>>& players) {
+  	auto player = std::find_if(players.begin(), players.end(), [playerId] (auto credentials) { return std::get<0>(credentials) == playerId; });
   	return std::get<2>(*player) == password;
   }
 
   std::string
-  authorizeClient(Message& message, Server& server, std::vector <Connection>& clients, ServerHelper& serverHelper) {
+  authorizeClient(Message& message, Server& server, std::vector <Connection>& clients, ModelInterface& modelInterface) {
 
-  	std::vector<std::tuple<int,std::string,std::string>> players = serverHelper.getPlayerCredentialsVector();
+  	std::vector<std::tuple<int,std::string,std::string>> players = modelInterface.getPlayerCredentialsVector();
 
     if (message.text == "1" && message.connection.currentState == ConnectionState::UNAUTHORIZED) {
 
@@ -46,21 +46,21 @@ namespace Authentication {
 
       return "Please enter your username and password ex. 'Bob Bobpassword': \n";
     } else if (message.connection.currentState == ConnectionState::REGISTERING) {
-      return handleRegistration(message, server, clients, players, serverHelper);
+      return handleRegistration(message, server, clients, players, modelInterface);
     } else if (message.connection.currentState == ConnectionState::LOGIN) {
-      return handleLogin(message, server, clients, players, serverHelper);
+      return handleLogin(message, server, clients, players, modelInterface);
     } else {
       return "Sorry that is not a valid command, please enter '1' to register a new character, enter '2' to login to an existing character, or enter 'quit' to quit\n";
     }
   }
 
   std::string
-  handleLogin(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, ServerHelper& serverHelper) {
+  handleLogin(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, ModelInterface& modelInterface) {
     std::vector <std::string> playerCredentials;
     boost::trim_if(message.text, boost::is_any_of("\t "));
     boost::split(playerCredentials, message.text, boost::is_any_of("\t "), boost::token_compress_on);
 
-    int playerID = 0;
+    int playerId = 0;
 
     if (playerCredentials.size() != 2) {
       return "Please enter your username and password in a 'username SPACE password' format, no extra spaces are allowed in your username or password: \n";
@@ -72,33 +72,36 @@ namespace Authentication {
       return "Sorry that is an invalid username. Please only enter alphanumeric characters: \n";
     } else if (playerCredentials[1].find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890_") != std::string::npos) {
       return "Sorry that is an invalid password. Please only enter alphanumeric characters: \n";
-    } else if ((playerID = findExistingPlayer(playerCredentials[0], players)) != 0) {
+    } else if ((playerId = findExistingPlayer(playerCredentials[0], players)) != 0) {
 
-      if (currentlyLoggedIn(playerID, clients)) {
+      if (currentlyLoggedIn(playerId, clients)) {
       	return "Player is currently logged in. Please enter a different username:\n";
-      } else if (!correctPassword(playerID, playerCredentials[1], players)) {
+      } else if (!correctPassword(playerId, playerCredentials[1], players)) {
         return "Sorry wrong password, please try again: \n";
       }
-      server.setPlayerIDConnectedToClient(message.connection, playerID);
+     
+      server.setPlayerId(message.connection, playerId);
       server.setClientCurrentState(message.connection, ConnectionState::AUTHORIZED);
 
       auto client = std::find_if(clients.begin(), clients.end(), [message](Connection c) { return c == message.connection; });
-      client-> playerIDConnectedToClientConnection = playerID;
+      client-> playerId = playerId;
       client-> currentState = ConnectionState::AUTHORIZED;
+      
+      modelInterface.playerConnect(*client);
 
-      return "Welcome back " + playerCredentials[0] + "," + serverHelper.getCurrentRoomDescription(playerID);
+      return "Welcome back " + playerCredentials[0] + "," + modelInterface.getCurrentRoomDescription(playerId);
     } else {
       return "Sorry that player does not exist, please enter an existing username: \n";
     }
   }
 
   std::string
-  handleRegistration(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, ServerHelper& serverHelper) {
+  handleRegistration(Message& message, Server& server, std::vector <Connection>& clients, const std::vector<std::tuple<int,std::string,std::string>>& players, ModelInterface& modelInterface) {
     std::vector <std::string> playerCredentials;
     boost::trim_if(message.text, boost::is_any_of("\t "));
     boost::split(playerCredentials, message.text, boost::is_any_of("\t "), boost::token_compress_on);
 
-    int playerID = 0;
+    int playerId = 0;
 
     if (playerCredentials.size() != 2) {
       return "Please enter your username and password in a 'username SPACE password' format, no extra spaces are allowed in your username or password: \n";
@@ -110,19 +113,21 @@ namespace Authentication {
       return "Sorry that is an invalid username. Please only enter alphanumeric characters: \n";
     } else if (playerCredentials[1].find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890_") != std::string::npos) {
       return "Sorry that is an invalid password. Please only enter alphanumeric characters: \n";
-    } else if ((playerID = findExistingPlayer(playerCredentials[0], players)) != 0) {
+    } else if ((playerId = findExistingPlayer(playerCredentials[0], players)) != 0) {
       return "Sorry that username is in use. Please enter a different username: \n";
     } else {
-      playerID = serverHelper.createPlayer(playerCredentials[0],playerCredentials[1]);
+      playerId = modelInterface.createPlayer(playerCredentials[0],playerCredentials[1]);
 
-      server.setPlayerIDConnectedToClient(message.connection,playerID);
+      server.setPlayerId(message.connection,playerId);
       server.setClientCurrentState(message.connection, ConnectionState::AUTHORIZED);
 
       auto client = std::find_if(clients.begin(), clients.end(), [message](Connection c) {return c == message.connection; });
-      client-> playerIDConnectedToClientConnection = playerID;
+      client-> playerId = playerId;
       client-> currentState = ConnectionState::AUTHORIZED;
-
-      return "Your name is " + playerCredentials[0] + "," + serverHelper.getCurrentRoomDescription(playerID);
+      
+      modelInterface.playerConnect(*client);
+      
+      return "Your name is " + playerCredentials[0] + "," + modelInterface.getCurrentRoomDescription(playerId);
     }
   }
 }

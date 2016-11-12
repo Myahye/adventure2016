@@ -2,18 +2,23 @@
 #define CHARACTER_H
 
 #include <iostream>
-#include <vector>
-#include <string>
-#include "Object.h"
-#include <unordered_map>
-#include <algorithm>
+#include "Player.h"
+#include "Npc.h"
+#include "CharacterType.h"
 
 class Character {
+protected:
+	CharacterType* charType;
+
 	int armor = 0;
 	int exp = 0;
 	int gold = 0;
 	int id = 0;
 	int level = 0;
+	
+	int health;
+    int mana;
+
 	int thac0;
 
 	std::string damage;
@@ -26,6 +31,8 @@ class Character {
 public:
 	Character();
 	Character(const int id);
+	Character(const int id, const std::string& shortdesc);
+	Character(const int id, const std::string& username, const std::string& password);
 
 	int getArmor() const;
 	void setArmor(const int armor);
@@ -57,8 +64,17 @@ public:
 	std::vector<std::string> getKeywords() const;
 	void setKeywords(const std::vector<std::string>& keywords);
 
-	std::string getLongdesc() const;
-	void setLongdesc(const std::vector<std::string>& longdesc);
+	std::string getLongDesc() const;
+	void setLongDesc(const std::vector<std::string>& longdesc);
+
+	int getHealth() const;
+    void setHealth(int const health);
+
+    int getMana() const;
+    void setMana(int const mana);
+
+	CharacterType& getCharacterType();
 }; 
 
-#endif 
+#endif
+

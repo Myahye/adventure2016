@@ -10,6 +10,20 @@ id{0} {};
 Character::Character (const int id):
 id{id} {};
 
+Character::Character (const int id, const std::string& shortdesc):
+id{id}
+//charType{new Npc(shortdesc)}
+{
+	charType = new Npc(shortdesc);
+};
+
+Character::Character (const int id, const std::string& username, const std::string& password):
+id{id}
+//charType{new Player(username, password)}
+{
+	charType = new Player(username, password);
+};
+
 int Character::getArmor() const{
 	return armor;
 }
@@ -82,13 +96,40 @@ void Character::setKeywords(const std::vector<std::string>& keywords){
 	this->keywords = keywords;
 }
 
-std::string Character::getLongdesc() const{
+std::string Character::getLongDesc() const{
 	std::string descString = "";
 	std::for_each(longdesc.begin(), longdesc.end(), [&descString](const std::string& i){descString += i + "\n";} );	
 	return descString;
 }
-void Character::setLongdesc(const std::vector<std::string>& longdesc){
+void Character::setLongDesc(const std::vector<std::string>& longdesc){
 	this->longdesc = longdesc;
 }
 
+int Character::getHealth() const{
+    return health;
+}
+
+void Character::setHealth(int const health){
+    this->health = health;
+}
+
+int Character::getMana() const{
+    return mana;
+}
+
+void Character::setMana(int const manaa){
+    this->mana = manaa;
+}
+
+CharacterType& Character::getCharacterType(){
+	return *charType;
+}
+
+/*void Character::setTypeToPlayer(){
+	charType = new Player();
+}
+
+void Character::setTypeToNpc(){
+
+}*/
 #endif
