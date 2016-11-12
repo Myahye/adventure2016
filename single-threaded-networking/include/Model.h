@@ -5,13 +5,12 @@
 #include <unordered_map>
 #include <tuple>
 #include <boost/algorithm/string/predicate.hpp>
-#include "Player.h"
 #include "Room.h"
 #include "Door.h"
 #include "CustomError.h"
-#include "YamlParseAndBuild.h"
+#include "YamlParseBuild.h"
 #include "Resets.h"
-#include "Npc.h"
+#include "Character.h"
 #include "Context.h"
 
 //using namespace custom_errors;
@@ -19,9 +18,9 @@
 class Model {
 
 private:
-  std::unordered_map<int,Player> players;
+  std::unordered_map<int,Character> players;
   std::unordered_map<int,Room> rooms;
-  std::unordered_map<int,Npc> npcs;
+  std::unordered_map<int,Character> npcs;
   std::unordered_map<int,Object> objects;
   std::vector<std::unique_ptr<Reset>> resets;
 
@@ -29,7 +28,7 @@ private:
   //need to change these to temlpate values
   std::unordered_map<int,int> playerLocation;
 
-  YamlParseandBuild yamlparse;
+  YamlParseBuild yamlparse;
   void yamlParseAndBuild(const std::string& pathToFile);
   void printAll();
   //Still need to be implemented

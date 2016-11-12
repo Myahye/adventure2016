@@ -23,7 +23,12 @@ std::string Room::getDesc() const {
   for_each(mDesc.begin(), mDesc.end(), [&response](const std::string& descriptionText){response += descriptionText + "\n";} ); 
   return response;
 }
-std::pair< std::vector<std::string>, std::vector<std::string> > Room::getExtendedDesc() const {
+
+std::vector <std::string> Room::getDescV() const {
+  return this->mDesc;
+}
+
+std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > > Room::getExtendedDesc() const {
     return this->mExtendedDesc;
 }
 std::string Room::getName() const {
@@ -54,7 +59,7 @@ int Room::getRoomInDir(std::string direction) const {
 void Room::setDescription(std::vector<std::string>& new_desc) {
     this->mDesc = new_desc;
 }
-void Room::setExtendedDesc(std::pair< std::vector<std::string>, std::vector<std::string> >& new_extended_desc) {
+void Room::setExtendedDesc(const std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > >& new_extended_desc) {
     this->mExtendedDesc = new_extended_desc;
 }
 void Room::setName(std::string& new_name) {
@@ -74,32 +79,40 @@ bool Room::addDoor(const Door& new_door) {
     return false;
   }
 }
+void Room::addVectorDoors(std::vector<Door>& new_vector_doors){
+  for (auto& door : new_vector_doors){
+    addDoor(door);
+  }
+}
 //New function added in to test
 void Room::printClass(int n) const{
   std::cout << "\n\n---------------------------------------";
   std::cout << "Room: "<< n << "\n";
   std::cout << "Room id: " << mRoomId << std::endl;
-  std::cout << "\nRoom Name: " << mName << std::endl;
-  for(auto i : mDesc) {
-    std::cout << "\tShort Desc: " << i << std::endl;
+  std::cout << "\tRoom Name: " << mName << std::endl;
+  std::cout << "\tDesc: " << std::endl;
+  printVector(mDesc);
+  std::cout << "\tExtended Description: " << std::endl;
+  for (auto& eachDesc : mExtendedDesc){
+    std::cout << "\t\t Description: " << std::endl;
+    printVector(eachDesc.first);
+    std::cout << "\t\tKeywords: " << std::endl;
+    printVector(eachDesc.second);
   }
-  // for(auto i : mExtendedDesc) {
-  //   std::cout << "\tExtended Desc: " << i.first.size() << std::endl;
-  // }
-  for(auto i : doors) {
-    std::cout << "   Door dir: "<< i.getDir() << "\n";
-    //for(auto k : i.getDesc()) {
-      std::cout << "   Door desc: " << i.getDesc() << std::endl;
-   // }
-    for(auto k : i.getKeywords()) {
-      std::cout << "   Door keywords: " << k << std::endl;
-    }
-    std::cout << "   Door Door_id: " << i.getDoorId() << std::endl;
-    std::cout << "   Door destinationId: " << i.getDestinationId() << std::endl;
+  for(auto& i : doors) {
+    std::cout << "\tDoor dir: "<< i.getDir() << "\n";
+    std::cout << "\tDoor Door_id: " << i.getDoorId() << std::endl;
+    std::cout << "\tDoor destinationId: " << i.getDestinationId() << std::endl;  
+    printVector(i.getDescV());
+    printVector(i.getKeywords());
   }
   //std::cout << "\tthac0: " << thac0 << std::endl;
 }
-
+void Room::printVector(const std::vector<std::string>& vec) const{
+  for (auto& element : vec){
+    std::cout << "\t\t" << element << std::endl;
+  }
+}
 //--------------------------------------Lawrence Yu
 Character* Room::addNpc(Character& npc, unsigned int limit) {
   if(npcsInRoom[npc.getId()].size() >= limit) {

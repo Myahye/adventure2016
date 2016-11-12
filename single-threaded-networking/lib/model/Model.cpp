@@ -56,7 +56,7 @@ void Model::yamlParseAndBuild(const std::string& pathToFile){
   yamlparse.buildObjects(this->objects);
   yamlparse.buildResets(this->resets);
   std::cout << "wwww " << std::endl;
-  yamlparse.parseBuildRooms(this->rooms);
+  yamlparse.buildRooms(this->rooms);
       // printAll();
   //this->resets = yamlparse.parseBuildResets(pathToFile);
   //not yet implemented
@@ -102,12 +102,12 @@ Model::createPlayer(const std::string& username, const std::string& password){
   //     assignedIds, username, password,
   // };
 
-  Player newPlayer{this->assignedIds, username, password};
+  Character newPlayer{this->assignedIds, username, password};
   players.insert({this->assignedIds, newPlayer});
   playerLocation[assignedIds] = 3007;
   assignedIds++;
   for (auto & player: players) {
-      std::cout << "Player Id: " << player.second.getId() << ", username: " << player.second.getUsername() << ", password: " << player.second.getPassword() << "\n";
+      std::cout << "Player Id: " << player.second.getId() << ", username: " << player.second.getCharacterType().getUsername() << ", password: " << player.second.getCharacterType().getPassword() << "\n";
   }
   return assignedIds - 1;
 }
@@ -118,7 +118,7 @@ Model::getPlayerCredentialsVector() const {
   std::vector<std::tuple<int,std::string,std::string>> vector;
 
   for(auto player: players) {
-    vector.push_back(std::make_tuple(player.second.getId(),player.second.getUsername(),player.second.getPassword()));
+    vector.push_back(std::make_tuple(player.second.getId(),player.second.getCharacterType().getUsername(),player.second.getCharacterType().getPassword()));
   }
 
   return vector;
@@ -160,7 +160,7 @@ Model::getCurrentRoomDescription(const int& playerId) {
 //---------------------------------------------------lawrence Yu
 std::string
 Model::dummySayCommand(const int& playerId, const std::string& message){
-  return this->players[playerId].getUsername() + "> " + message.substr(4) + "\n\n";
+  return this->players[playerId].getCharacterType().getUsername() + "> " + message.substr(4) + "\n\n";
 }
 
 // std::string
@@ -251,5 +251,5 @@ void Model::playerDisconnected(const int playerId) {
 
 void Model::playerConnect(const int playerId) {
   std::cout << "s " << playerLocation[playerId] << std::endl;
-  this->rooms[playerLocation[playerId]].addPlayer(playerId, players[playerId].getUsername());
+  this->rooms[playerLocation[playerId]].addPlayer(playerId, players[playerId].getCharacterType().getUsername());
 }

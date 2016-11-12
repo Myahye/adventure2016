@@ -65,8 +65,11 @@ namespace Commands {
 			response += "\n";
 			//move loop out later;
 					//need look through all currentobject get extra for keyword
-			for(auto descriptionText : currentObject->getExtra().first) {
-			  response += descriptionText + "\n";
+			for (auto eachPair : currentObject->getExtra()){
+				for(auto descriptionText : eachPair.first) {
+				  response += descriptionText + "\n";
+				}
+				response += "\n";
 			}
 			return response;
 		}

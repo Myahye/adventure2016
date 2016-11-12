@@ -6,7 +6,9 @@ add_library(BaseClass
 	Room.cpp
 	Door.cpp
 	Player.cpp
-	Object.cpp Context.cpp)
+	Object.cpp
+	Context.cpp
+	Spells.cpp)
 	set_target_properties(networking
 	                      PROPERTIES
 	                      LINKER_LANGUAGE CXX

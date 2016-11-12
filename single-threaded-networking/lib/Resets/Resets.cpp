@@ -16,7 +16,7 @@ namespace Resets {
 
   		auto it = npcs->find(this->id);
 	  	if(it != npcs->end()) {
-    		Charcter npc = (*npcs)[this->id];
+    		Character npc = (*npcs)[this->id];
     		// Npc npcClone = clone(npc); 
     		auto it1 = rooms->find(this->room);
 	  		if(it1 != rooms->end()) {
@@ -30,6 +30,11 @@ namespace Resets {
     		}
   		}
 	}
+	//Get currentlySelectedNpc
+	Character* ResetNpc::getCurrentlySelectedNpc() {
+		return this->currentlySelectedNpc;
+	}
+
 	//New function added in to test
 	void ResetNpc::printClass(int n) {
 		std::cout << "\n\n";
@@ -40,10 +45,6 @@ namespace Resets {
 		std::cout << "\tid: " << id << std::endl;
 		std::cout << "\tlimit: " << limit << std::endl;
 		std::cout << "\troom: " << room << std::endl;
-	}
-	//Get currentlySelectedNpc
-	Character* ResetNpc::getCurrentlySelectedNpc() {
-		return this->currentlySelectedNpc;
 	}
 
 //-----------------------------------------ResetObject
@@ -66,6 +67,12 @@ namespace Resets {
     		}
   		}
 	}
+
+	//Get currentlySelectedNpc
+	Character* ResetObject::getCurrentlySelectedNpc() {
+		return this->currentlySelectedNpc;
+	}
+
 	//New function added in to test
 	void ResetObject::printClass(int n) {
 		std::cout << "\n\n";
@@ -76,10 +83,6 @@ namespace Resets {
 		std::cout << "\tid: " << id << std::endl;
 		std::cout << "\tlimit: " << limit << std::endl;
 		std::cout << "\troom: " << room << std::endl;
-	}
-	//Get currentlySelectedNpc
-	Npc* ResetObject::getCurrentlySelectedNpc() {
-		return this->currentlySelectedNpc;
 	}
 
 //-----------------------------------------ResetGive
@@ -104,7 +107,7 @@ namespace Resets {
 		  	if(it != objects->end()) {
 	    		Object object = (*objects)[this->id];
 	    		// object npcClone = clone(npc); 
-	    		currentlySelectedNpc->addObjectToInventory(object, this->limit);
+	    		currentlySelectedNpc->getCharacterType().addObjectToInventory(object, this->limit);
 	  		}
   		}
 	}
@@ -121,7 +124,7 @@ namespace Resets {
 		std::cout << "\troom: " << room << std::endl;
 	}
 	//Get currentlySelectedNpc
-	Npc* ResetGive::getCurrentlySelectedNpc() {
+	Character* ResetGive::getCurrentlySelectedNpc() {
 		return this->currentlySelectedNpc;
 	}
 
@@ -143,10 +146,10 @@ namespace Resets {
 	    		// object npcClone = clone(npc); 
 	    		//std::cout << "E: " << currentlySelectedNpc->getId() << std::endl;
 	    		if (currentlySelectedNpc->getId() > 0) {
-		    		if(currentlySelectedNpc->getNpcEquipment().find(this->slot) == currentlySelectedNpc->getNpcEquipment().end()) {
+		    		if(currentlySelectedNpc->getCharacterType().getEquipment().find(this->slot) == currentlySelectedNpc->getCharacterType().getEquipment().end()) {
 		    			//this->printClass(1);
-		    			currentlySelectedNpc->addObjectToInventory(object,1);
-		    			currentlySelectedNpc->equipObject(object, this->slot);
+		    			currentlySelectedNpc->getCharacterType().addObjectToInventory(object,1);
+		    			currentlySelectedNpc->getCharacterType().equipObject(object, this->slot);
 		    		}
 	    		}
 	  		}
@@ -164,7 +167,7 @@ namespace Resets {
 		std::cout << "\tslot: " << slot<< std::endl;
 	}
 	//Get currentlySelectedNpc
-	Npc* ResetEquip::getCurrentlySelectedNpc() {
+	Character* ResetEquip::getCurrentlySelectedNpc() {
 		return this->currentlySelectedNpc;
 	}
 

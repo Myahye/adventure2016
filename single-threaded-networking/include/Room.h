@@ -15,7 +15,7 @@ class Room {
 
 private:
     std::vector<std::string> mDesc;
-    std::pair< std::vector<std::string>, std::vector<std::string> > mExtendedDesc;
+    std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > > mExtendedDesc;
     std::string mName;
     unsigned int mRoomId;
     std::vector<Door> doors;
@@ -41,7 +41,8 @@ std::unordered_map<int, std::string> playersInRoom;
 
     // Accessors
     std::string getDesc() const;
-    std::pair< std::vector<std::string>, std::vector<std::string> > getExtendedDesc() const;
+    std::vector <std::string> getDescV() const;
+    std::vector< std::pair<std::vector<std::string>, std::vector<std::string> > > getExtendedDesc() const;
     std::string getName() const;
     int getRoomId() const;
     std::vector<Door> getDoors() const;
@@ -50,14 +51,15 @@ std::unordered_map<int, std::string> playersInRoom;
 
     // Mutators
     void setDescription(std::vector<std::string>& new_desc);
-    void setExtendedDesc(std::pair< std::vector<std::string>, std::vector<std::string> >& new_extended_desc);
+    void setExtendedDesc(const std::vector< std::pair<std::vector<std::string>, std::vector<std::string> > >& new_extended_desc);
     void setName(std::string& new_name);
     void setRoomId(const int new_room_id);
     bool addDoor(const Door& new_door);
-
+    void addVectorDoors(std::vector<Door>& new_vector_doors);
     //New function added in to test
     void printClass(int n) const;
-
+    void printVector(const std::vector<std::string>& vec) const;
+    
     //--------------------------------------Lawrence Yu
     Character* addNpc(Character& npc, unsigned int limit);
     bool removeNpc(const int npcId);
