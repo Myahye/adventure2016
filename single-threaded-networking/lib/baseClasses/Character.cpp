@@ -24,6 +24,8 @@ id{id}
 	charType = new Player(username, password);
 };
 
+Character::~Character(){}
+
 int Character::getArmor() const{
 	return armor;
 }

@@ -12,6 +12,8 @@ Player::Player (std::string const username, std::string const password):
     username{username}, password{password}
     {};
 
+Player::~Player(){}
+
 std::string Player::getUsername() const {
     return username;
 }
@@ -28,7 +30,46 @@ void Player::setPassword(std::string& password) {
 }
 
 /*helper functions to level up*/
+/*
+void Player::addObjectToInventory(const Object& object, unsigned int limit){
+    //todo
+}
 
+bool Player::removeObjectFromInventory(const std::string& objectName){
+    //todo
+    return false;
+}
+
+bool Player::equipObject(const Object& object, int slot){
+    //todo
+    return false;
+}
+
+bool Player::unEquipObject(int slot){
+    //todo
+    return false;
+}
+
+std::unordered_map<int,std::vector<Object>> Player::getInventory() const{
+    //todo
+    return NULL;
+}
+
+std::unordered_map<int,Object> Player::getEquipment() const{
+    //todo
+    return NULL;
+}
+
+std::string Player::getInventoryDesc() const{
+    //todo
+    return "";
+}
+
+std::string Player::getEquipmentDesc() const{
+    //todo
+    return "";
+}
+*/
 int Player::newHealth(int const lvl){
     return DEFAULT_PLAYER_HEALTH+lvl*lvl*2;
 }

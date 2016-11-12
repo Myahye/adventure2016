@@ -16,6 +16,8 @@ public:
     Player ();
     Player (std::string const username, std::string const password);
 
+    ~Player();
+
     //username
     std::string getUsername() const;
     void setUsername(std::string& username);
@@ -23,6 +25,15 @@ public:
     //password
     std::string getPassword() const;
     void setPassword(std::string& password);
+/*
+    void addObjectToInventory(const Object& object, unsigned int limit);
+    bool removeObjectFromInventory(const std::string& objectName);
+    bool equipObject(const Object& object, int slot);
+    bool unEquipObject(int slot);
+    std::unordered_map<int,std::vector<Object>> getInventory() const;
+    std::unordered_map<int,Object> getEquipment() const;
+    std::string getInventoryDesc() const;
+    std::string getEquipmentDesc() const;*/
 
     int newHealth(const int lvl);
     int newMana(const int lvl);

@@ -34,6 +34,8 @@ public:
 	Character(const int id, const std::string& shortdesc);
 	Character(const int id, const std::string& username, const std::string& password);
 
+	~Character();
+	
 	int getArmor() const;
 	void setArmor(const int armor);
 

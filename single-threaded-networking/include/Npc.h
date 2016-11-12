@@ -18,6 +18,8 @@ public:
 	//Npc Constructor
 	Npc(std::string const shortdesc);
 
+    ~Npc();
+
 	std::string getShortDesc() const;
 	void setShortDesc(const std::string& shortdesc);
 
@@ -37,7 +39,6 @@ public:
     std::string getInventoryDesc() const;
     int newHealth(const int lvl);
     int newMana(const int lvl);
-
 };
 
 #endif

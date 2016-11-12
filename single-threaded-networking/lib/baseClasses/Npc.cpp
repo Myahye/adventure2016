@@ -10,6 +10,7 @@ Npc::Npc():
 Npc::Npc (std::string const shortdesc):
 	shortdesc{shortdesc} {};
 
+Npc::~Npc(){}
 std::string Npc::getShortDesc() const {
 	return shortdesc;
 }
