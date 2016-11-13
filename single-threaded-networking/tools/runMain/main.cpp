@@ -90,9 +90,13 @@ void refactoringTest(){
     npcChar.setArmor(1);
 
     cout << "Player armor: " << playerChar.getArmor() << endl;
-}   cout << "NPC armor: " << npcChar.getArmor() << endl;
+    cout << "Player username: " << playerChar.getCharacterType().getUsername() << endl;
+    cout << "NPC armor: " << npcChar.getArmor() << endl;
+    cout << "NPC shortdesc: " << npcChar.getCharacterType().getShortDesc() << endl;
+}
 
 int main() {
+    refactoringTest();
     // vector<Room> rooms;
     // Door door1("south");
     // Door door2("west");
