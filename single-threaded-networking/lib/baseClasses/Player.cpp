@@ -1,10 +1,28 @@
 #include "Player.h"
 
 //Player constructor
-Player::Player (int const pid, std::string const username, std::string const password):
-    pid{pid}, username{username}, password{password}{};
+Player::Player (int const pid, std::string const username, std::string const password, CombatManager& view):
+    pid{pid}, username{username}, password{password}, view{view}{};
 Player::Player ():
     pid{0}, username{""}, password{""}{};
+
+bool setFighting(Player& victim){
+  if(this->victim!=NULL&&){
+    this->victim=victim;
+    view.createMessageToPlayer(this->victim->pid, "Alert, "+this->username+" is attacking you!");
+  }else{
+    view.createMessageToPlayer(this->pid, "You are already attacking "+this->victim->username
+    +". \nYou will need to end your fight with "+this->victim->username+" before you can attack victim->");
+  }
+}
+void stopFighting(Player& victim){
+  if(this->victim!=NULL){
+    this->victim=NULL;
+  }
+}
+Player& getVictim(){
+  return this->victim;
+}
 
 std::string
 Player::getUsername() const {

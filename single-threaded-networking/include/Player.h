@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "CombatManager.h"
 
 class Player {
 private:
@@ -15,6 +16,10 @@ private:
     int pid = 0;
     int health=100;
     int mana=100;
+
+    Player& victim;
+    CombatManager& view;
+
 
     std::string damage;
     std::string hit;
@@ -32,10 +37,12 @@ private:
 
 public:
 
-
     // Constructor
-    Player (int const pid, std::string const username, std::string const password);
+    Player (int const pid, std::string const username, std::string const password, CombatManager& view);
     Player ();
+
+    void setVictim(Player& victim);
+    Player& getVictim();
 
     //username
     std::string getUsername() const;
@@ -46,7 +53,7 @@ public:
 
     int getMana() const;
     void setMana(int const mana);
-         
+
     //password
     std::string getPassword() const;
     void setPassword(std::string& password);
