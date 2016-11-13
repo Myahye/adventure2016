@@ -16,9 +16,9 @@ public:
     
     //player
     virtual std::string getUsername() const;
-    virtual void setUsername(std::string& username);
+    virtual void setUsername(const std::string& username);
 	virtual std::string getPassword() const;
-	virtual void setPassword(std::string& password);
+	virtual void setPassword(const std::string& password);
 
 	//npc
 	virtual std::string getShortDesc() const;
