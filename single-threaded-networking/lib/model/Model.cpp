@@ -96,13 +96,13 @@ void Model::printAll(){
 }
 
 int
-Model::createPlayer(const std::string& username, const std::string& password){
+Model::createPlayer(const std::string& username, const std::string& password, CombatManager& combatManager){
 
   // players[assignedIds] = Player {14441
   //     assignedIds, username, password,
   // };
 
-  Player newPlayer{this->assignedIds, username, password};
+  Player newPlayer{this->assignedIds, username, password, combatManager};
   players.insert({this->assignedIds, newPlayer});
   playerLocation[assignedIds] = 3007;
   assignedIds++;

@@ -15,15 +15,17 @@ CombatManager::buildCombatCommand(const networking::Connection connection, const
 
 
 std::deque<Message>
-CombatManager::updateCombat(auto context&){
-
+CombatManager::updateCombat
+(
+  std::vector<networking::Connection>& clients
+  , Model::Context& context
+){
   std::deque<Message> outgoing;
   //auto context = this->model.getContext();
     for(auto& combatCommand : combatCommandQueue) {
       std::string response = combatCommand->execute(context);
-      Message sourceMessage{combatCommand->getSourceConnection(),response};
-      outgoing.push_back(sourceMessage);
-      outgoing.push_back(createAlertMessage(combatCommand->getTargetConnection(), combatCommand->getSourceName()));
+      Message message{combatCommand->getSourceConnection(),response};
+      outgoing.push_back(message);
       combatCommandQueue.pop_front();
     }
     for(Player p : characterList){

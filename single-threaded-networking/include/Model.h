@@ -37,7 +37,7 @@ private:
   //map<int, rooms>
   //map<int, npcs>
   //map<int, objects>
-  
+
   //--------------Lawrence Yu
   Context context;
 public:
@@ -46,7 +46,7 @@ public:
 
   Model(const std::vector<std::string>& paths);
 
-  int createPlayer(const std::string& username, const std::string& password);
+  int createPlayer(const std::string& username, const std::string& password, CombatManager& combatManager);
   std::vector<std::tuple<int,std::string,std::string>> getPlayerCredentialsVector() const;
 
   //Model(const std::string& pathToYamlFile/s);
@@ -72,7 +72,7 @@ public:
 
   //-----------------------------Lawrence YU
   void reset();
-  
+
   void playerDisconnected(const int playerId);
   void playerConnect(const int playerId);
 };

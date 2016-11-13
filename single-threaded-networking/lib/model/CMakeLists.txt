@@ -1,5 +1,6 @@
 
 add_library(model
+            CombatManager.cpp
             ModelInterface.cpp
             Model.cpp)
 
@@ -16,6 +17,6 @@ install(TARGETS model
 
 set_property(TARGET model PROPERTY CXX_STANDARD 14)
 
-target_link_libraries(model yamlParser) 
+target_link_libraries(model yamlParser)
 target_link_libraries(model Resets)
 target_link_libraries(model Commands)

@@ -25,10 +25,17 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
       this->basicCommandQueue.push_back(std::make_unique<Commands::GoCommand>(message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Read"])) {
       //this->basicCommandQueue.push_back(std::make_unique<Commands::ReadCommand>(message.connection,message.text));
-    } else if (boost::istarts_with(messageText,commands["Attack"])) {
-      //this->CombatManager.buildCombatCommand(std::make_unique<CombatCommands::AttackCommand>(clients, message.connection,message.text));
-      this->combatCommandQueue.push_back(std::make_unique<CombatCommands::AttackCommand>(clients, message.connection,message.text));
-    } else if (boost::istarts_with(messageText,commands["Flee"])){
+    }
+
+
+    else if (boost::istarts_with(messageText,commands["Attack"])) {
+      this->CombatManager.buildCombatCommand(
+        std::make_unique<CombatCommands::AttackCommand>(message.connection,message.text));
+      //this->combatCommandQueue.push_back(std::make_unique<CombatCommands::AttackCommand>(clients, message.connection,message.text));
+    }
+
+
+    else if (boost::istarts_with(messageText,commands["Flee"])){
       this->basicCommandQueue.push_back(std::make_unique<Commands::FleeCommand>(message.connection,message.text));
     }else if (boost::istarts_with(messageText,commands["Say"])) {
       //this->basicCommandQueue.push_back(std::make_unique<Commands::SayCommand>(message.connection,message.text));
@@ -70,17 +77,16 @@ std::deque<Message>
 ModelInterface::updateCombat(){
 
   std::deque<Message> outgoing;
-  auto context = this->model.getContext();
-
-    for(auto& combatCommand : combatCommandQueue) {
-      std::string response = combatCommand->execute(context);
-      Message sourceMessage{combatCommand->getSourceConnection(),response};
-      outgoing.push_back(sourceMessage);
-      outgoing.push_back(createAlertMessage(combatCommand->getTargetConnection(), combatCommand->getSourceName()));
-      std::cout<<"7"<<std::endl;
-      combatCommandQueue.pop_front();
-
-    }
+  //auto context = this->model.getContext();
+  outgoing.push_back(this->CombatManager.updateCombat(clients, this->model.getContext()));
+    // for(auto& combatCommand : combatCommandQueue) {
+    //   std::string response = combatCommand->execute(context);
+    //   Message sourceMessage{combatCommand->getSourceConnection(),response};
+    //   outgoing.push_back(sourceMessage);
+    //   outgoing.push_back(createAlertMessage(combatCommand->getTargetConnection(), combatCommand->getSourceName()));
+    //   combatCommandQueue.pop_front();
+    //
+    // }
 
   //move out later
   //this->model.reset();
@@ -100,7 +106,7 @@ ModelInterface::getCurrentRoomDescription(const int& playerId) {
 
 int
 ModelInterface::createPlayer(const std::string& username, const std::string& password) {
-  return(this->model.createPlayer(username, password));
+  return(this->model.createPlayer(username, password, this->CombatManager));
 }
 
 std::vector<std::tuple<int,std::string,std::string>>
@@ -116,13 +122,13 @@ void ModelInterface::playerConnect(Connection c) {
   this->model.playerConnect(c.playerId);
 }
 
-Message
-ModelInterface::createAlertMessage(Connection connection, std::string name){
-  std::cout<<"6.1 connection == "<<connection.playerId<<std::endl;
-  std::string response = "ALERT > You have been attacked by " + name + "\n\n";
-  Message sourceMessage{connection,response};
-  return sourceMessage;
-}
+// Message
+// ModelInterface::createAlertMessage(Connection connection, std::string name){
+//   std::cout<<"6.1 connection == "<<connection.playerId<<std::endl;
+//   std::string response = "ALERT > You have been attacked by " + name + "\n\n";
+//   Message sourceMessage{connection,response};
+//   return sourceMessage;
+// }
 
 void
 ModelInterface::createSayCommandForGroup(std::deque<std::unique_ptr<Command>>& basicCommandQueue, std::vector<Connection> clients, std::string messageText, int playerId){
