@@ -318,3 +318,4 @@ std::string Room::getFullRoomDesc() const {
   response += "     " + getDoorsInRoomDesc() + "\n";
   return response;
 }
+

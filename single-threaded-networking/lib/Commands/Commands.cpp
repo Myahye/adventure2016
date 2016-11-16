@@ -389,7 +389,7 @@ namespace Commands {
 		return this->connection;
 	}
 	
-	//Need to move out but don't know where
+	//Need to move out but don't know where (move to top of ffile as static function)
 	bool TakeCommand::is_number(const std::string& s)
 	{
 		return !s.empty() && std::find_if(s.begin(), 
