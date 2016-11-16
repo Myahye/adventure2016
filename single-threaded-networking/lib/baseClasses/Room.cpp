@@ -304,9 +304,9 @@ std::string Room::getFullRoomDesc() const {
   response += getObjectsInRoomDesc();
 
   //Move to proper get playersinroomdesc() method later
-  response += "Players: " 
+  response += "Players: " ;
   for(auto& player : playersInRoom) {
-    response += player.second + ", "
+    response += player.second + ", ";
   }
   response += "\n";
 

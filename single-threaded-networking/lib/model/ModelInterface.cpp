@@ -26,16 +26,18 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
     } else if (boost::istarts_with(messageText,commands["Read"])) {
       //this->basicCommandQueue.push_back(std::make_unique<Commands::ReadCommand>(message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Attack"])) {
-      //this->combatCommandQueue.push_back(std::make_unique<Commands::AttackCommand>(message.connection,message.text));
+      this->combatCommandQueue.push_back(std::make_unique<CombatCommands::AttackCommand>(clients, message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Flee"])){
       this->basicCommandQueue.push_back(std::make_unique<Commands::FleeCommand>(message.connection,message.text));
     }else if (boost::istarts_with(messageText,commands["Say"])) {
       //this->basicCommandQueue.push_back(std::make_unique<Commands::SayCommand>(message.connection,message.text));
       createSayCommandForGroup(this->basicCommandQueue, clients, message.text, message.connection.playerId);
     } else if (boost::istarts_with(messageText, commands["ListCommands"])) {
-      this->basicCommandQueue.push_back(std::make_unique<Commands::ListCommand>(message.connection,commands));
+      this->basicCommandQueue.push_back(std::make_unique<Commands::ListCommand>(message.connection,commands,message.text));
     } else if (boost::istarts_with(messageText, commands["Take"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::TakeCommand>(message.connection,message.text));
+    } else if (boost::istarts_with(messageText,commands["Equip"])) {
+      this->basicCommandQueue.push_back(std::make_unique<Commands::EquipCommand>(message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Status"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::StatusCommand>(message.connection,message.text));
     } else {
@@ -73,9 +75,12 @@ ModelInterface::updateCombat(){
 
     for(auto& combatCommand : combatCommandQueue) {
       std::string response = combatCommand->execute(context);
-      Message message{combatCommand->getConnection(),response};
+      Message sourceMessage{combatCommand->getSourceConnection(),response};
+      outgoing.push_back(sourceMessage);
+      outgoing.push_back(createAlertMessage(combatCommand->getTargetConnection(), combatCommand->getSourceName()));
+      std::cout<<"7"<<std::endl;
       combatCommandQueue.pop_front();
-      outgoing.push_back(message);
+
     }
 
   //move out later
@@ -112,12 +117,19 @@ void ModelInterface::playerConnect(Connection c) {
   this->model.playerConnect(c.playerId);
 }
 
-void 
+Message
+ModelInterface::createAlertMessage(Connection connection, std::string name){
+  std::cout<<"6.1 connection == "<<connection.playerId<<std::endl;
+  std::string response = "ALERT > You have been attacked by " + name + "\n\n";
+  Message sourceMessage{connection,response};
+  return sourceMessage;
+}
+
+void
 ModelInterface::createSayCommandForGroup(std::deque<std::unique_ptr<Command>>& basicCommandQueue, std::vector<Connection> clients, std::string messageText, int playerId){
   std::for_each(clients.begin(), clients.end(), [&messageText,&basicCommandQueue,&playerId,this] (Connection& c)
-        { if(c.currentState == ConnectionState::AUTHORIZED) { 
-            this->basicCommandQueue.push_back(std::make_unique<Commands::SayCommand>(c,messageText, playerId)); 
+        { if(c.currentState == ConnectionState::AUTHORIZED) {
+            this->basicCommandQueue.push_back(std::make_unique<Commands::SayCommand>(c,messageText, playerId));
           }
         });
 }
-

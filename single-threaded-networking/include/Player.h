@@ -4,13 +4,15 @@
 #include <iostream>
 #include <vector>
 #include <string>
-
+#include <unordered_map>
+#include <algorithm>    // std::for_each
+#include "Object.h"
 class Player {
 private:
     int armor = 0;
     int exp = 0;
     int gold = 0;
-    int level = 0;
+    int level = 1;
     int thac0;
     int pid = 0;
     int health=100;
@@ -24,6 +26,17 @@ private:
     std::vector<std::string> description;
     std::vector<std::string> keywords;
     std::vector<std::string> longdesc;
+
+    //----------------------Mohamed Yahye
+    std::unordered_map<int,std::vector<Object>> playerInventory;
+    std::unordered_map<int,Object> playerEquipment; //int will be the item_type slot
+    //-----------------------------------
+    
+    void setNewHealth(int const level);
+    void setNewMana(int const level);
+    void setNewStats();
+    int nextLvl(int const XP,int const level) const;
+
 public:
 
 
@@ -59,7 +72,7 @@ public:
 
     //Experience
     int getExp() const;
-    void setExp(int const exp);
+    void setExp(int const XP);
 
     //Gold
     int getGold() const;
@@ -88,6 +101,21 @@ public:
     //Thac0
     int getThac0() const;
     void setThac0(int const thac0);
+
+    //-----------------------------Mohamed Yahye
+    void addObjectToInventory(const Object& object, unsigned int limit);
+    
+    bool removeObjectFromInventory(const std::string& objectName);
+
+    bool equipObject(const Object& object, int slot);
+    bool unEquipObject(int slot);
+    //bool unequipObject();
+
+    std::unordered_map<int,std::vector<Object>> getPlayerInventory() const;
+    std::unordered_map<int,Object> getPlayerEquipment() const;
+
+    std::string getPlayerEquipmentDesc() const;
+    std::string getPlayerInventoryDesc() const;
 };
 
 #endif /* PLAYER_H */
