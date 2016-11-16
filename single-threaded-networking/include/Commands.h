@@ -89,6 +89,21 @@ namespace Commands {
 		bool is_number(const std::string& s);
 	};
 
+	class EquipCommand : public Command {
+	private:
+		networking::Connection connection;
+		std::string message;
+	public:
+		EquipCommand(networking::Connection connection_, const std::string& message_);
+		
+		std::string execute(Context& context);
+
+		int getId() const;
+
+		networking::Connection getConnection() const;
+		
+	};
+
 	class InvalidCommand : public Command {
 	private:
 		networking::Connection connection;
@@ -111,7 +126,7 @@ namespace Commands {
 
 	public:
 		ListCommand(networking::Connection connection_, const std::unordered_map<std::string, std::string>& commands_, const std::string& message_);
-
+		
 		std::string execute(Context& context);
 
 		int getId() const;
