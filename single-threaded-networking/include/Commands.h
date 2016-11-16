@@ -9,6 +9,11 @@
 #include "Object.h"
 #include "Player.h"
 
+
+/*		@class     Command Class 
+*		@namespace Commands
+*		@breif     Commands implemented here i.e. Look, go, status, take etc.
+*/
 namespace Commands {
 
 	class LookCommand : public Command {
@@ -144,7 +149,10 @@ namespace Commands {
 
 }
 
-
+/*		@class     Command Class 
+*		@namespace Combact Commands
+*		@breif     Combact implemented here currently attack is under implementation and subject to change
+*/
 
 namespace CombatCommands {
 	class AttackCommand : public CombatCommand {

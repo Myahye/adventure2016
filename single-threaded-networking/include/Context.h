@@ -6,6 +6,11 @@
 #ifndef CONTEXT_H
 #define CONTEXT_H
 
+/*		@class     	Context 
+*		@breif     	Coontext helps in the retivals of data and 
+*					thus helps in the implementation of excute 
+*					in the commands interface
+*/
 class Context {
 private:
 	std::unordered_map<int,Room>* rooms;

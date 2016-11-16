@@ -3,6 +3,12 @@
 
 #include "Context.h"
 #include "Server.h"
+/**
+*	@Class  Command Interface class
+*	@breif  Basically a class that acts as a interface to commands thus 
+*			seperating the class from its implementation. The base classes 
+*			thus only intreact with the help of interface.
+*/
 
 class Command {
 public:
