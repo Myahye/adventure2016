@@ -33,9 +33,11 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
       //this->basicCommandQueue.push_back(std::make_unique<Commands::SayCommand>(message.connection,message.text));
       createSayCommandForGroup(this->basicCommandQueue, clients, message.text, message.connection.playerId);
     } else if (boost::istarts_with(messageText, commands["ListCommands"])) {
-      this->basicCommandQueue.push_back(std::make_unique<Commands::ListCommand>(message.connection,commands));
+      this->basicCommandQueue.push_back(std::make_unique<Commands::ListCommand>(message.connection,commands,message.text));
     } else if (boost::istarts_with(messageText, commands["Take"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::TakeCommand>(message.connection,message.text));
+    } else if (boost::istarts_with(messageText,commands["Equip"])) {
+      this->basicCommandQueue.push_back(std::make_unique<Commands::EquipCommand>(message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Status"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::StatusCommand>(message.connection,message.text));
     } else {

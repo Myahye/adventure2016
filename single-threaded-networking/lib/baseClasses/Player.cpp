@@ -154,3 +154,95 @@ int Player::getThac0() const {
 void Player::setThac0(int const thac0) {
     this->thac0 = thac0;
 }
+
+
+//-------------------------------Mohamed Yahye
+void Player::addObjectToInventory(const Object& object, unsigned int limit) {
+  if(playerInventory[object.getId()].size() == limit) {
+  	//std::cout << "object id: " << object.getId()<< "size: " << playerInventory[object.getId()].size() << std::endl;
+    std::cout << "limit reached\n";
+  } else {
+    playerInventory[object.getId()].push_back(object);
+    std::cout << "Object id: " << object.getId() << " Player id: " << pid << " Inventory size: " << playerInventory.size() <<std::endl;
+  }
+}
+
+bool Player::removeObjectFromInventory(const std::string& objectName) {
+  int objectId = 0;
+
+  for(auto& objectIdVectorPair : playerInventory) {
+    for(auto& keyword : objectIdVectorPair.second[0].getKeywords()) {
+      if(objectName.find(keyword) != std::string::npos) {
+        objectId = objectIdVectorPair.first;
+        //change to begin()+ selected Player number later
+        //if(objectIdVectorPair.second.size() >= selectedPlayernumber) {
+          playerInventory[objectId].erase(objectIdVectorPair.second.begin());
+        //}
+          std::cout << "objeect id: " << objectId << "size: " << playerInventory[objectId].size() << std::endl;
+        if(playerInventory[objectId].empty()) {
+          playerInventory.erase(objectId);
+        }
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+//maybe change it so int slot is string item_type and thats ur slots!
+bool Player::equipObject(const Object& object, int slot) {
+  if(playerInventory.find(object.getId()) == playerInventory.end()) {
+  	return false;
+  }
+
+  if(playerEquipment.find(slot) != playerEquipment.end()) {
+    playerInventory[playerEquipment[slot].getId()].push_back(playerEquipment[slot]);
+    playerEquipment[slot] = object;
+    playerInventory[object.getId()].pop_back();
+    //std::cout << "objz: " << object.getId() << std::endl;
+    return true;
+  } else {
+    playerEquipment[slot] = object;
+	//std::cout << "IW" << std::endl;
+
+    playerInventory[object.getId()].pop_back();
+    if(playerInventory[object.getId()].empty()) {
+    	playerInventory.erase(object.getId());
+    }
+
+    //std::cout << "IWOEFJ|" << std::endl;
+    return true;
+          // std::cout << this << "Object id: " << PlayerEquipment[slot].getId() << " Player id: " << id << " Equipment Desc: " << PlayerEquipment[slot].getShortDesc() << " Equipment size: " << PlayerEquipment.size() <<std::endl;
+  }
+}
+bool Player::unEquipObject(int slot) {
+  //remove if id == object and pickedupflag==yes
+  if(playerEquipment.find(slot) != playerEquipment.end()) {
+  	playerEquipment.erase(slot);
+  	return true;
+  }
+  return false;
+}
+
+std::unordered_map<int,std::vector<Object>> Player::getPlayerInventory() const {
+  return this->playerInventory;
+}
+
+std::unordered_map<int,Object> Player::getPlayerEquipment() const {
+  return this->playerEquipment;
+}
+
+std::string Player::getPlayerEquipmentDesc() const {
+  std::string response = "";
+  for_each(playerEquipment.begin(), playerEquipment.end(), [&response](const auto& currentEquip){response += currentEquip.second.getShortDesc() + ", ";});
+    std::cout << "player equip: " << playerEquipment.size() << std::endl;	
+  return response;
+}
+std::string Player::getPlayerInventoryDesc() const {
+	std::string response = "";
+	 std::cout << "player inv: " << playerInventory.size() << std::endl;
+	std::for_each(playerInventory.begin(), playerInventory.end(), [&response](const auto& currentItem){response += currentItem.second[0].getShortDesc() + " (Quantity: " + std::to_string(currentItem.second.size()) + "), ";});	
+  return response;
+}
+
+
