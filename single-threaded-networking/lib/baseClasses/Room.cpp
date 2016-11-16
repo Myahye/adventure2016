@@ -301,7 +301,15 @@ std::string Room::getDoorsInRoomDesc() const {
 std::string Room::getFullRoomDesc() const {
   std::string response = getDesc() + "\n";
   response += getNpcsInRoomDesc();
-  response += getObjectsInRoomDesc(); 
+  response += getObjectsInRoomDesc();
+
+  //Move to proper get playersinroomdesc() method later
+  response += "Players: " 
+  for(auto& player : playersInRoom) {
+    response += player.second + ", "
+  }
+  response += "\n";
+
   response += "     " + getDoorsInRoomDesc() + "\n";
   return response;
 }

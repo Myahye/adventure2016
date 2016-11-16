@@ -268,6 +268,10 @@ namespace Commands {
 
 		 std::cout << "EHTH" << std::endl;
 
+		 /*
+		 * Make static function findObject() at the top of this file that searches through the object Map and returns the object ID
+		 */
+
 		//-------------------------------------------------look "Npc keyword"
 
 		//OK findNpc/findRoom will return a Npc* object which we can use to directly modify the selected npc/object in the room 
@@ -343,7 +347,7 @@ namespace Commands {
 		return this->connection;
 	}
 	
-	//Need to move out but don't know where
+	//Need to move out but don't know where (move to top of ffile as static function)
 	bool TakeCommand::is_number(const std::string& s)
 	{
 		return !s.empty() && std::find_if(s.begin(), 
