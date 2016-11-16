@@ -319,3 +319,4 @@ std::string Room::getFullRoomDesc() const {
   return response;
 }
 
+
