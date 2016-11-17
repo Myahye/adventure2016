@@ -257,8 +257,8 @@ namespace Commands {
 		std::cout<<"status cout"<<std::endl;
 
 		return (*players)[playerId].getCharacterType().getUsername()+ "> \n" +
-				" Health: "+std::to_string((*players)[playerId].getHealth())+"\n"+
-				" Mana  : "+std::to_string((*players)[playerId].getMana())+"\n"+
+				" Health: "+std::to_string((*players)[playerId].getHealth())+"/"+std::to_string((*players)[playerId].getMaxHealth())+"\n"+
+				" Mana  : "+std::to_string((*players)[playerId].getMana())+"/"+std::to_string((*players)[playerId].getMaxMana())+"\n"+
 				" EXP   : "+std::to_string((*players)[playerId].getExp())+"\n"+
 				" Level : "+std::to_string((*players)[playerId].getLevel())+"\n";
 

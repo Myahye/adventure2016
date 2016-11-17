@@ -16,8 +16,10 @@ protected:
 	int id = 0;
 	int level = 0;
 	
-	int health;
-    int mana;
+	int MaxHealth = 100;
+	int MaxMana = 85;
+	int health = 100;
+    int mana = 85;
 
 	int thac0;
 
@@ -39,8 +41,15 @@ public:
 	int getArmor() const;
 	void setArmor(const int armor);
 
+	int getMaxHealth() const;
+	void setMaxHealth(const int health);
+
+	int getMaxMana() const;
+	void setMaxMana(const int mana);
+
 	int getExp() const;
 	void setExp(const int exp);
+	void setNewStats(const int lvl);
 
 	int getGold() const;
     void setGold(const int gold);

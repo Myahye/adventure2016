@@ -35,10 +35,7 @@ public:
     std::string getInventoryDesc() const;
     std::string getEquipmentDesc() const;*/
 
-    int newHealth(const int lvl);
-    int newMana(const int lvl);
-
-    //void setNewStats();
+   
 };
 
 #endif /* PLAYER_H */

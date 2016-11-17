@@ -37,9 +37,25 @@ int Character::getExp() const{
 	return exp;
 }
 void Character::setExp(const int exp){
-	this->exp = exp;
+	int baseXP =93;
+	this->exp += exp;
+	if((baseXP*this->level)<=this->exp){
+		this->level += 1;
+		setNewStats(this->level);
+	}
 }
 
+void Character::setNewStats(const int lvl){
+	int newHealth = MaxHealth+lvl*lvl*2;
+	int newMana   = MaxMana+lvl*lvl*1.5;
+
+	setMaxHealth(newHealth);
+	setHealth(newHealth);
+
+	setMaxMana(newMana);
+	setMana(newMana);
+
+}
 int Character::getGold() const{
 	return gold;
 }
@@ -126,6 +142,22 @@ void Character::setMana(int const manaa){
 CharacterType& Character::getCharacterType(){
 	return *charType;
 }
+
+int Character::getMaxHealth() const{
+	return MaxHealth;
+}
+void Character::setMaxHealth(const int health){
+	this->MaxHealth = health;
+}
+
+int Character::getMaxMana() const{
+	return MaxMana;
+}
+void Character::setMaxMana(const int mana){
+	this->MaxMana = mana;
+}
+
+
 
 /*void Character::setTypeToPlayer(){
 	charType = new Player();

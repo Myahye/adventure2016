@@ -70,18 +70,5 @@ std::string Player::getEquipmentDesc() const{
     return "";
 }
 */
-int Player::newHealth(int const lvl){
-    return DEFAULT_PLAYER_HEALTH+lvl*lvl*2;
-}
-
-int Player::newMana(int const lvl){
-    return 95+lvl*lvl*1.5;
-}
-
-/*void Player::setNewStats(){
-    setNewHealth(level);
-    setNewMana(level);
-}
-*/
 
 #endif
