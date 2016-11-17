@@ -130,11 +130,11 @@ timeTillNextUpdate(){
   std::chrono::milliseconds nextWorldReset = std::chrono::milliseconds((worldReset-std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastWorldReset)).count());
 
   std::time_t lastGameUpdate_c = std::chrono::system_clock::to_time_t(lastGameUpdate);
-  std::cout << "lastUpate: "
-            <<  std::put_time(std::localtime(&lastGameUpdate_c), "%F %T")
-            << std::endl;
+ // std::cout << "lastUpate: "
+   //         <<  std::put_time(std::localtime(&lastGameUpdate_c), "%F %T")
+     //       << std::endl;
 
-  std::cout << "nextGameUpdate in: " <<  gameUpdate.count() << " - " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastGameUpdate).count()<< std::endl;
+  /*std::cout << "nextGameUpdate in: " <<  gameUpdate.count() << " - " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastGameUpdate).count()<< std::endl;
   std::cout << "nextGameUpdate in: " <<  nextGameUpdate.count() << std::endl;
 
   std::cout << "nexCombatUpdate in: " <<  combatUpdate.count() << " - " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastCombatUpdate).count()<< std::endl;
@@ -142,16 +142,16 @@ timeTillNextUpdate(){
 
   std::cout << "nextWorldReset in: " <<  worldReset.count() << " - " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastWorldReset).count()<< std::endl;
   std::cout << "nextWorldReset in: " <<  nextWorldReset.count() << std::endl;
-
+*/
   //Game update turn
   if((nextGameUpdate.count() <= nextCombatUpdate.count()) && (nextGameUpdate.count() <= nextWorldReset.count())){
     updateState.turn=UpdateTurn::Game;
     if(updateState.turn==UpdateTurn::Game){
-      std::cout << "updateState.turn==UpdateTurn::Game"<< std::endl;
+      //std::cout << "updateState.turn==UpdateTurn::Game"<< std::endl;
     }
     lastGameUpdate=std::chrono::system_clock::now();
     if(nextGameUpdate.count()<0){
-      std::cout << "nextGameUpdate.count()<0"<< std::endl;
+      //std::cout << "nextGameUpdate.count()<0"<< std::endl;
       return immediate;
     }
     return nextGameUpdate;
@@ -163,12 +163,12 @@ timeTillNextUpdate(){
  else if((nextGameUpdate.count() > nextCombatUpdate.count()) && (nextCombatUpdate.count() < nextWorldReset.count())){
     updateState.turn=UpdateTurn::Combat;
     if(updateState.turn==UpdateTurn::Combat){
-      std::cout << "updateState.turn==UpdateTurn::Combat"<< std::endl;
+      //std::cout << "updateState.turn==UpdateTurn::Combat"<< std::endl;
     }
     lastCombatUpdate=std::chrono::system_clock::now();
 
     if(nextCombatUpdate.count()<0){
-      std::cout << "nextCombatUpdate.count()<0"<< std::endl;
+      //std::cout << "nextCombatUpdate.count()<0"<< std::endl;
       return immediate;
     }
     return nextCombatUpdate;
@@ -177,12 +177,12 @@ timeTillNextUpdate(){
   else{
     updateState.turn=UpdateTurn::Reset;
     if(updateState.turn==UpdateTurn::Reset){
-      std::cout << "updateState.turn==UpdateTurn::Reset"<< std::endl;
+      //std::cout << "updateState.turn==UpdateTurn::Reset"<< std::endl;
     }
     lastWorldReset=std::chrono::system_clock::now();
 
     if(nextWorldReset.count()<0){
-      std::cout << "nextCombatUpdate.count()<0"<< std::endl;
+      //std::cout << "nextCombatUpdate.count()<0"<< std::endl;
       return immediate;
     }
     return nextWorldReset;

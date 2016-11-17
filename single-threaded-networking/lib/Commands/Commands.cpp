@@ -20,7 +20,7 @@ namespace Commands {
 		std::transform(lookMessage.begin(), lookMessage.end(), lookMessage.begin(), ::tolower);
 	    boost::trim_if(lookMessage, boost::is_any_of("\t "));
 
-		std::string response = (*players)[playerId].getUsername() + "> " + message;
+		std::string response = (*players)[playerId].getCharacterType().getUsername() + "> " + message;
 
 		int currentRoomId = (*playerLocations)[playerId];
 		Room* currentRoom = &(*rooms)[currentRoomId];
@@ -47,12 +47,12 @@ namespace Commands {
 
 		//-------------------------------------------------look "Npc keyword"
 
-		Npc* currentNpc = currentRoom->findNpc(lookMessage);
+		Character* currentNpc = currentRoom->findNpc(lookMessage);
 			//will move this to room class later as if isNpc return npc.getfulldesc()
 		if(currentNpc != NULL) {
-			response += "\n\n" + currentNpc->getDesc();
-			response += "\n     Wearing: "  + currentNpc->getNpcEquipmentDesc();
-			response += "\n     Carrying: " + currentNpc->getNpcInventoryDesc() + "\n\n";
+			response += "\n\n" + currentNpc->getDescription();
+			response += "\n     Wearing: "  + currentNpc->getCharacterType().getEquipmentDesc();
+			response += "\n     Carrying: " + currentNpc->getCharacterType().getInventoryDesc() + "\n\n";
 			return response;
 		}
 
@@ -65,8 +65,11 @@ namespace Commands {
 			response += "\n";
 			//move loop out later;
 					//need look through all currentobject get extra for keyword
-			for(auto descriptionText : currentObject->getExtra().first) {
-			  response += descriptionText + "\n";
+			for (auto eachPair : currentObject->getExtra()){
+				for(auto descriptionText : eachPair.first) {
+				  response += descriptionText + "\n";
+				}
+				response += "\n";
 			}
 			return response;
 		}
@@ -75,7 +78,7 @@ namespace Commands {
 
 		std::cout << "G" << std::endl;
 
-		return (*players)[playerId].getUsername() + "> " + "Cannot find " + lookMessage + ", no match. \n\n";
+		return (*players)[playerId].getCharacterType().getUsername() + "> " + "Cannot find " + lookMessage + ", no match. \n\n";
 	}
 
 	int LookCommand::getId() const {
@@ -108,7 +111,7 @@ namespace Commands {
 		std::vector<Door> currentRoomDoors = currentRoom->getDoors();
 		std::cout << "number of doors in room: " << currentRoomDoors.size() << std::endl;
 
-		Player currentPlayer = (*players)[playerId];
+		Character currentPlayer = (*players)[playerId];
 
 		int destRoomId = currentRoom->getRoomInDir(goMessage);
 		Room* destRoom = &(*rooms)[destRoomId];
@@ -119,11 +122,11 @@ namespace Commands {
 			(*playerLocations)[playerId] = destRoomId;
 
 			currentRoom->removePlayer(playerId);
-			destRoom->addPlayer(playerId, currentPlayer.getUsername());
+			destRoom->addPlayer(playerId, currentPlayer.getCharacterType().getUsername());
 
-			return currentPlayer.getUsername() + "> " + message + "\n\n" + destRoom->getFullRoomDesc();
+			return currentPlayer.getCharacterType().getUsername() + "> " + message + "\n\n" + destRoom->getFullRoomDesc();
 		} else {
-			return currentPlayer.getUsername() + "> " + "There is no door in the " + goMessage + " direction." + "\n\n";
+			return currentPlayer.getCharacterType().getUsername() + "> " + "There is no door in the " + goMessage + " direction." + "\n\n";
 		}
 	}
 
@@ -229,9 +232,9 @@ namespace Commands {
 			std::cout << " Flee Destination room Id:: " << currentRoom.getRoomInDir(destination.getDir()) << std::endl;
 			//throw custom_errors::NoSuchDoorException();
 			(*playerLocations)[playerId] = destRoomId;
-			return (*players)[playerId].getUsername() + "> Flee to " + destination.getDir() + "\n\n" + (*rooms)[destRoomId].getFullRoomDesc();
+			return (*players)[playerId].getCharacterType().getUsername() + "> Flee to " + destination.getDir() + "\n\n" + (*rooms)[destRoomId].getFullRoomDesc();
 		} else {
-			return (*players)[playerId].getUsername() + "> " + "There is no door to flee in any direction." + "\n\n";
+			return (*players)[playerId].getCharacterType().getUsername() + "> " + "There is no door to flee in any direction." + "\n\n";
 		}
 	}
 
@@ -253,9 +256,9 @@ namespace Commands {
 		int playerId = connection.playerId;
 		std::cout<<"status cout"<<std::endl;
 
-		return (*players)[playerId].getUsername()+ "> \n" +
-				" Health: "+std::to_string((*players)[playerId].getHealth())+"\n"+
-				" Mana  : "+std::to_string((*players)[playerId].getMana())+"\n"+
+		return (*players)[playerId].getCharacterType().getUsername()+ "> \n" +
+				" Health: "+std::to_string((*players)[playerId].getHealth())+"/"+std::to_string((*players)[playerId].getMaxHealth())+"\n"+
+				" Mana  : "+std::to_string((*players)[playerId].getMana())+"/"+std::to_string((*players)[playerId].getMaxMana())+"\n"+
 				" EXP   : "+std::to_string((*players)[playerId].getExp())+"\n"+
 				" Level : "+std::to_string((*players)[playerId].getLevel())+"\n";
 
@@ -279,7 +282,7 @@ namespace Commands {
 		auto players = context.getPlayers();
 		int playerId = connection.playerId;
 
-		return (*players)[playerId].getUsername()+ "> " + message + " " +
+		return (*players)[playerId].getCharacterType().getUsername()+ "> " + message + " " +
 				" is an invalid command.\n\n";
 	}
 
@@ -309,7 +312,7 @@ namespace Commands {
 	    boost::trim_if(messageText, boost::is_any_of("\t "));
 	    boost::split(takeMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
 
-		std::string response = (*players)[playerId].getUsername() + "> " + message;
+		std::string response = (*players)[playerId].getCharacterType().getUsername() + "> " + message;
 
 		int currentRoomId = (*playerLocations)[playerId];
 		Room* currentRoom = &(*rooms)[currentRoomId];
@@ -339,7 +342,7 @@ namespace Commands {
 
 		//OK findNpc/findRoom will return a Npc* object which we can use to directly modify the selected npc/object in the room
 		if(takeMessage.size() == 2) {
-			Npc* currentNpc = currentRoom->findNpc(takeMessage[1]);
+			Character* currentNpc = currentRoom->findNpc(takeMessage[1]);
 			std::cout << takeMessage.size() << std::endl;
 			if(currentNpc != NULL) {
 				std::cout << "wewwr" << std::endl;
@@ -347,7 +350,7 @@ namespace Commands {
 				std::cout << "wsfsdfer" << std::endl;
 				//Npc will use a currentNpc->findObjectId(objectTargetPair[0]) method which returns the object ID	of the object in inventory
 				//Will change removeObjectfromInventory() to take in the objectID (maybe pass in selected index "eg. steal apple '1'");
-				if(currentNpc->removeObjectFromInventory(takeMessage[0])) {
+				if(currentNpc->getCharacterType().removeObjectFromInventory(takeMessage[0])) {
 					response += "Success!\n";
 				} else {
 					response += "Failure.\n";
@@ -378,7 +381,7 @@ namespace Commands {
 		//Will change removeNPC() to take in the npcID (maybe pass in selected duplicate index "eg. steal apple '1'");
 		//if(is_number(takeMessage.end()) {}
 
-		Npc* currentNpc = currentRoom->findNpc(takeMessage[0]);
+		Character* currentNpc = currentRoom->findNpc(takeMessage[0]);
 		if(currentNpc != NULL) {
 			if(currentRoom->removeNpc(currentNpc->getId())) {
 				response += "\n Take: " + takeMessage[0] + "\n\n";
@@ -399,7 +402,7 @@ namespace Commands {
 
 		std::cout << "G" << std::endl;
 
-		return (*players)[playerId].getUsername() + "> " + "Cannot steal " + takeMessage[0] + ", no match. \n\n";
+		return (*players)[playerId].getCharacterType().getUsername() + "> " + "Cannot steal " + takeMessage[0] + ", no match. \n\n";
 	}
 
 	int TakeCommand::getId() const {
@@ -430,7 +433,7 @@ namespace Commands {
     		allCommands += i.second + "\n";
   		}
 
-		return (*players)[playerId].getUsername()+ "> " + "All possible Commands:\n" + allCommands + "\n";
+		return (*players)[playerId].getCharacterType().getUsername()+ "> " + "All possible Commands:\n" + allCommands + "\n";
 	}
 
 	int ListCommand::getId() const {
@@ -446,7 +449,7 @@ namespace Commands {
 
 	std::string SayCommand::execute(Context& context) {
 		auto players = context.getPlayers();
-		return (*players)[this->playerId].getUsername()+ "> " + message.substr(4) + "\n";
+		return (*players)[this->playerId].getCharacterType().getUsername()+ "> " + message.substr(4) + "\n";
 	}
 
 	int SayCommand::getId() const {
@@ -475,7 +478,7 @@ namespace CombatCommands {
 		std::vector <std::string> takeMessage;
     boost::trim_if(messageText, boost::is_any_of("\t "));
     boost::split(takeMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
-		this->sourceName=(*players)[playerId].getUsername();
+		this->sourceName=(*players)[playerId].getCharacterType().getUsername();
 		std::string sourceResponse = sourceName + "> " + takeMessage[0];
 
 		int currentRoomId = (*playerLocations)[playerId];
@@ -489,7 +492,7 @@ namespace CombatCommands {
 			}
 		}
 		if(targetPlayerId != 0) {
-			std::cout<<(*players)[targetPlayerId].getUsername() +" is the target name for "+ (*players)[playerId].getUsername()<<std::endl;
+			std::cout<<(*players)[targetPlayerId].getCharacterType().getUsername() +" is the target name for "+ (*players)[playerId].getCharacterType().getUsername()<<std::endl;
 			int currentTargetHealth=(*players)[targetPlayerId].getHealth();
 			if (currentTargetHealth==0){
 				return sourceResponse + " has already been Defeated!\n";

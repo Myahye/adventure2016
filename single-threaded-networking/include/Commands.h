@@ -4,10 +4,9 @@
 #include <unordered_map>
 
 #include "CommandInterface.h"
-#include "Npc.h"
+#include "Character.h"
 #include "Room.h"
 #include "Object.h"
-#include "Player.h"
 
 namespace Commands {
 

@@ -8,6 +8,7 @@
 #include <string>
 #include <utility> //std::pair
 #include <algorithm>
+
 class Object {
 private:
 	int id = 0;
@@ -22,7 +23,7 @@ private:
 	std::vector<std::string> longDesc;
 	//std::vector<std::string> shortDesc;
 	std::vector<std::string> wearFlags;
-	std::pair<std::vector<std::string>, std::vector<std::string> > extra;
+	std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > > extra;
 
 public:
 	Object();
@@ -77,10 +78,10 @@ public:
 	void addWearFlag(const std::string& wearFlags);
 
   	// Getter and setter for extra:
-  	std::pair<std::vector<std::string>, std::vector<std::string> > getExtra() const;
-	void setExtra(const std::pair<std::vector<std::string>, std::vector<std::string> >& extra);
-	void addExtraDesc(const std::string& desc);
-	void addExtraKeyword(const std::string& keyword);
+	std::vector< std::pair<std::vector<std::string>, std::vector<std::string> > > getExtra() const;
+	void setExtra(const std::vector< std::pair<std::vector<std::string>, std::vector<std::string> > >& extra);
+/*	void addExtraDesc(const std::string& desc);
+	void addExtraKeyword(const std::string& keyword);*/
 
 	void copy_vec(std::vector<std::string>& output, const std::vector<std::string> Alist );
 	void clear_vec(std::vector<std::string> Alist);

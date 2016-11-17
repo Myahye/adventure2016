@@ -1,112 +1,21 @@
+#ifndef NPC_CPP
+#define NPC_CPP
+
 #include "Npc.h"
 
 //Npc Constructor
 Npc::Npc():
-id{0}, shortdesc{""} {};
+	shortdesc{""} {};
 
-Npc::Npc (int const id, std::string const shortdesc):
-	id{id}, shortdesc{shortdesc} {};
+Npc::Npc (std::string const shortdesc):
+	shortdesc{shortdesc} {};
 
-//Getter and Setter for Armor
-int Npc::getArmor() const {
-	return armor;
-}
-void Npc::setArmor(int const armor) {
-	this->armor = armor;
-}
-
-//Getter and Setter for	Damage
-std::string Npc::getDamage() const {
-	return damage;
-}
-void Npc::setDamage(const std::string& damage) {
-	this->damage = damage;
-}
-
-//Getter and Setter for	Description
-std::string Npc::getDesc() const {
-	std::string descString = "";
-	for_each(description.begin(), description.end(), [&descString](const std::string& i){descString += i + "\n";} );	
-	return descString;
-}
-void Npc::setDesc(const std::vector<std::string>& description) {
-	this->description = description;
-}
-
-
-//Getter and Setter for Exp
-int Npc::getExp() const {
-	return exp;
-}
-void Npc::setExp(int const exp) {
-	this->exp = exp;
-}
-
-//Getter and Setter for Gold
-int Npc::getGold() const {
-	return gold;
-}
-void Npc::setGold(int const gold) {
-	this->gold = gold;
-}
-
-//Getter and Setter for Hit
-std::string Npc::getHit() const {
-	return hit;
-}
-void Npc::setHit(const std::string& hit) {
-	this->hit = hit;
-}
-
-//Getter and Setter for Id
-int Npc::getId() const {
-	return id;
-}
-void Npc::setId(int const id) {
-	this->id = id;
-}
-
-//Getter and Setter for Keywords
-std::vector<std::string> Npc::getKeywords() const {
-	return keywords;
-}
-void Npc::setKeywords(const std::vector<std::string>& keywords) {
-	this->keywords = keywords;
-}
-
-
-//Getter and Setter for Level
-int Npc::getLevel() const {
-	return level;
-}
-void Npc::setLevel(int const level) {
-	this->level = level;
-}
-
-//Getter and Setter for Longdesc
-std::string Npc::getLongDesc() const {
-	std::string descString = "";
-	std::for_each(longdesc.begin(), longdesc.end(), [&descString](const std::string& i){descString += i + "\n";} );	
-	return descString;
-}
-void Npc::setLongDesc(const std::vector<std::string>& longdesc) {
-	this->longdesc = longdesc;
-}
-
-//Getter and Setter for Shordesc
+Npc::~Npc(){}
 std::string Npc::getShortDesc() const {
 	return shortdesc;
 }
 void Npc::setShortDesc(const std::string& shortdesc) {
 	this->shortdesc = shortdesc;
-}
-
-//Getter and Setter for Thac0
-int Npc::getThac0() const {
-	return thac0;
-}
-void Npc::setThac0(int const thac0) {
-	this->thac0 = thac0;
 }
 
 //--------------------------------------Lawrence Yu
@@ -175,25 +84,34 @@ bool Npc::unEquipObject(int slot) {
   return false;
 }
 
-std::unordered_map<int,std::vector<Object>> Npc::getNpcInventory() const {
+std::unordered_map<int,std::vector<Object>> Npc::getInventory() const {
   return this->npcInventory;
 }
 
-std::unordered_map<int,Object> Npc::getNpcEquipment() const {
+std::unordered_map<int,Object> Npc::getEquipment() const {
   return this->npcEquipment;
 }
 
-std::string Npc::getNpcEquipmentDesc() const {
+std::string Npc::getEquipmentDesc() const {
   std::string response = "";
   for_each(npcEquipment.begin(), npcEquipment.end(), [&response](const auto& currentEquip){response += currentEquip.second.getShortDesc() + ", ";});
     std::cout << "npe equip: " << npcEquipment.size() << std::endl;	
   return response;
 }
-std::string Npc::getNpcInventoryDesc() const {
+std::string Npc::getInventoryDesc() const {
 	std::string response = "";
 	  std::cout << "npe inv: " << npcInventory.size() << std::endl;
 	std::for_each(npcInventory.begin(), npcInventory.end(), [&response](const auto& currentItem){response += currentItem.second[0].getShortDesc() + " (Quantity: " + std::to_string(currentItem.second.size()) + "), ";});	
   return response;
 }
 
+//THE FORMULAS NEED TO BE CHANGED (COPIED FROM PLAYER)
+int Npc::newHealth(const int lvl){
+    return DEFAULT_NPC_HEALTH+lvl*lvl*2;
+}
 
+int Npc::newMana(const int lvl){
+    return 95+lvl*lvl*1.5;
+}
+
+#endif
