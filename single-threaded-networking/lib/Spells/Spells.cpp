@@ -72,26 +72,26 @@ namespace Spells{
 		this->dammsg = dammsg;
 	}
 
-	std::vector<std::string> OffenseSpell::getHitChar() const {
+	std::vector<std::string> OffenseSpell::getMsgChar() const {
 		return this->hitchar;
 	}
 
-	void OffenseSpell::setHitChar(std::vector<std::string>& new_hitChar) {
+	void OffenseSpell::setMsgChar(std::vector<std::string>& new_hitChar) {
 		this->hitchar = new_hitChar;
 	}
 
-	std::vector<std::string> OffenseSpell::getHitRoom() const {
+	std::vector<std::string> OffenseSpell::getMsgRoom() const {
 		return this->hitroom;
 
 	}
-	void OffenseSpell::setHitRoom(std::vector<std::string>& new_hitRoom) {
+	void OffenseSpell::setMsgRoom(std::vector<std::string>& new_hitRoom) {
 		this->hitroom = new_hitRoom
 	}
 
-	std::vector<std::string> OffenseSpell::getHitVict() const {
+	std::vector<std::string> OffenseSpell::getMsgVict() const {
 		return this->hitvict;
 	}
-	void OffenseSpell::setHitVict(std::vector<std::string>& new_hitVict){
+	void OffenseSpell::setMsgVict(std::vector<std::string>& new_hitVict){
 		this->hitvict = new_hitVict;
 	}
 
@@ -133,27 +133,27 @@ namespace Spells{
 		this->dammsg = new_dammsg;
 	}
 
-	std::vector<std::string> ObjectSpell::getHitChar() const {
+	std::vector<std::string> ObjectSpell::getMsgChar() const {
 		return this->hitchar;
 	}
 
-	void ObjectSpell::setHitChar(std::vector<std::string>& new_hitChar) {
-		this->hitchar = new_hitChar;
+	void ObjectSpell::setMsgChar(std::vector<std::string>& new_msgChar) {
+		this->msgChar = new_msgChar;
 	}
 
-	std::vector<std::string> ObjectSpell::getHitRoom() const {
+	std::vector<std::string> ObjectSpell::getMsgRoom() const {
 		return this->hitroom;
 
 	}
-	void ObjectSpell::setHitRoom(std::vector<std::string>& new_hitRoom) {
-		this->hitroom = new_hitRoom
+	void ObjectSpell::setMsgRoom(std::vector<std::string>& new_msgRoom) {
+		this->msgRoom = new_msgRoom
 	}
 
-	std::vector<std::string> ObjectSpell::getHitVict() const {
+	std::vector<std::string> ObjectSpell::getMsgVict() const {
 		return this->hitvict;
 	}
-	void ObjectSpell::setHitVict(std::vector<std::string>& new_hitVict){
-		this->hitvict = new_hitVict;
+	void ObjectSpell::setMsgVict(std::vector<std::string>& new_msgVict){
+		this->msgVict = new_msgVict;
 	}
 
 	networking::Connection getConnection() const {

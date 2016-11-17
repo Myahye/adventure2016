@@ -76,9 +76,9 @@ namespace Spells{
 		std::vector<string>  dammsg;
 		std::vector<string>  missromm;
 		std::vector<string>  effect; 
-		std::vector<string>  hitchar;
-		std::vector<string>  hitroom;
-		std::vector<string>  hitvict;
+		std::vector<string>  msgChar;
+		std::vector<string>  msgRoom;
+		std::vector<string>  msgVict;
 		std::vector<string>  immchar;
 		std::vector<string>  wearoff;
 
@@ -99,16 +99,16 @@ namespace Spells{
 		void setDammsg(std::vector<std::string>& new_dammsg);
 
 		//
-		std::vector<std::string> getHitChar()const;
-		void setHitChar(std::vector<std::string>& new_hitChar);
+		std::vector<std::string> getMsgChar()const;
+		void setMsgChar(std::vector<std::string>& new_msgChar);
 
 		//
-		std::vector<std::string> getHitRoom()const;
-		void setHitRoom(std::vector<std::string>& new_hitRoom);
+		std::vector<std::string> getMsgRoom()const;
+		void setMsgRoom(std::vector<std::string>& new_msgRoom);
 
 		//
-		std::vector<std::string> getHitVict()const;
-		void setHitVict(std::vector<std::string>& new_hitVict);
+		std::vector<std::string> getMsgVict()const;
+		void setMsgVict(std::vector<std::string>& new_msgVict);
 
 		//
 		std::vector<std::string> getImmchar()const;
@@ -135,9 +135,9 @@ namespace Spells{
 		std::vector<string>  dammsg;
 		std::vector<string>  missromm;
 		std::vector<string>  effect; 
-		std::vector<string>  hitchar;
-		std::vector<string>  hitroom;
-		std::vector<string>  hitvict;
+		std::vector<string>  msgChar;
+		std::vector<string>  msgRoom;
+		std::vector<string>  msgVict;
 
 		networking::Connection connection;
 
@@ -156,16 +156,16 @@ namespace Spells{
 		void setDammsg(std::vector<std::string>& new_dammsg);
 
 		//
-		std::vector<std::string> getHitChar()const;
-		void setHitChar(std::vector<std::string>& new_hitChar);
+		std::vector<std::string> getMsgChar()const;
+		void setMsgChar(std::vector<std::string>& new_msgChar);
 
 		//
-		std::vector<std::string> getHitRoom()const;
-		void setHitRoom(std::vector<std::string>& new_hitRoom);
+		std::vector<std::string> getMsgRoom()const;
+		void setMsgRoom(std::vector<std::string>& new_msgRoom);
 
 		//
-		std::vector<std::string> getHitVict()const;
-		void setHitVict(std::vector<std::string>& new_hitVict);
+		std::vector<std::string> getMsgVict()const;
+		void setMsgVict(std::vector<std::string>& new_msgVict);
 
 		DefenseSpell(networking::Connection_,);
 		std::string execute(Context& context);
