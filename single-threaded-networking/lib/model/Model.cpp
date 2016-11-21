@@ -128,7 +128,18 @@ std::string
 Model::getCurrentRoomDescription(const int& playerId) {
 
   int currentRoomId = this->playerLocation[playerId];
-  std::string response = "\n\n" + this->rooms[currentRoomId].getFullRoomDesc();
+
+  std::string playersInRoom = "     Players: " ;
+  for(auto& playerIdRoomIdpair : playerLocation) {
+    if(playerIdRoomIdpair.second == currentRoomId) {
+      if(players[playerIdRoomIdpair.first].getStatus() == "Online") {
+        playersInRoom += players[playerIdRoomIdpair.first].getUsername() + ", ";
+      }
+    }
+  }
+  playersInRoom += "\n\n";
+
+  std::string response = "\n\n" + this->rooms[currentRoomId].getFullRoomDesc() + playersInRoom;
 
   return response;
 }
