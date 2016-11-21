@@ -41,7 +41,7 @@ int Room::numberOfDoors() const{
 int Room::getRoomInDir(std::string direction) const {
   // std::cout << "In getRoomInDir" << "\n";
   for(Door door : doors){
-    std::cout << "Door in room goes to: " << door.getDir() <<"\n";
+    //std::cout << "Door in room goes to: " << door.getDir() <<"\n";
     if(door.getDir() == direction){
       return door.getDestinationId();
     }
@@ -157,20 +157,6 @@ bool Room::removeObject(const int objectId) {
   return false;
 }
 
-void Room::addPlayer(const int playerId, const std::string& username) {
-  playersInRoom[playerId] = username;
-      //   std::cout << "Room id: " << mRoomId << "Npc id: " << npc.getId() << std::endl;
-}
-bool Room::removePlayer(const int playerId) {
-
-  auto it = playersInRoom.erase(playerId);
-  
-  if(it == 0) {
-    return false;
-  }
-  return true;
-}
-
 Npc* Room::findNpc(const std::string& name) {
   Npc* currentlySelectedNpc = NULL;
 
@@ -195,24 +181,7 @@ Object* Room::findObject(const std::string& name) {
   }
   return NULL;
 }
-int Room::findPlayerId(const std::string& name) {
-  auto player = find_if(playersInRoom.begin(),playersInRoom.end(), 
-  [&name] (const auto& player) {
-    return player.second == name;
-  });
-  
-  if (player != playersInRoom.end()) {
-    return player->first;
-  }
-  return 0;
-}
 
-std::unordered_map<int,std::vector<Npc>> Room::getNpcsInRoom() const {
-  return npcsInRoom;
-}
-std::unordered_map<int,std::vector<Object>> Room::getObjectsInRoom() const {
-  return objectsInRoom;
-}
 
 Npc* Room::checkNpcKeywords(const std::string& message, const std::pair<int,std::vector<Npc>>& npcIdVectorPair) {
 
@@ -302,14 +271,6 @@ std::string Room::getFullRoomDesc() const {
   std::string response = getDesc() + "\n";
   response += getNpcsInRoomDesc();
   response += getObjectsInRoomDesc();
-
-  //Move to proper get playersinroomdesc() method later
-  response += "     Players: " ;
-  for(auto& player : playersInRoom) {
-    response += player.second + ", ";
-  }
-  response += "\n";
-
   response += "     " + getDoorsInRoomDesc() + "\n";
   return response;
 }

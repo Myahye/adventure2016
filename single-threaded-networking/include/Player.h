@@ -31,6 +31,9 @@ private:
     std::unordered_map<int,std::vector<Object>> playerInventory;
     //std::unordered_map<int,Object> playerEquipment; //int will be the item_type slot
     std::unordered_map<std::string,Object> playerEquipment; //where the key is the slot item_type
+
+    std::string status = "Offline";
+
     //-----------------------------------
     
     void setNewHealth(int const level);
@@ -117,6 +120,9 @@ public:
 
     std::string getPlayerEquipmentDesc() const;
     std::string getPlayerInventoryDesc() const;
+
+    std::string getStatus();
+    void setStatus(std::string s);
 };
 
 #endif /* PLAYER_H */

@@ -271,4 +271,11 @@ std::string Player::getPlayerInventoryDesc() const {
   return response;
 }
 
+std::string Player::getStatus() {
+  return status;
+}
+void Player::setStatus(std::string s) {
+  status = s;
+}
+
 

@@ -2,7 +2,75 @@
 #include <boost/algorithm/string.hpp>
 #include <random>
 
+//utility functions
+bool is_number(const std::string& s)
+{
+	return !s.empty() && std::find_if(s.begin(), 
+		s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
+}
 
+std::string printMiniMap(std::unordered_map<int,Room>* rooms, int currentRoomId) {
+	std::string miniMapS = "     ";
+	std::vector<std::vector<int>> miniMap{{0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0},	
+										  {0,0,0,0,0,0,0},
+										  {0,0,0,9,0,0,0},
+										  {0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0}};
+
+	int currentRoom = currentRoomId;
+	for(int i = 0; i < 3; i++) {
+		currentRoom = (*rooms)[currentRoom].getRoomInDir("west");
+		if(currentRoom != -1) {
+			miniMap[3][2-i] = 1;
+		}
+	}
+
+	currentRoom = currentRoomId;
+	for(int i = 0; i < 3; i++) {
+		currentRoom = (*rooms)[currentRoom].getRoomInDir("north");
+		if(currentRoom != -1) {
+			miniMap[2-i][3] = 1;
+		}
+	}
+
+	currentRoom = currentRoomId;
+	for(int i = 0; i < 3; i++) {
+		currentRoom = (*rooms)[currentRoom].getRoomInDir("south");
+		if(currentRoom != -1) {
+			miniMap[4+i][3] = 1;
+		}
+	}
+
+	currentRoom = currentRoomId;
+	for(int i = 0; i < 3; i++) {
+		currentRoom = (*rooms)[currentRoom].getRoomInDir("east");
+		if(currentRoom != -1) {
+			miniMap[3][4+i] = 1;
+		}
+	}
+
+
+	for(int row = 0; row < 7; ++row) {
+		for(int column = 0; column < 7; ++column) {
+			if(miniMap[row][column] == 1 && row == 3 && column < 3) {
+				miniMapS += "*-";
+			} else if(miniMap[row][column] == 1 && row == 3 && column > 3) {
+				miniMapS += "-*";
+			} else if(miniMap[row][column] == 1) {
+				miniMapS += "|";
+			} else if (miniMap[row][column] == 9) {
+				miniMapS += "P";
+			} else {
+				miniMapS += "  ";
+			}
+		}
+		miniMapS += "\n     ";
+	}
+
+	return miniMapS + "\n";
+}
 
 
 namespace Commands {
@@ -26,8 +94,19 @@ namespace Commands {
 		Room* currentRoom = &(*rooms)[currentRoomId];
 
 		if(lookMessage == "") {
-			std::cout << "FF" << std::endl;
-			return response + "\n\n" + currentRoom->getFullRoomDesc();
+
+			//Move to proper get playersinroomdesc() method later
+			std::string playersInRoom = "     Players: " ;
+			for(auto& playerIdRoomIdpair : *playerLocations) {
+				if(playerIdRoomIdpair.second == currentRoomId) {
+					if((*players)[playerIdRoomIdpair.first].getStatus() == "Online") {
+						playersInRoom += (*players)[playerIdRoomIdpair.first].getUsername() + ", ";
+					}
+				}
+			}
+			playersInRoom += "\n\n";
+
+			return response + "\n\n" + printMiniMap(rooms, currentRoomId) + currentRoom->getFullRoomDesc() + playersInRoom;
 		}
 
 		//-------------------------------------------------look "cardinal direction"
@@ -118,10 +197,7 @@ namespace Commands {
 			//throw custom_errors::NoSuchDoorException();
 			(*playerLocations)[playerId] = destRoomId;
 
-			currentRoom->removePlayer(playerId);
-			destRoom->addPlayer(playerId, currentPlayer.getUsername());
-
-			return currentPlayer.getUsername() + "> " + message + "\n\n" + destRoom->getFullRoomDesc();
+			return currentPlayer.getUsername() + "> " + message + "\n\n" + printMiniMap(rooms, destRoomId) + destRoom->getFullRoomDesc();
 		} else {
 			return currentPlayer.getUsername() + "> " + "There is no door in the " + goMessage + " direction." + "\n\n";
 		}
@@ -325,26 +401,6 @@ namespace Commands {
 		std::cout << "\n\n\n";
 		std::cout << messageText << "\n";
 
-		// if(takeMessage.size() == 2) {
-		// 	Npc* currentNpc = currentRoom->findNpc(takeMessage[1]);
-		// 	std::cout << takeMessage.size() << std::endl;
-		// 	if(currentNpc != NULL) {
-		// 		std::cout << "wewwr" << std::endl;
-		// 		response += "\n Steal: " + takeMessage[0] + " From: " + takeMessage[1] + "\n\n";
-		// 		std::cout << "wsfsdfer" << std::endl;
-		// 		//Npc will use a currentNpc->findObjectId(objectTargetPair[0]) method which returns the object ID	of the object in inventory
-		// 		//Will change removeObjectfromInventory() to take in the objectID (maybe pass in selected index "eg. steal apple '1'");
-		// 		if(currentNpc->removeObjectFromInventory(takeMessage[0])) {
-		// 			response += "Success!\n";
-		// 		} else {
-		// 			response += "Failure.\n";
-		// 		}
-		// 		//}
-
-		// 		return response;
-		// 	}
-		// }
-
 
 		 std::cout << "EHTH" << std::endl;
 
@@ -420,14 +476,6 @@ namespace Commands {
 	networking::Connection TakeCommand::getConnection() const {
 		return this->connection;
 	}
-	
-	//Need to move out but don't know where (move to top of ffile as static function)
-	bool TakeCommand::is_number(const std::string& s)
-	{
-		return !s.empty() && std::find_if(s.begin(), 
-			s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
-	}
-
 
 	EquipCommand::EquipCommand(networking::Connection connection_, const std::string& message_)
 	: connection{connection_}, message{message_} {}
@@ -550,50 +598,50 @@ namespace CombatCommands {
 	: clients{clients_}, sourceConnection{sourceConnection_}, message{message_} {}
 
 	std::string AttackCommand::execute(Context& context) {
-		auto players = context.getPlayers();
-		auto rooms = context.getRooms();
-		auto playerLocations = context.getPlayerLocations();
-		int playerId = this->sourceConnection.playerId;
+		// auto players = context.getPlayers();
+		// auto rooms = context.getRooms();
+		// auto playerLocations = context.getPlayerLocations();
+		// int playerId = this->sourceConnection.playerId;
 
-		std::string messageText = this->message.substr(7);
-		std::transform(messageText.begin(), messageText.end(), messageText.begin(), ::tolower);
+		// std::string messageText = this->message.substr(7);
+		// std::transform(messageText.begin(), messageText.end(), messageText.begin(), ::tolower);
 
-		std::vector <std::string> takeMessage;
-    boost::trim_if(messageText, boost::is_any_of("\t "));
-    boost::split(takeMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
-		this->sourceName=(*players)[playerId].getUsername();
-		std::string sourceResponse = sourceName + "> " + takeMessage[0];
+		// std::vector <std::string> takeMessage;
+  //   boost::trim_if(messageText, boost::is_any_of("\t "));
+  //   boost::split(takeMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
+		// this->sourceName=(*players)[playerId].getUsername();
+		// std::string sourceResponse = sourceName + "> " + takeMessage[0];
 
-		int currentRoomId = (*playerLocations)[playerId];
-		Room* currentRoom = &(*rooms)[currentRoomId];
+		// int currentRoomId = (*playerLocations)[playerId];
+		// Room* currentRoom = &(*rooms)[currentRoomId];
 
-		//should change this to not return magic number
-		int targetPlayerId = currentRoom->findPlayerId(takeMessage[0]);
-		for(networking::Connection client: clients){
-			if(client.playerId == targetPlayerId){
-				this->targetConnection = client;
-			}
-		}
-		if(targetPlayerId != 0) {
-			std::cout<<(*players)[targetPlayerId].getUsername() +" is the target name for "+ (*players)[playerId].getUsername()<<std::endl;
-			int currentTargetHealth=(*players)[targetPlayerId].getHealth();
-			if (currentTargetHealth==0){
-				return sourceResponse + " has already been Defeated!\n";
-			}else{
-				(*players)[targetPlayerId].setHealth(currentTargetHealth-50);
-				if ((*players)[targetPlayerId].getHealth()==0){
-					int playerXP=(*players)[playerId].getExp();
-					(*players)[playerId].setExp(100);
-					return sourceResponse + " has been defeated!\n";
-				}
+		// //should change this to not return magic number
+		// int targetPlayerId = currentRoom->findPlayerId(takeMessage[0]);
+		// for(networking::Connection client: clients){
+		// 	if(client.playerId == targetPlayerId){
+		// 		this->targetConnection = client;
+		// 	}
+		// }
+		// if(targetPlayerId != 0) {
+		// 	std::cout<<(*players)[targetPlayerId].getUsername() +" is the target name for "+ (*players)[playerId].getUsername()<<std::endl;
+		// 	int currentTargetHealth=(*players)[targetPlayerId].getHealth();
+		// 	if (currentTargetHealth==0){
+		// 		return sourceResponse + " has already been Defeated!\n";
+		// 	}else{
+		// 		(*players)[targetPlayerId].setHealth(currentTargetHealth-50);
+		// 		if ((*players)[targetPlayerId].getHealth()==0){
+		// 			int playerXP=(*players)[playerId].getExp();
+		// 			(*players)[playerId].setExp(100);
+		// 			return sourceResponse + " has been defeated!\n";
+		// 		}
 
-			}
-			return sourceResponse + " target found Attack Success \n";
-		}/*else if(){
+		// 	}
+		// 	return sourceResponse + " target found Attack Success \n";
+		// }/*else if(){
 
-		}*/else{
-			return sourceResponse + " target not in room / not found \n" ;
-		}
+		// }*/else{
+		// 	return sourceResponse + " target not in room / not found \n" ;
+		// }
 
 	}
 
