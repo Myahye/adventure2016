@@ -257,7 +257,9 @@ namespace Commands {
 				" Health: "+std::to_string((*players)[playerId].getHealth())+"\n"+
 				" Mana  : "+std::to_string((*players)[playerId].getMana())+"\n"+
 				" EXP   : "+std::to_string((*players)[playerId].getExp())+"\n"+
-				" Level : "+std::to_string((*players)[playerId].getLevel())+"\n";
+				" Level : "+std::to_string((*players)[playerId].getLevel())+"\n"+
+				" Armor : "+std::to_string((*players)[playerId].getArmor())+"\n"
+				" Attack : "+std::to_string((*players)[playerId].getThac0())+"\n";
 
 
 	}
@@ -446,22 +448,37 @@ namespace Commands {
 		Room* currentRoom = &(*rooms)[currentRoomId];
 		Object* currentObject = currentRoom->findObject(messageText);
 
-		if(currentObject != NULL){
-			if(player->equipObject(*currentObject, 1)){
-				//response += messageText + "has been equipped!\n\n";
-				return player->getUsername() + "> " + messageText + " has been equipped!\n\n";
-			}
-			else{
-				//response += messageText + "is not in your inventory!\n\n";
-				return player->getUsername() + "> " + messageText + " is not in your inventory!\n\n";
-			}
-		}
-		else{
-			//response += "Cannot equip " + messageText + ", no match. \n\n";
+		//currentobject can not be found
+		if(currentObject == NULL){
 			return player->getUsername() + "> " + "Cannot equip " + messageText + ", no match. \n\n";
-		} 
+		}
+
+		const std::string& armorFlag = " armor";
+		std::string weaponFlag = "weapon";
+		std::string itemtype = currentObject->getItemType();
+		//boost::trim_if(itemtype, boost::is_any_of(" "));
+		bool equipObjectRet;
+		std::cout << "objects itemtype : " << itemtype << "\n";
+		if( itemtype == armorFlag ){	// need to change to work with midgaard
+			equipObjectRet = player->equipObject(*currentObject, armorFlag);
+			int currentArmor = player->getArmor();
+			player->setArmor(currentArmor + 10); //maybe change this later
+			//std::cout << "line 425 commands\n";
+		} else if (itemtype == weaponFlag){ // need to change to work with midgaard
+			equipObjectRet = player->equipObject(*currentObject, weaponFlag);
+			int currentAttack = player->getThac0();
+			player->setThac0(currentAttack + 10); //maybe change this later
+			//std::cout << "line 428 commands\n";
+		} else{
+			//std::cout << "line 430 commands\n";
+			return player->getUsername() + "> " + messageText + " is not an item that can be equipped! \n\n";
+		}
 		
-		//return player.getUsername() + "> " + response;
+		if(equipObjectRet){
+			return player->getUsername() + "> " + messageText + " has been equipped!\n\n";
+		} else {
+			return player->getUsername() + "> " + messageText + " is not in your inventory!\n\n";
+		}
 	}
 
 	int EquipCommand::getId() const {

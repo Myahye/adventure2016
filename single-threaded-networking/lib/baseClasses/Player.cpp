@@ -157,6 +157,20 @@ void Player::setThac0(int const thac0) {
 
 
 //-------------------------------Mohamed Yahye
+// int checkInventorySize(){
+//   int maxInvetorySize = 30;
+//   int currentInventorySize = 0;
+//   //making sure inventory isnt full
+//   for(auto i& : playerInventory){
+//     currentInventorySize += i.second.size();
+//   }
+  
+//   if(currentInventorySize >= maxInvetorySize){
+//     cout << "inventory full\n";
+//   }
+// }
+
+
 void Player::addObjectToInventory(const Object& object, unsigned int limit) {
   if(playerInventory[object.getId()].size() == limit) {
   	//std::cout << "object id: " << object.getId()<< "size: " << playerInventory[object.getId()].size() << std::endl;
@@ -190,32 +204,38 @@ bool Player::removeObjectFromInventory(const std::string& objectName) {
 }
 
 //maybe change it so int slot is string item_type and thats ur slots!
-bool Player::equipObject(const Object& object, int slot) {
+bool Player::equipObject(const Object& object, std::string slot) {
   if(playerInventory.find(object.getId()) == playerInventory.end()) {
-  	return false;
+    //std::cout << "line 195 player\n";
+    return false;
+  }
+
+  if(slot != "armor" && slot != "weapon") {
+    //std::cout << "line 199 player\n";
+    return false;
   }
 
   if(playerEquipment.find(slot) != playerEquipment.end()) {
     playerInventory[playerEquipment[slot].getId()].push_back(playerEquipment[slot]);
     playerEquipment[slot] = object;
     playerInventory[object.getId()].pop_back();
-    //std::cout << "objz: " << object.getId() << std::endl;
+    //std::cout << "line 209 player\n";
     return true;
   } else {
     playerEquipment[slot] = object;
-	//std::cout << "IW" << std::endl;
-
+    //std::cout << "IW" << std::endl;
     playerInventory[object.getId()].pop_back();
+    
     if(playerInventory[object.getId()].empty()) {
     	playerInventory.erase(object.getId());
     }
 
-    //std::cout << "IWOEFJ|" << std::endl;
+    //std::cout << "line 221 player\n";
     return true;
-          // std::cout << this << "Object id: " << PlayerEquipment[slot].getId() << " Player id: " << id << " Equipment Desc: " << PlayerEquipment[slot].getShortDesc() << " Equipment size: " << PlayerEquipment.size() <<std::endl;
   }
+
 }
-bool Player::unEquipObject(int slot) {
+bool Player::unEquipObject(std::string slot) {
   //remove if id == object and pickedupflag==yes
   if(playerEquipment.find(slot) != playerEquipment.end()) {
   	playerEquipment.erase(slot);
@@ -228,20 +248,26 @@ std::unordered_map<int,std::vector<Object>> Player::getPlayerInventory() const {
   return this->playerInventory;
 }
 
-std::unordered_map<int,Object> Player::getPlayerEquipment() const {
+std::unordered_map<std::string,Object> Player::getPlayerEquipment() const {
   return this->playerEquipment;
 }
 
 std::string Player::getPlayerEquipmentDesc() const {
   std::string response = "";
-  for_each(playerEquipment.begin(), playerEquipment.end(), [&response](const auto& currentEquip){response += currentEquip.second.getShortDesc() + ", ";});
-    std::cout << "player equip: " << playerEquipment.size() << std::endl;	
+  std::cout << "Equipment: " << playerEquipment.size() << std::endl; 
+
+  for_each(playerEquipment.begin(), playerEquipment.end(), [&response](const auto& currentEquip){
+    response += currentEquip.first + ":" + currentEquip.second.getShortDesc() + "\n";});
+    
   return response;
 }
 std::string Player::getPlayerInventoryDesc() const {
 	std::string response = "";
-	 std::cout << "player inv: " << playerInventory.size() << std::endl;
-	std::for_each(playerInventory.begin(), playerInventory.end(), [&response](const auto& currentItem){response += currentItem.second[0].getShortDesc() + " (Quantity: " + std::to_string(currentItem.second.size()) + "), ";});	
+	std::cout << "Inventory: " << playerInventory.size() << std::endl;
+	
+  std::for_each(playerInventory.begin(), playerInventory.end(), [&response](const auto& currentItem){
+    response += currentItem.second[0].getShortDesc() + " (Quantity: " + std::to_string(currentItem.second.size()) + "), ";});	
+  
   return response;
 }
 

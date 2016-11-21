@@ -13,7 +13,7 @@ private:
     int exp = 0;
     int gold = 0;
     int level = 1;
-    int thac0;
+    int thac0 = 0;//set thac0 to 0
     int pid = 0;
     int health=100;
     int mana=100;
@@ -29,7 +29,8 @@ private:
 
     //----------------------Mohamed Yahye
     std::unordered_map<int,std::vector<Object>> playerInventory;
-    std::unordered_map<int,Object> playerEquipment; //int will be the item_type slot
+    //std::unordered_map<int,Object> playerEquipment; //int will be the item_type slot
+    std::unordered_map<std::string,Object> playerEquipment; //where the key is the slot item_type
     //-----------------------------------
     
     void setNewHealth(int const level);
@@ -107,12 +108,12 @@ public:
     
     bool removeObjectFromInventory(const std::string& objectName);
 
-    bool equipObject(const Object& object, int slot);
-    bool unEquipObject(int slot);
+    bool equipObject(const Object& object, std::string slot);
+    bool unEquipObject(std::string slot);
     //bool unequipObject();
 
     std::unordered_map<int,std::vector<Object>> getPlayerInventory() const;
-    std::unordered_map<int,Object> getPlayerEquipment() const;
+    std::unordered_map<std::string,Object> getPlayerEquipment() const;
 
     std::string getPlayerEquipmentDesc() const;
     std::string getPlayerInventoryDesc() const;
