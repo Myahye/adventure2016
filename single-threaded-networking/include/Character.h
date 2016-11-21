@@ -9,6 +9,10 @@
 #include <algorithm>
 
 class Character {
+
+	std::unordered_map<int, std::vector<Object>> inventory;
+	std::unordered_map<int, Object> equipment;
+
 	int armor = 0;
 	int exp = 0;
 	int gold = 0;
@@ -16,8 +20,15 @@ class Character {
 	int level = 0;
 	int thac0;
 
+	int maxHealth = 100;
+	int maxMana = 85;
+
+	int currentHealth = 100;
+	int currentMana = 85;
+
 	std::string damage;
 	std::string hit;
+	std::string shortdesc;
 
 	std::vector<std::string> description;
 	std::vector<std::string> keywords;
@@ -42,6 +53,18 @@ public:
 	int getLevel() const;
 	void setLevel(const int level);
 
+	int getMaxHealth() const;
+	void setMaxHealth(const int maxHealth);
+
+	int getMaxMana() const;
+	void setMaxMana(const int maxMana);
+
+	int getCurrentHealth() const;
+	void setCurrentHealth(const int currentHealth);
+
+	int getCurrentMana() const;
+	void setCurrentMana(const int currentMana);
+
 	int getThac0() const;
 	void setThac0(int const thac0);
 	
@@ -54,11 +77,29 @@ public:
 	std::string getDescription() const;
 	void setDescription(const std::vector<std::string>& description);
 
+	std::string getShortDesc() const;
+    void setShortDesc(const std::string& shortdesc);
+
 	std::vector<std::string> getKeywords() const;
 	void setKeywords(const std::vector<std::string>& keywords);
 
-	std::string getLongdesc() const;
-	void setLongdesc(const std::vector<std::string>& longdesc);
+	std::string getLongDesc() const;
+	void setLongDesc(const std::vector<std::string>& longdesc);
+
+	void addObjectToInventory(const Object& object, unsigned int limit);
+	bool removeObjectFromInventory(const std::string& objectName);
+
+	bool equipObject(const Object& object, int slot);
+    bool unEquipObject(int slot);
+
+    std::unordered_map<int,std::vector<Object>> getInventory() const;
+    void setInventory(std::unordered_map<int, std::vector<Object>> inventory);
+
+    std::unordered_map<int,Object> getEquipment() const;
+    void setEquipment(std::unordered_map<int, Object> equipment);
+    
+    std::string getEquipmentDesc() const;
+    std::string getInventoryDesc() const;
 }; 
 
 #endif 

@@ -33,6 +33,10 @@ Door::getDesc() const {
     std::for_each(desc.begin(), desc.end(), [&descString](std::string i){descString += i + "\n";} );    
     return descString;
 }
+std::vector<std::string>
+Door::getDescV() const{
+    return this->desc;
+}
 std::string
 Door::getDir() const {
     return this -> dir;

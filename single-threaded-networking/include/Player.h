@@ -7,11 +7,11 @@ class Player {
     std::string username;
     std::string password;
 public:
-    Character playerCharacter;
-
     // Constructor
     Player ();
     Player (int const id, std::string const username, std::string const password);
+
+    Character playerCharacter{};
 
     //username
     std::string getUsername() const;
@@ -21,6 +21,7 @@ public:
     std::string getPassword() const;
     void setPassword(std::string& password);
 
+    void setCharacter(const Character& character);
 };
 
 #endif /* PLAYER_H */

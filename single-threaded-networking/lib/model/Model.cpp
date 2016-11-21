@@ -40,20 +40,25 @@
 // }
 
 //This is what construction will look like
- Model::Model(const std::string& path){
-   yamlParseAndBuild(path);
-   this->context = Context{&this->rooms,&this->npcs,&this->objects};
+ Model::Model(const std::vector<std::string>& paths){
+   yamlParseAndBuild(paths[0]);
+   yamlParseAndBuild(paths[1]);
+   std::cout << "gei " << std::endl;
+   this->context = Context{&this->rooms,&this->npcs,&this->objects,&this->players,&this->playerLocation};
+   std::cout << "goi " << std::endl;
+   this->reset();
  }
 
-//use subclass to build objects
-//each subclass method returns an unordered_map?
 void Model::yamlParseAndBuild(const std::string& pathToFile){
-  this->npcs = yamlparse.parseBuildNpcs(pathToFile);
-  this->objects = yamlparse.parseBuildObjects(pathToFile);
-  this->rooms = yamlparse.parseBuildRooms(pathToFile);
-  this->resets = yamlparse.parseBuildResets(pathToFile);
-
-  printAll();
+  std::cout << "DIFFERENT FILE\n\n\n\n\n\n\n";
+  yamlparse.loadFile(pathToFile);
+  yamlparse.buildNpcs(this->npcs);
+  yamlparse.buildObjects(this->objects);
+  //yamlparse.buildResets(this->resets);
+  std::cout << "wwww " << std::endl;
+  yamlparse.buildRooms(this->rooms);
+      // printAll();
+  //this->resets = yamlparse.parseBuildResets(pathToFile);
   //not yet implemented
   // this->allPlayers = yamlParse.parseBuildPlayers(pathToFile);
 
@@ -61,7 +66,7 @@ void Model::yamlParseAndBuild(const std::string& pathToFile){
 
 void Model::printAll(){
   // std::cout << "Printing map contents \n";
-  // int count = 1;
+   int count = 1;
   // for ( auto it = npcs.begin(); it != npcs.end(); ++it ){
   //   std::cout << "Map 1\nid:" << it->first << "\n";
   //   std::cout << it->first  << std::endl;
@@ -75,19 +80,19 @@ void Model::printAll(){
   //   std::cout << std::endl;
   //   count++;
   // }
-  // for ( auto it = rooms.begin(); it != rooms.end(); ++it ){
-  //    std::cout << "Map 1\nid:" << it->first << "\n";
-  //    (it->second).printClass(count);
-  //    std::cout << std::endl;
-  //    count++;
-  // }
-  //  for ( auto it = resets.begin(); it != resets.end(); ++it ){
-  //    std::cout << "Map 3\nid:" << "\n";
-  //      auto r = *it;
-  //      r->printClass(count);
-  //    std::cout << std::endl;
-  //    count++;
-  // }
+  for ( auto it = rooms.begin(); it != rooms.end(); ++it ){
+     std::cout << "Map 1\nid:" << it->first << "\n";
+     (it->second).printClass(count);
+     std::cout << std::endl;
+     count++;
+  }
+   // for ( auto it = resets.begin(); it != resets.end(); ++it ){
+   //   std::cout << "Map 3\nid:" << "\n";
+
+   //    (*it)->printClass(count);
+   //   std::cout << std::endl;
+   //   count++;
+   // }
 }
 
 int
@@ -99,10 +104,10 @@ Model::createPlayer(const std::string& username, const std::string& password){
 
   Player newPlayer{this->assignedIds, username, password};
   players.insert({this->assignedIds, newPlayer});
-  playerLocation[assignedIds] = 1100;
+  playerLocation[assignedIds] = 3007;
   assignedIds++;
   for (auto & player: players) {
-      std::cout << "Player Id: " << player.second.getId() << ", username: " << player.second.getUsername() << ", password: " << player.second.getPassword() << "\n";
+      std::cout << "Player Id: " << player.second.playerCharacter.getId() << ", username: " << player.second.getUsername() << ", password: " << player.second.getPassword() << "\n";
   }
   return assignedIds - 1;
 }
@@ -113,7 +118,7 @@ Model::getPlayerCredentialsVector() const {
   std::vector<std::tuple<int,std::string,std::string>> vector;
 
   for(auto player: players) {
-    vector.push_back(std::make_tuple(player.second.getId(),player.second.getUsername(),player.second.getPassword()));
+    vector.push_back(std::make_tuple(player.second.playerCharacter.getId(),player.second.getUsername(),player.second.getPassword()));
   }
 
   return vector;
@@ -128,119 +133,123 @@ Model::getCurrentRoomDescription(const int& playerId) {
   return response;
 }
 
-std::string
-Model::movePlayer(const int& playerId, const std::string& destDirection){
-  std::cout << "Player wants to go " << destDirection << std::endl;
-  int currentRoomId  = this->playerLocation[playerId];
-  std::cout << "Current room Id: " << currentRoomId << std::endl;
-  Room currentRoom = this->rooms[currentRoomId];
-  std::vector<Door> currentRoomDoors = currentRoom.getDoors();
-  std::cout << "number of doors in room: " << currentRoomDoors.size() << std::endl;
+// std::string
+// Model::movePlayer(const int& playerId, const std::string& destDirection){
+//   std::cout << "Player wants to go " << destDirection << std::endl;
+//   int currentRoomId  = this->playerLocation[playerId];
+//   std::cout << "Current room Id: " << currentRoomId << std::endl;
+//   Room currentRoom = this->rooms[currentRoomId];
+//   std::vector<Door> currentRoomDoors = currentRoom.getDoors();
+//   std::cout << "number of doors in room: " << currentRoomDoors.size() << std::endl;
 
-  // for(Door door : currentRoomDoors){
-  //   std::cout << "Dir: " << door.getDir() << endl;
-  // }
+//   // for(Door door : currentRoomDoors){
+//   //   std::cout << "Dir: " << door.getDir() << endl;
+//   // }
 
-  int destRoomId = currentRoom.getRoomInDir(destDirection);
+//   int destRoomId = currentRoom.getRoomInDir(destDirection);
 
-  if(destRoomId != -1) {
-    std::cout << "Destination room Id:: " << currentRoom.getRoomInDir(destDirection) << std::endl;
-    //throw custom_errors::NoSuchDoorException();
-    this->playerLocation[playerId] = destRoomId;
-    return this->players[playerId].getUsername() + "> " + destDirection + getCurrentRoomDescription(playerId);
-  } else {
-    return this->players[playerId].getUsername() + "> " + "There is no door in the " + destDirection + " direction." + "\n\n";
-  }
-}
+//   if(destRoomId != -1) {
+//     std::cout << "Destination room Id:: " << currentRoom.getRoomInDir(destDirection) << std::endl;
+//     //throw custom_errors::NoSuchDoorException();
+//     this->playerLocation[playerId] = destRoomId;
+//     return this->players[playerId].getUsername() + "> " + destDirection + getCurrentRoomDescription(playerId);
+//   } else {
+//     return this->players[playerId].getUsername() + "> " + "There is no door in the " + destDirection + " direction." + "\n\n";
+//   }
+// }
 //---------------------------------------------------lawrence Yu
 std::string
 Model::dummySayCommand(const int& playerId, const std::string& message){
   return this->players[playerId].getUsername() + "> " + message.substr(4) + "\n\n";
 }
 
-std::string
-Model::lookCommand(const int& playerId, const std::string& command){
-  std::string response = this->players[playerId].getUsername() + "> " + command;
-  std::string message = command.substr(5);
-  std::transform(message.begin(), message.end(), message.begin(), ::tolower);
+// std::string
+// Model::lookCommand(const int& playerId, const std::string& command){
+//   std::string response = this->players[playerId].getUsername() + "> " + command;
+//   std::string message = command.substr(5);
+//   std::transform(message.begin(), message.end(), message.begin(), ::tolower);
 
-  int currentRoomId = this->playerLocation[playerId];
+//   int currentRoomId = this->playerLocation[playerId];
+//   Room currentRoom = this->rooms[currentRoomId];
 
-  if(message == "room") {
-    return response + getCurrentRoomDescription(playerId);
-  }
+//   if(message == "room") {
+//     return response + getCurrentRoomDescription(playerId);
+//   }
 
-  //-------------------------------------------------look "cardinal direction"
+//   //-------------------------------------------------look "cardinal direction"
 
-  //will move this to room class later as if isDirection return door.getDesc()
-  auto doorsInRoom = this->rooms[currentRoomId].getDoors();
+//   //will move this to room class later as if isDirection return door.getDesc()
+//   auto doorsInRoom = currentRoom.getDoors();
 
-  for(auto currentDoor : doorsInRoom) {
-    if(message == currentDoor.getDir()) {
-      response += "\n\n" + currentDoor.getDesc() += "\n";
+//   for(auto currentDoor : doorsInRoom) {
+//     if(message == currentDoor.getDir()) {
+//       response += "\n\n" + currentDoor.getDesc() += "\n";
 
-      return response;
-    }
-  }
+//       return response;
+//     }
+//   }
 
-  //-------------------------------------------------look "Npc keyword"
+//   //-------------------------------------------------look "Npc keyword"
 
-  //will move this to room class later as if isNpc return npc.getfulldesc()
-  auto npcsInRoom = this->rooms[currentRoomId].getNpcsInRoom();
-  for(auto currentNpc : npcsInRoom) {
-    if(checkNpcKeywords(message, currentNpc)) {
+//   //will move this to room class later as if isNpc return npc.getfulldesc()
+//   Npc currentNpc = currentRoom.findNpc(message);
 
-      //change for look toddler 1 look toddler 2 look toddler 3 later since it only checks the description of the first duplicate npc?
-      response += "\n\n" + currentNpc.second[0].getDesc();
-      response += "\n     Wearing: "  + currentNpc.second[0].getNpcEquipmentDesc();
-      response += "\n     Carrying: " + currentNpc.second[0].getNpcInventoryDesc() + "\n\n";
+//   if(currentNpc.getId() != 0) {
 
-      return response;
-    }
-  }
+//     //change for look toddler 1 look toddler 2 look toddler 3 later since it only checks the description of the first duplicate npc?
+//     response += "\n\n" + currentNpc.getDesc();
+//     response += "\n     Wearing: "  + currentNpc.getNpcEquipmentDesc();
+//     response += "\n     Carrying: " + currentNpc.getNpcInventoryDesc() + "\n\n";
 
-  //-------------------------------------------------look "Object keyword"
+//     return response;
+//   }
 
-  //will move this to room class later as if isobject return object.getfulldesc()
-  for(auto objectIdVectorPair : this->rooms[currentRoomId].getObjectsInRoom()) {
-    if(checkObjectKeywords(message, objectIdVectorPair)) {
-    response += "\n";
-      //change for look object 1 look object 2 look object 3 later since it only checks the description of the first duplicate object?
-      for(auto descriptionText : objectIdVectorPair.second[0].getExtra().first) {
-        response += descriptionText + "\n";
-      }
-      return response;
-    }
-  }
+//   //-------------------------------------------------look "Object keyword"
 
-  return this->players[playerId].getUsername() + "> " + "Cannot find " + message + ", no match. \n\n";
-}
+//   //will move this to room class later as if isobject return object.getfulldesc()
+//   Object currentObject = currentRoom.findObject(message);
+
+//   if(currentObject.getId() != 0) {
+
+//     response += "\n";
+//     //change for look object 1 look object 2 look object 3 later since it only checks the description of the first duplicate object?
+//     for(auto descriptionText : currentObject.getExtra().first) {
+//       response += descriptionText + "\n";
+//     }
+//     return response;
+//   }
+
+//   return this->players[playerId].getUsername() + "> " + "Cannot find " + message + ", no match. \n\n";
+// }
 
 //----------------------Lawrence Yu
 void Model::reset(){
+    //  std::cout << "gerooooi " << std::endl;
   for(auto& reset : resets) {
-    reset->execute(this->context);
-    this->context.setCurrentlySelectedNpc(reset->getCurrentlySelectedNpc());
+  //      std::cout << "pppp " << std::endl;
+    if(reset != NULL) {
+           //reset->printClass(1);
+      reset->execute(this->context);
+   //     std::cout << "lll " << std::endl;
+      this->context.setCurrentlySelectedNpc(reset->getCurrentlySelectedNpc());
+  //  std::cout << "geroi " << std::endl;
+    }
   }
+   //   std::cout << "roi " << std::endl;
+  this->context.setCurrentlySelectedNpc(NULL);
+    //  std::cout << "oi " << std::endl;
 }
 
-bool Model::checkObjectKeywords(const std::string& message, std::pair<const int,std::vector<Object>>& objectIdVectorPair) {
-  // return std::any_of(objectIdVectorPair.second[0].getKeywords().begin(), objectIdVectorPair.second[0].getKeywords().end(), 
-  // [&message] (const std::string& keyword) { return message == keyword;});
-  for(auto& keyword : objectIdVectorPair.second[0].getKeywords()) {
-    if(message == keyword) {
-      return true;
-    }
-  }
-  return false;
+Context Model::getContext() const {
+  return this->context;
 }
-bool Model::checkNpcKeywords(const std::string& message, std::pair<const int,std::vector<Npc>>& npcIdVectorPair) {
-  // return std::any_of(npcIdVectorPair.second[0].getKeywords().begin(), npcIdVectorPair.second[0].getKeywords().end(), 
-  // [&message] (const std::string& keyword) { return message == keyword;});
-  for(auto& keyword : npcIdVectorPair.second[0].getKeywords()) {
-    if(message == keyword) {
-      return true;
-    }
-  }
-  return false;
+
+
+void Model::playerDisconnected(const int playerId) {
+  this->rooms[playerLocation[playerId]].removePlayer(playerId);
+}
+
+void Model::playerConnect(const int playerId) {
+  std::cout << "s " << playerLocation[playerId] << std::endl;
+  this->rooms[playerLocation[playerId]].addPlayer(playerId, players[playerId].getUsername());
 }

@@ -5,12 +5,12 @@
 #include <unordered_map>
 #include <tuple>
 #include <boost/algorithm/string/predicate.hpp>
-#include "Player.h"
 #include "Room.h"
 #include "Door.h"
 #include "CustomError.h"
-#include "yamlParser.h"
+#include "YamlParseBuild.h"
 #include "Resets.h"
+#include "Player.h"
 #include "Npc.h"
 #include "Context.h"
 
@@ -23,13 +23,13 @@ private:
   std::unordered_map<int,Room> rooms;
   std::unordered_map<int,Npc> npcs;
   std::unordered_map<int,Object> objects;
-  std::vector<std::shared_ptr<Reset>> resets;
+  std::vector<std::unique_ptr<Reset>> resets;
 
   int assignedIds = 1;
   //need to change these to temlpate values
   std::unordered_map<int,int> playerLocation;
 
-  YamlParser yamlparse;
+  YamlParseBuild yamlparse;
   void yamlParseAndBuild(const std::string& pathToFile);
   void printAll();
   //Still need to be implemented
@@ -44,7 +44,7 @@ public:
 
   //Model(); //temp
 
-  Model(const std::string& path);
+  Model(const std::vector<std::string>& paths);
 
   int createPlayer(const std::string& username, const std::string& password);
   std::vector<std::tuple<int,std::string,std::string>> getPlayerCredentialsVector() const;
@@ -66,10 +66,14 @@ public:
 
   std::string lookCommand(const int& playerId, const std::string& destDirection);
 
-  bool checkObjectKeywords(const std::string& message, std::pair<const int,std::vector<Object>>& objectIdVectorPair);
-  bool checkNpcKeywords(const std::string& message, std::pair<const int,std::vector<Npc>>& npcIdVectorPair);
+  std::string stealCommand(const int& playerId, const std::string& command);
+
+  Context getContext() const;
 
   //-----------------------------Lawrence YU
   void reset();
+  
+  void playerDisconnected(const int playerId);
+  void playerConnect(const int playerId);
 };
 #endif /* commandparse_h */
