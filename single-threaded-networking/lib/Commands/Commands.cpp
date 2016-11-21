@@ -2,7 +2,75 @@
 #include <boost/algorithm/string.hpp>
 #include <random>
 
+//utility functions
+bool is_number(const std::string& s)
+{
+	return !s.empty() && std::find_if(s.begin(), 
+		s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
+}
 
+std::string printMiniMap(std::unordered_map<int,Room>* rooms, int currentRoomId) {
+	std::string miniMapS = "     ";
+	std::vector<std::vector<int>> miniMap{{0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0},	
+										  {0,0,0,0,0,0,0},
+										  {0,0,0,9,0,0,0},
+										  {0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0}};
+
+	int currentRoom = currentRoomId;
+	for(int i = 0; i < 3; i++) {
+		currentRoom = (*rooms)[currentRoom].getRoomInDir("west");
+		if(currentRoom != -1) {
+			miniMap[3][2-i] = 1;
+		}
+	}
+
+	currentRoom = currentRoomId;
+	for(int i = 0; i < 3; i++) {
+		currentRoom = (*rooms)[currentRoom].getRoomInDir("north");
+		if(currentRoom != -1) {
+			miniMap[2-i][3] = 1;
+		}
+	}
+
+	currentRoom = currentRoomId;
+	for(int i = 0; i < 3; i++) {
+		currentRoom = (*rooms)[currentRoom].getRoomInDir("south");
+		if(currentRoom != -1) {
+			miniMap[4+i][3] = 1;
+		}
+	}
+
+	currentRoom = currentRoomId;
+	for(int i = 0; i < 3; i++) {
+		currentRoom = (*rooms)[currentRoom].getRoomInDir("east");
+		if(currentRoom != -1) {
+			miniMap[3][4+i] = 1;
+		}
+	}
+
+
+	for(int row = 0; row < 7; ++row) {
+		for(int column = 0; column < 7; ++column) {
+			if(miniMap[row][column] == 1 && row == 3 && column < 3) {
+				miniMapS += "*-";
+			} else if(miniMap[row][column] == 1 && row == 3 && column > 3) {
+				miniMapS += "-*";
+			} else if(miniMap[row][column] == 1) {
+				miniMapS += "|";
+			} else if (miniMap[row][column] == 9) {
+				miniMapS += "P";
+			} else {
+				miniMapS += "  ";
+			}
+		}
+		miniMapS += "\n     ";
+	}
+
+	return miniMapS + "\n";
+}
 
 
 namespace Commands {
@@ -26,8 +94,19 @@ namespace Commands {
 		Room* currentRoom = &(*rooms)[currentRoomId];
 
 		if(lookMessage == "") {
-			std::cout << "FF" << std::endl;
-			return response + "\n\n" + currentRoom->getFullRoomDesc();
+
+			//Move to proper get playersinroomdesc() method later
+			std::string playersInRoom = "     Players: " ;
+			for(auto& playerIdRoomIdpair : *playerLocations) {
+				if(playerIdRoomIdpair.second == currentRoomId) {
+					if((*players)[playerIdRoomIdpair.first].getStatus() == "Online") {
+						playersInRoom += (*players)[playerIdRoomIdpair.first].getUsername() + ", ";
+					}
+				}
+			}
+			playersInRoom += "\n\n";
+
+			return response + "\n\n" + printMiniMap(rooms, currentRoomId) + currentRoom->getFullRoomDesc() + playersInRoom;
 		}
 
 		//-------------------------------------------------look "cardinal direction"
@@ -121,10 +200,7 @@ namespace Commands {
 			//throw custom_errors::NoSuchDoorException();
 			(*playerLocations)[playerId] = destRoomId;
 
-			currentRoom->removePlayer(playerId);
-			destRoom->addPlayer(playerId, currentPlayer.getUsername());
-
-			return currentPlayer.getUsername() + "> " + message + "\n\n" + destRoom->getFullRoomDesc();
+			return currentPlayer.getUsername() + "> " + message + "\n\n" + printMiniMap(rooms, destRoomId) + destRoom->getFullRoomDesc();
 		} else {
 			return currentPlayer.getUsername() + "> " + "There is no door in the " + goMessage + " direction." + "\n\n";
 		}
@@ -387,14 +463,6 @@ namespace Commands {
 	networking::Connection TakeCommand::getConnection() const {
 		return this->connection;
 	}
-	
-	//Need to move out but don't know where (move to top of ffile as static function)
-	bool TakeCommand::is_number(const std::string& s)
-	{
-		return !s.empty() && std::find_if(s.begin(), 
-			s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
-	}
-
 
 
 	EquipCommand::EquipCommand(networking::Connection connection_, const std::string& message_)

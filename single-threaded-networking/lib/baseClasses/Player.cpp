@@ -28,10 +28,11 @@ void Player::setCharacter(const Character& character){
     this->playerCharacter = character;
 }
 
-std::string Player::getStatus() const {
+std::string Player::getStatus() {
+
   return status;
 }
-void Player::setStatus(std::string s) {
+void Player::setStatus(std::string s) const {
   status = s;
 }
 
@@ -44,5 +45,4 @@ void Player::setSwapTarget(Character& swapTarget) {
   this->swapTarget = &swapTarget;
 } 
 
-#endif
 

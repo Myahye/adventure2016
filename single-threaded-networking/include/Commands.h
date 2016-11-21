@@ -10,6 +10,11 @@
 #include "Room.h"
 #include "Object.h"
 
+//utility functions
+bool is_number(const std::string& s);
+
+std::string printMiniMap(const std::unordered_map<int,Room>* rooms, int currentRoomId);
+
 namespace Commands {
 
 	class LookCommand : public Command {
@@ -84,9 +89,6 @@ namespace Commands {
 		int getId() const;
 
 		networking::Connection getConnection() const;
-
-		//need to move out later
-		bool is_number(const std::string& s);
 	};
 
 	class EquipCommand : public Command {

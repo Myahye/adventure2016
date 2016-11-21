@@ -9,6 +9,8 @@ class Player {
     std::string password;
     std::string status = "Offline";
 
+    std::string status = "Offline";
+
 public:
     // Constructor
     Player ();
@@ -26,6 +28,7 @@ public:
     void setPassword(std::string& password);
 
     void setCharacter(const Character& character);
+
     std::string getStatus() const;
     void setStatus(std::string s);
 

@@ -25,7 +25,6 @@ private:
     //--------------------------------------Lawrence Yu
     std::unordered_map<int,std::vector<Npc>> npcsInRoom;
     std::unordered_map<int,std::vector<Object>> objectsInRoom;
-    //std::unordered_map<int,Player*> playersInRoom;
     
     //Maybe change to not use pointers
     Npc* checkNpcKeywords(const std::string& message, const std::pair<int,std::vector<Npc>>& npcIdVectorPair);
@@ -68,13 +67,9 @@ std::unordered_map<int, std::string> playersInRoom;
 
     void addObject(const Object& object, unsigned int limit);
     bool removeObject(const int objectId);
-    
-    void addPlayer(const int playerId, const std::string& username);
-    bool removePlayer(const int playerId);
 
     Npc* findNpc(const std::string& name);
     Object* findObject(const std::string& name);
-    int findPlayerId(const std::string& name);
 
     std::unordered_map<int,std::vector<Npc>> getNpcsInRoom() const;
     std::unordered_map<int,std::vector<Object>> getObjectsInRoom() const;
