@@ -12,7 +12,9 @@
 //utility functions
 bool is_number(const std::string& s);
 
-std::string printMiniMap(const std::unordered_map<int,Room>* rooms, int currentRoomId);
+std::string printMiniMap(std::unordered_map<int,Room>* rooms, const int currentRoomId);
+
+std::string getPlayersInRoomDesc(std::unordered_map<int, Player>* players, const std::unordered_map<int, int>* playerLocations, const int currentRoomId);
 
 namespace Commands {
 

@@ -271,7 +271,7 @@ std::string Player::getPlayerInventoryDesc() const {
   return response;
 }
 
-std::string Player::getStatus() {
+std::string Player::getStatus() const {
   return status;
 }
 void Player::setStatus(std::string s) {

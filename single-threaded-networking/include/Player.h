@@ -121,7 +121,7 @@ public:
     std::string getPlayerEquipmentDesc() const;
     std::string getPlayerInventoryDesc() const;
 
-    std::string getStatus();
+    std::string getStatus() const;
     void setStatus(std::string s);
 };
 
