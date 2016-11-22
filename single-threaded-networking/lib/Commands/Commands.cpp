@@ -178,6 +178,7 @@ namespace Commands {
 		auto players = context.getPlayers();
 		auto rooms = context.getRooms();
 		auto playerLocations = context.getPlayerLocations();
+		auto objects = context.getObjects();
 		int playerId = connection.playerId;
 
 		std::string lookMessage = message.substr(4);
@@ -225,19 +226,58 @@ namespace Commands {
 		Object* currentObject = currentRoom->findObject(lookMessage);
 		//will move this to room class later as if isobject return object.getfulldesc()
 		if(currentObject != NULL) {
-			response += "\n";
-			//move loop out later;
+			response += "\n\n";
+			//should be vector of pair of vectors
 					//need look through all currentobject get extra for keyword
-			for (auto eachPair : currentObject->getExtra()){
-				for(auto descriptionText : eachPair.first) {
-				  response += descriptionText + "\n";
+			response += currentObject->getShortDesc() + "\n";
+			for(auto& keyword : currentObject->getExtra().second) {
+				if(lookMessage.find(keyword) != std::string::npos) {
+					for(auto descriptionText : currentObject->getExtra().first) {
+			  			response += descriptionText + "\n";
+					}
 				}
-				response += "\n";
 			}
 			return response;
 		}
 
-		//look extended description in room
+		//-----------------------------------------------look extended description in room
+
+		//should be vector of pair of vectors
+		auto extendedDescription = currentRoom->getExtendedDesc();
+		for(auto& keyword : extendedDescription.second) {
+			std::cout << "sdfsdf" << std::endl;
+			if(lookMessage.find(keyword) != std::string::npos) {
+				response += "\n\n";
+				for(auto descriptionText : extendedDescription.first) {
+			  		response += descriptionText + "\n";
+				}
+				return response;
+			}
+		}
+
+		//------------look object in player inventory
+
+		int currentObjectId = 0;
+		for(auto& object : *objects) {
+			for(auto& keyword : object.second.getKeywords()) {
+				if(lookMessage.find(keyword) != std::string::npos) {
+					currentObjectId = object.first;
+					break;
+				}
+			}
+		}
+
+		if(currentObjectId != 0) {
+			auto playerInventory = (*players)[playerId].getPlayerInventory();
+			if(playerInventory.find(currentObjectId) != playerInventory.end()) {
+				response += "\n\n";
+				for(auto descriptionText : (*objects)[currentObjectId].getExtra().first) {
+			  			response += descriptionText + "\n";
+				}
+				return response;
+			}
+		}
+
 
 		std::cout << "G" << std::endl;
 
@@ -662,6 +702,100 @@ namespace Commands {
 	networking::Connection SayCommand::getConnection() const {
 		return this->connection;
 	}
+	
+	StealCommand::StealCommand(networking::Connection connection_, const std::string& message_)
+	: connection{connection_}, message{message_} {}
+
+	std::string StealCommand::execute(Context& context) {
+		int playerId = connection.playerId;
+		auto players = context.getPlayers();
+		auto player = &(*players)[playerId];
+		auto rooms = context.getRooms();
+		auto objects = context.getObjects();
+		auto playerLocations = context.getPlayerLocations();
+
+		std::string messageText = message.substr(5);
+		std::transform(messageText.begin(), messageText.end(), messageText.begin(), ::tolower);
+
+		std::vector <std::string> stealMessage;
+	    boost::trim_if(messageText, boost::is_any_of("\t "));
+	    boost::split(stealMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
+
+		std::string response = "";
+
+		int currentRoomId = (*playerLocations)[playerId];
+		Room* currentRoom = &(*rooms)[currentRoomId];
+		//add dummy object to room to test
+
+
+		 std::cout << "EHTH" << std::endl;
+
+		 /*
+		 * Make static function findObject() at the top of this file that searches through the object Map and returns the object ID
+		 */
+
+		//-------------------------------------------------look "Npc keyword"
+
+		//OK findNpc/findRoom will return a Npc* object which we can use to directly modify the selected npc/object in the room 
+		if(stealMessage.size() == 2) {
+			Npc* currentNpc = currentRoom->findNpc(stealMessage[1]);
+			std::cout << stealMessage.size() << std::endl;
+			if(currentNpc != NULL) {
+				std::cout << "wewwr" << std::endl;
+				response += "\n Steal: " + stealMessage[0] + " From: " + stealMessage[1] + "\n\n";
+				std::cout << "wsfsdfer" << std::endl;
+				//Npc will use a currentNpc->findObjectId(objectTargetPair[0]) method which returns the object ID	of the object in inventory 
+				//Will change removeObjectfromInventory() to take in the objectID (maybe pass in selected index "eg. steal apple '1'");
+				if(currentNpc->removeObjectFromInventory(stealMessage[0])) {
+					response += "Success!\n";
+				} else {
+					response += "Failure.\n";
+				}
+				//}
+
+				return response;
+			}
+		}
+		std::cout << "POIP" << std::endl;
+
+		return player->getUsername() + "> " + "Cannot steal " + messageText + ", no match. \n\n";
+	}
+
+	int StealCommand::getId() const {
+		return this->connection.playerId;
+	}
+
+	networking::Connection StealCommand::getConnection() const {
+		return this->connection;
+	}
+
+	TeleportCommand::TeleportCommand(networking::Connection connection_, const std::string& message_)
+	: connection{connection_}, message{message_} {}
+
+	std::string TeleportCommand::execute(Context& context) {
+		auto players = context.getPlayers();
+		auto playerLocations = context.getPlayerLocations();
+		auto rooms = context.getRooms();
+
+		int playerId = connection.playerId;
+
+		std::string teleportMessage = message.substr(8);
+		std::transform(teleportMessage.begin(), teleportMessage.end(), teleportMessage.begin(), ::tolower);
+	    boost::trim_if(teleportMessage, boost::is_any_of("\t "));
+
+		(*playerLocations)[playerId] = std::stoi(teleportMessage);
+
+		return (*players)[playerId].getUsername() + "> " + message + "\n\n" + printMiniMap(rooms, std::stoi(teleportMessage)) + (*rooms)[std::stoi(teleportMessage)].getFullRoomDesc() + getPlayersInRoomDesc(players, playerLocations, std::stoi(teleportMessage));
+	}
+
+	int TeleportCommand::getId() const {
+		return this->connection.playerId;
+	}
+
+	networking::Connection TeleportCommand::getConnection() const {
+		return this->connection;
+	}
+}
 
 	//CastCommand
 	CastCommand::CastCommand(networking::Connection connection_, const std::string& message_)

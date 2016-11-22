@@ -153,6 +153,49 @@ namespace Commands {
 		networking::Connection getConnection() const;
 	};
 
+	class StealCommand : public Command {
+	private:
+		networking::Connection connection;
+		std::string message;
+	public:
+		StealCommand(networking::Connection connection_, const std::string& message_);
+
+		std::string execute(Context& context);
+
+		int getId() const;
+
+		networking::Connection getConnection() const;
+	};
+
+	class TeleportCommand : public Command {
+	private:
+		networking::Connection connection;
+		std::string message;
+	public:
+		TeleportCommand(networking::Connection connection_, const std::string& message_);
+
+		std::string execute(Context& context);
+
+		int getId() const;
+
+		networking::Connection getConnection() const;
+	};
+
+	class GlobalChatCommand : public Command {
+	private:
+		networking::Connection connection;
+		std::string message;
+	public:
+		GlobalChatCommand(networking::Connection connection_, const std::string& message_);
+
+		std::string execute(Context& context);
+
+		int getId() const;
+
+		networking::Connection getConnection() const;
+	};
+
+
 	class CastCommand : public Command {
 	private:
 		networking::Connection connection;
