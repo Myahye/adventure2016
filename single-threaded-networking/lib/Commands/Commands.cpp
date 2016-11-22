@@ -9,67 +9,163 @@ bool is_number(const std::string& s)
 		s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
 }
 
-std::string printMiniMap(std::unordered_map<int,Room>* rooms, int currentRoomId) {
+std::string printMiniMap(std::unordered_map<int,Room>* rooms, const int currentRoomId) {
 	std::string miniMapS = "     ";
-	std::vector<std::vector<int>> miniMap{{0,0,0,0,0,0,0},
-										  {0,0,0,0,0,0,0},	
-										  {0,0,0,0,0,0,0},
-										  {0,0,0,9,0,0,0},
-										  {0,0,0,0,0,0,0},
-										  {0,0,0,0,0,0,0},
-										  {0,0,0,0,0,0,0}};
+	std::vector<std::vector<int>> miniMap{{0,0,0,0,0,0,0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0},	
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,9,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0}};
+	int temp = 0;
 
 	int currentRoom = currentRoomId;
-	for(int i = 0; i < 3; i++) {
+	for(int i = 0; i < 6; i+=2) {
 		currentRoom = (*rooms)[currentRoom].getRoomInDir("west");
 		if(currentRoom != -1) {
-			miniMap[3][2-i] = 1;
+			miniMap[6][5-i] = 1;
+			miniMap[6][5-i-1] = 3;
 		}
+
+		// temp = currentRoom;
+		// for(int j = 0; j < 6; j+=2) {
+		// 	temp = (*rooms)[temp].getRoomInDir("north");
+		// 	if(temp != -1) {
+		// 		miniMap[5-j][5-i-1] = 2;
+		// 		miniMap[5-j-1][5-i-1] = 3;
+		// 	}
+		// }
+
+		// temp = currentRoom;
+		// for(int j = 0; j < 6; j+=2) {
+		// 	temp = (*rooms)[temp].getRoomInDir("south");
+		// 	if(temp != -1) {
+		// 		miniMap[7+j][5-i-1] = 2;
+		// 		miniMap[7+j+1][5-i-1] = 3;
+		// 	}
+		// }
 	}
 
 	currentRoom = currentRoomId;
-	for(int i = 0; i < 3; i++) {
+	for(int i = 0; i < 6; i+=2) {
 		currentRoom = (*rooms)[currentRoom].getRoomInDir("north");
 		if(currentRoom != -1) {
-			miniMap[2-i][3] = 1;
+			miniMap[5-i][6] = 2;
+			miniMap[5-i-1][6] = 3;
+		}
+
+		temp = currentRoom;
+		for(int j = 0; j < 6; j+=2) {
+			temp = (*rooms)[temp].getRoomInDir("west");
+			if(temp != -1) {
+				miniMap[5-i-1][5-j] = 1;
+				miniMap[5-i-1][5-j-1] = 3;
+			}
+		}
+
+		temp = currentRoom;
+		for(int j = 0; j < 6; j+=2) {
+			temp = (*rooms)[temp].getRoomInDir("east");
+			if(temp != -1) {
+				miniMap[5-i-1][7+j] = 1;
+				miniMap[5-i-1][7+j+1] = 3;
+			}
 		}
 	}
 
 	currentRoom = currentRoomId;
-	for(int i = 0; i < 3; i++) {
+	for(int i = 0; i < 6; i+=2) {
 		currentRoom = (*rooms)[currentRoom].getRoomInDir("south");
 		if(currentRoom != -1) {
-			miniMap[4+i][3] = 1;
+			miniMap[7+i][6] = 2;
+			miniMap[7+i+1][6] = 3;
+		}
+
+		temp = currentRoom;
+		for(int j = 0; j < 6; j+=2) {
+			temp = (*rooms)[temp].getRoomInDir("west");
+			if(temp != -1) {
+				miniMap[7+i+1][5-j] = 1;
+				miniMap[7+i+1][5-j-1] = 3;
+			}
+		}
+
+		temp = currentRoom;
+		for(int j = 0; j < 6; j+=2) {
+			temp = (*rooms)[temp].getRoomInDir("east");
+			if(temp != -1) {
+				miniMap[7+i+1][7+j] = 1;
+				miniMap[7+i+1][7+j+1] = 3;
+			}
 		}
 	}
 
 	currentRoom = currentRoomId;
-	for(int i = 0; i < 3; i++) {
+	for(int i = 0; i < 6; i+=2) {
 		currentRoom = (*rooms)[currentRoom].getRoomInDir("east");
 		if(currentRoom != -1) {
-			miniMap[3][4+i] = 1;
+			miniMap[6][7+i] = 1;
+			miniMap[6][7+i+1] = 3;
 		}
+
+		// temp = currentRoom;
+		// for(int j = 0; j < 6; j+=2) {
+		// 	temp = (*rooms)[temp].getRoomInDir("north");
+		// 	if(temp != -1) {
+		// 		miniMap[5-j][7+i+1] = 2;
+		// 		miniMap[5-j-1][7+i+1] = 3;
+		// 	}
+		// }
+
+		// temp = currentRoom;
+		// for(int j = 0; j < 6; j+=2) {
+		// 	temp = (*rooms)[temp].getRoomInDir("south");
+		// 	if(temp != -1) {
+		// 		miniMap[7+j][7+i+1] = 2;
+		// 		miniMap[7+j+1][7+i+1] = 3;
+		// 	}
+		// }
 	}
 
 
-	for(int row = 0; row < 7; ++row) {
-		for(int column = 0; column < 7; ++column) {
-			if(miniMap[row][column] == 1 && row == 3 && column < 3) {
-				miniMapS += "*-";
-			} else if(miniMap[row][column] == 1 && row == 3 && column > 3) {
-				miniMapS += "-*";
-			} else if(miniMap[row][column] == 1) {
+	for(int row = 0; row < 13; ++row) {
+		for(int column = 0; column < 13; ++column) {
+			if(miniMap[row][column] == 1) {
+				miniMapS += "-";
+			} else if(miniMap[row][column] == 2) {
 				miniMapS += "|";
+			} else if (miniMap[row][column] == 3) {
+				miniMapS += "*";
 			} else if (miniMap[row][column] == 9) {
 				miniMapS += "P";
 			} else {
-				miniMapS += "  ";
+				miniMapS += " ";
 			}
 		}
 		miniMapS += "\n     ";
 	}
 
 	return miniMapS + "\n";
+}
+
+std::string getPlayersInRoomDesc(std::unordered_map<int, Player>* players, const std::unordered_map<int, int>* playerLocations, const int currentRoomId) {
+	std::string playersInRoom = "     Players: " ;
+	for(auto& playerIdRoomIdpair : *playerLocations) {
+		if(playerIdRoomIdpair.second == currentRoomId) {
+			if((*players)[playerIdRoomIdpair.first].getStatus() == "Online") {
+				playersInRoom += (*players)[playerIdRoomIdpair.first].getUsername() + ", ";
+			}
+		}
+	}
+	playersInRoom += "\n\n";
+	return playersInRoom;
 }
 
 
@@ -94,19 +190,7 @@ namespace Commands {
 		Room* currentRoom = &(*rooms)[currentRoomId];
 
 		if(lookMessage == "") {
-
-			//Move to proper get playersinroomdesc() method later
-			std::string playersInRoom = "     Players: " ;
-			for(auto& playerIdRoomIdpair : *playerLocations) {
-				if(playerIdRoomIdpair.second == currentRoomId) {
-					if((*players)[playerIdRoomIdpair.first].getStatus() == "Online") {
-						playersInRoom += (*players)[playerIdRoomIdpair.first].getUsername() + ", ";
-					}
-				}
-			}
-			playersInRoom += "\n\n";
-
-			return response + "\n\n" + printMiniMap(rooms, currentRoomId) + currentRoom->getFullRoomDesc() + playersInRoom;
+			return response + "\n\n" + printMiniMap(rooms, currentRoomId) + currentRoom->getFullRoomDesc() + getPlayersInRoomDesc(players, playerLocations, currentRoomId);
 		}
 
 		//-------------------------------------------------look "cardinal direction"
@@ -200,7 +284,7 @@ namespace Commands {
 			//throw custom_errors::NoSuchDoorException();
 			(*playerLocations)[playerId] = destRoomId;
 
-			return currentPlayer.getUsername() + "> " + message + "\n\n" + printMiniMap(rooms, destRoomId) + destRoom->getFullRoomDesc();
+			return currentPlayer.getUsername() + "> " + message + "\n\n" + printMiniMap(rooms, destRoomId) + destRoom->getFullRoomDesc() + getPlayersInRoomDesc(players, playerLocations, destRoomId);
 		} else {
 			return currentPlayer.getUsername() + "> " + "There is no door in the " + goMessage + " direction." + "\n\n";
 		}

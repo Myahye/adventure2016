@@ -28,8 +28,7 @@ void Player::setCharacter(const Character& character){
     this->playerCharacter = character;
 }
 
-std::string Player::getStatus() {
-
+std::string Player::getStatus() const {
   return status;
 }
 void Player::setStatus(std::string s) const {
