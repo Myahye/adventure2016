@@ -5,14 +5,14 @@
 //utility functions
 bool is_number(const std::string& s)
 {
-	return !s.empty() && std::find_if(s.begin(), 
+	return !s.empty() && std::find_if(s.begin(),
 		s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
 }
 
 std::string printMiniMap(std::unordered_map<int,Room>* rooms, const int currentRoomId) {
 	std::string miniMapS = "     ";
 	std::vector<std::vector<int>> miniMap{{0,0,0,0,0,0,0,0,0,0,0,0,0},
-										  {0,0,0,0,0,0,0,0,0,0,0,0,0},	
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
 										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
 										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
 										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -494,7 +494,7 @@ namespace Commands {
 
 		//-------------------------------------------------look "Npc keyword"
 
-		//OK findNpc/findRoom will return a Npc* object which we can use to directly modify the selected npc/object in the room 
+		//OK findNpc/findRoom will return a Npc* object which we can use to directly modify the selected npc/object in the room
 		if(takeMessage.size() == 2) {
 			Npc* currentNpc = currentRoom->findNpc(takeMessage[1]);
 			std::cout << takeMessage.size() << std::endl;
@@ -502,7 +502,7 @@ namespace Commands {
 				std::cout << "wewwr" << std::endl;
 				response += "\n Steal: " + takeMessage[0] + " From: " + takeMessage[1] + "\n\n";
 				std::cout << "wsfsdfer" << std::endl;
-				//Npc will use a currentNpc->findObjectId(objectTargetPair[0]) method which returns the object ID	of the object in inventory 
+				//Npc will use a currentNpc->findObjectId(objectTargetPair[0]) method which returns the object ID	of the object in inventory
 				//Will change removeObjectfromInventory() to take in the objectID (maybe pass in selected index "eg. steal apple '1'");
 				if(currentNpc->removeObjectFromInventory(takeMessage[0])) {
 					response += "Success!\n";
@@ -517,15 +517,15 @@ namespace Commands {
 		std::cout << "POIP" << std::endl;
 		//-------------------------------------------------look "Object keyword"
 
-		//Room will use a currentRoom->findObjectId(objectTargetPair[0]) method which returns the object ID of the object in inventory 
+		//Room will use a currentRoom->findObjectId(objectTargetPair[0]) method which returns the object ID of the object in inventory
 		//Will change removeObject() to take in the objectID (maybe pass in selected index "eg. steal apple '1'");
 		//if(std::isdigit(takeMessage.end()) )
 
-		
+
 		if(currentObject != NULL){
-			if( std::find((currentObject->getWearFlags()).begin(), 
+			if( std::find((currentObject->getWearFlags()).begin(),
 				(currentObject->getWearFlags()).end(), takeString )!=(currentObject->getWearFlags()).end() ){
-				
+
 				player->addObjectToInventory(*currentObject, 1);
 				std::cout << "player inventory: " << player->getPlayerInventoryDesc() << "\n";
 				//bool ret = currentRoom->removeObject(currentObject->getId());
@@ -536,18 +536,18 @@ namespace Commands {
 				//response += messageText + "is not an object you can take!\n\n";
 				return player->getUsername() + "> " + messageText + " is not an object you can take!\n\n";
 			}
-		} 
+		}
 		else{
 			//response += "Cannot take " + messageText + ", no match. \n\n";
 			return player->getUsername() + "> " + "Cannot take " + messageText + ", no match. \n\n";
 		}
-		
+
 
 		//-------------------------------------------------look "Object keyword"
 
 		//Object* currentObject = currentRoom->>findObject(ObjectTargetPair[0]);
 
-		//Room will use a currentRoom->>findObject(objectTargetPair[0]) method which returns the object ID of the object in inventory 
+		//Room will use a currentRoom->>findObject(objectTargetPair[0]) method which returns the object ID of the object in inventory
 		//Will change removeObject() to take in the objectID (maybe pass in selected index "eg. steal apple '1'");
 
 		//return player.getUsername() + "> " + response;
@@ -605,7 +605,7 @@ namespace Commands {
 			//std::cout << "line 430 commands\n";
 			return player->getUsername() + "> " + messageText + " is not an item that can be equipped! \n\n";
 		}
-		
+
 		if(equipObjectRet){
 			return player->getUsername() + "> " + messageText + " has been equipped!\n\n";
 		} else {
@@ -620,9 +620,9 @@ namespace Commands {
 	networking::Connection EquipCommand::getConnection() const {
 		return this->connection;
 	}
-	
 
-	ListCommand::ListCommand(networking::Connection connection_, const std::unordered_map<std::string, std::string>& commands_, const std::string& message_) 
+
+	ListCommand::ListCommand(networking::Connection connection_, const std::unordered_map<std::string, std::string>& commands_, const std::string& message_)
 	: connection{connection_}, commands{commands_}, message{message_} {}
 
 	std::string ListCommand::execute(Context& context) {
@@ -657,7 +657,6 @@ namespace Commands {
 	networking::Connection ListCommand::getConnection() const {
 		return this->connection;
 	}
-	
 
 	SayCommand::SayCommand(networking::Connection connection_, const std::string& message_, int playerId_)
 	: connection{connection_}, message{message_}, playerId{playerId_} {}
@@ -673,76 +672,5 @@ namespace Commands {
 
 	networking::Connection SayCommand::getConnection() const {
 		return this->connection;
-	}
-}
-
-//Add teleport command to help testing
-namespace CombatCommands {
-	AttackCommand::AttackCommand(std::vector<networking::Connection>& clients_, networking::Connection sourceConnection_, const std::string& message_)
-	: clients{clients_}, sourceConnection{sourceConnection_}, message{message_} {}
-
-	std::string AttackCommand::execute(Context& context) {
-		// auto players = context.getPlayers();
-		// auto rooms = context.getRooms();
-		// auto playerLocations = context.getPlayerLocations();
-		// int playerId = this->sourceConnection.playerId;
-
-		// std::string messageText = this->message.substr(7);
-		// std::transform(messageText.begin(), messageText.end(), messageText.begin(), ::tolower);
-
-		// std::vector <std::string> takeMessage;
-  //   boost::trim_if(messageText, boost::is_any_of("\t "));
-  //   boost::split(takeMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
-		// this->sourceName=(*players)[playerId].getUsername();
-		// std::string sourceResponse = sourceName + "> " + takeMessage[0];
-
-		// int currentRoomId = (*playerLocations)[playerId];
-		// Room* currentRoom = &(*rooms)[currentRoomId];
-
-		// //should change this to not return magic number
-		// int targetPlayerId = currentRoom->findPlayerId(takeMessage[0]);
-		// for(networking::Connection client: clients){
-		// 	if(client.playerId == targetPlayerId){
-		// 		this->targetConnection = client;
-		// 	}
-		// }
-		// if(targetPlayerId != 0) {
-		// 	std::cout<<(*players)[targetPlayerId].getUsername() +" is the target name for "+ (*players)[playerId].getUsername()<<std::endl;
-		// 	int currentTargetHealth=(*players)[targetPlayerId].getHealth();
-		// 	if (currentTargetHealth==0){
-		// 		return sourceResponse + " has already been Defeated!\n";
-		// 	}else{
-		// 		(*players)[targetPlayerId].setHealth(currentTargetHealth-50);
-		// 		if ((*players)[targetPlayerId].getHealth()==0){
-		// 			int playerXP=(*players)[playerId].getExp();
-		// 			(*players)[playerId].setExp(100);
-		// 			return sourceResponse + " has been defeated!\n";
-		// 		}
-
-		// 	}
-		// 	return sourceResponse + " target found Attack Success \n";
-		// }/*else if(){
-
-		// }*/else{
-		// 	return sourceResponse + " target not in room / not found \n" ;
-		// }
-
-	}
-
-	std::string AttackCommand::getSourceName() const {
-		return this->sourceName;
-	}
-
-	int AttackCommand::getSourceId() const {
-		return this->sourceConnection.playerId;
-	}
-	int AttackCommand::getTargetId() const {
-		return this->targetId;
-	}
-	networking::Connection AttackCommand::getSourceConnection() const {
-		return this->sourceConnection;
-	}
-	networking::Connection AttackCommand::getTargetConnection() const {
-		return this->targetConnection;
 	}
 }

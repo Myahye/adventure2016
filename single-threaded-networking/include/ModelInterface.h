@@ -4,6 +4,7 @@
 #include "Server.h"
 #include "Model.h"
 #include "Commands.h"
+#include "CombatCommands.h"
 
 
 class ModelInterface {

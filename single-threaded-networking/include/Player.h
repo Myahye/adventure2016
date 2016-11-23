@@ -35,7 +35,7 @@ private:
     std::string status = "Offline";
 
     //-----------------------------------
-    
+
     void setNewHealth(int const level);
     void setNewMana(int const level);
     void setNewStats();
@@ -43,10 +43,10 @@ private:
 
 public:
 
-
     // Constructor
     Player (int const pid, std::string const username, std::string const password);
     Player ();
+		void attack(const std::string& name);
 
     //username
     std::string getUsername() const;
@@ -57,7 +57,7 @@ public:
 
     int getMana() const;
     void setMana(int const mana);
-         
+
     //password
     std::string getPassword() const;
     void setPassword(std::string& password);
@@ -108,7 +108,7 @@ public:
 
     //-----------------------------Mohamed Yahye
     void addObjectToInventory(const Object& object, unsigned int limit);
-    
+
     bool removeObjectFromInventory(const std::string& objectName);
 
     bool equipObject(const Object& object, std::string slot);

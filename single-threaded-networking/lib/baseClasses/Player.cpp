@@ -15,6 +15,11 @@ Player::setUsername(std::string& username) {
     this->username = username;
 }
 
+void
+Player::attack(const std::string& name){
+	std::cout << "You are being attacked by " +name << std::endl;
+}
+
 //Getter and setter for Shortdesc
 std::string
 Player::getPassword() const {
@@ -164,7 +169,7 @@ void Player::setThac0(int const thac0) {
 //   for(auto i& : playerInventory){
 //     currentInventorySize += i.second.size();
 //   }
-  
+
 //   if(currentInventorySize >= maxInvetorySize){
 //     cout << "inventory full\n";
 //   }
@@ -225,7 +230,7 @@ bool Player::equipObject(const Object& object, std::string slot) {
     playerEquipment[slot] = object;
     //std::cout << "IW" << std::endl;
     playerInventory[object.getId()].pop_back();
-    
+
     if(playerInventory[object.getId()].empty()) {
     	playerInventory.erase(object.getId());
     }
@@ -254,20 +259,20 @@ std::unordered_map<std::string,Object> Player::getPlayerEquipment() const {
 
 std::string Player::getPlayerEquipmentDesc() const {
   std::string response = "";
-  std::cout << "Equipment: " << playerEquipment.size() << std::endl; 
+  std::cout << "Equipment: " << playerEquipment.size() << std::endl;
 
   for_each(playerEquipment.begin(), playerEquipment.end(), [&response](const auto& currentEquip){
     response += currentEquip.first + ":" + currentEquip.second.getShortDesc() + "\n";});
-    
+
   return response;
 }
 std::string Player::getPlayerInventoryDesc() const {
 	std::string response = "";
 	std::cout << "Inventory: " << playerInventory.size() << std::endl;
-	
+
   std::for_each(playerInventory.begin(), playerInventory.end(), [&response](const auto& currentItem){
-    response += currentItem.second[0].getShortDesc() + " (Quantity: " + std::to_string(currentItem.second.size()) + "), ";});	
-  
+    response += currentItem.second[0].getShortDesc() + " (Quantity: " + std::to_string(currentItem.second.size()) + "), ";});
+
   return response;
 }
 
@@ -277,5 +282,3 @@ std::string Player::getStatus() const {
 void Player::setStatus(std::string s) {
   status = s;
 }
-
-
