@@ -459,6 +459,76 @@ namespace Commands {
 	networking::Connection SayCommand::getConnection() const {
 		return this->connection;
 	}
+	
+	//CastCommand
+	CastCommand::CastCommand(networking::Connection connection_, const std::string& message_)
+	: connection{connection_}, message{message_} {}
+
+	std::string CastCommand::execute(Context& context) {
+		auto players = context.getPlayers();
+		auto rooms = context.getRooms();
+		auto playerLocations = context.getPlayerLocations();
+		std::vector<Spells>* spells = context.getOffenseSpells();
+		auto defenseSpells = context.getDefenseSpells();
+		spells->insert(spells->end(), defenseSpells->begin(), defenseSpells->end());
+
+		int playerId = connection.playerId;
+
+		std::string messageText = this->message.substr(4);
+		std::transform(messageText.begin(), messageText.end(), messageText.begin(), ::tolower);
+
+		std::vector <std::string> takeMessage;
+    	boost::trim_if(messageText, boost::is_any_of("\t "));
+    	boost::split(takeMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
+		
+		int currentRoomId = (*playerLocations)[playerId];
+		Room* currentRoom = &(*rooms)[currentRoomId];
+		Spells* castedSpell = getCastedSpell(takeMessage[0], (*spells));
+		int targetId = currentRoom->findPlayerId(takeMessage[2]);
+		auto target = &(*players)[targetId];
+		
+
+		//should change this to not return magic number
+		// int targetPlayerId = currentRoom->findPlayerId(takeMessage[1]);
+		// for(networking::Connection client: clients){
+		// 	if(client.playerId == targetPlayerId){
+		// 		this->targetConnection = client;
+		// 	}
+		// }
+		if(targetId != 0) {
+			std::cout<<(*players)[targetId].getUsername() +" is the target name for "+ (*players)[playerId].getUsername()<<std::endl;
+			int targetHealth=(*players)[targetId].playerCharacter.getCurrentHealth();
+			int playerMana = (*players)[playerId].playerCharacter.getCurrentMana();
+			if (targetHealth == 0){
+				return " has already been Defeated!\n";
+			}else{
+				(*players)[targetId].playerCharacter.setCurrentHealth(targetHealth - 50);
+				(*players)[playerId].playerCharacter.setCurrentMana(playerMana - 50);
+
+				if ((*players)[targetId].playerCharacter.getCurrentHealth()==0){
+					int playerXP=(*players)[playerId].playerCharacter.getExp();
+					(*players)[playerId].playerCharacter.setExp(playerXP + 100);
+					(*players)[playerId].playerCharacter.setMaxMana(85);
+					return " has been defeated!\n";
+				}
+
+			}
+			return " target found Cast Success \n";
+		}else{
+			return " target not in room / not found \n" ;
+		}
+
+	}
+
+	Spells* CastCommand::getCastedSpell(const std::string& castName_, std::vector<Spells>& spells_){
+		for (auto & spell: spells_) {
+			if(spell.getName() == castName_) {
+				return &spell;
+			}
+		}
+		return nullptr;
+	}
+
 }
 
 //Add teleport command to help testing
@@ -471,21 +541,24 @@ namespace CombatCommands {
 		auto rooms = context.getRooms();
 		auto playerLocations = context.getPlayerLocations();
 		int playerId = this->sourceConnection.playerId;
-
-		std::string messageText = this->message.substr(7);
-		std::transform(messageText.begin(), messageText.end(), messageText.begin(), ::tolower);
-
-		std::vector <std::string> takeMessage;
-    boost::trim_if(messageText, boost::is_any_of("\t "));
-    boost::split(takeMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
-		this->sourceName=(*players)[playerId].getUsername();
-		std::string sourceResponse = sourceName + "> " + takeMessage[0];
-
 		int currentRoomId = (*playerLocations)[playerId];
 		Room* currentRoom = &(*rooms)[currentRoomId];
 
+		std::string messageText = this->message.substr(6);
+		std::transform(messageText.begin(), messageText.end(), messageText.begin(), ::tolower);
+		std::vector <std::string> takeMessage;
+    	
+    	boost::trim_if(messageText, boost::is_any_of("\t "));
+    	boost::split(takeMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
+		
+		this->sourceName=(*players)[playerId].getUsername();
+		
+		std::string sourceResponse = sourceName + "> " + takeMessage[1];
+
+		
+
 		//should change this to not return magic number
-		int targetPlayerId = currentRoom->findPlayerId(takeMessage[0]);
+		int targetPlayerId = currentRoom->findPlayerId(takeMessage[1]);
 		for(networking::Connection client: clients){
 			if(client.playerId == targetPlayerId){
 				this->targetConnection = client;

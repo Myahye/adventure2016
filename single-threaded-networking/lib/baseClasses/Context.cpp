@@ -2,8 +2,8 @@
 
 Context::Context() {}
 
-Context::Context(std::unordered_map<int,Room>* rooms_, std::unordered_map<int,Npc>* Npcs_, std::unordered_map<int,Object>* objects_, std::unordered_map<int,Player>* players_, std::unordered_map<int,int>* playerLocations_)
-:rooms{rooms_},Npcs{Npcs_},objects{objects_},players{players_},playerLocations{playerLocations_} {}
+Context::Context(std::unordered_map<int,Room>* rooms_, std::unordered_map<int,Npc>* Npcs_, std::unordered_map<int,Object>* objects_, std::unordered_map<int,Player>* players_, std::unordered_map<int,int>* playerLocations_, std::vector<Spells>* offenseSpells_, std::vector<Spells>* defenseSpells_)
+:rooms{rooms_},Npcs{Npcs_},objects{objects_},players{players_},playerLocations{playerLocations_},offenseSpells{offenseSpells_},defenseSpells{defenseSpells_} {}
 
 std::unordered_map<int,Room>* Context::getRooms() {
 	return this->rooms;
@@ -31,4 +31,12 @@ void Context::setCurrentlySelectedNpc(Npc* npc) {
 
 Npc* Context::getCurrentlySelectedNpc() {
 	return this->currentlySelectedNpc;
+}
+
+std::vector<Spells>* Context::getOffenseSpells() {
+	return this->offenseSpells;
+}
+
+std::vector<Spells>* Context::getDefenseSpells() {
+	return this->defenseSpells;
 }

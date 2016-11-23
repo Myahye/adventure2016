@@ -146,6 +146,22 @@ namespace Commands {
 		networking::Connection getConnection() const;
 	};
 
+	class CastCommand : public Command {
+	private:
+		networking::Connection connection;
+		std::string message;
+	public:
+		CastCommand(networking::Connection connection_, const std::string& message_);
+
+		std::string execute(Context& context);
+
+		int getId() const;
+
+		Spells* getCastedSpell(const std::string& castName_, std::vector<Spells>& spells_);
+
+		networking::Connection getConnection(const std::string& message_) const;
+	};
+
 }
 
 
