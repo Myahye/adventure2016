@@ -25,13 +25,13 @@ namespace CombatCommands {
 		auto rooms = context.getRooms();
 		auto playerLocations = context.getPlayerLocations();
 		int playerId = connection.playerId;
-		std::string playerName = players*
+		std::string playerName = (*players)[playerId].getUsername();
 
 		std::string targetName = message.substr(7);
 		std::transform(targetName.begin(), targetName.end(), targetName.begin(), ::tolower);
 		boost::trim_if(targetName, boost::is_any_of("\t "));
 
-		std::string response = (*players)[playerId].getUsername() + "> " + message;
+		std::string response = playerName + "> " + message;
 
 		int currentRoomId = (*playerLocations)[playerId];
 		Room* currentRoom = &(*rooms)[currentRoomId];
@@ -42,9 +42,9 @@ namespace CombatCommands {
 
 
 		//-------------------------------------------------Attack player
-		int targetPlayerId = getPlayerInRoom(players, playerLocations, currentRoomId, targetName);
+		int targetPlayerId = getPlayerIdInRoom(players, playerLocations, currentRoomId, targetName);
 		Player targetPlayer = (*players)[targetPlayerId];
-		targetPlayer.attack((*players)[playerId].getUsername());
+		targetPlayer.attack(playerName);
 
 
 		return response + "\n\n" + "Combat with " + targetName + " initiated.";

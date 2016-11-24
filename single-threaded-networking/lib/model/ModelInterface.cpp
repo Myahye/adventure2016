@@ -26,7 +26,7 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
     } else if (boost::istarts_with(messageText,commands["Read"])) {
       //this->basicCommandQueue.push_back(std::make_unique<Commands::ReadCommand>(message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Attack"])) {
-      this->combatCommandQueue.push_back(std::make_unique<CombatCommands::AttackCommand>(clients, message.connection,message.text));
+      this->combatCommandQueue.push_back(std::make_unique<CombatCommands::AttackCommand>(message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Flee"])){
       this->basicCommandQueue.push_back(std::make_unique<Commands::FleeCommand>(message.connection,message.text));
     }else if (boost::istarts_with(messageText,commands["Say"])) {
@@ -75,10 +75,10 @@ ModelInterface::updateCombat(){
 
     for(auto& combatCommand : combatCommandQueue) {
       std::string response = combatCommand->execute(context);
-      Message sourceMessage{combatCommand->getSourceConnection(),response};
-      outgoing.push_back(sourceMessage);
-      outgoing.push_back(createAlertMessage(combatCommand->getTargetConnection(), combatCommand->getSourceName()));
-      std::cout<<"7"<<std::endl;
+      // Message sourceMessage{combatCommand->getSourceConnection(),response};
+      // outgoing.push_back(sourceMessage);
+      // outgoing.push_back(createAlertMessage(combatCommand->getTargetConnection(), combatCommand->getSourceName()));
+      // std::cout<<"7"<<std::endl;
       combatCommandQueue.pop_front();
 
     }
