@@ -6,7 +6,7 @@ Player::Player (int const pid, std::string const username, std::string const pas
 Player::Player ():
     pid{0}, username{""}, password{""}{};
 
-bool setFighting(Player& victim){
+void Player::setFighting(Player& victim){
   if(this->victim!=NULL&&){
     this->victim=victim;
     view.createMessageToPlayer(this->victim->pid, "Alert, "+this->username+" is attacking you!");
@@ -15,19 +15,26 @@ bool setFighting(Player& victim){
     +". \nYou will need to end your fight with "+this->victim->username+" before you can attack victim->");
   }
 }
-void stopFighting(Player& victim){
+
+void Player::stopFighting(Player& victim){
   if(this->victim!=NULL){
     this->victim=NULL;
   }
 }
-Player& getVictim(){
+
+Player& Player::getVictim(){
   return this->victim;
 }
 
-std::string
-Player::getUsername() const {
+std::string Player::getUsername() const {
     return username;
 }
+
+void Player::applyDamage(const int damage){
+    this->health-=damage;
+    this->view.createMessageToPlayer(this->pid, "Alert, you have taken "+damage+" damage!")
+}
+
 void
 Player::setUsername(std::string& username) {
     this->username = username;

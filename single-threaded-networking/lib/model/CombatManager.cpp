@@ -6,18 +6,13 @@ using namespace networking;
 
 CombatManager::CombatManager() {}
 
-
 void
-CombatManager::buildCombatCommand(const networking::Connection connection, const std::string message) {
+CombatManager::buildCombatCommand(const Connection connection, const std::string message) {
   this->combatCommandQueue.push_back(std::make_unique<CombatCommands::AttackCommand>(connection, message));
 }
 
-
-
 std::deque<Message>
-CombatManager::updateCombat
-(
-  std::vector<networking::Connection>& clients
+CombatManager::updateCombat(std::vector<Connection>& clients
   , Model::Context& context
 ){
   std::deque<Message> outgoing;
@@ -28,21 +23,36 @@ CombatManager::updateCombat
       outgoing.push_back(message);
       combatCommandQueue.pop_front();
     }
-    for(Player p : characterList){
-      //attck(p->victim);
+    for(Player p : characterList){//will move this to a function soon
+      attack(p);
     }
-  //move out later
-  //this->model.reset();
-
   return outgoing;
+}
+
+void
+CombatManager::attack(Player& player) {
+  if(player.getVictim()!=null){
+
+  }
+}
+
+void
+CombatManager::addToCharacterList(Player& player){
 
 }
 
+void
+CombatManager::removeFromCharacterList(const Player& player){
+  int pos = find(characterList.begin(), characterList.end(), player) - characterList.begin();
+  if(pos >= characterList.size()) {
+      //Not found
+  }else{
+    characterList.erase(pos);
+    createMessageToPlayer(player.getId, "You are no longer in the combat list");
+  }
+}
 
-// Message
-// ModelInterface::createAlertMessage(Connection connection, std::string name){
-//   std::cout<<"6.1 connection == "<<connection.playerId<<std::endl;
-//   std::string response = "ALERT > You have been attacked by " + name + "\n\n";
-//   Message sourceMessage{connection,response};
-//   return sourceMessage;
-//}
+void
+CombatManager::createMessageToPlayer(const int pid, const std::string& msg){
+  this->combatCommandQueue.push_back(std::make_unique<CombatCommands::messageToUser>(pid, message));
+}

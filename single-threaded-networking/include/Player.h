@@ -41,8 +41,11 @@ public:
     Player (int const pid, std::string const username, std::string const password, CombatManager& view);
     Player ();
 
-    void setVictim(Player& victim);
+    void setFighting(Player& victim);
+    void stopFighting(Player& victim);
     Player& getVictim();
+
+    void applyDamage(const int damage);
 
     //username
     std::string getUsername() const;
