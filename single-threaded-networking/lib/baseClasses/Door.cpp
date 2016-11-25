@@ -33,6 +33,10 @@ Door::getDesc() const {
     std::for_each(desc.begin(), desc.end(), [&descString](std::string i){descString += i + "\n";} );    
     return descString;
 }
+std::vector<std::string>
+Door::getDescV() const{
+    return this->desc;
+}
 std::string
 Door::getDir() const {
     return this -> dir;
@@ -66,4 +70,9 @@ Door::setKeywords(const std::vector<std::string>& new_keywords) {
 void
 Door::setDoorId(const int new_door_id) {
     this -> Door_id = new_door_id;
+}
+
+void
+Door::setDestinationId(const int new_destination_id){
+    this -> destinationId = new_destination_id;
 }

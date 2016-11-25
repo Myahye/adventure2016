@@ -14,6 +14,7 @@ public:
     Door(const std::string& new_dir, const std::vector<std::string>& new_desc, const std::vector<std::string>& new_keywords, int new_door_id, int new_destinationId);
 
     std::string getDesc() const;
+    std::vector<std::string> getDescV() const;
     std::string getDir() const;
     std::vector<std::string> getKeywords() const;
     int getDoorId() const;
@@ -23,7 +24,7 @@ public:
     void setDir(const std::string& new_dir);
     void setKeywords(const std::vector<std::string>& new_keywords);
     void setDoorId(const int new_door_id);
-
+    void setDestinationId(const int new_destination_id);
 
 private:
     std::vector<std::string> desc;

@@ -1,6 +1,6 @@
-#include "Npc.h"
 #include "Room.h"
 #include "Object.h"
+#include "Npc.h"
 #include "Player.h"
 
 #ifndef CONTEXT_H

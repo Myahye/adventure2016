@@ -8,7 +8,7 @@ ModelInterface::ModelInterface() {}
 
 //load config file to map commands["Create"] = getcreatecommandstringfromfile etc.
 
-std::unordered_map<std::string, std::string> commands {{"Create","create"},{"Look","look"},{"Walk","walk"},{"Read","read"},{"Go","go"},{"Attack","attack"},{"Say","say"},{"ListCommands","ls"},{"Status","status"}, {"Take","take"}, {"Flee","flee"},{"Equip","equip"}};
+std::unordered_map<std::string, std::string> commands {{"Create","create"},{"Look","look"},{"Walk","walk"},{"Read","read"},{"Go","go"},{"Attack","attack"},{"Say","say"},{"ListCommands","ls"},{"Status","status"}, {"Take","take"}, {"Flee","flee"}};
 
 void
 ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::vector<Connection>& clients) {
@@ -26,18 +26,16 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
     } else if (boost::istarts_with(messageText,commands["Read"])) {
       //this->basicCommandQueue.push_back(std::make_unique<Commands::ReadCommand>(message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Attack"])) {
-      this->combatCommandQueue.push_back(std::make_unique<CombatCommands::AttackCommand>(message.connection,message.text));
+      //this->combatCommandQueue.push_back(std::make_unique<CombatCommands::AttackCommand>(clients, message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Flee"])){
       this->basicCommandQueue.push_back(std::make_unique<Commands::FleeCommand>(message.connection,message.text));
     }else if (boost::istarts_with(messageText,commands["Say"])) {
       //this->basicCommandQueue.push_back(std::make_unique<Commands::SayCommand>(message.connection,message.text));
       createSayCommandForGroup(this->basicCommandQueue, clients, message.text, message.connection.playerId);
     } else if (boost::istarts_with(messageText, commands["ListCommands"])) {
-      this->basicCommandQueue.push_back(std::make_unique<Commands::ListCommand>(message.connection,commands,message.text));
+      this->basicCommandQueue.push_back(std::make_unique<Commands::ListCommand>(message.connection,commands));
     } else if (boost::istarts_with(messageText, commands["Take"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::TakeCommand>(message.connection,message.text));
-    } else if (boost::istarts_with(messageText,commands["Equip"])) {
-      this->basicCommandQueue.push_back(std::make_unique<Commands::EquipCommand>(message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Status"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::StatusCommand>(message.connection,message.text));
     } else {
@@ -75,10 +73,10 @@ ModelInterface::updateCombat(){
 
     for(auto& combatCommand : combatCommandQueue) {
       std::string response = combatCommand->execute(context);
-      // Message sourceMessage{combatCommand->getSourceConnection(),response};
-      // outgoing.push_back(sourceMessage);
-      // outgoing.push_back(createAlertMessage(combatCommand->getTargetConnection(), combatCommand->getSourceName()));
-      // std::cout<<"7"<<std::endl;
+    //  Message sourceMessage{combatCommand->getSourceConnection(),response};
+    //  outgoing.push_back(sourceMessage);
+    //  outgoing.push_back(createAlertMessage(combatCommand->getTargetConnection(), combatCommand->getSourceName()));
+    //  std::cout<<"7"<<std::endl;
       combatCommandQueue.pop_front();
 
     }

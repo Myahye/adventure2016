@@ -4,16 +4,13 @@
 #include <unordered_map>
 
 #include "CommandInterface.h"
+#include "Player.h"
 #include "Npc.h"
 #include "Room.h"
 #include "Object.h"
-#include "Player.h"
 
-//utility functions
 bool is_number(const std::string& s);
-
 std::string printMiniMap(std::unordered_map<int,Room>* rooms, const int currentRoomId);
-
 std::string getPlayersInRoomDesc(std::unordered_map<int, Player>* players, const std::unordered_map<int, int>* playerLocations, const int currentRoomId);
 
 namespace Commands {
@@ -50,20 +47,6 @@ namespace Commands {
 		networking::Connection getConnection() const;
 	};
 
-	class AttackCommand : public Command {
-  	private:
-  		networking::Connection connection;
-  		std::string message;
-  	public:
-  		AttackCommand(networking::Connection connection_, const std::string& message_);
-
-  		std::string execute(Context& context);
-
-  		int getId() const;
-
-  		networking::Connection getConnection() const;
-  	};
-
 
 	class FleeCommand : public Command {
   	private:
@@ -93,6 +76,18 @@ namespace Commands {
 		networking::Connection getConnection() const;
 	};
 
+	class EquipCommand : public Command {
+		private:
+			networking::Connection connection;
+			std::string message;
+		public:
+			EquipCommand(networking::Connection connection_, const std::string& message_);
+			std::string execute(Context& context);
+			int getId() const;
+			networking::Connection getConnection() const;
+
+		};
+
 	class TakeCommand : public Command {
 	private:
 		networking::Connection connection;
@@ -105,21 +100,9 @@ namespace Commands {
 		int getId() const;
 
 		networking::Connection getConnection() const;
-	};
 
-	class EquipCommand : public Command {
-	private:
-		networking::Connection connection;
-		std::string message;
-	public:
-		EquipCommand(networking::Connection connection_, const std::string& message_);
-
-		std::string execute(Context& context);
-
-		int getId() const;
-
-		networking::Connection getConnection() const;
-
+		//need to move out later
+		bool is_number(const std::string& s);
 	};
 
 	class InvalidCommand : public Command {
@@ -140,10 +123,8 @@ namespace Commands {
 	private:
 		networking::Connection connection;
 		std::unordered_map<std::string, std::string> commands;
-		std::string message;
-
 	public:
-		ListCommand(networking::Connection connection_, const std::unordered_map<std::string, std::string>& commands_, const std::string& message_);
+		ListCommand(networking::Connection connection_, const std::unordered_map<std::string, std::string>& commands_);
 
 		std::string execute(Context& context);
 
@@ -168,6 +149,4 @@ namespace Commands {
 	};
 
 }
-
-
 #endif

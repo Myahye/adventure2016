@@ -8,8 +8,8 @@
 #include <unordered_map>
 #include "Door.h"
 #include "Npc.h"
-#include "Object.h"
 #include "Player.h"
+
 //#include "CustomError.h"
 
 
@@ -17,7 +17,7 @@ class Room {
 
 private:
     std::vector<std::string> mDesc;
-    std::pair< std::vector<std::string>, std::vector<std::string> > mExtendedDesc;
+    std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > > mExtendedDesc;
     std::string mName;
     unsigned int mRoomId;
     std::vector<Door> doors;
@@ -25,14 +25,15 @@ private:
     //--------------------------------------Lawrence Yu
     std::unordered_map<int,std::vector<Npc>> npcsInRoom;
     std::unordered_map<int,std::vector<Object>> objectsInRoom;
-
+    //std::unordered_map<int,Player*> playersInRoom;
+    
     //Maybe change to not use pointers
     Npc* checkNpcKeywords(const std::string& message, const std::pair<int,std::vector<Npc>>& npcIdVectorPair);
     Object* checkObjectKeywords(const std::string& message, const std::pair<int,std::vector<Object>>& objectIdVectorPair);
     //Player* checkPlayerUsername(const std::string& message, const std::pair<int,Player*>& player);
 
 public:
-//std::unordered_map<int, std::string> playersInRoom;
+std::unordered_map<int, std::string> playersInRoom;
     // Default constructor
     Room();
     //Temp constructor for testing and first iteration
@@ -42,7 +43,8 @@ public:
 
     // Accessors
     std::string getDesc() const;
-    std::pair< std::vector<std::string>, std::vector<std::string> > getExtendedDesc() const;
+    std::vector <std::string> getDescV() const;
+    std::vector< std::pair<std::vector<std::string>, std::vector<std::string> > > getExtendedDesc() const;
     std::string getName() const;
     int getRoomId() const;
     std::vector<Door> getDoors() const;
@@ -51,23 +53,28 @@ public:
 
     // Mutators
     void setDescription(std::vector<std::string>& new_desc);
-    void setExtendedDesc(std::pair< std::vector<std::string>, std::vector<std::string> >& new_extended_desc);
+    void setExtendedDesc(const std::vector< std::pair<std::vector<std::string>, std::vector<std::string> > >& new_extended_desc);
     void setName(std::string& new_name);
     void setRoomId(const int new_room_id);
     bool addDoor(const Door& new_door);
-
+    void addVectorDoors(std::vector<Door>& new_vector_doors);
     //New function added in to test
     void printClass(int n) const;
-
+    void printVector(const std::vector<std::string>& vec) const;
+    
     //--------------------------------------Lawrence Yu
     Npc* addNpc(Npc& npc, unsigned int limit);
     bool removeNpc(const int npcId);
 
     void addObject(const Object& object, unsigned int limit);
     bool removeObject(const int objectId);
+    
+    void addPlayer(const int playerId, const std::string& username);
+    bool removePlayer(const int playerId);
 
     Npc* findNpc(const std::string& name);
     Object* findObject(const std::string& name);
+    int findPlayerId(const std::string& name);
 
     std::unordered_map<int,std::vector<Npc>> getNpcsInRoom() const;
     std::unordered_map<int,std::vector<Object>> getObjectsInRoom() const;

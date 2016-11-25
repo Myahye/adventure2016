@@ -5,12 +5,12 @@
 #include <unordered_map>
 #include <tuple>
 #include <boost/algorithm/string/predicate.hpp>
-#include "Player.h"
 #include "Room.h"
 #include "Door.h"
 #include "CustomError.h"
-#include "YamlParseAndBuild.h"
+#include "YamlParseBuild.h"
 #include "Resets.h"
+#include "Player.h"
 #include "Npc.h"
 #include "Context.h"
 
@@ -29,8 +29,9 @@ private:
   //need to change these to temlpate values
   std::unordered_map<int,int> playerLocation;
 
-  YamlParseandBuild yamlparse;
+  YamlParseBuild yamlparse;
   void yamlParseAndBuild(const std::string& pathToFile);
+  //void yamlParseAndBuildExistingPlayers(const std::string& pathToFile);
   void printAll();
   //Still need to be implemented
   //map<int, Players>
@@ -43,7 +44,7 @@ private:
 public:
 
   //Model(); //temp
-
+  void yamlParseAndBuildExistingPlayers(const std::string& pathToFile);
   Model(const std::vector<std::string>& paths);
 
   int createPlayer(const std::string& username, const std::string& password);
@@ -75,5 +76,8 @@ public:
   
   void playerDisconnected(const int playerId);
   void playerConnect(const int playerId);
+
+
+  std::unordered_map<int, Player> getPlayerMap();
 };
 #endif /* commandparse_h */

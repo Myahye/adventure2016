@@ -22,8 +22,9 @@ Object::Object(const Object &ob){
   clear_vec(this->keywords);
   clear_vec(this->longDesc);
   clear_vec(this->wearFlags);
-  clear_vec(this->extra.first);
-  clear_vec(this->extra.second);
+
+  this->extra.clear();
+  this->extra.shrink_to_fit();
 
   /*------copy vectors------*/
   copy_vec(this->attributes,ob.getAttributes());
@@ -32,7 +33,9 @@ Object::Object(const Object &ob){
   copy_vec(this->wearFlags,ob.getWearFlags());
 
   /*-----------copy extra---------------*/
-  this->extra=ob.getExtra();
+  for(auto& i:extra){
+    extra.push_back(i);
+  }
 }
 
 Object& Object::operator =(const Object& ob){
@@ -47,8 +50,9 @@ Object& Object::operator =(const Object& ob){
   clear_vec(this->keywords);
   clear_vec(this->longDesc);
   clear_vec(this->wearFlags);
-  clear_vec(this->extra.first);
-  clear_vec(this->extra.second);
+
+  extra.clear();
+  extra.shrink_to_fit();
 
   /*------copy vectors------*/
   copy_vec(this->attributes,ob.getAttributes());
@@ -57,7 +61,9 @@ Object& Object::operator =(const Object& ob){
   copy_vec(this->wearFlags,ob.getWearFlags());
 
   /*-----------copy extra---------------*/
-  this->extra=ob.getExtra();
+  for(auto& i:extra){
+    extra.push_back(i);
+  }
   
   return *this;
 }
@@ -173,21 +179,21 @@ void Object::addWearFlag(const std::string& wearFlags) {
 
 
 // Getter and setter for extra:
-std::pair<std::vector<std::string>, std::vector<std::string> > Object::getExtra() const {
+std::vector< std::pair<std::vector<std::string>, std::vector<std::string> > > Object::getExtra() const {
   return extra;
 }
 
-void Object::setExtra(const std::pair<std::vector<std::string>, std::vector<std::string> >& extra) {
+void Object::setExtra(const std::vector< std::pair<std::vector<std::string>, std::vector<std::string> > >& extra) {
   this->extra = extra;
 }
 
-void Object::addExtraDesc(const std::string& desc){
+/*void Object::addExtraDesc(const std::string& desc){
   this->extra.first.push_back(desc);
 }
 
 void Object::addExtraKeyword(const std::string& keyword){
   this->extra.second.push_back(keyword);
-}
+}*/
 
 void Object::copy_vec(std::vector<std::string>& output, const std::vector<std::string> Alist ){
   for(auto& i:Alist)
@@ -217,12 +223,19 @@ void Object::printClass(int n) const{
   std::cout << "\tWear Flags: " << std::endl;
   printVector(wearFlags);
   std::cout << "\tExtra: " << std::endl;
-  std::cout << "\t\tDescription: " << std::endl;
+  for (auto& eachPair : extra){
+    std::cout << "\t\tDescription: " << std::endl;
+    printVector(eachPair.first);
+    std::cout << "\t\tKeywords: " << std::endl;
+    printVector(eachPair.second);
+  }
+/*  std::cout << "\t\tDescription: " << std::endl;
   std::cout << "size of extra desc: " << extra.first.size() << std::endl;
   printVector(extra.first);
   std::cout << "\t\tKeywords: " << std::endl;
   std::cout << "size of extra keywords: " << extra.second.size() << std::endl;
   printVector(extra.second);
+*/
 }
 
 void Object::printVector(const std::vector<std::string>& vec) const{

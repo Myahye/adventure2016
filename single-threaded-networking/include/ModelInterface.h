@@ -4,13 +4,12 @@
 #include "Server.h"
 #include "Model.h"
 #include "Commands.h"
-#include "CombatCommands.h"
 
 
 class ModelInterface {
 
 private:
-	std::vector<std::string> filepaths = {"../data/shire.yml", "../data/Midgaard.yml"};
+	std::vector<std::string> filepaths = {"../data/shire.yml", "../data/Midgaard.yml", "../data/users.yml"};
 	Model model{filepaths};
 	std::deque<std::unique_ptr<Command>> basicCommandQueue;
 	std::deque<std::unique_ptr<CombatCommand>> combatCommandQueue;
