@@ -99,6 +99,10 @@ std::string Character::getDescription() const{
 	for_each(description.begin(), description.end(), [&descString](const std::string& i){descString += i + "\n";} );	
 	return descString;
 }
+std::vector<std::string> Character::getDescriptionV() const{
+  return description;
+}
+
 void Character::setDescription(const std::vector<std::string>& description){
 	this->description = description;
 }
@@ -122,6 +126,10 @@ std::string Character::getLongDesc() const{
 	std::for_each(longdesc.begin(), longdesc.end(), [&descString](const std::string& i){descString += i + "\n";} );	
 	return descString;
 }
+std::vector<std::string> Character::getLongDescV() const{
+  return this->longdesc;
+}
+
 void Character::setLongDesc(const std::vector<std::string>& longdesc){
 	this->longdesc = longdesc;
 }
@@ -189,17 +197,25 @@ bool Character::unEquipObject(int slot) {
   	return false;
 }
 
+/*int Character::getInventoryLimit() const{
+  return this->inventoryLimit;
+}
+
+void Character::setInventoryLimit(const int inventoryLimit){
+  this->inventoryLimit = inventoryLimit;
+}*/
+
 std::unordered_map<int,std::vector<Object>> Character::getInventory() const{
 	return this->inventory;
 }
-void Character::setInventory(std::unordered_map<int, std::vector<Object>> inventory){
+void Character::setInventory(std::unordered_map<int, std::vector<Object>>& inventory){
 	this->inventory = inventory;
 }
 
 std::unordered_map<int,Object> Character::getEquipment() const{
 	return this->equipment;
 }
-void Character::setEquipment(std::unordered_map<int, Object> equipment){
+void Character::setEquipment(std::unordered_map<int, Object>& equipment){
 	this->equipment = equipment;
 }
    
@@ -213,7 +229,7 @@ std::string Character::getInventoryDesc() const {
 	std::string response = "";
 	std::cout << "npe inv: " << inventory.size() << std::endl;
 	std::for_each(inventory.begin(), inventory.end(), [&response](const auto& currentItem){response += currentItem.second[0].getShortDesc() + " (Quantity: " + std::to_string(currentItem.second.size()) + "), ";});	
-  	return response;
+  return response;
 }
 
 #endif

@@ -43,6 +43,7 @@
  Model::Model(const std::vector<std::string>& paths){
    yamlParseAndBuild(paths[0]);
    yamlParseAndBuild(paths[1]);
+   yamlParseAndBuildExistingPlayers(paths[2]);
    std::cout << "gei " << std::endl;
    this->context = Context{&this->rooms,&this->npcs,&this->objects,&this->players,&this->playerLocation};
    std::cout << "goi " << std::endl;
@@ -62,6 +63,15 @@ void Model::yamlParseAndBuild(const std::string& pathToFile){
   //not yet implemented
   // this->allPlayers = yamlParse.parseBuildPlayers(pathToFile);
 
+}
+
+void Model::yamlParseAndBuildExistingPlayers(const std::string& pathToFile){
+  std::cout << "existing players\n\n\n\n\n\n\n";
+  yamlparse.loadFile(pathToFile);
+  std::cout << "aa11a" << std::endl;
+  yamlparse.buildPlayers(this->players);
+  std::cout << "aaa" << std::endl;
+  //yamlparse.buildResets(this->resets);
 }
 
 void Model::printAll(){
@@ -252,4 +262,8 @@ void Model::playerDisconnected(const int playerId) {
 void Model::playerConnect(const int playerId) {
   std::cout << "s " << playerLocation[playerId] << std::endl;
   this->rooms[playerLocation[playerId]].addPlayer(playerId, players[playerId].getUsername());
+}
+
+std::unordered_map<int, Player> Model::getPlayerMap(){
+  return this->players;
 }
