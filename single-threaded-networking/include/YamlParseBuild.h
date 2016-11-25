@@ -34,7 +34,7 @@ public:
 	void buildRooms(std::unordered_map<int,Room>& buildAllRooms);
 	void buildResets(std::vector< std::unique_ptr< Reset > >&  resets);
 	void buildDoors(const YAML::Node& door_node, std::vector<Door>& doorsV);
-	void buildSpells(std::vector<Spells>& spellsV);
+	void buildSpells(std::vector<Spells>& spellsV, bool typeFlag);
 	//std::unordered_map<int,Room> buildRooms(); //doors will be built here as well
 
 

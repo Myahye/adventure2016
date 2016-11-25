@@ -71,3 +71,7 @@ void
 Door::setDoorId(const int new_door_id) {
     this -> Door_id = new_door_id;
 }
+void
+Door::setDoorDestinationId(const int new_destination_id) {
+    this -> destinationId = new_destination_id;
+}

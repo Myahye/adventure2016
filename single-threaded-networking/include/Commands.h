@@ -2,7 +2,7 @@
 #define COMMANDS_H
 
 #include <unordered_map>
-
+#include <boost/algorithm/string/replace.hpp>
 #include "CommandInterface.h"
 #include "Player.h"
 #include "Npc.h"
@@ -159,7 +159,11 @@ namespace Commands {
 
 		Spells* getCastedSpell(const std::string& castName_, std::vector<Spells>& spells_);
 
-		networking::Connection getConnection(const std::string& message_) const;
+		bool checkMana(const int spellMana, const int playerMana);
+
+		std::string replaceTargetName(std::string hitString, const std::string& targetName);
+
+		networking::Connection getConnection() const;
 	};
 
 }

@@ -234,24 +234,6 @@ std::unique_ptr<Reset> YamlParseBuild::parseResets(const YAML::Node& node){
 			}
 		}
 		return std::move(reset);
-
-		// Reset reset{node["action"].as<std::string>(), node["id"].as<int>()};
-
-		// if (node["limit"]){
-		// 	reset.setLimit(node["limit"].as<int>());
-		// }
-		// if (node["room"]){
-		// 	reset.setRoom(node["room"].as<int>());
-		// }
-		// if (node["slot"]){
-		// 	reset.setSlot(node["slot"].as<int>());
-		// }
-		// if (node["comment"]){
-		// 	std::string comment = node["comment"].as<std::string>();
-		// 	reset.setComment(comment);
-		// }
-		
-		// buildAllResets.push_back(reset);
 }
 
 void YamlParseBuild::buildResets(std::vector< std::unique_ptr< Reset > >&  resets){
@@ -265,22 +247,19 @@ void YamlParseBuild::buildResets(std::vector< std::unique_ptr< Reset > >&  reset
 */
 
 Door YamlParseBuild::parseDoors(const YAML::Node& node){
-	Door doorObject;
+	std::string direction = node["dir"].as<std::string>();
+	Door doorObject{direction};
 
 	if(node["desc"]){
 		std::vector<std::string> descV = setStringVectorHelper(node["desc"]);
 		doorObject.setDesc(descV);
-	}
-	if(node["dir"]){
-		std::string direction = node["dir"].as<std::string>();
-		doorObject.setDir(direction);
 	}
 	if(node["keywords"]){
 		std::vector<std::string> keywordsV = setStringVectorHelper(node["keywords"]);
 		doorObject.setDesc(keywordsV);
 	}
 	if(node["to"]){
-		doorObject.setDoorId(node["to"].as<int>());
+		doorObject.setDoorDestinationId(node["to"].as<int>());
 	}
 	return doorObject;
 }
@@ -387,12 +366,17 @@ Spells YamlParseBuild::parseSpells(const YAML::Node& node){
 	return spellsObject;
 }
 
-void YamlParseBuild::buildSpells(std::vector<Spells>& spellsV){
-	const YAML::Node& defense_node = fileNode["defense"];
-	//std::unordered_map<int,Object> buildAllObjects;
-	
-	std::transform(defense_node.begin(),defense_node.end(), std::inserter(spellsV, spellsV.end()), 
+void YamlParseBuild::buildSpells(std::vector<Spells>& spellsV, bool typeFlag){
+	if(typeFlag){
+		const YAML::Node& defense_node = fileNode["defense"];	
+		std::transform(defense_node.begin(),defense_node.end(), std::inserter(spellsV, spellsV.end()), 
 					[this](const YAML::Node& node) { return this->parseSpells(node); });
+	}
+	else{
+		const YAML::Node& offense_node = fileNode["offense"];	
+		std::transform(offense_node.begin(),offense_node.end(), std::inserter(spellsV, spellsV.end()), 
+					[this](const YAML::Node& node) { return this->parseSpells(node); });
+	}
 }
 
 //helper classes for yamlParse

@@ -43,8 +43,9 @@
  Model::Model(const std::vector<std::string>& paths){
    yamlParseAndBuild(paths[0]);
    yamlParseAndBuild(paths[1]);
+   yamlParseAndBuildSpells(paths[2]);
    std::cout << "gei " << std::endl;
-   this->context = Context{&this->rooms,&this->npcs,&this->objects,&this->players,&this->playerLocation};
+   this->context = Context{&this->rooms,&this->npcs,&this->objects,&this->players,&this->playerLocation, &this->offenseSpells, &this->defenseSpells};
    std::cout << "goi " << std::endl;
    this->reset();
  }
@@ -54,18 +55,22 @@ void Model::yamlParseAndBuild(const std::string& pathToFile){
   yamlparse.loadFile(pathToFile);
   yamlparse.buildNpcs(this->npcs);
   yamlparse.buildObjects(this->objects);
-  //yamlparse.buildResets(this->resets);
-  std::cout << "wwww " << std::endl;
   yamlparse.buildRooms(this->rooms);
-      // printAll();
-  //this->resets = yamlparse.parseBuildResets(pathToFile);
+  //yamlparse.buildResets(this->resets);
+
   //not yet implemented
   // this->allPlayers = yamlParse.parseBuildPlayers(pathToFile);
+}
 
+void Model::yamlParseAndBuildSpells(const std::string& pathToFile){
+  std::cout << "DIFFERENT FILE\n\n\n\n\n\n\n";
+  yamlparse.loadFile(pathToFile);
+  yamlparse.buildSpells(this->defenseSpells, true); //true = defensive
+  yamlparse.buildSpells(this->offenseSpells, false); //false = offense
 }
 
 void Model::printAll(){
-  // std::cout << "Printing map contents \n";
+  std::cout << "Printing map contents \n";
    int count = 1;
   // for ( auto it = npcs.begin(); it != npcs.end(); ++it ){
   //   std::cout << "Map 1\nid:" << it->first << "\n";
@@ -80,11 +85,17 @@ void Model::printAll(){
   //   std::cout << std::endl;
   //   count++;
   // }
-  for ( auto it = rooms.begin(); it != rooms.end(); ++it ){
-     std::cout << "Map 1\nid:" << it->first << "\n";
-     (it->second).printClass(count);
+  std::cout << "size of offenseSpells: " << offenseSpells.size() << std::endl;
+  std::cout << "size of defenseSpells: " << defenseSpells.size() << std::endl;
+
+  for ( auto it = offenseSpells.begin(); it != offenseSpells.end(); ++it ){
+     it->printClass();
      std::cout << std::endl;
-     count++;
+  }
+
+  for ( auto it = defenseSpells.begin(); it != defenseSpells.end(); ++it ){
+     it->printClass();
+     std::cout << std::endl;
   }
    // for ( auto it = resets.begin(); it != resets.end(); ++it ){
    //   std::cout << "Map 3\nid:" << "\n";

@@ -468,56 +468,75 @@ namespace Commands {
 		auto players = context.getPlayers();
 		auto rooms = context.getRooms();
 		auto playerLocations = context.getPlayerLocations();
-		std::vector<Spells>* spells = context.getOffenseSpells();
+		auto offenseSpells = context.getOffenseSpells();
 		auto defenseSpells = context.getDefenseSpells();
-		spells->insert(spells->end(), defenseSpells->begin(), defenseSpells->end());
 
 		int playerId = connection.playerId;
 
 		std::string messageText = this->message.substr(4);
 		std::transform(messageText.begin(), messageText.end(), messageText.begin(), ::tolower);
 
-		std::vector <std::string> takeMessage;
+		std::vector <std::string> castMessage;
     	boost::trim_if(messageText, boost::is_any_of("\t "));
-    	boost::split(takeMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
+    	boost::split(castMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
 		
 		int currentRoomId = (*playerLocations)[playerId];
 		Room* currentRoom = &(*rooms)[currentRoomId];
-		Spells* castedSpell = getCastedSpell(takeMessage[0], (*spells));
-		int targetId = currentRoom->findPlayerId(takeMessage[2]);
-		auto target = &(*players)[targetId];
 		
+		Spells* castedDefenseSpell = getCastedSpell(castMessage[0], (*defenseSpells));
+		Spells* castedOffenseSpell = getCastedSpell(castMessage[0], (*offenseSpells));
 
-		//should change this to not return magic number
-		// int targetPlayerId = currentRoom->findPlayerId(takeMessage[1]);
-		// for(networking::Connection client: clients){
-		// 	if(client.playerId == targetPlayerId){
-		// 		this->targetConnection = client;
-		// 	}
-		// }
-		if(targetId != 0) {
-			std::cout<<(*players)[targetId].getUsername() +" is the target name for "+ (*players)[playerId].getUsername()<<std::endl;
-			int targetHealth=(*players)[targetId].playerCharacter.getCurrentHealth();
-			int playerMana = (*players)[playerId].playerCharacter.getCurrentMana();
-			if (targetHealth == 0){
-				return " has already been Defeated!\n";
-			}else{
-				(*players)[targetId].playerCharacter.setCurrentHealth(targetHealth - 50);
-				(*players)[playerId].playerCharacter.setCurrentMana(playerMana - 50);
+		
+		int targetId = currentRoom->findPlayerId(castMessage[1]);
+		auto target = &(*players)[targetId].playerCharacter;
+		int currentTargetHealth= target->getCurrentHealth();
+		auto player = &(*players)[playerId].playerCharacter;
+		int currentPlayerMana = target->getCurrentMana();
 
-				if ((*players)[targetId].playerCharacter.getCurrentHealth()==0){
-					int playerXP=(*players)[playerId].playerCharacter.getExp();
-					(*players)[playerId].playerCharacter.setExp(playerXP + 100);
-					(*players)[playerId].playerCharacter.setMaxMana(85);
-					return " has been defeated!\n";
-				}
 
-			}
-			return " target found Cast Success \n";
-		}else{
-			return " target not in room / not found \n" ;
+		//if findPlayerId can't find the player it will return 0
+		//might need to change this
+		if(targetId == 0){
+			return (*players)[playerId].getUsername() + "> " + "Target " + castMessage[1] + " not found\n\n";
 		}
 
+		if(currentTargetHealth == 0){
+			return (*players)[playerId].getUsername() + "> " + "Target " + castMessage[1] + " has already been defeated!\n\n";
+		}
+
+		if(castedDefenseSpell != nullptr){ 
+			std::cout<<(*players)[targetId].getUsername() +" is the target name for "+ (*players)[playerId].getUsername()<<std::endl;
+			int spellMana = castedDefenseSpell->getMana();
+			if(checkMana(spellMana, currentPlayerMana)){
+				player->setCurrentMana(currentPlayerMana - spellMana);
+				target->setCurrentHealth(currentTargetHealth + 50); //change so it uses their level!
+				
+				std::string targetName = (*players)[targetId].getUsername();
+				std::string hitChar = replaceTargetName(castedDefenseSpell->getHitChar(), targetName);
+				return (*players)[playerId].getUsername() + "> " + castMessage[0] + " has been cast on " + castMessage[1] + "\n\t" + hitChar + "\n\n";
+			}
+			else{
+				return (*players)[playerId].getUsername() + "> " + "Not enough mana to cast spell\n\n";
+			}
+		}
+		else if(castedOffenseSpell != nullptr){
+			int spellMana = castedOffenseSpell->getMana();
+			if(checkMana(spellMana, currentPlayerMana)){
+				player->setCurrentMana(currentPlayerMana - spellMana);
+				target->setCurrentHealth(currentTargetHealth - 50); //change so it uses their level!
+				//todo: if target dies -- increase xp/lvl up
+
+				std::string targetName = (*players)[targetId].getUsername();
+				std::string hitChar = replaceTargetName(castedOffenseSpell->getHitChar(), targetName);
+				return (*players)[playerId].getUsername() + "> " + castMessage[0] + " has been cast on " + castMessage[1] + "\n\t" + hitChar + "\n\n";
+			}
+			else{
+				return (*players)[playerId].getUsername() + "> " + "Not enough mana to cast spell\n\n";
+			}
+		}
+		else{
+			return (*players)[playerId].getUsername() + "> " + "Cannot cast " + castMessage[0] + ", no match\n\n";
+		}
 	}
 
 	Spells* CastCommand::getCastedSpell(const std::string& castName_, std::vector<Spells>& spells_){
@@ -527,6 +546,30 @@ namespace Commands {
 			}
 		}
 		return nullptr;
+	}
+
+	bool CastCommand::checkMana(const int spellMana, const int playerMana){
+		if(spellMana <= playerMana){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	//--Mohamed
+	//will replace every instance of $N to targetName
+	std::string CastCommand::replaceTargetName(std::string hitString, const std::string& targetName){
+  		boost::replace_all(hitString, "$N", targetName); // <#include <boost/algorithm/string/replace.hpp>
+		return hitString;
+	}
+
+	int CastCommand::getId() const {
+		return this->connection.playerId;
+	}
+
+	networking::Connection CastCommand::getConnection() const {
+		return this->connection;
 	}
 
 }

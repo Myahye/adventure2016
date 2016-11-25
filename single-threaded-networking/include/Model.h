@@ -13,6 +13,7 @@
 #include "Player.h"
 #include "Npc.h"
 #include "Context.h"
+#include "Spells.h"
 
 //using namespace custom_errors;
 
@@ -24,6 +25,8 @@ private:
   std::unordered_map<int,Npc> npcs;
   std::unordered_map<int,Object> objects;
   std::vector<std::unique_ptr<Reset>> resets;
+  std::vector<Spells> defenseSpells;
+  std::vector<Spells> offenseSpells;
 
   int assignedIds = 1;
   //need to change these to temlpate values
@@ -31,12 +34,8 @@ private:
 
   YamlParseBuild yamlparse;
   void yamlParseAndBuild(const std::string& pathToFile);
-  void printAll();
-  //Still need to be implemented
-  //map<int, Players>
-  //map<int, rooms>
-  //map<int, npcs>
-  //map<int, objects>
+  void yamlParseAndBuildSpells(const std::string& pathToFile);
+
   
   //--------------Lawrence Yu
   Context context;
@@ -75,5 +74,9 @@ public:
   
   void playerDisconnected(const int playerId);
   void playerConnect(const int playerId);
+
+  //to test
+  void printAll();
+
 };
 #endif /* commandparse_h */
