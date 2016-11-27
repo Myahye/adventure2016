@@ -69,7 +69,7 @@ public:
 
 	int getThac0() const;
 	void setThac0(int const thac0);
-	
+
 	std::string getDamage() const;
 	void setDamage(const std::string& damage);
 
@@ -104,9 +104,9 @@ public:
 
     std::unordered_map<int,Object> getEquipment() const;
     void setEquipment(std::unordered_map<int, Object>& equipment);
-    
+
     std::string getEquipmentDesc() const;
     std::string getInventoryDesc() const;
-}; 
+};
 
-#endif 
+#endif
