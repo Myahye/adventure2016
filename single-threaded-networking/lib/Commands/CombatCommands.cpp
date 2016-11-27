@@ -21,14 +21,14 @@ namespace CombatCommands {
 	: connection{connection_}, message{message_} {}
 
 
-	//Edit parameters to take clients so we can build combatants
-	//Maybe pass in all existing combatants so we can check if they are already fighting
-	std::string AttackCommand::execute(Context& context) {
+
+	std::string AttackCommand::execute(std::vector<networking::Connection>& clients, std::vector<Fight>& fights, Context& context) {
 		auto players = context.getPlayers();
 		auto rooms = context.getRooms();
 		auto playerLocations = context.getPlayerLocations();
 		int playerId = connection.playerId;
 		std::string playerName = (*players)[playerId].getUsername();
+
 
 		//auto player = &(*players)[playerId];
 
@@ -40,6 +40,17 @@ namespace CombatCommands {
 
 		std::string response = playerName + "> " + message;
 
+		//refactor this out to its own method
+		for(Fight fight : battles){
+			bool playerIsInstigator = (fight.getInstigatorCombatant().getCharacter().getId()
+																	== playerId);
+			bool playerIsTarget = (fight.getTargetCombatant().getCharacter().getId()
+																	== playerId);;
+			if(playerIsInstigator || playerIsTarget){
+				eturn response + "You are already in combat.";
+			}
+		}
+
 		int currentRoomId = (*playerLocations)[playerId];
 		Room* currentRoom = &(*rooms)[currentRoomId];
 
@@ -50,11 +61,36 @@ namespace CombatCommands {
 
 		//-------------------------------------------------Attack player
 		int targetPlayerId = getPlayerIdInRoom(players, playerLocations, currentRoomId, targetName);
-		Player targetPlayer = (*players)[targetPlayerId];
-		targetPlayer.attack(playerName);
-		//Create target combatant
+		//refactor this out to its own method
+		for(Fight fight : fights){
+			bool playerIsInstigator = (fight.getInstigatorCombatant().getCharacter().getId()
+																	== targetPlayerId);
+			bool playerIsTarget = (fight.getTargetCombatant().getCharacter().getId()
+																	== targetPlayerId);;
+			if(playerIsInstigator || playerIsTarget){
+				return response + targetName + " is already in combat.";
+			}
+		}
 
-		return response + "\n\n" + "Combat with " + targetName + " initiated.";
+
+		for(Connection targetConnection, clients){
+			if(connection.playerId == targetPlayerId){
+				//Create target and instigator combatant, create fight and add to battles
+				auto player = &(*players)[playerId];
+				auto targetPlayer = (*players)[targetPlayerId];
+
+				Fight fight = new Fight(Combatant(player.playerCharacter, connection), Combatant(targetPlayer.playerCharacter, targetConnection))
+
+				battles.push_back(fight);
+
+				return response + "\n\n" + "Combat with " + targetName + " initiated.";
+			}
+		}
+		//To self - this is trash, remove asap
+		else{
+			return "Error";
+		}
+
 	}
 
 	int AttackCommand::getId() const {

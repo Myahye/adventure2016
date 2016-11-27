@@ -28,12 +28,11 @@ CombatManager::updateCombat(Model::Context& context){
     }
 
     for(Fight fight : battles){
-      if(!getTargetCombatantOverrideFlagSet()){
+      if(!fight.targetOverrideFlag){
         outgoing.pushback(fight.getInstigatorCombatant().attack(1, fight.getTargetCombatant().getName()));
       }
-      if(!getInstigatorCombatantOverrideFlagSet()){
+      if(!fight.instigatorOverrideFlag){
         outgoing.pushback(fight.getTargetCombatant().attack(1, fight.getInstigatorCombatant().getName()));
-
       }
     }
 

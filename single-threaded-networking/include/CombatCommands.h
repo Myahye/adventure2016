@@ -26,7 +26,7 @@ namespace CombatCommands {
 	public:
 		AttackCommand(networking::Connection connection_, const std::string& message_);
 
-		std::string execute(Context& context);
+		std::string execute(std::vector<networking::Connection>& clients, std::vector<Fight>& fights, Context& context);
 
 		int getId() const;
 

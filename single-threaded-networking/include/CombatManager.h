@@ -16,8 +16,8 @@ private:
 
 	//NPCs and Players in combat
 	//Just players for now
-  std::vector<Player>& characterList;
-
+  std::vector<Player> characterList;
+	std::vector<Fight> Fights;
 
 	//networking::Message createAlertMessage(networking::Connection, std::string);
 
@@ -28,7 +28,7 @@ public:
   void buildCombatCommand(const networking::Connection connection, const std::string& message);
 
 	//Used by ModelInterface to initiate one combat cycle
-	std::deque<networking::Message> updateCombat(Model::Context& context);
+	std::deque<networking::Message> updateCombat(std::vector<networking::Connection>& clients, Model::Context& context);
 
 	//What is this for?
 	// Maybe we dont need this as players and NPCs will enter and exit combat on

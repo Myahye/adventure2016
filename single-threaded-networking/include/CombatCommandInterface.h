@@ -7,7 +7,7 @@
 class CombatCommand {
 public:
 	//virtual std::string execute(Context& context) = 0;
-	virtual std::string execute(Context& context) = 0;
+	virtual std::string execute(std::vector<networking::Connection>& clients, std::vector<Fight>& fights, Context& context) = 0;
 	virtual int getId() const = 0;
 	virtual networking::Connection getConnection() const = 0;
 	// virtual int getSourceId() const = 0;

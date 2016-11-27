@@ -72,7 +72,8 @@ std::deque<Message>
 ModelInterface::updateCombat(){
 
   std::deque<Message> outgoing;
-  outgoing.push_back(this->CombatManager.updateCombat(this->model.getContext()));
+  auto context = this->model.getContext();
+  outgoing.push_back(this->CombatManager.updateCombat(clients, context));
 
   // auto context = this->model.getContext();
   //
