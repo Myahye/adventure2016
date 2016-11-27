@@ -7,6 +7,7 @@ class Player {
     std::string username;
     std::string password;
     std::string status = "Offline";
+
 public:
     // Constructor
     Player ();
@@ -28,5 +29,6 @@ public:
     void setStatus(std::string s);
 
     void attack(const std::string& name);
+};
 
 #endif /* PLAYER_H */
