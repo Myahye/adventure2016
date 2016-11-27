@@ -12,7 +12,9 @@ private:
 	std::vector<std::string> filepaths = {"../data/shire.yml", "../data/Midgaard.yml", "../data/users.yml"};
 	Model model{filepaths};
 	std::deque<std::unique_ptr<Command>> basicCommandQueue;
-	std::deque<std::unique_ptr<CombatCommand>> combatCommandQueue;
+
+	CombatManager combatManager{};
+	//std::deque<std::unique_ptr<CombatCommand>> combatCommandQueue;
 
 	networking::Message createAlertMessage(networking::Connection, std::string);
 

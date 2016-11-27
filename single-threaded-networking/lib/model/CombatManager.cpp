@@ -14,16 +14,16 @@ CombatManager::buildCombatCommand(const Connection connection, const std::string
 std::deque<Message>
 CombatManager::updateCombat(Model::Context& context){
   std::deque<Message> outgoing;
-  //auto context = this->model.getContext();
-    for(auto& combatCommand : combatCommandQueue) {
-      std::string response = combatCommand->execute(context);
-      Message message{combatCommand->getSourceConnection(),response};
-      outgoing.push_back(message);
-      combatCommandQueue.pop_front();
-    }
-    for(Player p : characterList){//will move this to a function soon
-      attack(p);
-    }
+  // //auto context = this->model.getContext();
+  //   for(auto& combatCommand : combatCommandQueue) {
+  //     std::string response = combatCommand->execute(context);
+  //     Message message{combatCommand->getSourceConnection(),response};
+  //     outgoing.push_back(message);
+  //     combatCommandQueue.pop_front();
+  //   }
+  //   for(Player p : characterList){//will move this to a function soon
+  //     attack(p);
+  //   }
   return outgoing;
 }
 
