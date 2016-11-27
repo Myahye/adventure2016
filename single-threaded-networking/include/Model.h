@@ -77,7 +77,5 @@ public:
   void playerDisconnected(const int playerId);
   void playerConnect(const int playerId);
 
-
-  std::unordered_map<int, Player> getPlayerMap();
 };
 #endif /* commandparse_h */

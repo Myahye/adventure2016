@@ -263,7 +263,3 @@ void Model::playerConnect(const int playerId) {
   std::cout << "s " << playerLocation[playerId] << std::endl;
   this->rooms[playerLocation[playerId]].addPlayer(playerId, players[playerId].getUsername());
 }
-
-std::unordered_map<int, Player> Model::getPlayerMap(){
-  return this->players;
-}
