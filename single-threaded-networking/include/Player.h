@@ -11,7 +11,7 @@ public:
     Player ();
     Player (int const id, std::string const username, std::string const password);
 
-    Character playerCharacter{};
+    Character playerCharacter;
 
     //username
     std::string getUsername() const;

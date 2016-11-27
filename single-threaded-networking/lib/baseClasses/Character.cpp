@@ -4,11 +4,22 @@
 #include "Character.h"
 
 // Constructors:
-Character::Character():
-id{0} {};
+Character::Character(bool isPlayer){
+  setId(0);
+  setCharacterType(isPlayer);
+}
 
-Character::Character (const int id):
-id{id} {};
+Character::Character (const int id, bool isPlayer){
+  setId(id);
+  setCharacterType(isPlayer);
+}
+
+bool Character::checkCharacterType(){
+  return isPlayer;
+}
+void Character::setCharacterType(bool isPlayer){
+  this->isPlayer = isPlayer;
+}
 
 int Character::getArmor() const{
 	return armor;

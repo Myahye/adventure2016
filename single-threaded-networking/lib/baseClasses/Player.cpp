@@ -5,9 +5,9 @@
 
 //Player constructor
 Player::Player ():
-    playerCharacter{0}, username{""}, password{""}{};
+    playerCharacter{0, true}, username{""}, password{""}{};
 Player::Player (int const id, std::string const username, std::string const password):
-    playerCharacter{id}, username{username}, password{password}{};
+    playerCharacter{id, true}, username{username}, password{password}{};
 
 std::string Player::getUsername() const {
     return username;
