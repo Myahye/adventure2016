@@ -201,12 +201,14 @@ std::pair<int,Object> YamlParseBuild::parseObjects(const YAML::Node& node){
 
 void YamlParseBuild::buildObjects(std::unordered_map<int,Object>& buildAllObjects){
 	const YAML::Node& Object_Node = fileNode["OBJECTS"];
+
 	//std::unordered_map<int,Object> buildAllObjects;
 
 	std::transform(Object_Node.begin(),Object_Node.end(), std::inserter( buildAllObjects, buildAllObjects.end() ),
 					[this](const YAML::Node& node) { return this->parseObjects(node); });
 	//return buildAllObjects;
 }
+
 void YamlParseBuild::buildObjectsForPlayerEquipment(const YAML::Node& object_node, std::unordered_map<int,Object>& inventoryObjects){
 
 	std::transform(object_node.begin(),object_node.end(), std::inserter( inventoryObjects, inventoryObjects.end() ),
@@ -339,7 +341,6 @@ void YamlParseBuild::buildResets(std::vector< std::unique_ptr< Reset > >&  reset
 	//return buildAllObjects;
 }
 
-
 Door YamlParseBuild::parseDoors(const YAML::Node& node){
 	Door doorObject;
 	if (node["dir"]){
@@ -370,6 +371,7 @@ void YamlParseBuild::buildDoors(const YAML::Node& door_node, std::vector<Door>& 
 
 std::pair<int,Room> YamlParseBuild::parseRooms(const YAML::Node& node){
 	Room roomObject;
+
 	int roomId = node["id"].as<int>();
 	if(node["id"]){
 		roomObject.setRoomId(node["id"].as<int>());

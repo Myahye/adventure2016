@@ -230,13 +230,16 @@ namespace Commands {
 			//should be vector of pair of vectors
 					//need look through all currentobject get extra for keyword
 			response += currentObject->getShortDesc() + "\n";
-			for(auto& keyword : currentObject->getExtra().second) {
-				if(lookMessage.find(keyword) != std::string::npos) {
-					for(auto descriptionText : currentObject->getExtra().first) {
-			  			response += descriptionText + "\n";
+			for(auto& extraPair : currentObject->getExtra()) {
+				for(auto& keyword : extraPair.second) {
+					if(lookMessage.find(keyword) != std::string::npos) {
+						for(auto& descriptionText : extraPair.first) {
+				  			response += descriptionText + "\n";
+						}
 					}
 				}
 			}
+			
 			return response;
 		}
 
@@ -244,14 +247,16 @@ namespace Commands {
 
 		//should be vector of pair of vectors
 		auto extendedDescription = currentRoom->getExtendedDesc();
-		for(auto& keyword : extendedDescription.second) {
-			std::cout << "sdfsdf" << std::endl;
-			if(lookMessage.find(keyword) != std::string::npos) {
-				response += "\n\n";
-				for(auto descriptionText : extendedDescription.first) {
-			  		response += descriptionText + "\n";
+		for(auto& extendedDescPair : extendedDescription) {
+			for(auto& keyword : extendedDescPair.second) {
+				std::cout << "sdfsdf" << std::endl;
+				if(lookMessage.find(keyword) != std::string::npos) {
+					response += "\n\n";
+					for(auto& descriptionText : extendedDescPair.first) {
+				  		response += descriptionText + "\n";
+					}
+					return response;
 				}
-				return response;
 			}
 		}
 
@@ -271,11 +276,35 @@ namespace Commands {
 			auto playerInventory = (*players)[playerId].getPlayerInventory();
 			if(playerInventory.find(currentObjectId) != playerInventory.end()) {
 				response += "\n\n";
-				for(auto descriptionText : (*objects)[currentObjectId].getExtra().first) {
-			  			response += descriptionText + "\n";
+				for(auto& extraPair : (*objects)[currentObjectId].getExtra()) {
+					for(auto& keyword : extraPair.second) {
+						if(lookMessage.find(keyword) != std::string::npos) {
+							for(auto& descriptionText : extraPair.first) {
+					  			response += descriptionText + "\n";
+							}
+						}
+					}
 				}
 				return response;
 			}
+		}
+
+		if(currentObject != NULL) {
+			response += "\n\n";
+			//should be vector of pair of vectors
+					//need look through all currentobject get extra for keyword
+			response += currentObject->getShortDesc() + "\n";
+			for(auto& extraPair : currentObject->getExtra()) {
+				for(auto& keyword : extraPair.second) {
+					if(lookMessage.find(keyword) != std::string::npos) {
+						for(auto& descriptionText : extraPair.first) {
+				  			response += descriptionText + "\n";
+						}
+					}
+				}
+			}
+			
+			return response;
 		}
 
 

@@ -206,7 +206,7 @@ void Object::clear_vec(std::vector<std::string> Alist){
 }
 
 //New function added in to test
-void Object::printClass(int n) const{
+void Object::printClass(int n) {
   std::cout << "\n\n";
   std::cout << "Object: "<< n << "\n";
   std::cout << "Object Id: " << id << std::endl;
@@ -222,6 +222,13 @@ void Object::printClass(int n) const{
   printVector(longDesc);
   std::cout << "\tWear Flags: " << std::endl;
   printVector(wearFlags);
+
+  std::vector<std::string> s{"s"};
+  std::vector<std::string> e{"e"};
+    auto d = std::make_pair(s,e);
+  std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > > ext = {d};
+
+  setExtra(ext);
   std::cout << "\tExtra: " << std::endl;
   for (auto& eachPair : extra){
     std::cout << "\t\tDescription: " << std::endl;
