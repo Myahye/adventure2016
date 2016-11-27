@@ -1,7 +1,9 @@
-Fight::Fight(Combatant instigator, Combatant target){}
+Fight::Fight(Combatant instigator, Combatant target):
+        instigatorCombatant{instigator}, targetCombatant{target}{};
 
-//instigator combatant
-//combat loop override flag
-
-//target combatant
-//combat loop override flag
+void Fight::setInstigatorOverrideFlag(bool val){
+  this->instigatorOverrideFlag = val;
+}
+void Fight::setTargetOverrideFlag(bool val){
+  this->targetOverrideFlag = val;
+}

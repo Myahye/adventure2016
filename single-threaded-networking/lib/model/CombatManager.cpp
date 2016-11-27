@@ -23,17 +23,18 @@ CombatManager::updateCombat(Model::Context& context){
       outgoing.push_back(message);
       combatCommandQueue.pop_front();
     }
-    for(Player p : characterList){//will move this to a function soon
-      attack(p);
-    }
 
     for(Fight fight : battles){
       if(!fight.targetOverrideFlag){
         outgoing.pushback(fight.getInstigatorCombatant().attack(1, fight.getTargetCombatant().getName()));
+        outgoing.pushback(fight.getTargetCombatant().sendMessage("You have attacked " + fight.getInstigatorCombatant() + " for 1 point of damage");
       }
+      fight.setTargetOverrideFlag(false);
       if(!fight.instigatorOverrideFlag){
         outgoing.pushback(fight.getTargetCombatant().attack(1, fight.getInstigatorCombatant().getName()));
+        outgoing.pushback(fight.getInstigatorCombatant().sendMessage("You have attacked " + fight.getTargetCombatant() + " for 1 point of damage");
       }
+      fight.setInstigatorOverrideFlag(false);
     }
 
 
