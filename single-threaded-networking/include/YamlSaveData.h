@@ -15,7 +15,7 @@ public:
 	void emitVectorObjects(YAML::Emitter& emitter, std::vector<Object>& objectV);
 	void emitMapObjects(YAML::Emitter& emitter, std::unordered_map<int, Object>& objectM);
 	void emitObjectExtra(std::string pair_one, std::string pair_two, YAML::Emitter& emitter, std::vector< std::pair< std::vector<std::string>, std::vector<std::string> > >& extraV);
-	//void updateOneUser(std::unordered_map<int,Player>& players, const int pid);
+	void updateOrAddPlayer(std::unordered_map<int,Player>& players, Player& player);
 };	
 
 #endif

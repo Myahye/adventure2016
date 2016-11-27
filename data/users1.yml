@@ -1,90 +1,26 @@
 - id: 2222
-  username: username2
-  password: password2
-  armor: 22
-  exp: 22
-  gold: 22
-  level: 22
-  health: 222
-  mana: 222
-  thac0: 42
-  damage: 1d8+12
-  hit: 19d19+192
+  username: abc
+  password: password
+  armor: 0
+  exp: 0
+  gold: 0
+  level: 0
+  health: 100
+  mana: 85
+  thac0: 1407134496
+  damage: ""
+  hit: ""
   keywords:
-    - user test
+    []
   description:
-    - DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
-    - EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-    - SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-    - CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+    []
   longdesc:
-    - =========================================
-    - ==============long desc==================
-    - =========================================
-  shortdesc: shordesc
+    []
+  shortdesc: ""
   inventory:
-    attributes:
-      - glow
-      - hum
-      - antievil
-    cost: 10000
-    id: 1101
-    item_type: weapon
-    keywords:
-      - sting
-    longdesc:
-      - Sting lies here.
-    shortdesc: Sting
-    wear_flags:
-      - take
-      - wield
-    weight: 1
-    attributes:
-      - magic
-    cost: 5000
-    id: 1100
-    item_type: light
-    keywords:
-      - rainbow
-      - staff
-    longdesc:
-      - The rainbow staff lies here.
-    shortdesc: the rainbow staff
-    wear_flags:
-      - take
-      - ears
-    weight: 22
+    {}
   equipment:
-    attributes:
-      - magic
-      - antievil
-    cost: 10000
-    id: 1104
-    item_type: armor
-    keywords:
-      - silvery
-      - cloak
-    longdesc:
-      - A silvery cloak lies here.
-    shortdesc: a silvery cloak
-    wear_flags:
-      - take
-      - about
-    weight: 3
-    attributes:
-      []
-    cost: 13
-    id: 1103
-    item_type: food
-    keywords:
-      - pipeweed
-      - bread
-    longdesc:
-      - A loaf of pipeweed bread arouses your hunger.
-    shortdesc: a pipeweed bread
-    wear_flags:
-      - take
-    weight: 1
+    {}
 - id: 1111
   username: username
   password: password1234

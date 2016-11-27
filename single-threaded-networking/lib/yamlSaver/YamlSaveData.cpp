@@ -134,10 +134,11 @@ void YamlSaveData::emitMapObjects(YAML::Emitter& emitter, std::unordered_map<int
 void YamlSaveData::emitObjectExtra(std::string pair_one, std::string pair_two, YAML::Emitter& emitter, std::vector< std::pair< std::vector<std::string>, std::vector<std::string> > >& extraV){
 	for (auto& eachPair : extraV){
 		emitVectorStrings(pair_one, emitter, eachPair.first);
-		emitVectorStrings(pair_two, emitter, eachPair.second);
+			emitVectorStrings(pair_two, emitter, eachPair.second);
 	}
 }
 
-/*void updateOneUser(std::unordered_map<int,Player>& players, const int pid){
-	
-}*/
+void YamlSaveData::updateOrAddPlayer(std::unordered_map<int,Player>& players, Player& player){
+	players.erase(player.playerCharacter.getId());
+	players.insert(std::make_pair(player.playerCharacter.getId(), player));
+}

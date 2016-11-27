@@ -125,14 +125,18 @@ void yamlTest(){
     std::vector<std::string> filepaths = {"../data/shire.yml", "../data/Midgaard.yml", "../data/users.yml"};
     Model model(filepaths);
     //model.yamlParseAndBuildExistingPlayers("../data/users.yml");
-    YamlSaveData ysd;
     
-    ysd.saveUserData(model.getPlayerMap());
+    std::unordered_map<int, Player> playerMap = model.getPlayerMap();
+
+    YamlSaveData ysd;
+    Player somePlayer{2222, "abc", "password"};
+    ysd.updateOrAddPlayer(playerMap, somePlayer);
+
+    ysd.saveUserData(playerMap);
 }
 
 int main() {
     //refactoringTest();
     yamlTest();
-
 	return 0;
 }
