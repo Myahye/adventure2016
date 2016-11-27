@@ -20,12 +20,17 @@ namespace CombatCommands {
 	AttackCommand::AttackCommand(networking::Connection connection_, const std::string& message_)
 	: connection{connection_}, message{message_} {}
 
+
+	//Edit parameters to take clients so we can build combatants
+	//Maybe pass in all existing combatants so we can check if they are already fighting
 	std::string AttackCommand::execute(Context& context) {
 		auto players = context.getPlayers();
 		auto rooms = context.getRooms();
 		auto playerLocations = context.getPlayerLocations();
 		int playerId = connection.playerId;
 		std::string playerName = (*players)[playerId].getUsername();
+
+		//Create instigator combatant
 
 		std::string targetName = message.substr(7);
 		std::transform(targetName.begin(), targetName.end(), targetName.begin(), ::tolower);
@@ -45,7 +50,7 @@ namespace CombatCommands {
 		int targetPlayerId = getPlayerIdInRoom(players, playerLocations, currentRoomId, targetName);
 		Player targetPlayer = (*players)[targetPlayerId];
 		targetPlayer.attack(playerName);
-
+		//Create target combatant
 
 		return response + "\n\n" + "Combat with " + targetName + " initiated.";
 	}

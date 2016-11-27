@@ -1,0 +1,5 @@
+//isNpc
+
+//Connection
+
+//Character
