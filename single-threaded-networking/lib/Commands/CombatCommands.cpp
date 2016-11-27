@@ -30,6 +30,8 @@ namespace CombatCommands {
 		int playerId = connection.playerId;
 		std::string playerName = (*players)[playerId].getUsername();
 
+		//auto player = &(*players)[playerId];
+
 		//Create instigator combatant
 
 		std::string targetName = message.substr(7);
