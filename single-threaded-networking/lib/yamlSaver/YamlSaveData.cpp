@@ -50,15 +50,17 @@ void YamlSaveData::saveUserData(const std::unordered_map<int,Player>& players){
 		emitter << YAML::Key << "shortdesc" << YAML::Value << eachPlayer.second.playerCharacter.getShortDesc();
 		
 		emitter << YAML::Key << "inventory";
+		emitter << YAML::BeginMap;
 		std::unordered_map<int, std::vector<Object> > inventoryMap = eachPlayer.second.playerCharacter.getInventory();
 		for (auto& eachVectorObject : inventoryMap){
 			emitVectorObjects(emitter, eachVectorObject.second);
 		}
-
+		emitter << YAML::EndMap;
 		emitter << YAML::Key << "equipment";
+		emitter << YAML::BeginMap;
 		std::unordered_map<int, Object> equipmentMap = eachPlayer.second.playerCharacter.getEquipment();
 		emitMapObjects(emitter, equipmentMap);
-
+		emitter << YAML::EndMap;
 		emitter << YAML::EndMap;
 	}
 	emitter << YAML::EndSeq;
@@ -77,7 +79,6 @@ void YamlSaveData::emitVectorStrings(std::string name, YAML::Emitter& emitter, s
 
 void YamlSaveData::emitVectorObjects(YAML::Emitter& emitter, std::vector<Object>& objectV){
 	for (auto& eachObject : objectV){
-		emitter << YAML::BeginSeq;
 		std::vector<std::string> attributesV = eachObject.getAttributes();
 		emitVectorStrings("attributes", emitter, attributesV);
 		emitter << YAML::Key << "cost" << YAML::Value << std::to_string(eachObject.getCost());
@@ -100,14 +101,11 @@ void YamlSaveData::emitVectorObjects(YAML::Emitter& emitter, std::vector<Object>
 		emitVectorStrings("wear_flags", emitter, wearflagsV);
 
 		emitter << YAML::Key << "weight" << YAML::Value << std::to_string(eachObject.getWeight());
-		
-		emitter << YAML::EndSeq;
 	}
 }
 
 void YamlSaveData::emitMapObjects(YAML::Emitter& emitter, std::unordered_map<int, Object>& objectM){
 	for (auto& eachObject : objectM){
-		emitter << YAML::BeginSeq;
 		std::vector<std::string> attributesV = eachObject.second.getAttributes();
 		emitVectorStrings("attributes", emitter, attributesV);
 		emitter << YAML::Key << "cost" << YAML::Value << std::to_string(eachObject.second.getCost());
@@ -130,8 +128,6 @@ void YamlSaveData::emitMapObjects(YAML::Emitter& emitter, std::unordered_map<int
 		emitVectorStrings("wear_flags", emitter, wearflagsV);
 
 		emitter << YAML::Key << "weight" << YAML::Value << std::to_string(eachObject.second.getWeight());
-		
-		emitter << YAML::EndSeq;
 	}
 }
 
@@ -141,3 +137,7 @@ void YamlSaveData::emitObjectExtra(std::string pair_one, std::string pair_two, Y
 		emitVectorStrings(pair_two, emitter, eachPair.second);
 	}
 }
+
+/*void updateOneUser(std::unordered_map<int,Player>& players, const int pid){
+	
+}*/

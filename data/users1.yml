@@ -23,104 +23,68 @@
     - =========================================
   shortdesc: shordesc
   inventory:
-    - attributes
-    -
+    attributes:
       - glow
       - hum
       - antievil
-    - cost
-    - 10000
-    - id
-    - 1101
-    - item_type
-    - weapon
-    - keywords
-    -
+    cost: 10000
+    id: 1101
+    item_type: weapon
+    keywords:
       - sting
-    - longdesc
-    -
+    longdesc:
       - Sting lies here.
-    - shortdesc
-    - Sting
-    - wear_flags
-    -
+    shortdesc: Sting
+    wear_flags:
       - take
       - wield
-    - weight
-    - 1
-  ? - attributes
-    -
+    weight: 1
+    attributes:
       - magic
-    - cost
-    - 5000
-    - id
-    - 1100
-    - item_type
-    - light
-    - keywords
-    -
+    cost: 5000
+    id: 1100
+    item_type: light
+    keywords:
       - rainbow
       - staff
-    - longdesc
-    -
+    longdesc:
       - The rainbow staff lies here.
-    - shortdesc
-    - the rainbow staff
-    - wear_flags
-    -
+    shortdesc: the rainbow staff
+    wear_flags:
       - take
       - ears
-    - weight
-    - 22
-  : equipment
-  ? - attributes
-    -
+    weight: 22
+  equipment:
+    attributes:
       - magic
       - antievil
-    - cost
-    - 10000
-    - id
-    - 1104
-    - item_type
-    - armor
-    - keywords
-    -
+    cost: 10000
+    id: 1104
+    item_type: armor
+    keywords:
       - silvery
       - cloak
-    - longdesc
-    -
+    longdesc:
       - A silvery cloak lies here.
-    - shortdesc
-    - a silvery cloak
-    - wear_flags
-    -
+    shortdesc: a silvery cloak
+    wear_flags:
       - take
       - about
-    - weight
-    - 3
-  : - attributes
-    -
+    weight: 3
+    attributes:
       []
-    - cost
-    - 13
-    - id
-    - 1103
-    - item_type
-    - food
-    - keywords
-    -
+    cost: 13
+    id: 1103
+    item_type: food
+    keywords:
       - pipeweed
       - bread
-    - longdesc
-    -
+    longdesc:
       - A loaf of pipeweed bread arouses your hunger.
-    - shortdesc
-    - a pipeweed bread
-    - wear_flags
-    -
+    shortdesc: a pipeweed bread
+    wear_flags:
       - take
-    - weight
-    - 1
+    weight: 1
 - id: 1111
   username: username
   password: password1234
@@ -146,101 +110,65 @@
     - =========================================
   shortdesc: shordesc
   inventory:
-    - attributes
-    -
+    attributes:
       - glow
       - hum
       - antievil
-    - cost
-    - 10000
-    - id
-    - 1101
-    - item_type
-    - weapon
-    - keywords
-    -
+    cost: 10000
+    id: 1101
+    item_type: weapon
+    keywords:
       - sting
-    - longdesc
-    -
+    longdesc:
       - Sting lies here.
-    - shortdesc
-    - Sting
-    - wear_flags
-    -
+    shortdesc: Sting
+    wear_flags:
       - take
       - wield
-    - weight
-    - 1
-  ? - attributes
-    -
+    weight: 1
+    attributes:
       - magic
-    - cost
-    - 5000
-    - id
-    - 1100
-    - item_type
-    - light
-    - keywords
-    -
+    cost: 5000
+    id: 1100
+    item_type: light
+    keywords:
       - rainbow
       - staff
-    - longdesc
-    -
+    longdesc:
       - The rainbow staff lies here.
-    - shortdesc
-    - the rainbow staff
-    - wear_flags
-    -
+    shortdesc: the rainbow staff
+    wear_flags:
       - take
       - ears
-    - weight
-    - 8
-  : equipment
-  ? - attributes
-    -
+    weight: 8
+  equipment:
+    attributes:
       - magic
       - antievil
-    - cost
-    - 10000
-    - id
-    - 1104
-    - item_type
-    - armor
-    - keywords
-    -
+    cost: 10000
+    id: 1104
+    item_type: armor
+    keywords:
       - silvery
       - cloak
-    - longdesc
-    -
+    longdesc:
       - A silvery cloak lies here.
-    - shortdesc
-    - a silvery cloak
-    - wear_flags
-    -
+    shortdesc: a silvery cloak
+    wear_flags:
       - take
       - about
-    - weight
-    - 3
-  : - attributes
-    -
+    weight: 3
+    attributes:
       []
-    - cost
-    - 13
-    - id
-    - 1103
-    - item_type
-    - food
-    - keywords
-    -
+    cost: 13
+    id: 1103
+    item_type: food
+    keywords:
       - pipeweed
       - bread
-    - longdesc
-    -
+    longdesc:
       - A loaf of pipeweed bread arouses your hunger.
-    - shortdesc
-    - a pipeweed bread
-    - wear_flags
-    -
+    shortdesc: a pipeweed bread
+    wear_flags:
       - take
-    - weight
-    - 1
+    weight: 1
