@@ -5,9 +5,15 @@
 
 //Player constructor
 Player::Player ():
-    playerCharacter{0}, username{""}, password{""}{};
+    playerCharacter{0}, username{""}, password{""} {};
+/*
 Player::Player (int const id, std::string const username, std::string const password):
-    playerCharacter{id}, username{username}, password{password}{};
+    playerCharacter{id}, username{username}, password{password} {};
+*/
+
+// Using this constructor temporarily to test if swapping actually changes elements (check on shortdesc)
+Player::Player (int const id, std::string const username, std::string const password):
+    playerCharacter{id}, username{username}, password{password} { playerCharacter.setShortDesc(username); };
 
 std::string Player::getUsername() const {
     return username;

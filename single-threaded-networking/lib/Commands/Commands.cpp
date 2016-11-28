@@ -1,7 +1,7 @@
 #include "Commands.h"
 #include <boost/algorithm/string.hpp>
 #include <random>
-
+#include <algorithm>
 
 
 
@@ -199,7 +199,55 @@ namespace Commands {
 	networking::Connection AttackCommand::getConnection() const {
 		return this->connection;
 	}
-*//*Flee command*/
+*/
+
+	/*Swap command*/
+	SwapCommand::SwapCommand(networking::Connection connection_, const std::string& message_)
+	: connection{connection_}, message{message_} {}
+
+	std::string SwapCommand::execute(Context& context) {
+		auto players = context.getPlayers();
+		auto playerLocations = context.getPlayerLocations();
+		auto rooms = context.getRooms();
+
+		int playerId = connection.playerId;
+
+		std::string swapMessage = message.substr(4);
+		boost::trim_if(swapMessage, boost::is_any_of("\t "));
+
+		int currentRoomId = (*playerLocations)[playerId];
+		Room* currentRoom = &(*rooms)[currentRoomId];
+
+		int targetPlayerId = currentRoom->findPlayerId(swapMessage);
+		std::cout << "Swap with target player ID: " << targetPlayerId << std::endl;
+
+		/*
+		 ***************************************************************************************************************
+		 * TODO: Swap with NPC, handle when a player and npc have the same name
+		 ***************************************************************************************************************
+		*/
+		// Swap with another player in the same room
+		if(targetPlayerId != 0) {
+			std::cout << "Swapping " << (*players)[playerId].getUsername() << " and " << (*players)[targetPlayerId].getUsername() << std::endl;
+			std::swap((*players)[playerId].playerCharacter, (*players)[targetPlayerId].playerCharacter);
+		// No target found
+		} else {
+			return (*players)[playerId].getUsername() + "> " + "Unable to locate " + swapMessage + "\n";
+		}
+
+		return (*players)[playerId].getUsername() + "> " + "You have swapped with " + (*players)[targetPlayerId].getUsername() + "\n";
+	}
+
+	int SwapCommand::getId() const {
+		return this->connection.playerId;
+	}
+
+	networking::Connection SwapCommand::getConnection() const {
+		return this->connection;
+	}
+
+
+	/*Flee command*/
 	FleeCommand::FleeCommand(networking::Connection connection_, const std::string& message_)
 	: connection{connection_}, message{message_} {}
 
@@ -209,6 +257,7 @@ namespace Commands {
 		auto rooms = context.getRooms();
 
 		int playerId = connection.playerId;
+
 
 		std::cout << "Player wants to Flee " << message << std::endl;
 		int currentRoomId  = (*playerLocations)[playerId];
@@ -260,7 +309,9 @@ namespace Commands {
 				" Health: "+std::to_string((*players)[playerId].playerCharacter.getCurrentHealth())+"/"+std::to_string((*players)[playerId].playerCharacter.getMaxHealth())+"\n"+
 				" Mana  : "+std::to_string((*players)[playerId].playerCharacter.getCurrentMana())+"/"+std::to_string((*players)[playerId].playerCharacter.getMaxMana())+"\n"+
 				" EXP   : "+std::to_string((*players)[playerId].playerCharacter.getExp())+"\n"+
-				" Level : "+std::to_string((*players)[playerId].playerCharacter.getLevel())+"\n";
+				" Level : "+std::to_string((*players)[playerId].playerCharacter.getLevel())+"\n"+
+				// Used for testing
+				" Desc  : "+((*players)[playerId].playerCharacter.getShortDesc())+"\n";
 
 
 	}
