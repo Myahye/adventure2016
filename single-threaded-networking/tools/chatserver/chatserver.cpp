@@ -113,7 +113,7 @@ processMessages(std::deque<Message>& messages, Server& server) {
   }
   //updateState.turn==UpdateTurn::Combat
   else if(updateState.turn==UpdateTurn::Combat){
-    return modelInterface.updateCombat();
+    return modelInterface.updateCombat(clients);
   }
   else {
     std::deque<Message> outgoing;

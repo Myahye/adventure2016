@@ -1,4 +1,4 @@
-#include "ModelInterface.h"
+#include "CombatManager.h"
 #include <boost/algorithm/string/predicate.hpp>
 #include <iostream>
 
@@ -19,20 +19,20 @@ CombatManager::updateCombat(std::vector<networking::Connection>& clients, Contex
   //auto context = this->model.getContext();
     for(auto& combatCommand : combatCommandQueue) {
       std::string response = combatCommand->execute(clients, fights, context);
-      Message message{combatCommand->getSourceConnection(),response};
+      Message message{combatCommand->getConnection(),response};
       outgoing.push_back(message);
       combatCommandQueue.pop_front();
     }
 
     for(Fight fight : fights){
       if(!fight.targetOverrideFlag){
-        outgoing.pushback(fight.getInstigatorCombatant().attack(1, fight.getTargetCombatant().getName()));
-        outgoing.pushback(fight.getTargetCombatant().sendMessage("You have attacked " + fight.getInstigatorCombatant() + " for 1 point of damage");
+        outgoing.push_back(fight.instigatorCombatant.attack(1, fight.targetCombatant.name));
+        outgoing.push_back(fight.targetCombatant.sendMessage("You have attacked " + fight.instigatorCombatant.name + " for 1 point of damage"));
       }
       fight.setTargetOverrideFlag(false);
       if(!fight.instigatorOverrideFlag){
-        outgoing.pushback(fight.getTargetCombatant().attack(1, fight.getInstigatorCombatant().getName()));
-        outgoing.pushback(fight.getInstigatorCombatant().sendMessage("You have attacked " + fight.getTargetCombatant() + " for 1 point of damage");
+        outgoing.push_back(fight.targetCombatant.attack(1, fight.instigatorCombatant.name));
+        outgoing.push_back(fight.instigatorCombatant.sendMessage("You have attacked " + fight.targetCombatant.name + " for 1 point of damage"));
       }
       fight.setInstigatorOverrideFlag(false);
     }
@@ -52,7 +52,7 @@ CombatManager::updateCombat(std::vector<networking::Connection>& clients, Contex
 }
 
 Message
-ModelInterface::createAlertMessage(Connection connection, std::string name){
+CombatManager::createAlertMessage(Connection connection, std::string name){
   std::cout<<"6.1 connection == "<<connection.playerId<<std::endl;
   std::string response = "ALERT > You have been attacked by " + name + "\n\n";
   Message sourceMessage{connection,response};

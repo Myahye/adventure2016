@@ -4,7 +4,7 @@
 #include "Server.h"
 #include "Model.h"
 #include "Context.h"
-#include "Commands.h"
+#include "CombatCommands.h"
 #include "Player.h"
 #include "Fight.h"
 #include "Combatant.h"

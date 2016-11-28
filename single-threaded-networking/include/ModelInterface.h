@@ -32,7 +32,7 @@ public:
   std::vector<std::tuple<int,std::string,std::string>> getPlayerCredentialsVector() const;
   std::string getCurrentRoomDescription(const int& playerId);
   std::deque<networking::Message> updateGame();
-  std::deque<networking::Message> updateCombat();
+  std::deque<networking::Message> updateCombat(std::vector<Connection>& clients);
   void resetWorld();
   void playerDisconnected(networking::Connection c);
   void playerConnect(networking::Connection c);

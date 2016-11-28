@@ -1,7 +1,7 @@
 #include "Combatant.h"
 
-Combatant::Combatant(networking::Connection connection_,Character* character_)
-:connection{connection_},character{character_}{}
+Combatant::Combatant(networking::Connection connection_,Character* character_, std::string name_)
+:connection{connection_},character{character_}, name{name_}{}
 
 networking::Message
 Combatant::attack(int amount, const std::string& targetName){

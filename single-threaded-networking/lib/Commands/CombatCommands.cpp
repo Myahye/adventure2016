@@ -81,9 +81,9 @@ namespace CombatCommands {
 				auto targetPlayer = (*players)[targetPlayerId];
 
 
-				Combatant instigatorCombatant = Combatant{connection, &(*players)[playerId].playerCharacter};
+				Combatant instigatorCombatant = Combatant{connection, &(*players)[playerId].playerCharacter, playerName};
 				//Combatant instigatorCombatant = Combatant{connection, player->playerCharacter};
-				Combatant targetCombatant = Combatant{targetConnection, &(*players)[targetPlayerId].playerCharacter};
+				Combatant targetCombatant = Combatant{targetConnection, &(*players)[targetPlayerId].playerCharacter, targetName};
 
 				//Combatant targetCombatant =Combatant{targetConnection, targetPlayer->playerCharacter};
 				Fight fight = Fight{instigatorCombatant, targetCombatant};
