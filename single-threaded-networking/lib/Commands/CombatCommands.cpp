@@ -41,13 +41,13 @@ namespace CombatCommands {
 		std::string response = playerName + "> " + message;
 
 		//refactor this out to its own method
-		for(Fight fight : battles){
-			bool playerIsInstigator = (fight.getInstigatorCombatant().getCharacter().getId()
+		for(Fight fight : fights){
+			bool playerIsInstigator = (fight.instigatorCombatant.character->getId()
 																	== playerId);
-			bool playerIsTarget = (fight.getTargetCombatant().getCharacter().getId()
+			bool playerIsTarget = (fight.targetCombatant.character->getId()
 																	== playerId);;
 			if(playerIsInstigator || playerIsTarget){
-				eturn response + "You are already in combat.";
+				return response + "You are already in combat.";
 			}
 		}
 
@@ -63,9 +63,9 @@ namespace CombatCommands {
 		int targetPlayerId = getPlayerIdInRoom(players, playerLocations, currentRoomId, targetName);
 		//refactor this out to its own method
 		for(Fight fight : fights){
-			bool playerIsInstigator = (fight.getInstigatorCombatant().getCharacter().getId()
+			bool playerIsInstigator = (fight.instigatorCombatant.character->getId()
 																	== targetPlayerId);
-			bool playerIsTarget = (fight.getTargetCombatant().getCharacter().getId()
+			bool playerIsTarget = (fight.targetCombatant.character->getId()
 																	== targetPlayerId);;
 			if(playerIsInstigator || playerIsTarget){
 				return response + targetName + " is already in combat.";
@@ -73,15 +73,21 @@ namespace CombatCommands {
 		}
 
 
-		for(Connection targetConnection, clients){
+
+		for(networking::Connection targetConnection: clients){
 			if(connection.playerId == targetPlayerId){
 				//Create target and instigator combatant, create fight and add to battles
 				auto player = &(*players)[playerId];
 				auto targetPlayer = (*players)[targetPlayerId];
 
-				Fight fight = new Fight(Combatant(player.playerCharacter, connection), Combatant(targetPlayer.playerCharacter, targetConnection))
 
-				battles.push_back(fight);
+				Combatant instigatorCombatant = Combatant{connection, player.playerCharacter};
+				//Combatant instigatorCombatant = Combatant{connection, player->playerCharacter};
+				Combatant targetCombatant = Combatant{targetConnection, &targetPlayer->playerCharacter};
+				//Combatant targetCombatant =Combatant{targetConnection, targetPlayer->playerCharacter};
+				Fight fight = new Fight(instigatorCombatant, targetCombatant);
+
+				fights.push_back(fight);
 
 				return response + "\n\n" + "Combat with " + targetName + " initiated.";
 			}

@@ -2,19 +2,22 @@
 #define COMBATCOMMANDS_H
 
 #include <unordered_map>
-
+#include "Combatant.h"
+#include "Fight.h"
 #include "CombatCommandInterface.h"
 #include "Npc.h"
 #include "Room.h"
 #include "Object.h"
 #include "Player.h"
+#include "Server.h"
+
 
 //utility functions
 bool is_number(const std::string& s);
 
 //std::string getPlayersInRoomDesc(std::unordered_map<int, Player>* players, const std::unordered_map<int, int>* playerLocations, const int currentRoomId);
 
-int getPlayerIdInRoom(std::unordered_map<int, Player>* players, const std::unordered_map<int, int>* playerLocations, const int currentRoomId, const std::string& playerName);
+int getPlayerIdInRoom(std::unordered_map<int, Player>* players, const std::unordered_map<int, int>* playerLocations, const int CcurrentRoomId, const std::string& playerName);
 
 namespace CombatCommands {
 	class AttackCommand : public CombatCommand {

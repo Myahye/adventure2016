@@ -1,7 +1,7 @@
 #include "Combatant.h"
 
 Combatant::Combatant() {}
-Combatant::Combatant(networking::Connection* connection_,Character* character_)
+Combatant::Combatant(networking::Connection connection_,Character* character_)
 : connection{connection_},character{character_}{}
 
 networking::Message

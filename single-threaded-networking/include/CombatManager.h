@@ -5,7 +5,8 @@
 #include "Model.h"
 #include "Commands.h"
 #include "Player.h"
-
+#include "Fight.h"
+#include "Combatant.h"
 
 class CombatManager {
 

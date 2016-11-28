@@ -1,8 +1,11 @@
 #ifndef COMBATCOMMAND_INTERFACE
 #define COMBATCOMMAND_INTERFACE
 
+#include "Fight.h"
+#include "Combatant.h"
 #include "Context.h"
 #include "Server.h"
+
 
 class CombatCommand {
 public:

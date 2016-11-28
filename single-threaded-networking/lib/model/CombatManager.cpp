@@ -12,19 +12,19 @@ CombatManager::buildCombatCommand(const Connection connection, const std::string
 }
 
 std::deque<Message>
-CombatManager::updateCombat(Model::Context& context){
+CombatManager::updateCombat(std::vector<networking::Connection>& clients, Model::Context& context){
   std::deque<Message> outgoing;
 
 
   //auto context = this->model.getContext();
     for(auto& combatCommand : combatCommandQueue) {
-      std::string response = combatCommand->execute(context);
+      std::string response = combatCommand->execute(clients, fights, context);
       Message message{combatCommand->getSourceConnection(),response};
       outgoing.push_back(message);
       combatCommandQueue.pop_front();
     }
 
-    for(Fight fight : battles){
+    for(Fight fight : fights){
       if(!fight.targetOverrideFlag){
         outgoing.pushback(fight.getInstigatorCombatant().attack(1, fight.getTargetCombatant().getName()));
         outgoing.pushback(fight.getTargetCombatant().sendMessage("You have attacked " + fight.getInstigatorCombatant() + " for 1 point of damage");

@@ -1,7 +1,10 @@
 
 add_library(model
-            ModelInterface.cpp
-            Model.cpp)
+							Combatant.cpp
+							Fight.cpp
+							CombatManager.cpp
+            	ModelInterface.cpp
+            	Model.cpp)
 
 set_target_properties(networking
                       PROPERTIES
@@ -16,6 +19,6 @@ install(TARGETS model
 
 set_property(TARGET model PROPERTY CXX_STANDARD 14)
 
-target_link_libraries(model yamlParser) 
+target_link_libraries(model yamlParser)
 target_link_libraries(model Resets)
 target_link_libraries(model Commands)
