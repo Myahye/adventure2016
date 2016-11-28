@@ -4,7 +4,7 @@
 #include <unordered_map>
 
 #include "ResetInterface.h"
-#include "Character.h"
+#include "Npc.h"
 #include "Room.h"
 #include "Object.h"
 
@@ -13,7 +13,7 @@
 namespace Resets {
 
 	class Reset{
-		virtual Character* getCurrentlySelectedNpc();
+		virtual Npc* getCurrentlySelectedNpc();
 	};
 	//-----------------------------------------ResetNpc
 
@@ -24,13 +24,13 @@ namespace Resets {
 		unsigned int limit;
 		int room;
 		std::string comment;
-		Character* currentlySelectedNpc = NULL;
+		Npc* currentlySelectedNpc = NULL;
 	public:
 		ResetNpc(const std::string& action, int const id, unsigned int const limit, int const room, const std::string& comment);
 
 		void execute(Context& context);
 
-		Character* getCurrentlySelectedNpc();
+		Npc* getCurrentlySelectedNpc();
 
 		void printClass(int n);
 	};
@@ -44,13 +44,13 @@ namespace Resets {
 		unsigned int limit;
 		int room;
 		std::string comment;
-		Character* currentlySelectedNpc = NULL;
+		Npc* currentlySelectedNpc = NULL;
 	public:
 		ResetObject(const std::string& action, int const id, unsigned int const limit, int const room, const std::string& comment);
 
 		void execute(Context& context);
 
-		Character* getCurrentlySelectedNpc();
+		Npc* getCurrentlySelectedNpc();
 
 		void printClass(int n);
 	};
@@ -64,13 +64,13 @@ namespace Resets {
 		unsigned int limit;
 		int room;
 		std::string comment;
-		Character* currentlySelectedNpc = NULL;
+		Npc* currentlySelectedNpc = NULL;
 	public:
 		ResetGive(const std::string& action, int const id, unsigned int const limit, int const room, const std::string& comment);
 
 		void execute(Context& context);
 
-		Character* getCurrentlySelectedNpc();
+		Npc* getCurrentlySelectedNpc();
 
 		void printClass(int n);
 	};
@@ -83,13 +83,13 @@ namespace Resets {
 		int id;
 		int slot;
 		std::string comment;
-		Character* currentlySelectedNpc = NULL;
+		Npc* currentlySelectedNpc = NULL;
 	public:
 		ResetEquip(const std::string& action, int const id, int const slot, const std::string& comment);
 
 		void execute(Context& context);
 
-		Character* getCurrentlySelectedNpc();
+		Npc* getCurrentlySelectedNpc();
 
 		void printClass(int n);
 	};

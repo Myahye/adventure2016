@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.2.2)
 
 add_library(BaseClass
 	Character.cpp
-	CharacterType.cpp
 	Npc.cpp
 	Room.cpp
 	Door.cpp

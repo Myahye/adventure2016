@@ -7,7 +7,9 @@
 #include <algorithm>
 #include <unordered_map>
 #include "Door.h"
-#include "Character.h"
+#include "Npc.h"
+#include "Player.h"
+
 //#include "CustomError.h"
 
 
@@ -21,12 +23,12 @@ private:
     std::vector<Door> doors;
 
     //--------------------------------------Lawrence Yu
-    std::unordered_map<int,std::vector<Character>> npcsInRoom;
+    std::unordered_map<int,std::vector<Npc>> npcsInRoom;
     std::unordered_map<int,std::vector<Object>> objectsInRoom;
     //std::unordered_map<int,Player*> playersInRoom;
     
     //Maybe change to not use pointers
-    Character* checkNpcKeywords(const std::string& message, const std::pair<int,std::vector<Character>>& npcIdVectorPair);
+    Npc* checkNpcKeywords(const std::string& message, const std::pair<int,std::vector<Npc>>& npcIdVectorPair);
     Object* checkObjectKeywords(const std::string& message, const std::pair<int,std::vector<Object>>& objectIdVectorPair);
     //Player* checkPlayerUsername(const std::string& message, const std::pair<int,Player*>& player);
 
@@ -61,7 +63,7 @@ std::unordered_map<int, std::string> playersInRoom;
     void printVector(const std::vector<std::string>& vec) const;
     
     //--------------------------------------Lawrence Yu
-    Character* addNpc(Character& npc, unsigned int limit);
+    Npc* addNpc(Npc& npc, unsigned int limit);
     bool removeNpc(const int npcId);
 
     void addObject(const Object& object, unsigned int limit);
@@ -70,11 +72,11 @@ std::unordered_map<int, std::string> playersInRoom;
     void addPlayer(const int playerId, const std::string& username);
     bool removePlayer(const int playerId);
 
-    Character* findNpc(const std::string& name);
+    Npc* findNpc(const std::string& name);
     Object* findObject(const std::string& name);
     int findPlayerId(const std::string& name);
 
-    std::unordered_map<int,std::vector<Character>> getNpcsInRoom() const;
+    std::unordered_map<int,std::vector<Npc>> getNpcsInRoom() const;
     std::unordered_map<int,std::vector<Object>> getObjectsInRoom() const;
 
     std::string getNpcsInRoomDesc() const;

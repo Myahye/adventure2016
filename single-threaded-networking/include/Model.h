@@ -10,7 +10,8 @@
 #include "CustomError.h"
 #include "YamlParseBuild.h"
 #include "Resets.h"
-#include "Character.h"
+#include "Player.h"
+#include "Npc.h"
 #include "Context.h"
 
 //using namespace custom_errors;
@@ -18,9 +19,9 @@
 class Model {
 
 private:
-  std::unordered_map<int,Character> players;
+  std::unordered_map<int,Player> players;
   std::unordered_map<int,Room> rooms;
-  std::unordered_map<int,Character> npcs;
+  std::unordered_map<int,Npc> npcs;
   std::unordered_map<int,Object> objects;
   std::vector<std::unique_ptr<Reset>> resets;
 
@@ -30,6 +31,7 @@ private:
 
   YamlParseBuild yamlparse;
   void yamlParseAndBuild(const std::string& pathToFile);
+  //void yamlParseAndBuildExistingPlayers(const std::string& pathToFile);
   void printAll();
   //Still need to be implemented
   //map<int, Players>
@@ -42,7 +44,7 @@ private:
 public:
 
   //Model(); //temp
-
+  void yamlParseAndBuildExistingPlayers(const std::string& pathToFile);
   Model(const std::vector<std::string>& paths);
 
   int createPlayer(const std::string& username, const std::string& password);
@@ -74,5 +76,6 @@ public:
   
   void playerDisconnected(const int playerId);
   void playerConnect(const int playerId);
+
 };
 #endif /* commandparse_h */

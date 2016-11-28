@@ -4,7 +4,8 @@
 #include <unordered_map>
 
 #include "CommandInterface.h"
-#include "Character.h"
+#include "Player.h"
+#include "Npc.h"
 #include "Room.h"
 #include "Object.h"
 
