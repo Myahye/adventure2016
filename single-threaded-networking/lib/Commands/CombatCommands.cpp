@@ -77,25 +77,26 @@ namespace CombatCommands {
 		for(networking::Connection targetConnection: clients){
 			if(connection.playerId == targetPlayerId){
 				//Create target and instigator combatant, create fight and add to battles
-				auto player = &(*players)[playerId];
+				auto player = (*players)[playerId];
 				auto targetPlayer = (*players)[targetPlayerId];
 
 
-				Combatant instigatorCombatant = Combatant{connection, player.playerCharacter};
+				Combatant instigatorCombatant = Combatant{connection, &player.playerCharacter};
 				//Combatant instigatorCombatant = Combatant{connection, player->playerCharacter};
-				Combatant targetCombatant = Combatant{targetConnection, &targetPlayer->playerCharacter};
+				Combatant targetCombatant = Combatant{targetConnection, &targetPlayer.playerCharacter};
 				//Combatant targetCombatant =Combatant{targetConnection, targetPlayer->playerCharacter};
-				Fight fight = new Fight(instigatorCombatant, targetCombatant);
+				Fight fight = Fight{instigatorCombatant, targetCombatant};
 
 				fights.push_back(fight);
 
 				return response + "\n\n" + "Combat with " + targetName + " initiated.";
 			}
+			//To self - this is trash, remove asap
+			else{
+				return "Error";
+			}
 		}
-		//To self - this is trash, remove asap
-		else{
-			return "Error";
-		}
+
 
 	}
 
