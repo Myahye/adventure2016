@@ -8,11 +8,11 @@
 class Combatant {
 private:
   //bool isNpc;
-  networking::Connection connection;
-  Character character;
+  networking::Connection* connection;
+  Character* character;
 public:
 //  Combatant(bool isNpc_, networking::Connection connection_, Character* character_);
-  Combatant(networking::Connection connection_,Character character_);
+  Combatant(networking::Connection* connection_,Character* character_);
 
   //bool isNpc();
   networking::Message sendMessage(const std::string& message);
