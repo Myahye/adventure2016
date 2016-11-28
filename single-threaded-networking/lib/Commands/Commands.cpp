@@ -168,6 +168,72 @@ std::string getPlayersInRoomDesc(std::unordered_map<int, Player>* players, const
 	return playersInRoom;
 }
 
+Editor::Editor(networking::Connection connection_, const std::string& message_)
+: connection{connection_}, message{message_} {}
+
+std::string Editor::execute(Context& context) {
+	auto players = context.getPlayers();
+	auto rooms = context.getRooms();
+	auto playerLocations = context.getPlayerLocations();
+	auto objects = context.getObjects();
+	int playerId = connection.playerId;
+
+	std::string lookMessage = message.substr(4);
+	std::transform(lookMessage.begin(), lookMessage.end(), lookMessage.begin(), ::tolower);
+    boost::trim_if(lookMessage, boost::is_any_of("\t "));
+
+	std::string response = (*players)[playerId].getUsername() + "> " + message;
+
+	int currentRoomId = (*playerLocations)[playerId];
+	Room* currentRoom = &(*rooms)[currentRoomId];
+
+	if(lookMessage == "") {
+		return response + "\n\n" + printMiniMap(rooms, currentRoomId) + currentRoom->getFullRoomDesc() + getPlayersInRoomDesc(players, playerLocations, currentRoomId);
+	}
+
+	//-------------------------------------------------look "cardinal direction"
+	if(player.getStatus() == "WorldBuilding" && lookMessage == "1") {
+		player.setState("EditCurrentRoom");
+	}
+
+
+	if(player.getStatus() == "WorldBuilding") {
+		std::string reponse = "Type '1' to edit current room\n"
+							+ "Type '2' to create new room\n"
+							+ "Type '3' to edit object\n";
+		return response;
+	}
+
+	if(player.getStatus() == "EditCurrentRoom") {
+		//print options
+
+		//print desc
+
+		//print exits
+
+		//print resets
+
+
+	}
+
+
+	std::cout << "G" << std::endl;
+
+	return (*players)[playerId].getUsername() + "> " + "Cannot find " + lookMessage + ", no match. \n\n";
+}
+
+void Editor::setMessage(const std::string& s) {
+	message = s;
+}
+
+networking::Connection Editor::getConnection() const {
+	return this->connection;
+}
+
+
+
+
+
 
 namespace Commands {
 

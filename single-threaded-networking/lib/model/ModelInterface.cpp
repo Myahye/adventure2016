@@ -12,6 +12,8 @@ ModelInterface::ModelInterface() {}
 std::unordered_map<std::string, std::string> commands {{"Create","create"},{"Look","look"},{"Walk","walk"},{"Read","read"},{"Go","go"},{"Attack","attack"},{"Say","say"},{"ListCommands","ls"},{"Status","status"}, {"Take","take"}, {"Flee","flee"},{"Equip","equip"},{"Steal","steal"},{"Teleport","teleport"},{"Swap", "swap"},{"Cast", "cast"}};
 
 
+unordered_map<int,Editor> activeEditors;
+
 void
 ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::vector<Connection>& clients) {
 
@@ -19,8 +21,14 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
 
     std::string messageText = message.text;
 
-    if (boost::istarts_with(messageText,commands["Create"])) {
-      //this->basicCommandQueue.push_back(std::make_unique<Commands::LookCommand>(message.connection,message.text));
+    auto context = this->model.getContext();
+    auto players = context.getPlayers();
+
+    if((*players)[message.connection.playerId].getState() != "Online") {
+      activeEditors[message.connection.playerId].setMessage(message.text);
+    } else if (boost::istarts_with(messageText,commands["Create"])) {
+      this->activeEditors[message.connection.playerId] = Editor{message.connection,message.text};
+      (*players)[message.connection.playerId].setState("WorldBuilding");
     } else if (boost::istarts_with(messageText,commands["Look"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::LookCommand>(message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Go"])) {
@@ -31,7 +39,7 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
       this->combatManager.buildCombatCommand(message.connection,message.text);
     } else if (boost::istarts_with(messageText,commands["Flee"])){
       this->basicCommandQueue.push_back(std::make_unique<Commands::FleeCommand>(message.connection,message.text));
-    }else if (boost::istarts_with(messageText,commands["Say"])) {
+    } else if (boost::istarts_with(messageText,commands["Say"])) {
       createSayCommandForGroup(this->basicCommandQueue, clients, message.text, message.connection.playerId);
     } else if (boost::istarts_with(messageText, commands["ListCommands"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::ListCommand>(message.connection,commands,message.text));
@@ -69,8 +77,13 @@ ModelInterface::updateGame(){
     outgoing.push_back(message);
   }
 
-  //move out later
-  //this->model.reset();
+  for(auto& editor : activeEditors) {
+    std::string response = editor->execute(context);
+    if(response != "") {
+      Message message{editor->getConnection(),response};
+      outgoing.push_back(message);
+    }
+  }
 
   return outgoing;
 

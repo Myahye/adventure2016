@@ -17,6 +17,20 @@ std::string printMiniMap(std::unordered_map<int,Room>* rooms, const int currentR
 
 std::string getPlayersInRoomDesc(std::unordered_map<int, Player>* players, const std::unordered_map<int, int>* playerLocations, const int currentRoomId);
 
+class Editor : public Command {
+private:
+	networking::Connection connection;
+	std::string message;
+public:
+	Editor(networking::Connection connection_, const std::string& message_);
+
+	std::string execute(Context& context);
+
+	void setMessage(std::string s);
+
+	networking::Connection getConnection() const;
+};
+
 namespace Commands {
 
 	class LookCommand : public Command {
