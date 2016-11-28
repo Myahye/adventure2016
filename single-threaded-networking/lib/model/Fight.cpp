@@ -1,4 +1,6 @@
-Fight::Fight(Combatant instigator, Combatant target):
+#include "Fight.h"
+
+Fight::Fight(Combatant& instigator, Combatant& target):
         instigatorCombatant{instigator}, targetCombatant{target}{};
 
 void Fight::setInstigatorOverrideFlag(bool val){

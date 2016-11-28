@@ -1,4 +1,4 @@
-#include"Combatant.h"
+#include "Combatant.h"
 
 Combatant::Combatant() {}
 Combatant::Combatant(networking::Connection* connection_,Character* character_)
