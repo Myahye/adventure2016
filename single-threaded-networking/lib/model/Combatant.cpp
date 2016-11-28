@@ -19,6 +19,6 @@ Combatant::attack(int amount, const std::string& targetName){
 networking::Message
 Combatant::sendMessage(const std::string& sourceMessage){
   std::string response = sourceMessage;
-  networking::Message retMessage(connection,sourceMessage);
+  networking::Message retMessage{connection,sourceMessage};
   return retMessage;
 }

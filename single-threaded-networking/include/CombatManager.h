@@ -3,6 +3,7 @@
 
 #include "Server.h"
 #include "Model.h"
+#include "Context.h"
 #include "Commands.h"
 #include "Player.h"
 #include "Fight.h"
@@ -18,7 +19,7 @@ private:
 	//NPCs and Players in combat
 	//Just players for now
   std::vector<Player> characterList;
-	std::vector<Fight> Fights;
+	std::vector<Fight> fights;
 
 	//networking::Message createAlertMessage(networking::Connection, std::string);
 
@@ -26,10 +27,10 @@ public:
   CombatManager();
 
 	//Used by ModelInterface to create a CombatCommand
-  void buildCombatCommand(const networking::Connection connection, const std::string& message);
+  void buildCombatCommand(const networking::Connection& connection, const std::string& message);
 
 	//Used by ModelInterface to initiate one combat cycle
-	std::deque<networking::Message> updateCombat(std::vector<networking::Connection>& clients, Model::Context& context);
+	std::deque<networking::Message> updateCombat(std::vector<networking::Connection>& clients, Context& context);
 
 	//What is this for?
 	// Maybe we dont need this as players and NPCs will enter and exit combat on

@@ -7,12 +7,12 @@ using namespace networking;
 CombatManager::CombatManager() {}
 
 void
-CombatManager::buildCombatCommand(const Connection connection, const std::string message) {
+CombatManager::buildCombatCommand(const networking::Connection& connection, const std::string& message) {
   this->combatCommandQueue.push_back(std::make_unique<CombatCommands::AttackCommand>(connection, message));
 }
 
 std::deque<Message>
-CombatManager::updateCombat(std::vector<networking::Connection>& clients, Model::Context& context){
+CombatManager::updateCombat(std::vector<networking::Connection>& clients, Context& context){
   std::deque<Message> outgoing;
 
 

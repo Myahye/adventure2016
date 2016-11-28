@@ -1,9 +1,13 @@
 #ifndef MODELINTERFACE_h
 #define MODELINTERFACE_h
 
+#include "Fight.h"
+#include "Combatant.h"
+#include "CombatManager.h"
 #include "Server.h"
 #include "Model.h"
 #include "Commands.h"
+
 
 
 class ModelInterface {

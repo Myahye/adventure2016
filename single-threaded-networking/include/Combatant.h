@@ -11,7 +11,7 @@ private:
 public:
 //  Combatant(bool isNpc_, networking::Connection connection_, Character* character_);
   Combatant(networking::Connection connection_, Character* character_);
-	networking::Connection* connection;
+	networking::Connection connection;
   Character* character;
   //bool isNpc();
   networking::Message sendMessage(const std::string& message);
