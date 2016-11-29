@@ -6,7 +6,10 @@ int getPlayerIdInRoom(std::unordered_map<int, Player>* players, const std::unord
 	for(auto& playerIdRoomIdpair : *playerLocations) {
 		if(playerIdRoomIdpair.second == currentRoomId) {
 			if((*players)[playerIdRoomIdpair.first].getStatus() == "Online") {
-				if((*players)[playerIdRoomIdpair.first].getUsername()==playerName){return playerIdRoomIdpair.first;}
+				std::cout<<"Checking if " + (*players)[playerIdRoomIdpair.first].getUsername()+" == " + playerName <<std::endl;
+				if((*players)[playerIdRoomIdpair.first].getUsername()==playerName){
+
+					return playerIdRoomIdpair.first;}
 				//Yuck, too much nest 4 me.
 			}
 		}
@@ -35,8 +38,13 @@ namespace CombatCommands {
 		//Create instigator combatant
 
 		std::string targetName = message.substr(7);
+		std::ostringstream playerIdString;
+		playerIdString << playerId;
+		std::cout<<"Player: " + playerName+" ID: " + playerIdString.str() + " initiated combat with " + targetName<<std::endl;
+
 		std::transform(targetName.begin(), targetName.end(), targetName.begin(), ::tolower);
 		boost::trim_if(targetName, boost::is_any_of("\t "));
+
 
 		std::string response = playerName + "> " + message;
 
@@ -61,6 +69,7 @@ namespace CombatCommands {
 
 		//-------------------------------------------------Attack player
 		int targetPlayerId = getPlayerIdInRoom(players, playerLocations, currentRoomId, targetName);
+
 		//refactor this out to its own method
 		for(Fight fight : fights){
 			bool playerIsInstigator = (fight.instigatorCombatant.character->getId()
@@ -94,6 +103,7 @@ namespace CombatCommands {
 			}
 			//To self - this is trash, remove asap
 			else{
+				std::cout<<"Error at end of CombatCommands::Attack.execute"<<std::endl;
 				return "Error";
 			}
 		}
