@@ -276,69 +276,69 @@ void YamlParseBuild::buildObjectsForPlayerInventory(const YAML::Node& inventory_
 
 //maybe change to take in npc,object,room maps as parameters and pass in pointers to rooms/npc/objects to the constructors of resetNPC etc.
 //change to use unique_ptr and move ownership to vector
-/*
-std::vector<std::unique_ptr<Reset>> YamlParseBuild::parseBuildResets(const std::string& pathToFile){
+
+// std::vector<std::unique_ptr<Reset>> YamlParseBuild::parseBuildResets(const std::string& pathToFile){
 	
-	YAML::Node config = YAML::LoadFile(pathToFile);
-	const YAML::Node& reset_node = config["RESETS"];
+// 	YAML::Node config = YAML::LoadFile(pathToFile);
+// 	const YAML::Node& reset_node = config["RESETS"];
 
-	//initialize our map we will return
-	std::vector<std::unique_ptr<Reset>> buildAllResets;
+// 	//initialize our map we will return
+// 	std::vector<std::unique_ptr<Reset>> buildAllResets;
 
-	std::unique_ptr<Reset> reset;
+// 	std::unique_ptr<Reset> reset;
 
-	for (auto& node : reset_node) {
-		if(node["action"].as<std::string>() == "npc") {
-			if (node["comment"]){
-				reset = std::make_unique<Resets::ResetNpc>(node["action"].as<std::string>(), node["id"].as<int>(), node["limit"].as<int>(), node["room"].as<int>(), node["comment"].as<std::string>());
-			}
-			else {
-				reset = std::make_unique<Resets::ResetNpc>(node["action"].as<std::string>(), node["id"].as<int>(), node["limit"].as<int>(), node["room"].as<int>(), "");
-			}
-		} else if(node["action"].as<std::string>() == "object") {
-			if (node["comment"]){
-				reset = std::make_unique<Resets::ResetObject>(node["action"].as<std::string>(), node["id"].as<int>(), 1, node["room"].as<int>(), node["comment"].as<std::string>());
-			}
-			else {
-				reset = std::make_unique<Resets::ResetObject>(node["action"].as<std::string>(), node["id"].as<int>(), 1, node["room"].as<int>(), "");
-			}
-		} else if(node["action"].as<std::string>() == "give") {
-			if (node["comment"]){
-				reset = std::make_unique<Resets::ResetGive>(node["action"].as<std::string>(), node["id"].as<int>(), 1, 0, node["comment"].as<std::string>());
-			}
-			else {
-				reset = std::make_unique<Resets::ResetGive>(node["action"].as<std::string>(), node["id"].as<int>(), 1, 0, "");
-			}
-		} else if(node["action"].as<std::string>() == "equip") {
-			if (node["comment"]){
-				reset = std::make_unique<Resets::ResetEquip>(node["action"].as<std::string>(), node["id"].as<int>(), node["slot"].as<int>(), node["comment"].as<std::string>());
-			}
-			else {
-				reset = std::make_unique<Resets::ResetEquip>(node["action"].as<std::string>(), node["id"].as<int>(), node["slot"].as<int>(), "");
-			}
-		}
-		buildAllResets.push_back(std::move(reset));
+// 	for (auto& node : reset_node) {
+// 		if(node["action"].as<std::string>() == "npc") {
+// 			if (node["comment"]){
+// 				reset = std::make_unique<Resets::ResetNpc>(node["action"].as<std::string>(), node["id"].as<int>(), node["limit"].as<int>(), node["room"].as<int>(), node["comment"].as<std::string>());
+// 			}
+// 			else {
+// 				reset = std::make_unique<Resets::ResetNpc>(node["action"].as<std::string>(), node["id"].as<int>(), node["limit"].as<int>(), node["room"].as<int>(), "");
+// 			}
+// 		} else if(node["action"].as<std::string>() == "object") {
+// 			if (node["comment"]){
+// 				reset = std::make_unique<Resets::ResetObject>(node["action"].as<std::string>(), node["id"].as<int>(), 1, node["room"].as<int>(), node["comment"].as<std::string>());
+// 			}
+// 			else {
+// 				reset = std::make_unique<Resets::ResetObject>(node["action"].as<std::string>(), node["id"].as<int>(), 1, node["room"].as<int>(), "");
+// 			}
+// 		} else if(node["action"].as<std::string>() == "give") {
+// 			if (node["comment"]){
+// 				reset = std::make_unique<Resets::ResetGive>(node["action"].as<std::string>(), node["id"].as<int>(), 1, 0, node["comment"].as<std::string>());
+// 			}
+// 			else {
+// 				reset = std::make_unique<Resets::ResetGive>(node["action"].as<std::string>(), node["id"].as<int>(), 1, 0, "");
+// 			}
+// 		} else if(node["action"].as<std::string>() == "equip") {
+// 			if (node["comment"]){
+// 				reset = std::make_unique<Resets::ResetEquip>(node["action"].as<std::string>(), node["id"].as<int>(), node["slot"].as<int>(), node["comment"].as<std::string>());
+// 			}
+// 			else {
+// 				reset = std::make_unique<Resets::ResetEquip>(node["action"].as<std::string>(), node["id"].as<int>(), node["slot"].as<int>(), "");
+// 			}
+// 		}
+// 		buildAllResets.push_back(std::move(reset));
 
-		// Reset reset{node["action"].as<std::string>(), node["id"].as<int>()};
+// 		// Reset reset{node["action"].as<std::string>(), node["id"].as<int>()};
 
-		// if (node["limit"]){
-		// 	reset.setLimit(node["limit"].as<int>());
-		// }
-		// if (node["room"]){
-		// 	reset.setRoom(node["room"].as<int>());
-		// }
-		// if (node["slot"]){
-		// 	reset.setSlot(node["slot"].as<int>());
-		// }
-		// if (node["comment"]){
-		// 	std::string comment = node["comment"].as<std::string>();
-		// 	reset.setComment(comment);
-		// }
+// 		// if (node["limit"]){
+// 		// 	reset.setLimit(node["limit"].as<int>());
+// 		// }
+// 		// if (node["room"]){
+// 		// 	reset.setRoom(node["room"].as<int>());
+// 		// }
+// 		// if (node["slot"]){
+// 		// 	reset.setSlot(node["slot"].as<int>());
+// 		// }
+// 		// if (node["comment"]){
+// 		// 	std::string comment = node["comment"].as<std::string>();
+// 		// 	reset.setComment(comment);
+// 		// }
 		
-		// buildAllResets.push_back(reset);
-	}
-	return buildAllResets;
-}
+// 		// buildAllResets.push_back(reset);
+// 	}
+// 	return buildAllResets;
+// }
 
 
 
@@ -404,7 +404,7 @@ void YamlParseBuild::buildResets(std::vector< std::unique_ptr< Reset > >&  reset
 					[this](const YAML::Node& node) { return this->parseResets(node); });
 	//return buildAllObjects;
 }
-*/
+
 
 Door YamlParseBuild::parseDoors(const YAML::Node& node){
 	Door doorObject;

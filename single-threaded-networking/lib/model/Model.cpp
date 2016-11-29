@@ -55,7 +55,7 @@ void Model::yamlParseAndBuild(const std::string& pathToFile){
   yamlparse.loadFile(pathToFile);
   yamlparse.buildNpcs(this->npcs);
   yamlparse.buildObjects(this->objects);
-  //yamlparse.buildResets(this->resets);
+  yamlparse.buildResets(this->resets);
   std::cout << "wwww " << std::endl;
   yamlparse.buildRooms(this->rooms);
       // printAll();
