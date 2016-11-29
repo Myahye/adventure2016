@@ -33,7 +33,7 @@ Object::Object(const Object &ob){
   copy_vec(this->wearFlags,ob.getWearFlags());
 
   /*-----------copy extra---------------*/
-  for(auto& i:extra){
+  for(auto& i:ob.getExtra()){
     extra.push_back(i);
   }
 }
@@ -61,7 +61,7 @@ Object& Object::operator =(const Object& ob){
   copy_vec(this->wearFlags,ob.getWearFlags());
 
   /*-----------copy extra---------------*/
-  for(auto& i:extra){
+  for(auto& i: ob.getExtra()){
     extra.push_back(i);
   }
   
@@ -183,8 +183,8 @@ std::vector< std::pair<std::vector<std::string>, std::vector<std::string> > > Ob
   return extra;
 }
 
-void Object::setExtra(const std::vector< std::pair<std::vector<std::string>, std::vector<std::string> > >& extra) {
-  this->extra = extra;
+void Object::setExtra(const std::vector< std::pair<std::vector<std::string>, std::vector<std::string> > >& extraa) {
+  this->extra = extraa;
 }
 
 /*void Object::addExtraDesc(const std::string& desc){
@@ -222,13 +222,6 @@ void Object::printClass(int n) {
   printVector(longDesc);
   std::cout << "\tWear Flags: " << std::endl;
   printVector(wearFlags);
-
-  std::vector<std::string> s{"s"};
-  std::vector<std::string> e{"e"};
-    auto d = std::make_pair(s,e);
-  std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > > ext = {d};
-
-  setExtra(ext);
   std::cout << "\tExtra: " << std::endl;
   for (auto& eachPair : extra){
     std::cout << "\t\tDescription: " << std::endl;

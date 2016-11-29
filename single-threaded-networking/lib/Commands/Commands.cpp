@@ -298,6 +298,8 @@ namespace Commands {
 		Npc* currentNpc = currentRoom->findNpc(lookMessage);
 			//will move this to room class later as if isNpc return npc.getfulldesc()
 		if(currentNpc != NULL) {
+
+			response += "\n\n" + currentNpc->npcCharacter.getShortDesc() + ":";
 			response += "\n\n" + currentNpc->npcCharacter.getDescription();
 			response += "\n     Wearing: "  + currentNpc->npcCharacter.getEquipmentDesc();
 			response += "\n     Carrying: " + currentNpc->npcCharacter.getInventoryDesc() + "\n\n";
@@ -313,7 +315,7 @@ namespace Commands {
 			response += "\n\n";
 			//should be vector of pair of vectors
 					//need look through all currentobject get extra for keyword
-			response += currentObject->getShortDesc() + "\n";
+			response += currentObject->getShortDesc() + ":\n";
 			for(auto& extraPair : currentObject->getExtra()) {
 				for(auto& keyword : extraPair.second) {
 					if(lookMessage.find(keyword) != std::string::npos) {
@@ -323,7 +325,7 @@ namespace Commands {
 					}
 				}
 			}
-			
+			response += "\n";
 			return response;
 		}
 
@@ -339,6 +341,7 @@ namespace Commands {
 					for(auto& descriptionText : extendedDescPair.first) {
 				  		response += descriptionText + "\n";
 					}
+					response += "\n";
 					return response;
 				}
 			}
@@ -369,6 +372,7 @@ namespace Commands {
 						}
 					}
 				}
+				response += "\n";
 				return response;
 			}
 		}
@@ -387,7 +391,7 @@ namespace Commands {
 					}
 				}
 			}
-			
+			response += "\n";
 			return response;
 		}
 
@@ -630,6 +634,10 @@ namespace Commands {
 		int currentRoomId = (*playerLocations)[playerId];
 		Room* currentRoom = &(*rooms)[currentRoomId];
 
+		//add dummy object to room to test
+		//currentRoom->addObject((*objects)[std::stoi(messageText)],1); // mithril/axe
+		Object* currentObject = currentRoom->findObject(messageText);
+
 	 	std::cout << "EHTH" << std::endl;
 
 		//-------------------------------------------------look "Npc keyword"
@@ -668,6 +676,7 @@ namespace Commands {
 				(currentObject->getWearFlags()).end(), takeString )!=(currentObject->getWearFlags()).end() ){
 				
 				player->addObjectToInventory(*currentObject, 1);
+				currentRoom->removeObject(currentObject->getId());
 				std::cout << "player inventory: " << player->getPlayerInventoryDesc() << "\n";
 				//bool ret = currentRoom->removeObject(currentObject->getId());
 				//response += messageText + "added to inventory\n\n";
@@ -906,6 +915,39 @@ namespace Commands {
 	}
 
 	networking::Connection TeleportCommand::getConnection() const {
+		return this->connection;
+	}
+
+	SummonCommand::SummonCommand(networking::Connection connection_, const std::string& message_)
+	: connection{connection_}, message{message_} {}
+
+	std::string SummonCommand::execute(Context& context) {
+		auto players = context.getPlayers();
+		auto playerLocations = context.getPlayerLocations();
+		auto rooms = context.getRooms();
+		auto objects = context.getObjects();
+
+		int playerId = connection.playerId;
+
+		std::string teleportMessage = message.substr(7);
+		std::transform(teleportMessage.begin(), teleportMessage.end(), teleportMessage.begin(), ::tolower);
+	    boost::trim_if(teleportMessage, boost::is_any_of("\t "));
+
+	    int objectId = std::stoi(teleportMessage);
+
+	    if(objects->find(objectId) != objects->end()) {
+	    	(*rooms)[(*playerLocations)[playerId]].addObject((*objects)[objectId],1);
+	    	return (*players)[playerId].getUsername() + "> " + message + "\n\n" + "success"; 
+	    }
+
+		return (*players)[playerId].getUsername() + "> " + message + "\n\n" + "failed"; //+ printMiniMap(rooms, std::stoi(teleportMessage)) + (*rooms)[std::stoi(teleportMessage)].getFullRoomDesc() + getPlayersInRoomDesc(players, playerLocations, std::stoi(teleportMessage));
+	}
+
+	int SummonCommand::getId() const {
+		return this->connection.playerId;
+	}
+
+	networking::Connection SummonCommand::getConnection() const {
 		return this->connection;
 	}
 }

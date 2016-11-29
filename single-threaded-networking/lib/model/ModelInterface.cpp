@@ -8,9 +8,7 @@ ModelInterface::ModelInterface() {}
 
 //load config file to map commands["Create"] = getcreatecommandstringfromfile etc.
 
-
 std::unordered_map<std::string, std::string> commands {{"Create","create"},{"Look","look"},{"Walk","walk"},{"Read","read"},{"Go","go"},{"Attack","attack"},{"Say","say"},{"ListCommands","ls"},{"Status","status"}, {"Take","take"}, {"Flee","flee"},{"Equip","equip"},{"Steal","steal"},{"Teleport","teleport"},{"Swap", "swap"},{"Cast", "cast"}};
-
 
 std::unordered_map<int,std::unique_ptr<Editor>> activeEditors;
 
@@ -57,6 +55,8 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
       this->basicCommandQueue.push_back(std::make_unique<Commands::StealCommand>(message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Teleport"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::TeleportCommand>(message.connection,message.text));
+    } else if (boost::istarts_with(messageText,commands["Summon"])) {
+      this->basicCommandQueue.push_back(std::make_unique<Commands::SummonCommand>(message.connection,message.text));
     } else {
       this->basicCommandQueue.push_back(std::make_unique<Commands::InvalidCommand>(message.connection,message.text));
     }

@@ -197,6 +197,20 @@ namespace Commands {
 		networking::Connection getConnection() const;
 	};
 
+	class SummonCommand : public Command {
+	private:
+		networking::Connection connection;
+		std::string message;
+	public:
+		SummonCommand(networking::Connection connection_, const std::string& message_);
+
+		std::string execute(Context& context);
+
+		int getId() const;
+
+		networking::Connection getConnection() const;
+	};
+
 	class GlobalChatCommand : public Command {
 	private:
 		networking::Connection connection;
