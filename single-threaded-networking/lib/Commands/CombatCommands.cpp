@@ -47,6 +47,9 @@ namespace CombatCommands {
 
 
 		std::string response = playerName + "> " + message;
+		if(targetName == "") {
+			return response + "\n\n" + "Please enter a target";
+		}
 
 		//refactor this out to its own method
 		for(Fight fight : fights){
@@ -62,9 +65,7 @@ namespace CombatCommands {
 		int currentRoomId = (*playerLocations)[playerId];
 		Room* currentRoom = &(*rooms)[currentRoomId];
 
-		if(targetName == "") {
-			return response + "\n\n" + "Please enter a target";
-		}
+
 
 
 		//-------------------------------------------------Attack player
@@ -84,6 +85,8 @@ namespace CombatCommands {
 
 
 		for(networking::Connection targetConnection: clients){
+			std::cout << "targetId is: "+targetPlayerId << '\n';
+			std::cout << "targetConnection is: "+targetConnection.playerId << '\n';
 			if(connection.playerId == targetPlayerId){
 				//Create target and instigator combatant, create fight and add to battles
 				auto player = (*players)[playerId];
