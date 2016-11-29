@@ -42,12 +42,8 @@ std::unordered_map<int, std::string> playersInRoom;
 
     // Accessors
     std::string getDesc() const;
-<<<<<<< HEAD
     std::vector <std::string> getDescV() const;
     std::vector< std::pair<std::vector<std::string>, std::vector<std::string> > > getExtendedDesc() const;
-=======
-    std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > > getExtendedDesc() const;
->>>>>>> Fix none doors
     std::string getName() const;
     int getRoomId() const;
     std::vector<Door> getDoors() const;
@@ -56,11 +52,9 @@ std::unordered_map<int, std::string> playersInRoom;
 
     // Mutators
     void setDescription(std::vector<std::string>& new_desc);
-<<<<<<< HEAD
+
     void setExtendedDesc(const std::vector< std::pair<std::vector<std::string>, std::vector<std::string> > >& new_extended_desc);
-=======
-    void setExtendedDesc(std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > > & new_extended_desc);
->>>>>>> Fix none doors
+
     void setName(std::string& new_name);
     void setRoomId(const int new_room_id);
     bool addDoor(const Door& new_door);

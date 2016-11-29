@@ -78,11 +78,11 @@ namespace Resets {
 	private:
 		std::string action;
 		int id;
-		int slot;
+		std::string slot;
 		std::string comment;
 		Npc* currentlySelectedNpc = NULL;
 	public:
-		ResetEquip(const std::string& action, int const id, int const slot, const std::string& comment);
+		ResetEquip(const std::string& action, int const id, const std::string& slot, const std::string& comment);
 
 		void execute(Context& context);
 

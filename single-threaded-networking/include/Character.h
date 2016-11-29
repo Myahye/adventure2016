@@ -11,7 +11,7 @@
 class Character {
 
 	std::unordered_map<int, std::vector<Object>> inventory;
-	std::unordered_map<int, Object> equipment;
+	std::unordered_map<std::string, Object> equipment;
 
 	//int inventoryLimit = 10;
 
@@ -105,8 +105,8 @@ public:
 	void addObjectToInventory(const Object& object, unsigned int limit);
 	bool removeObjectFromInventory(const std::string& objectName);
 
-	bool equipObject(const Object& object, int slot);
-    bool unEquipObject(int slot);
+	bool equipObject(const Object& object, const std::string& slot);
+    bool unEquipObject(const std::string& slot);
 
     //int getInventoryLimit() const;
     //void setInventoryLimit(const int inventoryLimit);

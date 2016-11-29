@@ -37,7 +37,7 @@ public:
 	void buildNpcs(std::unordered_map<int,Npc>& buildAllNpcs);
 	void buildPlayers(std::unordered_map<int,Player>& buildAllPlayers);
 	void buildObjects(std::unordered_map<int,Object>& buildAllObjects);
-	void buildObjectsForPlayerEquipment(const YAML::Node& object_node, std::unordered_map<int,Object>& inventoryObjects);
+	void buildObjectsForPlayerEquipment(const YAML::Node& object_node, std::unordered_map<std::string,Object>& inventoryObjects);
 	void buildObjectsForPlayerInventory(const YAML::Node& inventory_node, std::vector<Object>& objectsV);
 	void buildRooms(std::unordered_map<int,Room>& buildAllRooms);
 	void buildResets(std::vector< std::unique_ptr< Reset > >&  resets);

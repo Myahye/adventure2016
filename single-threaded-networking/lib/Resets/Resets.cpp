@@ -131,7 +131,7 @@ namespace Resets {
 //-----------------------------------------ResetEquip
 
 	//Reset Constructor
-	ResetEquip::ResetEquip(const std::string& action, int const id, int const slot, const std::string& comment)
+	ResetEquip::ResetEquip(const std::string& action, int const id, const std::string& slot, const std::string& comment)
 		: action{action}, id{id}, slot{slot}, comment{comment} {};
 	//Execute
 	void ResetEquip::execute(Context& context) {

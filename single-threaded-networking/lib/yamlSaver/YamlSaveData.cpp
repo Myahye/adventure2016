@@ -56,7 +56,7 @@ void YamlSaveData::saveUserData(const std::unordered_map<int,Player>& players){
 		}
 
 		emitter << YAML::Key << "equipment";
-		std::unordered_map<int, Object> equipmentMap = eachPlayer.second.playerCharacter.getEquipment();
+		std::unordered_map<std::string, Object> equipmentMap = eachPlayer.second.playerCharacter.getEquipment();
 		emitMapObjects(emitter, equipmentMap);
 
 		emitter << YAML::EndMap;
@@ -107,7 +107,7 @@ void YamlSaveData::emitVectorObjects(YAML::Emitter& emitter, std::vector<Object>
 	}
 }
 
-void YamlSaveData::emitMapObjects(YAML::Emitter& emitter, std::unordered_map<int, Object>& objectM){
+void YamlSaveData::emitMapObjects(YAML::Emitter& emitter, std::unordered_map<std::string, Object>& objectM){
 	for (auto& eachObject : objectM){
 		emitter << YAML::BeginSeq;
 		std::vector<std::string> attributesV = eachObject.second.getAttributes();

@@ -315,7 +315,7 @@ namespace Commands {
 			response += "\n\n";
 			//should be vector of pair of vectors
 					//need look through all currentobject get extra for keyword
-			response += currentObject->getShortDesc() + ":\n";
+			response += currentObject->getShortDesc() + ":\n\n";
 			for(auto& extraPair : currentObject->getExtra()) {
 				for(auto& keyword : extraPair.second) {
 					if(lookMessage.find(keyword) != std::string::npos) {
@@ -360,7 +360,7 @@ namespace Commands {
 		}
 
 		if(currentObjectId != 0) {
-			auto playerInventory = (*players)[playerId].getPlayerInventory();
+			auto playerInventory = (*players)[playerId].playerCharacter.getInventory();
 			if(playerInventory.find(currentObjectId) != playerInventory.end()) {
 				response += "\n\n";
 				for(auto& extraPair : (*objects)[currentObjectId].getExtra()) {
@@ -375,24 +375,6 @@ namespace Commands {
 				response += "\n";
 				return response;
 			}
-		}
-
-		if(currentObject != NULL) {
-			response += "\n\n";
-			//should be vector of pair of vectors
-					//need look through all currentobject get extra for keyword
-			response += currentObject->getShortDesc() + "\n";
-			for(auto& extraPair : currentObject->getExtra()) {
-				for(auto& keyword : extraPair.second) {
-					if(lookMessage.find(keyword) != std::string::npos) {
-						for(auto& descriptionText : extraPair.first) {
-				  			response += descriptionText + "\n";
-						}
-					}
-				}
-			}
-			response += "\n";
-			return response;
 		}
 
 
@@ -675,9 +657,9 @@ namespace Commands {
 			if( std::find((currentObject->getWearFlags()).begin(), 
 				(currentObject->getWearFlags()).end(), takeString )!=(currentObject->getWearFlags()).end() ){
 				
-				player->addObjectToInventory(*currentObject, 1);
+				player->playerCharacter.addObjectToInventory(*currentObject, 1);
 				currentRoom->removeObject(currentObject->getId());
-				std::cout << "player inventory: " << player->getPlayerInventoryDesc() << "\n";
+				std::cout << "player inventory: " << player->playerCharacter.getInventoryDesc() << "\n";
 				//bool ret = currentRoom->removeObject(currentObject->getId());
 				//response += messageText + "added to inventory\n\n";
 				return player->getUsername() + "> " + messageText + " added to inventory\n\n";
@@ -742,14 +724,14 @@ namespace Commands {
 		bool equipObjectRet;
 		std::cout << "objects itemtype : " << itemtype << "\n";
 		if( itemtype == armorFlag ){	// need to change to work with midgaard
-			equipObjectRet = player->equipObject(*currentObject, armorFlag);
-			int currentArmor = player->getArmor();
-			player->setArmor(currentArmor + 10); //maybe change this later
+			equipObjectRet = player->playerCharacter.equipObject(*currentObject, armorFlag);
+			int currentArmor = player->playerCharacter.getArmor();
+			player->playerCharacter.setArmor(currentArmor + 10); //maybe change this later
 			//std::cout << "line 425 commands\n";
 		} else if (itemtype == weaponFlag){ // need to change to work with midgaard
-			equipObjectRet = player->equipObject(*currentObject, weaponFlag);
-			int currentAttack = player->getThac0();
-			player->setThac0(currentAttack + 10); //maybe change this later
+			equipObjectRet = player->playerCharacter.equipObject(*currentObject, weaponFlag);
+			int currentAttack = player->playerCharacter.getThac0();
+			player->playerCharacter.setThac0(currentAttack + 10); //maybe change this later
 			//std::cout << "line 428 commands\n";
 		} else{
 			//std::cout << "line 430 commands\n";
@@ -792,9 +774,9 @@ namespace Commands {
   			}
   			return (*players)[playerId].getUsername()+ "> " + "All possible Commands:\n" + allCommands + "\n\n";
   		}else if (lsMessage == "inventory"){
-  			return (*players)[playerId].getUsername()+ "> " + "Inventory:\n" + player.getPlayerInventoryDesc() + "\n\n";
+  			return (*players)[playerId].getUsername()+ "> " + "Inventory:\n" + player.playerCharacter.getInventoryDesc() + "\n\n";
 		}else if (lsMessage == "equipment"){
-			return (*players)[playerId].getUsername()+ "> " + "Equipment:\n" + player.getPlayerEquipmentDesc() + "\n\n";
+			return (*players)[playerId].getUsername()+ "> " + "Equipment:\n" + player.playerCharacter.getEquipmentDesc() + "\n\n";
   		}else{
   			return (*players)[playerId].getUsername()+ "> " + "Cannot list " + lsMessage + ", no match\n\n";
   		}
@@ -868,7 +850,7 @@ namespace Commands {
 				std::cout << "wsfsdfer" << std::endl;
 				//Npc will use a currentNpc->findObjectId(objectTargetPair[0]) method which returns the object ID	of the object in inventory 
 				//Will change removeObjectfromInventory() to take in the objectID (maybe pass in selected index "eg. steal apple '1'");
-				if(currentNpc->removeObjectFromInventory(stealMessage[0])) {
+				if(currentNpc->npcCharacter.removeObjectFromInventory(stealMessage[0])) {
 					response += "Success!\n";
 				} else {
 					response += "Failure.\n";

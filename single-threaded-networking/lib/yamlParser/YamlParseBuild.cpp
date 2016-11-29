@@ -126,7 +126,7 @@ std::pair<int,Player> YamlParseBuild::parsePlayers(const YAML::Node& node){
 		}
 	}
 	if(node["equipment"]){
-		std::unordered_map<int,Object> equipment;
+		std::unordered_map<std::string,Object> equipment;
 		buildObjectsForPlayerEquipment(node["equipment"], equipment);
 		playerClass.playerCharacter.setEquipment(equipment);
 	}
@@ -209,7 +209,7 @@ void YamlParseBuild::buildObjects(std::unordered_map<int,Object>& buildAllObject
 	//return buildAllObjects;
 }
 
-void YamlParseBuild::buildObjectsForPlayerEquipment(const YAML::Node& object_node, std::unordered_map<int,Object>& inventoryObjects){
+void YamlParseBuild::buildObjectsForPlayerEquipment(const YAML::Node& object_node, std::unordered_map<std::string,Object>& inventoryObjects){
 
 	std::transform(object_node.begin(),object_node.end(), std::inserter( inventoryObjects, inventoryObjects.end() ),
 					[this](const YAML::Node& node) { return this->parseObjects(node); });
@@ -302,15 +302,15 @@ std::unique_ptr<Reset> YamlParseBuild::parseResets(const YAML::Node& node){
 		}
 	} else if(node["action"].as<std::string>() == "equip") {
 		if (node["comment"]){
-			return std::make_unique<Resets::ResetEquip>(node["action"].as<std::string>(), node["id"].as<int>(), node["slot"].as<int>(), node["comment"].as<std::string>());
+			return std::make_unique<Resets::ResetEquip>(node["action"].as<std::string>(), node["id"].as<int>(), node["slot"].as<std::string>(), node["comment"].as<std::string>());
 		}
 		else {
-			return std::make_unique<Resets::ResetEquip>(node["action"].as<std::string>(), node["id"].as<int>(), node["slot"].as<int>(), "");
+			return std::make_unique<Resets::ResetEquip>(node["action"].as<std::string>(), node["id"].as<int>(), node["slot"].as<std::string>(), "");
 		}
 	} else if(node["action"].as<std::string>() == "door") {
-			return std::make_unique<Resets::ResetEquip>("", 0, 0, "");
+			return std::make_unique<Resets::ResetEquip>("", 0, "", "");
 	} else if(node["action"].as<std::string>() == "put") {
-			return std::make_unique<Resets::ResetEquip>("", 0, 0, "");
+			return std::make_unique<Resets::ResetEquip>("", 0, "", "");
 	}
 	return NULL;
 }
