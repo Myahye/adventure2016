@@ -55,7 +55,7 @@ void Model::yamlParseAndBuild(const std::string& pathToFile){
   yamlparse.loadFile(pathToFile);
   yamlparse.buildNpcs(this->npcs);
   yamlparse.buildObjects(this->objects);
-  //yamlparse.buildResets(this->resets);
+  yamlparse.buildResets(this->resets);
   std::cout << "wwww " << std::endl;
   yamlparse.buildRooms(this->rooms);
       // printAll();
@@ -256,12 +256,12 @@ Context Model::getContext() const {
 
 
 void Model::playerDisconnected(const int playerId) {
-  this->rooms[playerLocation[playerId]].removePlayer(playerId);
+  players[playerId].setStatus("Offline");
 }
 
 void Model::playerConnect(const int playerId) {
   std::cout << "s " << playerLocation[playerId] << std::endl;
-  this->rooms[playerLocation[playerId]].addPlayer(playerId, players[playerId].getUsername());
+  players[playerId].setStatus("Online");
 }
 
 std::unordered_map<int, Player> Model::getPlayerMap(){

@@ -3,7 +3,7 @@
 
 Room::Room()
 :mDesc{"No Description"}, mExtendedDesc{std::make_pair(std::vector<std::string>{"No extended description"},std::vector<std::string>{""})}, mName{"Empty Room"},
-            mRoomId{static_cast<unsigned int>(0)}, doors{Door()} {}
+            mRoomId{static_cast<unsigned int>(0)} {}
 
 //Temp constructor for testing and first iteration
 Room::Room(int& id, std::vector<std::string>& description, std::vector<Door>& new_doors) 

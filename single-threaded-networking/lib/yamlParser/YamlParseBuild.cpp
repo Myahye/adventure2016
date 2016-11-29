@@ -339,7 +339,7 @@ std::vector<std::unique_ptr<Reset>> YamlParseBuild::parseBuildResets(const std::
 	}
 	return buildAllResets;
 }
-
+*/
 
 
 std::unique_ptr<Reset> YamlParseBuild::parseResets(const YAML::Node& node){
@@ -404,7 +404,7 @@ void YamlParseBuild::buildResets(std::vector< std::unique_ptr< Reset > >&  reset
 					[this](const YAML::Node& node) { return this->parseResets(node); });
 	//return buildAllObjects;
 }
-*/
+
 
 Door YamlParseBuild::parseDoors(const YAML::Node& node){
 	Door doorObject;
