@@ -8,7 +8,7 @@ int getPlayerIdInRoom(std::unordered_map<int, Player>* players, const std::unord
 			if((*players)[playerIdRoomIdpair.first].getStatus() == "Online") {
 				std::cout<<"Checking if " + (*players)[playerIdRoomIdpair.first].getUsername()+" == " + playerName <<std::endl;
 				if((*players)[playerIdRoomIdpair.first].getUsername()==playerName){
-
+					std::cout<<"getPlayerIdInRoom found that does infact " + (*players)[playerIdRoomIdpair.first].getUsername()+" == " + playerName <<std::endl;
 					return playerIdRoomIdpair.first;}
 				//Yuck, too much nest 4 me.
 			}
@@ -81,10 +81,17 @@ namespace CombatCommands {
 			}
 		}
 
-
+		std::ostringstream targetPlayerIdString;
+		targetPlayerIdString << targetPlayerId;
 
 		for(networking::Connection targetConnection: clients){
-			if(connection.playerId == targetPlayerId){
+
+			std::ostringstream targetConnectionPlayerIdString;
+			targetConnectionPlayerIdString << targetConnection.playerId;
+
+			std::cout<<"Checking if targetConnection.playerid: " + targetConnectionPlayerIdString.str() +" == " + targetPlayerIdString.str() <<std::endl;
+			if(targetConnection.playerId == targetPlayerId){
+				std::cout<<"getPlayerIdInRoom found that does infact targetConnection.playerid: " + targetConnectionPlayerIdString.str() +" == " + targetPlayerIdString.str() <<std::endl;
 				//Create target and instigator combatant, create fight and add to battles
 				auto player = (*players)[playerId];
 				auto targetPlayer = (*players)[targetPlayerId];
