@@ -17,7 +17,7 @@ private:
 	std::unordered_map<int,int>* playerLocations;
 	std::vector<Spells>* offenseSpells;
   	std::vector<Spells>* defenseSpells;
-
+  	std::unordered_map<Character, Character>* swappedCharacters;
 
 public:
 	Context();
@@ -30,6 +30,7 @@ public:
 	std::unordered_map<int,int>* getPlayerLocations();
 	std::vector<Spells>* getOffenseSpells();
   	std::vector<Spells>* getDefenseSpells();
+  	std::unordered_map<Character, Character>* getSwappedCharacters();
 
 	void setCurrentlySelectedNpc(Npc* npc);
 	Npc* getCurrentlySelectedNpc();

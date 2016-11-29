@@ -200,7 +200,11 @@ namespace Commands {
 		return this->connection;
 	}
 */
-
+	/*
+	***************************************************************************************************************
+	* TODO: Swap with NPC, handle when a player and npc have the same name
+	***************************************************************************************************************
+	*/
 	/*Swap command*/
 	SwapCommand::SwapCommand(networking::Connection connection_, const std::string& message_)
 	: connection{connection_}, message{message_} {}
@@ -209,6 +213,8 @@ namespace Commands {
 		auto players = context.getPlayers();
 		auto playerLocations = context.getPlayerLocations();
 		auto rooms = context.getRooms();
+		// Keep track of all characters that have been swapped
+		auto swappedCharacters = context.getSwappedCharacters();
 
 		int playerId = connection.playerId;
 
@@ -219,17 +225,13 @@ namespace Commands {
 		Room* currentRoom = &(*rooms)[currentRoomId];
 
 		int targetPlayerId = currentRoom->findPlayerId(swapMessage);
-		std::cout << "Swap with target player ID: " << targetPlayerId << std::endl;
 
-		/*
-		 ***************************************************************************************************************
-		 * TODO: Swap with NPC, handle when a player and npc have the same name
-		 ***************************************************************************************************************
-		*/
 		// Swap with another player in the same room
 		if(targetPlayerId != 0) {
-			std::cout << "Swapping " << (*players)[playerId].getUsername() << " and " << (*players)[targetPlayerId].getUsername() << std::endl;
+			std::cout << "Swapping " << (*players)[playerId].getUsername() << " and " << (*players)[targetPlayerId].getUsername() << std::endl;			
+			
 			std::swap((*players)[playerId].playerCharacter, (*players)[targetPlayerId].playerCharacter);
+
 		// No target found
 		} else {
 			return (*players)[playerId].getUsername() + "> " + "Unable to locate " + swapMessage + "\n";
