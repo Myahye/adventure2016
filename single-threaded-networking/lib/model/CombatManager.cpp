@@ -27,12 +27,12 @@ CombatManager::updateCombat(std::vector<networking::Connection>& clients, Contex
     for(Fight fight : fights){
       if(!fight.targetOverrideFlag){
         outgoing.push_back(fight.instigatorCombatant.attack(1, fight.targetCombatant.name));
-        outgoing.push_back(fight.targetCombatant.sendMessage("You have attacked " + fight.instigatorCombatant.name + " for 1 point of damage"));
+        outgoing.push_back(fight.targetCombatant.sendMessage("You have attacked " + fight.instigatorCombatant.name + " for 1 point of damage\n\n"));
       }
       fight.setTargetOverrideFlag(false);
       if(!fight.instigatorOverrideFlag){
         outgoing.push_back(fight.targetCombatant.attack(1, fight.instigatorCombatant.name));
-        outgoing.push_back(fight.instigatorCombatant.sendMessage("You have attacked " + fight.targetCombatant.name + " for 1 point of damage"));
+        outgoing.push_back(fight.instigatorCombatant.sendMessage("You have attacked " + fight.targetCombatant.name + " for 1 point of damage\n\n"));
       }
       fight.setInstigatorOverrideFlag(false);
     }

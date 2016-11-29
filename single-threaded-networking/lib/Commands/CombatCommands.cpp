@@ -9,11 +9,13 @@ int getPlayerIdInRoom(std::unordered_map<int, Player>* players, const std::unord
 				std::cout<<"Checking if " + (*players)[playerIdRoomIdpair.first].getUsername()+" == " + playerName <<std::endl;
 				if((*players)[playerIdRoomIdpair.first].getUsername()==playerName){
 					std::cout<<"getPlayerIdInRoom found that does infact " + (*players)[playerIdRoomIdpair.first].getUsername()+" == " + playerName <<std::endl;
-					return playerIdRoomIdpair.first;}
+					return playerIdRoomIdpair.first;
+				}
 				//Yuck, too much nest 4 me.
 			}
 		}
 	}
+	return -1;//Please forgive me.
 	// playersInRoom += "\n\n";
 	// return playersInRoom;
 }
@@ -55,7 +57,7 @@ namespace CombatCommands {
 			bool playerIsTarget = (fight.targetCombatant.character->getId()
 																	== playerId);;
 			if(playerIsInstigator || playerIsTarget){
-				return response + "You are already in combat.";
+				return "Combat aborted, you are already in combat.\n\n";
 			}
 		}
 
@@ -63,12 +65,16 @@ namespace CombatCommands {
 		Room* currentRoom = &(*rooms)[currentRoomId];
 
 		if(targetName == "") {
-			return response + "\n\n" + "Please enter a target";
+			return response + "\n\n" + "Please enter a target\n\n";
 		}
 
 
 		//-------------------------------------------------Attack player
 		int targetPlayerId = getPlayerIdInRoom(players, playerLocations, currentRoomId, targetName);
+
+		if(targetPlayerId==-1){
+			return "Combat aborted, no player with name "+targetName+" in room.";
+		}
 
 		//refactor this out to its own method
 		for(Fight fight : fights){
@@ -77,12 +83,13 @@ namespace CombatCommands {
 			bool playerIsTarget = (fight.targetCombatant.character->getId()
 																	== targetPlayerId);;
 			if(playerIsInstigator || playerIsTarget){
-				return response + targetName + " is already in combat.";
+				return "Combat aborted, " + targetName + " is already in combat.";
 			}
 		}
 
 		std::ostringstream targetPlayerIdString;
 		targetPlayerIdString << targetPlayerId;
+
 
 		for(networking::Connection targetConnection: clients){
 
@@ -106,14 +113,13 @@ namespace CombatCommands {
 
 				fights.push_back(fight);
 
-				return response + "\n\n" + "Combat with " + targetName + " initiated.";
+				return response + "\n\n" + "Combat with " + targetName + " initiated.n\n\n";
 			}
 			//To self - this is trash, remove asap
-			else{
-				std::cout<<"Error at end of CombatCommands::Attack.execute"<<std::endl;
-				return "Error";
-			}
+
 		}
+		std::cout<<"Error at end of CombatCommands::Attack.execute"<<std::endl;
+		return "Error";
 
 
 	}
