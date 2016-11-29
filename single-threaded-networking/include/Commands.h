@@ -26,9 +26,11 @@ public:
 
 	std::string execute(Context& context);
 
-	void setMessage(std::string s);
+	void setMessage(const std::string& s);
 
 	networking::Connection getConnection() const;
+
+	int getId() const;
 };
 
 namespace Commands {

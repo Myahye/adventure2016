@@ -15,15 +15,5 @@ public:
 };
 
 
-class Editor {
-public:
-	virtual std::string execute(Context& context) = 0;
-	virtual void setMessage(std::string s) = 0;
-	virtual networking::Connection getConnection() const = 0;
-	//virtual Npc* getCurrentlySelectedNpc() = 0;
-	//virtual void printClass(int n) = 0;
-	virtual ~Editor() {}
-};
-
 #endif
 

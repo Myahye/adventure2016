@@ -12,7 +12,7 @@ ModelInterface::ModelInterface() {}
 std::unordered_map<std::string, std::string> commands {{"Create","create"},{"Look","look"},{"Walk","walk"},{"Read","read"},{"Go","go"},{"Attack","attack"},{"Say","say"},{"ListCommands","ls"},{"Status","status"}, {"Take","take"}, {"Flee","flee"},{"Equip","equip"},{"Steal","steal"},{"Teleport","teleport"},{"Swap", "swap"},{"Cast", "cast"}};
 
 
-unordered_map<int,Editor> activeEditors;
+std::unordered_map<int,std::unique_ptr<Editor>> activeEditors;
 
 void
 ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::vector<Connection>& clients) {
@@ -24,11 +24,11 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
     auto context = this->model.getContext();
     auto players = context.getPlayers();
 
-    if((*players)[message.connection.playerId].getState() != "Online") {
-      activeEditors[message.connection.playerId].setMessage(message.text);
+    if((*players)[message.connection.playerId].getStatus() != "Online") {
+      activeEditors[message.connection.playerId]->setMessage(message.text);
     } else if (boost::istarts_with(messageText,commands["Create"])) {
-      this->activeEditors[message.connection.playerId] = Editor{message.connection,message.text};
-      (*players)[message.connection.playerId].setState("WorldBuilding");
+      activeEditors[message.connection.playerId] = std::make_unique<Editor>(message.connection,message.text);
+      (*players)[message.connection.playerId].setStatus("WorldBuilding");
     } else if (boost::istarts_with(messageText,commands["Look"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::LookCommand>(message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Go"])) {
@@ -78,9 +78,9 @@ ModelInterface::updateGame(){
   }
 
   for(auto& editor : activeEditors) {
-    std::string response = editor->execute(context);
+    std::string response = editor.second->execute(context);
     if(response != "") {
-      Message message{editor->getConnection(),response};
+      Message message{editor.second->getConnection(),response};
       outgoing.push_back(message);
     }
   }

@@ -178,7 +178,7 @@ std::string Editor::execute(Context& context) {
 	auto objects = context.getObjects();
 	int playerId = connection.playerId;
 
-	std::string lookMessage = message.substr(4);
+	std::string lookMessage = message;
 	std::transform(lookMessage.begin(), lookMessage.end(), lookMessage.begin(), ::tolower);
     boost::trim_if(lookMessage, boost::is_any_of("\t "));
 
@@ -187,24 +187,35 @@ std::string Editor::execute(Context& context) {
 	int currentRoomId = (*playerLocations)[playerId];
 	Room* currentRoom = &(*rooms)[currentRoomId];
 
-	if(lookMessage == "") {
+	Player* player = &(*players)[playerId];
+
+	if(message == "") {
+		return "";
+	}
+
+	if(message == "stop") {
+		player->setStatus("Online");
+		message = "";
+		return response + "\n\n" + "Quiting Editor.\n\n";
+	}
+
+	if(lookMessage == "r32wr34r") {
+		message = "";
 		return response + "\n\n" + printMiniMap(rooms, currentRoomId) + currentRoom->getFullRoomDesc() + getPlayersInRoomDesc(players, playerLocations, currentRoomId);
 	}
 
 	//-------------------------------------------------look "cardinal direction"
-	if(player.getStatus() == "WorldBuilding" && lookMessage == "1") {
-		player.setState("EditCurrentRoom");
+	if(player->getStatus() == "WorldBuilding" && message == "1") {
+		player->setStatus("EditCurrentRoom");
 	}
 
 
-	if(player.getStatus() == "WorldBuilding") {
-		std::string reponse = "Type '1' to edit current room\n"
-							+ "Type '2' to create new room\n"
-							+ "Type '3' to edit object\n";
-		return response;
+	if(player->getStatus() == "WorldBuilding") {
+		message = "";
+		return response + "\n\n" + "Type '1' to edit current room\nType '2' to create new room\nType '3' to edit object\n\n";
 	}
 
-	if(player.getStatus() == "EditCurrentRoom") {
+	if(player->getStatus() == "EditCurrentRoom") {
 		//print options
 
 		//print desc
@@ -212,6 +223,9 @@ std::string Editor::execute(Context& context) {
 		//print exits
 
 		//print resets
+
+		message = "";
+		return response + "\n\n" + printMiniMap(rooms, currentRoomId) + currentRoom->getFullRoomDesc() + getPlayersInRoomDesc(players, playerLocations, currentRoomId);
 
 
 	}
@@ -228,6 +242,10 @@ void Editor::setMessage(const std::string& s) {
 
 networking::Connection Editor::getConnection() const {
 	return this->connection;
+}
+
+int Editor::getId() const {
+	return this->connection.playerId;
 }
 
 

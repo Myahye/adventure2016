@@ -46,6 +46,7 @@ namespace CombatCommands {
 		boost::trim_if(targetName, boost::is_any_of("\t "));
 
 
+
 		std::string response = playerName + "> " + message;
 
 		//refactor this out to its own method
@@ -55,6 +56,7 @@ namespace CombatCommands {
 			bool playerIsTarget = (fight.targetCombatant.character->getId()
 																	== playerId);;
 			if(playerIsInstigator || playerIsTarget){
+
 				return "Combat aborted, you are already in combat.\n\n";
 			}
 		}
@@ -147,7 +149,6 @@ std::cout<<"shit"<<std::endl;
 		std::cout<<"Error at end of CombatCommands::Attack.execute"<<std::endl;
 		return "Error";
 
-
 	}
 
 	int AttackCommand::getId() const {
@@ -159,4 +160,3 @@ std::cout<<"shit"<<std::endl;
 	}
 
 
-}
