@@ -73,7 +73,11 @@ ModelInterface::updateCombat(std::vector<Connection>& clients){
 
   std::deque<Message> outgoing;
   auto context = this->model.getContext();
-  outgoing.push_back(this->combatManager.updateCombat(clients, context));
+  std::deque<Message> res = this->combatManager.updateCombat(clients, context);
+  for(Message m : res){
+    outgoing.push_back(m);
+  }
+  //outgoing.push_back(res);
 
   // auto context = this->model.getContext();
   //
