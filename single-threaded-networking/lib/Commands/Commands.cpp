@@ -1,7 +1,7 @@
 #include "Commands.h"
 #include <boost/algorithm/string.hpp>
 #include <random>
-#include <algorithm>
+
 
 
 
@@ -199,57 +199,7 @@ namespace Commands {
 	networking::Connection AttackCommand::getConnection() const {
 		return this->connection;
 	}
-*/
-	/*
-	***************************************************************************************************************
-	* TODO: Swap with NPC, handle when a player and npc have the same name
-	***************************************************************************************************************
-	*/
-	/*Swap command*/
-	SwapCommand::SwapCommand(networking::Connection connection_, const std::string& message_)
-	: connection{connection_}, message{message_} {}
-
-	std::string SwapCommand::execute(Context& context) {
-		auto players = context.getPlayers();
-		auto playerLocations = context.getPlayerLocations();
-		auto rooms = context.getRooms();
-		// Keep track of all characters that have been swapped
-		auto swappedCharacters = context.getSwappedCharacters();
-
-		int playerId = connection.playerId;
-
-		std::string swapMessage = message.substr(4);
-		boost::trim_if(swapMessage, boost::is_any_of("\t "));
-
-		int currentRoomId = (*playerLocations)[playerId];
-		Room* currentRoom = &(*rooms)[currentRoomId];
-
-		int targetPlayerId = currentRoom->findPlayerId(swapMessage);
-
-		// Swap with another player in the same room
-		if(targetPlayerId != 0) {
-			std::cout << "Swapping " << (*players)[playerId].getUsername() << " and " << (*players)[targetPlayerId].getUsername() << std::endl;			
-			
-			std::swap((*players)[playerId].playerCharacter, (*players)[targetPlayerId].playerCharacter);
-
-		// No target found
-		} else {
-			return (*players)[playerId].getUsername() + "> " + "Unable to locate " + swapMessage + "\n";
-		}
-
-		return (*players)[playerId].getUsername() + "> " + "You have swapped with " + (*players)[targetPlayerId].getUsername() + "\n";
-	}
-
-	int SwapCommand::getId() const {
-		return this->connection.playerId;
-	}
-
-	networking::Connection SwapCommand::getConnection() const {
-		return this->connection;
-	}
-
-
-	/*Flee command*/
+*//*Flee command*/
 	FleeCommand::FleeCommand(networking::Connection connection_, const std::string& message_)
 	: connection{connection_}, message{message_} {}
 
@@ -259,7 +209,6 @@ namespace Commands {
 		auto rooms = context.getRooms();
 
 		int playerId = connection.playerId;
-
 
 		std::cout << "Player wants to Flee " << message << std::endl;
 		int currentRoomId  = (*playerLocations)[playerId];
@@ -311,9 +260,7 @@ namespace Commands {
 				" Health: "+std::to_string((*players)[playerId].playerCharacter.getCurrentHealth())+"/"+std::to_string((*players)[playerId].playerCharacter.getMaxHealth())+"\n"+
 				" Mana  : "+std::to_string((*players)[playerId].playerCharacter.getCurrentMana())+"/"+std::to_string((*players)[playerId].playerCharacter.getMaxMana())+"\n"+
 				" EXP   : "+std::to_string((*players)[playerId].playerCharacter.getExp())+"\n"+
-				" Level : "+std::to_string((*players)[playerId].playerCharacter.getLevel())+"\n"+
-				// Used for testing
-				" Desc  : "+((*players)[playerId].playerCharacter.getShortDesc())+"\n";
+				" Level : "+std::to_string((*players)[playerId].playerCharacter.getLevel())+"\n";
 
 
 	}
@@ -512,7 +459,7 @@ namespace Commands {
 	networking::Connection SayCommand::getConnection() const {
 		return this->connection;
 	}
-	
+
 	//CastCommand
 	CastCommand::CastCommand(networking::Connection connection_, const std::string& message_)
 	: connection{connection_}, message{message_} {}
@@ -535,16 +482,28 @@ namespace Commands {
 		
 		int currentRoomId = (*playerLocations)[playerId];
 		Room* currentRoom = &(*rooms)[currentRoomId];
-		
 		Spells* castedDefenseSpell = getCastedSpell(castMessage[0], (*defenseSpells));
 		Spells* castedOffenseSpell = getCastedSpell(castMessage[0], (*offenseSpells));
-
+		Spells* currentSpell;
+		
+		if(castedDefenseSpell != nullptr){
+			std::cout << "line 492\n";
+			currentSpell = castedDefenseSpell;
+		}
+		else if(castedOffenseSpell != nullptr){
+			std::cout << "line 496\n";
+			currentSpell = castedOffenseSpell;
+		}
+		else{
+			return (*players)[playerId].getUsername() + "> " + "Cannot cast " + castMessage[0] + ", no match\n\n";
+		}
 		
 		int targetId = currentRoom->findPlayerId(castMessage[1]);
 		auto target = &(*players)[targetId].playerCharacter;
 		int currentTargetHealth= target->getCurrentHealth();
 		auto player = &(*players)[playerId].playerCharacter;
-		int currentPlayerMana = target->getCurrentMana();
+		int currentPlayerMana = player->getCurrentMana();
+		int spellMana = currentSpell->getMana();
 
 
 		//if findPlayerId can't find the player it will return 0
@@ -552,44 +511,44 @@ namespace Commands {
 		if(targetId == 0){
 			return (*players)[playerId].getUsername() + "> " + "Target " + castMessage[1] + " not found\n\n";
 		}
+		
+		/* -- for testing purposes this will be commented out, uncomment out later
+		if(targetId == playerId && castedOffenseSpell != nullptr){
+			return (*players)[playerId].getUsername() + "> " + "Cannot cast " + castMessage[0] + " on yourself!\n\n";
+		}
+		*/
 
 		if(currentTargetHealth == 0){
 			return (*players)[playerId].getUsername() + "> " + "Target " + castMessage[1] + " has already been defeated!\n\n";
 		}
 
-		if(castedDefenseSpell != nullptr){ 
-			std::cout<<(*players)[targetId].getUsername() +" is the target name for "+ (*players)[playerId].getUsername()<<std::endl;
-			int spellMana = castedDefenseSpell->getMana();
-			if(checkMana(spellMana, currentPlayerMana)){
-				player->setCurrentMana(currentPlayerMana - spellMana);
-				target->setCurrentHealth(currentTargetHealth + 50); //change so it uses their level!
-				
-				std::string targetName = (*players)[targetId].getUsername();
-				std::string hitChar = replaceTargetName(castedDefenseSpell->getHitChar(), targetName);
-				return (*players)[playerId].getUsername() + "> " + castMessage[0] + " has been cast on " + castMessage[1] + "\n\t" + hitChar + "\n\n";
-			}
-			else{
-				return (*players)[playerId].getUsername() + "> " + "Not enough mana to cast spell\n\n";
-			}
+		if(!checkMana(spellMana, currentPlayerMana)){
+			return (*players)[playerId].getUsername() + "> " + "Not enough mana to cast " + castMessage[0] + "\n\n";
 		}
-		else if(castedOffenseSpell != nullptr){
-			int spellMana = castedOffenseSpell->getMana();
-			if(checkMana(spellMana, currentPlayerMana)){
-				player->setCurrentMana(currentPlayerMana - spellMana);
-				target->setCurrentHealth(currentTargetHealth - 50); //change so it uses their level!
-				//todo: if target dies -- increase xp/lvl up
 
-				std::string targetName = (*players)[targetId].getUsername();
-				std::string hitChar = replaceTargetName(castedOffenseSpell->getHitChar(), targetName);
-				return (*players)[playerId].getUsername() + "> " + castMessage[0] + " has been cast on " + castMessage[1] + "\n\t" + hitChar + "\n\n";
-			}
-			else{
-				return (*players)[playerId].getUsername() + "> " + "Not enough mana to cast spell\n\n";
-			}
-		}
+		player->setCurrentMana(currentPlayerMana - spellMana);
+		std::string targetName = (*players)[targetId].getUsername();
+		std::string hitChar = replaceTargetName(currentSpell->getHitChar(), targetName);
+		int playerLevel = player->getLevel();
+		int currentPlayerExp = player->getExp();
+		player->setExp(currentPlayerExp + (playerLevel*2 + 10)); //need leveling up method in player
+
+
+		if(currentSpell->getType() == "defense"){
+			target->setCurrentHealth(currentTargetHealth + (playerLevel*2 + 50));
+		} 
 		else{
-			return (*players)[playerId].getUsername() + "> " + "Cannot cast " + castMessage[0] + ", no match\n\n";
+			target->setCurrentHealth(currentTargetHealth - (playerLevel*2 + 50)); 
+			//todo: if target dies -- increase xp/lvl up
 		}
+
+
+		return (*players)[playerId].getUsername() + "> " + castMessage[0] + " has been cast on " + castMessage[1] + "\n\t" + hitChar + "\n\n";
+ 		
+ 		//todo: setmax and setcurrent in character need to be changed, specifically
+ 		//setcurrent needs to check it the parameter passed is greater than max
+ 		//if it is, then set it to max, else set it to parameter passed
+
 	}
 
 	Spells* CastCommand::getCastedSpell(const std::string& castName_, std::vector<Spells>& spells_){
@@ -625,6 +584,54 @@ namespace Commands {
 		return this->connection;
 	}
 
+
+	/*
+	***************************************************************************************************************
+	* TODO: Swap with NPC, handle when a player and npc have the same name
+	***************************************************************************************************************
+	*/
+	/*Swap command*/
+	SwapCommand::SwapCommand(networking::Connection connection_, const std::string& message_)
+	: connection{connection_}, message{message_} {}
+
+	std::string SwapCommand::execute(Context& context) {
+		auto players = context.getPlayers();
+		auto playerLocations = context.getPlayerLocations();
+		auto rooms = context.getRooms();
+		// Keep track of all characters that have been swapped
+		auto swappedCharacters = context.getSwappedCharacters();
+
+		int playerId = connection.playerId;
+
+		std::string swapMessage = message.substr(4);
+		boost::trim_if(swapMessage, boost::is_any_of("\t "));
+
+		int currentRoomId = (*playerLocations)[playerId];
+		Room* currentRoom = &(*rooms)[currentRoomId];
+
+		int targetPlayerId = currentRoom->findPlayerId(swapMessage);
+
+		// Swap with another player in the same room
+		if(targetPlayerId != 0) {
+			std::cout << "Swapping " << (*players)[playerId].getUsername() << " and " << (*players)[targetPlayerId].getUsername() << std::endl;			
+			
+			std::swap((*players)[playerId].playerCharacter, (*players)[targetPlayerId].playerCharacter);
+
+		// No target found
+		} else {
+			return (*players)[playerId].getUsername() + "> " + "Unable to locate " + swapMessage + "\n";
+		}
+
+		return (*players)[playerId].getUsername() + "> " + "You have swapped with " + (*players)[targetPlayerId].getUsername() + "\n";
+	}
+
+	int SwapCommand::getId() const {
+		return this->connection.playerId;
+	}
+
+	networking::Connection SwapCommand::getConnection() const {
+		return this->connection;
+	}
 }
 
 //Add teleport command to help testing
@@ -637,24 +644,21 @@ namespace CombatCommands {
 		auto rooms = context.getRooms();
 		auto playerLocations = context.getPlayerLocations();
 		int playerId = this->sourceConnection.playerId;
+
+		std::string messageText = this->message.substr(7);
+		std::transform(messageText.begin(), messageText.end(), messageText.begin(), ::tolower);
+
+		std::vector <std::string> takeMessage;
+    boost::trim_if(messageText, boost::is_any_of("\t "));
+    boost::split(takeMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
+		this->sourceName=(*players)[playerId].getUsername();
+		std::string sourceResponse = sourceName + "> " + takeMessage[0];
+
 		int currentRoomId = (*playerLocations)[playerId];
 		Room* currentRoom = &(*rooms)[currentRoomId];
 
-		std::string messageText = this->message.substr(6);
-		std::transform(messageText.begin(), messageText.end(), messageText.begin(), ::tolower);
-		std::vector <std::string> takeMessage;
-    	
-    	boost::trim_if(messageText, boost::is_any_of("\t "));
-    	boost::split(takeMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
-		
-		this->sourceName=(*players)[playerId].getUsername();
-		
-		std::string sourceResponse = sourceName + "> " + takeMessage[1];
-
-		
-
 		//should change this to not return magic number
-		int targetPlayerId = currentRoom->findPlayerId(takeMessage[1]);
+		int targetPlayerId = currentRoom->findPlayerId(takeMessage[0]);
 		for(networking::Connection client: clients){
 			if(client.playerId == targetPlayerId){
 				this->targetConnection = client;

@@ -3,7 +3,6 @@
 #include "Npc.h"
 #include "Player.h"
 #include "Spells.h"
-
 #ifndef CONTEXT_H
 #define CONTEXT_H
 
@@ -21,6 +20,7 @@ private:
 
 public:
 	Context();
+	//swappedCharacters is not in the context constructor?
 	Context(std::unordered_map<int,Room>* rooms_, std::unordered_map<int,Npc>* Npcs_, std::unordered_map<int,Object>* objects_, std::unordered_map<int,Player>* players_, std::unordered_map<int,int>* playerLocations_, std::vector<Spells>* offenseSpells_, std::vector<Spells>* defenseSpells_);
 
 	std::unordered_map<int,Room>* getRooms();

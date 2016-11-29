@@ -88,6 +88,13 @@ int Spells::getMinLevel() const {
 	return this->minLevel;
 }
 
+void Spells::setType(std::string& type){
+	this->type = type;
+}
+std::string Spells::getType() const {
+	return this->type;
+}
+
 void Spells::printClass(){
 	std::cout << "Name: " << name << std::endl;
 	std::cout << "Effect: " << effect << std::endl;
@@ -100,6 +107,7 @@ void Spells::printClass(){
 	std::cout << "Duration: " << duration << std::endl;
 	std::cout << "Mana: " << mana << std::endl;
 	std::cout << "MinLevel: " << minLevel << std::endl;
+	std::cout << "Type: " << type << std::endl;
 }
 
 #endif

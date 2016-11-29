@@ -13,11 +13,15 @@ class Character {
 	std::unordered_map<int, std::vector<Object>> inventory;
 	std::unordered_map<int, Object> equipment;
 
+	//int inventoryLimit = 10;
+
+	bool isPlayer;
+
 	int armor = 0;
 	int exp = 0;
 	int gold = 0;
 	int id = 0;
-	int level = 0;
+	int level = 1;
 	int thac0;
 
 	int maxHealth = 100;
@@ -35,8 +39,11 @@ class Character {
 	std::vector<std::string> longdesc;
 
 public:
-	Character();
-	Character(const int id);
+	Character(bool isPlayer);
+	Character(const int id, bool isPlayer);
+
+	bool checkCharacterType();
+	void setCharacterType(bool isPlayer);
 
 	int getArmor() const;
 	void setArmor(const int armor);
@@ -75,6 +82,7 @@ public:
 	void setHit(const std::string& hit);
 
 	std::string getDescription() const;
+	std::vector<std::string> getDescriptionV() const;
 	void setDescription(const std::vector<std::string>& description);
 
 	std::string getShortDesc() const;
@@ -84,6 +92,7 @@ public:
 	void setKeywords(const std::vector<std::string>& keywords);
 
 	std::string getLongDesc() const;
+	std::vector<std::string> getLongDescV() const;
 	void setLongDesc(const std::vector<std::string>& longdesc);
 
 	void addObjectToInventory(const Object& object, unsigned int limit);
@@ -92,11 +101,14 @@ public:
 	bool equipObject(const Object& object, int slot);
     bool unEquipObject(int slot);
 
+    //int getInventoryLimit() const;
+    //void setInventoryLimit(const int inventoryLimit);
+
     std::unordered_map<int,std::vector<Object>> getInventory() const;
-    void setInventory(std::unordered_map<int, std::vector<Object>> inventory);
+    void setInventory(std::unordered_map<int, std::vector<Object>>& inventory);
 
     std::unordered_map<int,Object> getEquipment() const;
-    void setEquipment(std::unordered_map<int, Object> equipment);
+    void setEquipment(std::unordered_map<int, Object>& equipment);
     
     std::string getEquipmentDesc() const;
     std::string getInventoryDesc() const;

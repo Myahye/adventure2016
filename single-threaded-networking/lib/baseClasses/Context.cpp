@@ -25,14 +25,6 @@ std::unordered_map<int,int>* Context::getPlayerLocations() {
 	return this->playerLocations;
 }
 
-void Context::setCurrentlySelectedNpc(Npc* npc) {
-	this->currentlySelectedNpc = npc;
-}
-
-Npc* Context::getCurrentlySelectedNpc() {
-	return this->currentlySelectedNpc;
-}
-
 std::vector<Spells>* Context::getOffenseSpells() {
 	return this->offenseSpells;
 }
@@ -43,4 +35,12 @@ std::vector<Spells>* Context::getDefenseSpells() {
 
 std::unordered_map<Character,Character>* Context::getSwappedCharacters() {
 	return this->swappedCharacters;
+}
+
+void Context::setCurrentlySelectedNpc(Npc* npc) {
+	this->currentlySelectedNpc = npc;
+}
+
+Npc* Context::getCurrentlySelectedNpc() {
+	return this->currentlySelectedNpc;
 }
