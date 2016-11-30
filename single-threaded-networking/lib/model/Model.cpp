@@ -204,3 +204,4 @@ void Model::playerConnect(const int playerId) {
   std::cout << "s " << playerLocation[playerId] << std::endl;
   players[playerId].setStatus("Online");
   this->rooms[playerLocation[playerId]].addPlayer(playerId, players[playerId].getUsername());
+}

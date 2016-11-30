@@ -109,18 +109,10 @@ public:
 
     std::unordered_map<int,Object> getEquipment() const;
     void setEquipment(std::unordered_map<int, Object>& equipment);
-<<<<<<< HEAD
+
 
     std::string getEquipmentDesc() const;
     std::string getInventoryDesc() const;
 };
 
 #endif
-=======
-
-    std::string getEquipmentDesc() const;
-    std::string getInventoryDesc() const;
-};
-
-#endif
->>>>>>> master

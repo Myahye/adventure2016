@@ -138,10 +138,6 @@ namespace Commands {
 		return this->connection;
 	}
 
-<<<<<<< HEAD
-	/*Flee command*/
-=======
-
 	/*Attack command*/
 	/*AttackCommand::AttackCommand(networking::Connection connection_, const std::string& message_)
 	: connection{connection_}, message{message_} {}
@@ -203,7 +199,6 @@ namespace Commands {
 		return this->connection;
 	}
 *//*Flee command*/
->>>>>>> master
 	FleeCommand::FleeCommand(networking::Connection connection_, const std::string& message_)
 	: connection{connection_}, message{message_} {}
 
@@ -444,77 +439,3 @@ namespace Commands {
 		return this->connection;
 	}
 }
-<<<<<<< HEAD
-=======
-
-//Add teleport command to help testing
-namespace CombatCommands {
-	AttackCommand::AttackCommand(std::vector<networking::Connection>& clients_, networking::Connection sourceConnection_, const std::string& message_)
-	: clients{clients_}, sourceConnection{sourceConnection_}, message{message_} {}
-
-	std::string AttackCommand::execute(Context& context) {
-		auto players = context.getPlayers();
-		auto rooms = context.getRooms();
-		auto playerLocations = context.getPlayerLocations();
-		int playerId = this->sourceConnection.playerId;
-
-		std::string messageText = this->message.substr(7);
-		std::transform(messageText.begin(), messageText.end(), messageText.begin(), ::tolower);
-
-		std::vector <std::string> takeMessage;
-    boost::trim_if(messageText, boost::is_any_of("\t "));
-    boost::split(takeMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
-		this->sourceName=(*players)[playerId].getUsername();
-		std::string sourceResponse = sourceName + "> " + takeMessage[0];
-
-		int currentRoomId = (*playerLocations)[playerId];
-		Room* currentRoom = &(*rooms)[currentRoomId];
-
-		//should change this to not return magic number
-		int targetPlayerId = currentRoom->findPlayerId(takeMessage[0]);
-		for(networking::Connection client: clients){
-			if(client.playerId == targetPlayerId){
-				this->targetConnection = client;
-			}
-		}
-		if(targetPlayerId != 0) {
-			std::cout<<(*players)[targetPlayerId].getUsername() +" is the target name for "+ (*players)[playerId].getUsername()<<std::endl;
-			int currentTargetCurrentHealth=(*players)[targetPlayerId].playerCharacter.getCurrentHealth();
-			if (currentTargetCurrentHealth==0){
-				return sourceResponse + " has already been Defeated!\n";
-			}else{
-				(*players)[targetPlayerId].playerCharacter.setCurrentHealth(currentTargetCurrentHealth-50);
-				if ((*players)[targetPlayerId].playerCharacter.getCurrentHealth()==0){
-					int playerXP=(*players)[playerId].playerCharacter.getExp();
-					(*players)[playerId].playerCharacter.setExp(100);
-					return sourceResponse + " has been defeated!\n";
-				}
-
-			}
-			return sourceResponse + " target found Attack Success \n";
-		}/*else if(){
-
-		}*/else{
-			return sourceResponse + " target not in room / not found \n" ;
-		}
-
-	}
-
-	std::string AttackCommand::getSourceName() const {
-		return this->sourceName;
-	}
-
-	int AttackCommand::getSourceId() const {
-		return this->sourceConnection.playerId;
-	}
-	int AttackCommand::getTargetId() const {
-		return this->targetId;
-	}
-	networking::Connection AttackCommand::getSourceConnection() const {
-		return this->sourceConnection;
-	}
-	networking::Connection AttackCommand::getTargetConnection() const {
-		return this->targetConnection;
-	}
-}
->>>>>>> master
