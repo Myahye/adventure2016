@@ -183,6 +183,7 @@ bool Character::removeObjectFromInventory(const std::string& objectName) {
     }
     return false;
 }
+
 //maybe change it so int slot is string item_type and thats ur slots!
 bool Character::equipObject(const Object& object, const std::string& slot) {
   if(inventory.find(object.getId()) == inventory.end()) {
@@ -190,10 +191,10 @@ bool Character::equipObject(const Object& object, const std::string& slot) {
     return false;
   }
 
-  if(slot != "armor" && slot != "weapon") {
-    //std::cout << "line 199 player\n";
-    return false;
-  }
+  // if(slot != "armor" && slot != "weapon") {
+  //   //std::cout << "line 199 player\n";
+  //   return false;
+  // }
 
   if(equipment.find(slot) != equipment.end()) {
     inventory[equipment[slot].getId()].push_back(equipment[slot]);
