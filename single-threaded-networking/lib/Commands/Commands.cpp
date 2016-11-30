@@ -202,7 +202,7 @@ namespace Commands {
 */
 	/*
 	***************************************************************************************************************
-	* TODO: Swap with NPC, handle when a player and npc have the same name
+	* TODO: Handle when a player and npc have the same name, swapping back to origin on death/logout
 	***************************************************************************************************************
 	*/
 	/*Swap command*/
@@ -213,31 +213,32 @@ namespace Commands {
 		auto players = context.getPlayers();
 		auto playerLocations = context.getPlayerLocations();
 		auto rooms = context.getRooms();
-		// Keep track of all characters that have been swapped
-		auto swappedCharacters = context.getSwappedCharacters();
+		auto npcs = context.getNpcs();
 
 		int playerId = connection.playerId;
+		int currentRoomId = (*playerLocations)[playerId];
+		Room* currentRoom = &(*rooms)[currentRoomId];
 
 		std::string swapMessage = message.substr(4);
 		boost::trim_if(swapMessage, boost::is_any_of("\t "));
 
-		int currentRoomId = (*playerLocations)[playerId];
-		Room* currentRoom = &(*rooms)[currentRoomId];
-
 		int targetPlayerId = currentRoom->findPlayerId(swapMessage);
+		Npc* targetNpc = currentRoom->findNpc(swapMessage);
 
 		// Swap with another player in the same room
 		if(targetPlayerId != 0) {
-			std::cout << "Swapping " << (*players)[playerId].getUsername() << " and " << (*players)[targetPlayerId].getUsername() << std::endl;			
-			
+			(*players)[playerId].playerCharacter.setCurrentMana((*players)[playerId].playerCharacter.getCurrentMana() - 10);
 			std::swap((*players)[playerId].playerCharacter, (*players)[targetPlayerId].playerCharacter);
-
-		// No target found
-		} else {
-			return (*players)[playerId].getUsername() + "> " + "Unable to locate " + swapMessage + "\n";
+			return (*players)[playerId].getUsername() + "> " + "You have swapped with " + (*players)[targetPlayerId].getUsername() + "\n";
+		
+		// Swap with Npc in the same room
+		} else if(targetNpc != NULL) {
+			(*players)[playerId].playerCharacter.setCurrentMana((*players)[playerId].playerCharacter.getCurrentMana() - 10);
+			std::swap((*players)[playerId].playerCharacter, (*npcs)[targetNpc->npcCharacter.getId()].npcCharacter);
+			return (*players)[playerId].getUsername() + "> " + "You have swapped with " + (*npcs)[targetNpc->npcCharacter.getId()].npcCharacter.getShortDesc() + "\n";
 		}
-
-		return (*players)[playerId].getUsername() + "> " + "You have swapped with " + (*players)[targetPlayerId].getUsername() + "\n";
+		// No target found 
+		return (*players)[playerId].getUsername() + "> " + "Unable to locate " + swapMessage + "\n";
 	}
 
 	int SwapCommand::getId() const {

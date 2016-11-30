@@ -40,7 +40,3 @@ std::vector<Spells>* Context::getOffenseSpells() {
 std::vector<Spells>* Context::getDefenseSpells() {
 	return this->defenseSpells;
 }
-
-std::unordered_map<Character,Character>* Context::getSwappedCharacters() {
-	return this->swappedCharacters;
-}
