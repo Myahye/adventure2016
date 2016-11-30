@@ -20,7 +20,6 @@ private:
     std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > > mExtendedDesc;
     std::string mName;
     unsigned int mRoomId;
-    std::vector<Door> doors;
 
     //--------------------------------------Lawrence Yu
     std::unordered_map<int,std::vector<Npc>> npcsInRoom;
@@ -32,6 +31,7 @@ private:
     //Player* checkPlayerUsername(const std::string& message, const std::pair<int,Player*>& player);
 
 public:
+    std::vector<Door> doors;
 std::unordered_map<int, std::string> playersInRoom;
     // Default constructor
     Room();
