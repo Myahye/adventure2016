@@ -282,7 +282,7 @@ std::string Editor::execute(Context& context) {
 		int i = 0;
 		auto doors = currentRoom->doors;
 		for(auto & door : doors) {
-			response += std::string("        ") + std::to_string(i) + "- " + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + "\n";
+			response += std::string("        ") + std::to_string(i) + " - " + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + "\n";
 			i++;
 		}
 		message = "";
@@ -333,7 +333,7 @@ std::string Editor::execute(Context& context) {
 		int i = 0;
 		auto doors = currentRoom->doors;
 		for(auto & door : doors) {
-			response += std::string("        ") + std::to_string(i) + "- " + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + "\n";
+			response += std::string("        ") + std::to_string(i) + " - " + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + "\n";
 			i++;
 		}
 
@@ -373,7 +373,7 @@ std::string Editor::execute(Context& context) {
 		int i = 0;
 		doors = currentRoom->doors;
 		for(auto & door : doors) {
-			response += std::string("        ") + std::to_string(i) + "- " + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + "\n";
+			response += std::string("        ") + std::to_string(i) + " - " + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + "\n";
 			i++;
 		}
 
@@ -396,7 +396,7 @@ std::string Editor::execute(Context& context) {
 			int i = 0;
 			auto doors = currentRoom->doors;
 			for(auto & door : doors) {
-				response += std::string("        ") + std::to_string(i) + "- " + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + "\n";
+				response += std::string("        ") + std::to_string(i) + " - " + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + "\n";
 				i++;
 			}
 			message = "";
@@ -415,7 +415,7 @@ std::string Editor::execute(Context& context) {
 		response += "        Doors in Room: \n";
 		int i = 0;
 		for(auto & door : *doors) {
-			response += std::string("        ") + std::to_string(i) + "- " + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + "\n";
+			response += std::string("        ") + std::to_string(i) + " - " + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + "\n";
 			i++;
 		}
 
