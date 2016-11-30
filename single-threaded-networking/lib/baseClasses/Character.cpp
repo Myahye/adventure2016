@@ -107,7 +107,7 @@ void Character::setHit(const std::string& hit){
 
 std::string Character::getDescription() const{
   std::string descString = "";
-  for_each(description.begin(), description.end(), [&descString](const std::string& i){descString += i + "\n";} );  
+  for_each(description.begin(), description.end(), [&descString](const std::string& i){descString += i + "\n";} );
   return descString;
 }
 std::vector<std::string> Character::getDescriptionV() const{
@@ -134,7 +134,7 @@ void Character::setKeywords(const std::vector<std::string>& keywords){
 
 std::string Character::getLongDesc() const{
   std::string descString = "";
-  std::for_each(longdesc.begin(), longdesc.end(), [&descString](const std::string& i){descString += i + "\n";} ); 
+  std::for_each(longdesc.begin(), longdesc.end(), [&descString](const std::string& i){descString += i + "\n";} );
   return descString;
 }
 std::vector<std::string> Character::getLongDescV() const{
@@ -229,17 +229,17 @@ std::unordered_map<int,Object> Character::getEquipment() const{
 void Character::setEquipment(std::unordered_map<int, Object>& equipment){
   this->equipment = equipment;
 }
-   
+
 std::string Character::getEquipmentDesc() const {
     std::string response = "";
     for_each(equipment.begin(), equipment.end(), [&response](const auto& currentEquip){response += currentEquip.second.getShortDesc() + ", ";});
-    std::cout << "npe equip: " << equipment.size() << std::endl;  
+    std::cout << "npe equip: " << equipment.size() << std::endl;
     return response;
 }
 std::string Character::getInventoryDesc() const {
   std::string response = "";
   std::cout << "npe inv: " << inventory.size() << std::endl;
-  std::for_each(inventory.begin(), inventory.end(), [&response](const auto& currentItem){response += currentItem.second[0].getShortDesc() + " (Quantity: " + std::to_string(currentItem.second.size()) + "), ";});  
+  std::for_each(inventory.begin(), inventory.end(), [&response](const auto& currentItem){response += currentItem.second[0].getShortDesc() + " (Quantity: " + std::to_string(currentItem.second.size()) + "), ";});
   return response;
 }
 

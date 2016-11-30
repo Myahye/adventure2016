@@ -6,6 +6,8 @@
 class Player {
     std::string username;
     std::string password;
+    std::string status = "Offline";
+
 public:
     // Constructor
     Player ();
@@ -22,6 +24,10 @@ public:
     void setPassword(std::string& password);
 
     void setCharacter(const Character& character);
+    std::string getStatus() const;
+    void setStatus(std::string s);
+
+    void attack(const std::string& name);
 };
 
 #endif /* PLAYER_H */
