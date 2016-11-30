@@ -14,6 +14,7 @@ std::string hitVict;
 std::string wearOff;
 std::string damMsg;
 std::string immChar;
+std::string type;
 
 int duration;
 int mana;
@@ -55,6 +56,9 @@ public:
 
 	void setMinLevel(int level);
 	int getMinLevel() const;
+
+	void setType(std::string& type);
+	std::string getType() const;
 
 	void printClass();
 };

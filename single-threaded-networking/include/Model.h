@@ -12,8 +12,8 @@
 #include "Resets.h"
 #include "Player.h"
 #include "Npc.h"
-#include "Context.h"
 #include "Spells.h"
+#include "Context.h"
 
 //using namespace custom_errors;
 
@@ -35,14 +35,15 @@ private:
   YamlParseBuild yamlparse;
   void yamlParseAndBuild(const std::string& pathToFile);
   void yamlParseAndBuildSpells(const std::string& pathToFile);
-
+  //void yamlParseAndBuildExistingPlayers(const std::string& pathToFile);
+  void printAll();
   
   //--------------Lawrence Yu
   Context context;
 public:
 
   //Model(); //temp
-
+  void yamlParseAndBuildExistingPlayers(const std::string& pathToFile);
   Model(const std::vector<std::string>& paths);
 
   int createPlayer(const std::string& username, const std::string& password);
@@ -74,9 +75,6 @@ public:
   
   void playerDisconnected(const int playerId);
   void playerConnect(const int playerId);
-
-  //to test
-  void printAll();
 
 };
 #endif /* commandparse_h */

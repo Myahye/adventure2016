@@ -8,7 +8,7 @@ ModelInterface::ModelInterface() {}
 
 //load config file to map commands["Create"] = getcreatecommandstringfromfile etc.
 
-std::unordered_map<std::string, std::string> commands {{"Create","create"},{"Look","look"},{"Walk","walk"},{"Read","read"},{"Go","go"},{"Attack","attack"},{"Swap", "swap"},{"Say","say"},{"ListCommands","ls"},{"Status","status"}, {"Take","take"}, {"Flee","flee"}, {"Cast", "cast"}};
+std::unordered_map<std::string, std::string> commands {{"Create","create"},{"Look","look"},{"Walk","walk"},{"Read","read"},{"Go","go"},{"Attack","attack"},{"Say","say"},{"ListCommands","ls"},{"Status","status"}, {"Take","take"}, {"Flee","flee"}, {"Cast", "cast"}, {"Swap", "swap"}};
 
 void
 ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::vector<Connection>& clients) {
@@ -27,15 +27,9 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
       //this->basicCommandQueue.push_back(std::make_unique<Commands::ReadCommand>(message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Attack"])) {
       this->combatCommandQueue.push_back(std::make_unique<CombatCommands::AttackCommand>(clients, message.connection,message.text));
-    
-    
-    } else if (boost::istarts_with(messageText,commands["Swap"])) {
-      this->basicCommandQueue.push_back(std::make_unique<Commands::SwapCommand>(message.connection, message.text));
-    
-
     } else if (boost::istarts_with(messageText,commands["Flee"])){
       this->basicCommandQueue.push_back(std::make_unique<Commands::FleeCommand>(message.connection,message.text));
-    } else if (boost::istarts_with(messageText,commands["Say"])) {
+    }else if (boost::istarts_with(messageText,commands["Say"])) {
       //this->basicCommandQueue.push_back(std::make_unique<Commands::SayCommand>(message.connection,message.text));
       createSayCommandForGroup(this->basicCommandQueue, clients, message.text, message.connection.playerId);
     } else if (boost::istarts_with(messageText, commands["ListCommands"])) {
@@ -44,6 +38,8 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
       this->basicCommandQueue.push_back(std::make_unique<Commands::TakeCommand>(message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Status"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::StatusCommand>(message.connection,message.text));
+    } else if (boost::istarts_with(messageText,commands["Swap"])) {
+      this->basicCommandQueue.push_back(std::make_unique<Commands::SwapCommand>(message.connection, message.text));
     } else if (boost::istarts_with(messageText,commands["Cast"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::CastCommand>(message.connection,message.text));
     } else {

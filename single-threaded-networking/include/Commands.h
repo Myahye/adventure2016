@@ -2,7 +2,7 @@
 #define COMMANDS_H
 
 #include <unordered_map>
-#include <boost/algorithm/string/replace.hpp>
+
 #include "CommandInterface.h"
 #include "Player.h"
 #include "Npc.h"
@@ -56,25 +56,6 @@ namespace Commands {
 
   		networking::Connection getConnection() const;
   	};
-
-  	
-
-
-  	class SwapCommand : public Command {
-  	private:
-  		networking::Connection connection;
-  		std::string message;
-  	public:
-  		SwapCommand(networking::Connection connection_, const std::string& message);
-
-  		std:: string execute(Context& context);
-
-  		int getId() const;
-
-  		networking::Connection getConnection() const;
-  	};
-
-
 
 
 	class FleeCommand : public Command {
@@ -184,6 +165,20 @@ namespace Commands {
 
 		networking::Connection getConnection() const;
 	};
+
+	class SwapCommand : public Command {
+  	private:
+  		networking::Connection connection;
+  		std::string message;
+  	public:
+  		SwapCommand(networking::Connection connection_, const std::string& message);
+
+  		std:: string execute(Context& context);
+
+  		int getId() const;
+
+  		networking::Connection getConnection() const;
+  	};
 
 }
 

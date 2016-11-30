@@ -1,0 +1,6 @@
+add_library(yamlSaver YamlSaveData.cpp)
+target_link_libraries(yamlSaver ${CMAKE_SOURCE_DIR}/lib/yaml/libyaml-cpp.a)
+install(TARGETS yamlSaver DESTINATION lib)
+set_property(TARGET yamlSaver PROPERTY CXX_STANDARD 14)
+target_link_libraries(yamlSaver BaseClass)
+target_link_libraries(yamlSaver model)

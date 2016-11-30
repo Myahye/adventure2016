@@ -12,9 +12,6 @@
 
 namespace Resets {
 
-	class Reset{
-		virtual Npc* getCurrentlySelectedNpc();
-	};
 	//-----------------------------------------ResetNpc
 
 	class ResetNpc : public Reset {
