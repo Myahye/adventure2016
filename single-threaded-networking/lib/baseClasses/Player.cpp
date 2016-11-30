@@ -5,9 +5,15 @@
 
 //Player constructor
 Player::Player ():
+<<<<<<< HEAD
     playerCharacter{0,true}, username{""}, password{""}{};
 Player::Player (int const id, std::string const username, std::string const password):
     playerCharacter{id,true}, username{username}, password{password}{};
+=======
+    playerCharacter{0, true}, username{""}, password{""}{};
+Player::Player (int const id, std::string const username, std::string const password):
+    playerCharacter{id, true}, username{username}, password{password}{};
+>>>>>>> master
 
 std::string Player::getUsername() const {
     return username;
@@ -25,6 +31,7 @@ void Player::setPassword(std::string& password) {
 }
 
 void Player::setCharacter(const Character& character){
+<<<<<<< HEAD
   	this->playerCharacter = character;
 }
 
@@ -41,3 +48,9 @@ Player::attack(const std::string& name){
 }
 
 #endif
+=======
+    this->playerCharacter = character;
+}
+
+#endif
+>>>>>>> master

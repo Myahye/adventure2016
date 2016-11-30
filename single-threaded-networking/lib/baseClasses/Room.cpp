@@ -102,7 +102,11 @@ void Room::printClass(int n) const{
   for(auto& i : doors) {
     std::cout << "\tDoor dir: "<< i.getDir() << "\n";
     std::cout << "\tDoor Door_id: " << i.getDoorId() << std::endl;
+<<<<<<< HEAD
     std::cout << "\tDoor destinationId: " << i.getDestinationId() << std::endl;
+=======
+    std::cout << "\tDoor destinationId: " << i.getDestinationId() << std::endl;  
+>>>>>>> master
     printVector(i.getDescV());
     printVector(i.getKeywords());
   }
@@ -317,4 +321,8 @@ std::string Room::getFullRoomDesc() const {
   response += getObjectsInRoomDesc();
   response += "     " + getDoorsInRoomDesc() + "\n";
   return response;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> master

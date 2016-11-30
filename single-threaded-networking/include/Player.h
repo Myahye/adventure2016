@@ -24,7 +24,6 @@ public:
     void setPassword(std::string& password);
 
     void setCharacter(const Character& character);
-
     std::string getStatus() const;
     void setStatus(std::string s);
 

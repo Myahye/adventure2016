@@ -31,12 +31,13 @@ private:
 
   YamlParseBuild yamlparse;
   void yamlParseAndBuild(const std::string& pathToFile);
+  //void yamlParseAndBuildExistingPlayers(const std::string& pathToFile);
   void printAll();
 
 
   Context context;
 public:
-
+  //Model(); //temp
   void yamlParseAndBuildExistingPlayers(const std::string& pathToFile);
   Model(const std::vector<std::string>& paths);
 
@@ -66,7 +67,5 @@ public:
   void playerDisconnected(const int playerId);
   void playerConnect(const int playerId);
 
-
-  std::unordered_map<int, Player> getPlayerMap();
 };
 #endif /* commandparse_h */

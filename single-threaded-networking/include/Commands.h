@@ -134,4 +134,34 @@ namespace Commands {
 	};
 
 }
+<<<<<<< HEAD
 #endif
+=======
+
+
+
+namespace CombatCommands {
+	class AttackCommand : public CombatCommand {
+		private:
+			int targetId;
+			std::string sourceName;
+			std::vector<networking::Connection>& clients;
+			networking::Connection sourceConnection;
+			networking::Connection targetConnection;
+			std::string message;
+		public:
+			AttackCommand(std::vector<networking::Connection>& clients_, networking::Connection connection_, const std::string& message_);
+
+			std::string execute(Context& context);
+			std::string getSourceName() const;
+			int getSourceId() const;
+			int getTargetId() const;
+
+			networking::Connection getSourceConnection() const;
+			networking::Connection getTargetConnection() const;
+		};
+}
+
+
+#endif
+>>>>>>> master

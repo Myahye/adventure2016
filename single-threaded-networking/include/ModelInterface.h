@@ -19,7 +19,7 @@ private:
 
 	CombatManager combatManager{};
 
-	networking::Message createAlertMessage(networking::Connection, std::string);
+  networking::Message createAlertMessage(networking::Connection, std::string);
 
 public:
   ModelInterface();

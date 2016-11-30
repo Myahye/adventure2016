@@ -1,3 +1,5 @@
+
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -100,7 +102,7 @@ void refactoringTest(){
     cout << "npc hit: " << npc.npcCharacter.getHit() << endl;
     cout << "npc description: " << npc.npcCharacter.getDescription() << endl;
     cout << "npc shortdesc: " << npc.npcCharacter.getShortDesc() << endl;
-    
+
     cout << "Player armor: " << player.playerCharacter.getArmor() << endl;
     cout << "Player username: " << player.getUsername() << endl;
     cout << "Player exp: " << player.playerCharacter.getExp() << endl;
@@ -123,16 +125,16 @@ void refactoringTest(){
 
 void yamlTest(){
     std::vector<std::string> filepaths = {"../data/shire.yml", "../data/Midgaard.yml", "../data/users.yml"};
-    Model model(filepaths);
+    /*Model model(filepaths);
     //model.yamlParseAndBuildExistingPlayers("../data/users.yml");
     YamlSaveData ysd;
-    
-    ysd.saveUserData(model.getPlayerMap());
+
+    ysd.saveUserData(model.getPlayerMap());*/
 }
 
 int main() {
     //refactoringTest();
-    yamlTest();
+    //yamlTest();
 
-	return 0;
+    return 0;
 }
