@@ -18,7 +18,6 @@ private:
 	std::deque<std::unique_ptr<Command>> basicCommandQueue;
 
 	CombatManager combatManager{};
-	//std::deque<std::unique_ptr<CombatCommand>> combatCommandQueue;
 
 	networking::Message createAlertMessage(networking::Connection, std::string);
 

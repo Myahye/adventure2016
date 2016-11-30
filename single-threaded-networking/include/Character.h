@@ -15,6 +15,8 @@ class Character {
 
 	//int inventoryLimit = 10;
 
+	bool isPlayer;
+
 	int armor = 0;
 	int exp = 0;
 	int gold = 0;
@@ -37,8 +39,11 @@ class Character {
 	std::vector<std::string> longdesc;
 
 public:
-	Character();
-	Character(const int id);
+	Character(bool isPlayer);
+	Character(const int id, bool isPlayer);
+
+	bool checkCharacterType();
+	void setCharacterType(bool isPlayer);
 
 	int getArmor() const;
 	void setArmor(const int armor);
@@ -109,4 +114,4 @@ public:
     std::string getInventoryDesc() const;
 };
 
-#endif
+#endif 

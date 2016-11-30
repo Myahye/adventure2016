@@ -9,12 +9,6 @@
 #include "Room.h"
 #include "Object.h"
 
-bool is_number(const std::string& s);
-
-std::string printMiniMap(std::unordered_map<int,Room>* rooms, const int currentRoomId);
-
-std::string getPlayersInRoomDesc(std::unordered_map<int, Player>* players, const std::unordered_map<int, int>* playerLocations, const int currentRoomId);
-
 namespace Commands {
 
 	class LookCommand : public Command {
@@ -48,8 +42,6 @@ namespace Commands {
 
 		networking::Connection getConnection() const;
 	};
-
-
 
 	class FleeCommand : public Command {
   	private:
@@ -95,22 +87,6 @@ namespace Commands {
 		//need to move out later
 		bool is_number(const std::string& s);
 	};
-
-/*	class EquipCommand : public Command {
-	private:
-		networking::Connection connection;
-		std::string message;
-	public:
-		EquipCommand(networking::Connection connection_, const std::string& message_);
-
-		std::string execute(Context& context);
-
-		int getId() const;
-
-		networking::Connection getConnection() const;
-
-	};
-*/
 
 	class InvalidCommand : public Command {
 	private:
@@ -158,9 +134,4 @@ namespace Commands {
 	};
 
 }
-
-
-
-
-
 #endif
