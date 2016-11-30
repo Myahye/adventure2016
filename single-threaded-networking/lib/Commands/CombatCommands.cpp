@@ -62,6 +62,8 @@ namespace CombatCommands {
 		}
 
 		int currentRoomId = (*playerLocations)[playerId];
+
+
 		Room* currentRoom = &(*rooms)[currentRoomId];
 
 		if(targetName == "") {
@@ -108,8 +110,12 @@ namespace CombatCommands {
 				//Combatant instigatorCombatant = Combatant{connection, player->playerCharacter};
 				Combatant targetCombatant = Combatant{targetConnection, &(*players)[targetPlayerId].playerCharacter, targetName};
 
+				std::ostringstream currentRoomIdString;
+				currentRoomIdString << currentRoomId;
+				std::cout<<"currentRoomId:::: " + currentRoomIdString.str()<<std::endl;
+
 				//Combatant targetCombatant =Combatant{targetConnection, targetPlayer->playerCharacter};
-				Fight fight = Fight{instigatorCombatant, targetCombatant};
+				Fight fight = Fight{instigatorCombatant, targetCombatant, currentRoomId};
 
 				fights.push_back(fight);
 

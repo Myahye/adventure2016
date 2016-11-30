@@ -1,7 +1,7 @@
 #include "Fight.h"
 
-Fight::Fight(Combatant instigator, Combatant target):
-        instigatorCombatant{instigator}, targetCombatant{target}{};
+Fight::Fight(Combatant instigator_, Combatant target_, int roomID_):
+        instigatorCombatant{instigator_}, targetCombatant{target_}, roomID{roomID_}{};
 
 void Fight::setInstigatorOverrideFlag(bool val){
   this->instigatorOverrideFlag = val;

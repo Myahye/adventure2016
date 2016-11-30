@@ -7,7 +7,7 @@
 class Fight{
 
 public:
-  Fight(Combatant instigator, Combatant target);
+  Fight(Combatant instigator, Combatant target, int roomID);
 
 	// Combatant getInstigatorCombatant();
   // Combatant getTargetCombatant();
@@ -15,6 +15,7 @@ public:
   Combatant targetCombatant;
   bool targetOverrideFlag;
   bool instigatorOverrideFlag;
+  int roomID;
   void setInstigatorOverrideFlag(bool);
   void setTargetOverrideFlag(bool);
 };
