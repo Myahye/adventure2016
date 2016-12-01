@@ -142,3 +142,7 @@ void YamlSaveData::updateOrAddPlayer(std::unordered_map<int,Player>& players, Pl
 	players.erase(player.playerCharacter.getId());
 	players.insert(std::make_pair(player.playerCharacter.getId(), player));
 }
+
+void YamlSaveData::deletePlayer(std::unordered_map<int,Player>& players, Player& player){
+	players.erase(player.playerCharacter.getId());
+}
