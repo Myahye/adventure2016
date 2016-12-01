@@ -16,8 +16,6 @@ int getPlayerIdInRoom(std::unordered_map<int, Player>* players, const std::unord
 		}
 	}
 	return -1;//Please forgive me.
-	// playersInRoom += "\n\n";
-	// return playersInRoom;
 }
 
 namespace CombatCommands {
@@ -74,11 +72,12 @@ namespace CombatCommands {
 		//-------------------------------------------------Attack player
 		int targetPlayerId = getPlayerIdInRoom(players, playerLocations, currentRoomId, targetName);
 		auto targetCharacter = &(*players)[targetPlayerId].playerCharacter;
-
+targetCharacter = NULL;
 		if(targetPlayerId==-1){
+			std::cout<<"targetPlayerId==-1"<<std::endl;
 
 			Npc* targetNpc = currentRoom->findNpc(targetName);
-				//will move this to room class later as if isNpc return npc.getfulldesc()
+
 			if(targetNpc != NULL) {
 				targetNpc->npcCharacter.setStatus("Online");
 				targetCharacter = &targetNpc->npcCharacter;
@@ -87,20 +86,29 @@ namespace CombatCommands {
 				return "Combat aborted, there is no one with the name "+targetName+" in room.";
 			}
 		}else{
+			std::cout<<"targetPlayerId!=-1"<<std::endl;
+
 			//refactor this out to its own method
+			bool playerIsInstigator = false;
+			bool playerIsTarget = false;
 			for(Fight fight : fights){
-				bool playerIsInstigator = (fight.instigatorCombatant.character->getId()
+				playerIsInstigator = (fight.instigatorCombatant.character->getId()
 																		== targetPlayerId);
-				bool playerIsTarget = (fight.targetCombatant.character->getId()
+				playerIsTarget = (fight.targetCombatant.character->getId()
 																		== targetPlayerId);;
-				if(!playerIsInstigator && !playerIsTarget){
-					targetCharacter = &(*players)[targetPlayerId].playerCharacter;
-				}else{
+				if(playerIsInstigator || playerIsTarget){
 					return "Combat aborted, " + targetName + " is already in combat.";
+
 				}
 			}
-		}
+			std::cout<<"Player assigned"<<std::endl;
 
+			targetCharacter = &(*players)[targetPlayerId].playerCharacter;
+		}
+		std::cout<<"end of if else"<<std::endl;
+		if(targetCharacter==NULL){
+std::cout<<"shit"<<std::endl;
+		}
 		std::ostringstream targetPlayerIdString;
 		targetPlayerIdString << targetPlayerId;
 
@@ -119,6 +127,7 @@ namespace CombatCommands {
 
 				Combatant instigatorCombatant = Combatant{connection, &(*players)[playerId].playerCharacter, playerName, false};
 				//Combatant instigatorCombatant = Combatant{connection, player->playerCharacter};
+				std::cout<<"targetName: " + targetName +", npcFlag: " << std::boolalpha << npcFlag <<std::endl;
 				Combatant targetCombatant = Combatant{targetConnection, targetCharacter, targetName, npcFlag};
 
 				std::ostringstream currentRoomIdString;
@@ -150,72 +159,4 @@ namespace CombatCommands {
 	}
 
 
-
-	// AttackCommand::AttackCommand(std::vector<networking::Connection>& clients_, networking::Connection sourceConnection_, const std::string& message_)
-	// : clients{clients_}, sourceConnection{sourceConnection_}, message{message_} {}
-	//
-	// std::string AttackCommand::execute(Context& context) {
-	// 	auto players = context.getPlayers();
-	// 	auto rooms = context.getRooms();
-	// 	auto playerLocations = context.getPlayerLocations();
-	// 	int playerId = this->sourceConnection.playerId;
-	//
-	// 	std::string messageText = this->message.substr(7);
-	// 	std::transform(messageText.begin(), messageText.end(), messageText.begin(), ::tolower);
-	//
-	// 	std::vector <std::string> takeMessage;
-	//   boost::trim_if(messageText, boost::is_any_of("\t "));
-	//   boost::split(takeMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
-	// 	this->sourceName=(*players)[playerId].getUsername();
-	// 	std::string sourceResponse = sourceName + "> " + takeMessage[0];
-	//
-	// 	int currentRoomId = (*playerLocations)[playerId];
-	// 	Room* currentRoom = &(*rooms)[currentRoomId];
-	//
-	// 	//should change this to not return magic number
-	// 	int targetPlayerId = currentRoom->findPlayerId(takeMessage[0]);
-	// 	for(networking::Connection client: clients){
-	// 		if(client.playerId == targetPlayerId){
-	// 			this->targetConnection = client;
-	// 		}
-	// 	}
-	// 	if(targetPlayerId != 0) {
-	// 		std::cout<<(*players)[targetPlayerId].getUsername() +" is the target name for "+ (*players)[playerId].getUsername()<<std::endl;
-	// 		int currentTargetHealth=(*players)[targetPlayerId].getHealth();
-	// 		if (currentTargetHealth==0){
-	// 			return sourceResponse + " has already been Defeated!\n";
-	// 		}else{
-	// 			(*players)[targetPlayerId].setHealth(currentTargetHealth-50);
-	// 			if ((*players)[targetPlayerId].getHealth()==0){
-	// 				int playerXP=(*players)[playerId].getExp();
-	// 				(*players)[playerId].setExp(100);
-	// 				return sourceResponse + " has been defeated!\n";
-	// 			}
-	//
-	// 		}
-	// 		return sourceResponse + " target found Attack Success \n";
-	// 	}/*else if(){
-	//
-	// 	}*/else{
-	// 		return sourceResponse + " target not in room / not found \n" ;
-	// 	}
-	//
-	// }
-	//
-	// std::string AttackCommand::getSourceName() const {
-	// 	return this->sourceName;
-	// }
-	//
-	// int AttackCommand::getSourceId() const {
-	// 	return this->sourceConnection.playerId;
-	// }
-	// int AttackCommand::getTargetId() const {
-	// 	return this->targetId;
-	// }
-	// networking::Connection AttackCommand::getSourceConnection() const {
-	// 	return this->sourceConnection;
-	// }
-	// networking::Connection AttackCommand::getTargetConnection() const {
-	// 	return this->targetConnection;
-	// }
 }

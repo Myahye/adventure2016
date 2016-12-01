@@ -29,17 +29,25 @@ CombatManager::updateCombat(std::vector<networking::Connection>& clients, Contex
     int index = 0;
     //bool instigatorNPCFlag = false;
     //bool targetNPCFlag = false;
+    std::cout<<"0"<<std::endl;
+    std::cout << "fights size: " << fights.size() << '\n';
+
     for(Fight fight : fights){ // Please forgive my sins. I should not have done this.
       bool instigatorNPCFlag = fight.instigatorCombatant.npcFlag;
-      std::cout<<"instigatorNPCFlag: "<<std::boolalpha <<instigatorNPCFlag<<std::endl;
+      std::cout<<"instigatorNPCFlag: "<<std::boolalpha <<instigatorNPCFlag << ", instigatorName: " + fight.instigatorCombatant.name <<std::endl;
       bool targetNPCFlag = fight.targetCombatant.npcFlag;
-      std::cout<<"targetNPCFlag: "<<std::boolalpha <<targetNPCFlag<<std::endl;
+      std::cout<<"targetNPCFlag: "<<std::boolalpha <<targetNPCFlag<< ", targetName: " + fight.targetCombatant.name <<std::endl;
       //check if instigator is dead
       if(fight.instigatorCombatant.character->getCurrentHealth()>0){
         std::cout<<"1"<<std::endl;
         //check if target is dead
+
+        if(fight.targetCombatant.character==NULL){
+std::cout<<"1.1"<<std::endl;
+        }
+
         if(fight.targetCombatant.character->getCurrentHealth()>0){
-std::cout<<"2"<<std::endl;
+          std::cout<<"2"<<std::endl;
         //check if instigator is still in room
         int currentInstigatorRoomId = (*playerLocations)[fight.instigatorCombatant.character->getId()];
 
@@ -63,13 +71,17 @@ std::cout<<"2"<<std::endl;
           if(currentTargetRoomId==fight.roomID || targetNPCFlag){
             std::cout<<"4"<<std::endl;
             //Check for override flag
-            if(!fight.targetOverrideFlag){
+            std::cout<<"fight.getTargetOverrideFlag(): "<<std::boolalpha <<fight.getTargetOverrideFlag()<<std::endl;
+
+
+            if(!fight.getTargetOverrideFlag()){
               std::cout<<"4.1"<<std::endl;
-              if(!targetNPCFlag){
-                std::cout<<"5"<<std::endl;
-                outgoing.push_back(fight.instigatorCombatant.attack(1, fight.targetCombatant.name));
-              }
+              networking::Message instigatorAttackMessage = fight.instigatorCombatant.attack(1, fight.targetCombatant.name);
               if(!instigatorNPCFlag){
+                std::cout<<"5"<<std::endl;
+                outgoing.push_back(instigatorAttackMessage);
+              }
+              if(!targetNPCFlag){
                 std::cout<<"6"<<std::endl;
                 outgoing.push_back(fight.targetCombatant.sendMessage("You have attacked " + fight.instigatorCombatant.name + " for 1 point of damage\n\n"));
               }
@@ -77,15 +89,20 @@ std::cout<<"2"<<std::endl;
               fight.setTargetOverrideFlag(false);
               //attack for whatever spell is worth here
             }
+            std::cout<<"6.1"<<std::endl;
+
+            std::cout<<"fight.getInstigatorOverrideFlag(): "<<std::boolalpha <<fight.getInstigatorOverrideFlag()<<std::endl;
 
             //Check for override flag
-            if(!fight.instigatorOverrideFlag){
-              if(!instigatorNPCFlag){
-                std::cout<<"6"<<std::endl;
-                outgoing.push_back(fight.targetCombatant.attack(1, fight.instigatorCombatant.name));
-              }
+            if(!fight.getInstigatorOverrideFlag()){
+              std::cout<<"7"<<std::endl;
+              networking::Message targetAttackMessage = fight.targetCombatant.attack(1, fight.instigatorCombatant.name);
               if(!targetNPCFlag){
-                std::cout<<"7"<<std::endl;
+                std::cout<<"8"<<std::endl;
+                outgoing.push_back(targetAttackMessage);
+              }
+              if(!instigatorNPCFlag){
+                std::cout<<"9"<<std::endl;
                 outgoing.push_back(fight.instigatorCombatant.sendMessage("You have attacked " + fight.targetCombatant.name + " for 1 point of damage\n\n"));
               }
             }else{
@@ -161,7 +178,7 @@ std::cout<<"2"<<std::endl;
 }
 
 Message
-CombatManager::createAlertMessage(Connection connection, std::string name){
+CombatManager::createAlertMessage(Connection connection, std::string name, bool npcFlag){
   std::cout<<"6.1 connection == "<<connection.playerId<<std::endl;
   std::string response = "ALERT > You have been attacked by " + name + "\n\n";
   Message sourceMessage{connection,response};
