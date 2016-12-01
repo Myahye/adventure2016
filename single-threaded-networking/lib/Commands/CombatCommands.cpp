@@ -5,7 +5,7 @@
 int getPlayerIdInRoom(std::unordered_map<int, Player>* players, const std::unordered_map<int, int>* playerLocations, const int currentRoomId, const std::string& playerName) {
 	for(auto& playerIdRoomIdpair : *playerLocations) {
 		if(playerIdRoomIdpair.second == currentRoomId) {
-			if((*players)[playerIdRoomIdpair.first].getStatus() == "Online") {
+			if((*players)[playerIdRoomIdpair.first].playerCharacter.getStatus() == "Online") {
 				std::cout<<"Checking if " + (*players)[playerIdRoomIdpair.first].getUsername()+" == " + playerName <<std::endl;
 				if((*players)[playerIdRoomIdpair.first].getUsername()==playerName){
 					std::cout<<"getPlayerIdInRoom found that does infact " + (*players)[playerIdRoomIdpair.first].getUsername()+" == " + playerName <<std::endl;
