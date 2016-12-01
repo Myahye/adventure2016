@@ -70,22 +70,34 @@ namespace CombatCommands {
 			return response + "\n\n" + "Please enter a target\n\n";
 		}
 
-
+		bool npcFlag = false;
 		//-------------------------------------------------Attack player
 		int targetPlayerId = getPlayerIdInRoom(players, playerLocations, currentRoomId, targetName);
+		auto targetCharacter = &(*players)[targetPlayerId].playerCharacter;
 
 		if(targetPlayerId==-1){
-			return "Combat aborted, no player with name "+targetName+" in room.";
-		}
 
-		//refactor this out to its own method
-		for(Fight fight : fights){
-			bool playerIsInstigator = (fight.instigatorCombatant.character->getId()
-																	== targetPlayerId);
-			bool playerIsTarget = (fight.targetCombatant.character->getId()
-																	== targetPlayerId);;
-			if(playerIsInstigator || playerIsTarget){
-				return "Combat aborted, " + targetName + " is already in combat.";
+			Npc* targetNpc = currentRoom->findNpc(targetName);
+				//will move this to room class later as if isNpc return npc.getfulldesc()
+			if(targetNpc != NULL) {
+				targetNpc->npcCharacter.setStatus("Online");
+				targetCharacter = &targetNpc->npcCharacter;
+				npcFlag = true;
+			}else{
+				return "Combat aborted, there is no one with the name "+targetName+" in room.";
+			}
+		}else{
+			//refactor this out to its own method
+			for(Fight fight : fights){
+				bool playerIsInstigator = (fight.instigatorCombatant.character->getId()
+																		== targetPlayerId);
+				bool playerIsTarget = (fight.targetCombatant.character->getId()
+																		== targetPlayerId);;
+				if(!playerIsInstigator && !playerIsTarget){
+					targetCharacter = &(*players)[targetPlayerId].playerCharacter;
+				}else{
+					return "Combat aborted, " + targetName + " is already in combat.";
+				}
 			}
 		}
 
@@ -99,16 +111,15 @@ namespace CombatCommands {
 			targetConnectionPlayerIdString << targetConnection.playerId;
 
 			std::cout<<"Checking if targetConnection.playerid: " + targetConnectionPlayerIdString.str() +" == " + targetPlayerIdString.str() <<std::endl;
-			if(targetConnection.playerId == targetPlayerId){
+			if(targetConnection.playerId == targetPlayerId || npcFlag){
 				std::cout<<"getPlayerIdInRoom found that does infact targetConnection.playerid: " + targetConnectionPlayerIdString.str() +" == " + targetPlayerIdString.str() <<std::endl;
 				//Create target and instigator combatant, create fight and add to battles
 				auto player = (*players)[playerId];
 				auto targetPlayer = (*players)[targetPlayerId];
 
-
-				Combatant instigatorCombatant = Combatant{connection, &(*players)[playerId].playerCharacter, playerName};
+				Combatant instigatorCombatant = Combatant{connection, &(*players)[playerId].playerCharacter, playerName, false};
 				//Combatant instigatorCombatant = Combatant{connection, player->playerCharacter};
-				Combatant targetCombatant = Combatant{targetConnection, &(*players)[targetPlayerId].playerCharacter, targetName};
+				Combatant targetCombatant = Combatant{targetConnection, targetCharacter, targetName, npcFlag};
 
 				std::ostringstream currentRoomIdString;
 				currentRoomIdString << currentRoomId;
@@ -119,7 +130,7 @@ namespace CombatCommands {
 
 				fights.push_back(fight);
 
-				return response + "\n\n" + "Combat with " + targetName + " initiated.n\n\n";
+				return response + "\n\n" + "Combat with " + targetName + " initiated.\n\n";
 			}
 			//To self - this is trash, remove asap
 
