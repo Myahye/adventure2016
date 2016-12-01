@@ -16,6 +16,7 @@ class Character {
 	//int inventoryLimit = 10;
 
 	bool isPlayer;
+	bool isSwapped = false;
 
 	int armor = 0;
 	int exp = 0;
@@ -112,6 +113,9 @@ public:
 
     std::string getEquipmentDesc() const;
     std::string getInventoryDesc() const;
+
+    bool getSwappedStatus() const;
+    void setSwappedStatus(bool swap);
 };
 
 #endif

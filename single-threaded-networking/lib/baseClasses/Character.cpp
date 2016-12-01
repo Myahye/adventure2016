@@ -248,4 +248,11 @@ std::string Character::getInventoryDesc() const {
   return response;
 }
 
+bool Character::getSwappedStatus() const{
+  return isSwapped;
+}
+void Character::setSwappedStatus(bool swap){
+  this->isSwapped = swap;
+}
+
 #endif

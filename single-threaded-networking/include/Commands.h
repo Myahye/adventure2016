@@ -2,6 +2,7 @@
 #define COMMANDS_H
 
 #include <unordered_map>
+#include <string>
 
 #include "CommandInterface.h"
 #include "Player.h"
