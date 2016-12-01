@@ -62,7 +62,9 @@ void YamlSaveData::saveUserData(const std::unordered_map<int,Player>& players){
 		emitter << YAML::EndMap;
 	}
 	emitter << YAML::EndSeq;
+
 	std::ofstream fout("../data/users.yml");
+
 	fout << emitter.c_str();
 }
 
@@ -100,7 +102,7 @@ void YamlSaveData::emitVectorObjects(YAML::Emitter& emitter, std::vector<Object>
 		emitVectorStrings("wear_flags", emitter, wearflagsV);
 
 		emitter << YAML::Key << "weight" << YAML::Value << std::to_string(eachObject.getWeight());
-		
+
 		emitter << YAML::EndSeq;
 	}
 }
@@ -130,7 +132,7 @@ void YamlSaveData::emitMapObjects(YAML::Emitter& emitter, std::unordered_map<int
 		emitVectorStrings("wear_flags", emitter, wearflagsV);
 
 		emitter << YAML::Key << "weight" << YAML::Value << std::to_string(eachObject.second.getWeight());
-		
+
 		emitter << YAML::EndSeq;
 	}
 }
@@ -141,3 +143,4 @@ void YamlSaveData::emitObjectExtra(std::string pair_one, std::string pair_two, Y
 		emitVectorStrings(pair_two, emitter, eachPair.second);
 	}
 }
+

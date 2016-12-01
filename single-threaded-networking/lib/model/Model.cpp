@@ -195,66 +195,6 @@ Model::dummySayCommand(const int& playerId, const std::string& message){
   return this->players[playerId].getUsername() + "> " + message.substr(4) + "\n\n";
 }
 
-// std::string
-// Model::lookCommand(const int& playerId, const std::string& command){
-//   std::string response = this->players[playerId].getUsername() + "> " + command;
-//   std::string message = command.substr(5);
-//   std::transform(message.begin(), message.end(), message.begin(), ::tolower);
-
-//   int currentRoomId = this->playerLocation[playerId];
-//   Room currentRoom = this->rooms[currentRoomId];
-
-//   if(message == "room") {
-//     return response + getCurrentRoomDescription(playerId);
-//   }
-
-//   //-------------------------------------------------look "cardinal direction"
-
-//   //will move this to room class later as if isDirection return door.getDesc()
-//   auto doorsInRoom = currentRoom.getDoors();
-
-//   for(auto currentDoor : doorsInRoom) {
-//     if(message == currentDoor.getDir()) {
-//       response += "\n\n" + currentDoor.getDesc() += "\n";
-
-//       return response;
-//     }
-//   }
-
-//   //-------------------------------------------------look "Npc keyword"
-
-//   //will move this to room class later as if isNpc return npc.getfulldesc()
-//   Npc currentNpc = currentRoom.findNpc(message);
-
-//   if(currentNpc.getId() != 0) {
-
-//     //change for look toddler 1 look toddler 2 look toddler 3 later since it only checks the description of the first duplicate npc?
-//     response += "\n\n" + currentNpc.getDesc();
-//     response += "\n     Wearing: "  + currentNpc.getNpcEquipmentDesc();
-//     response += "\n     Carrying: " + currentNpc.getNpcInventoryDesc() + "\n\n";
-
-//     return response;
-//   }
-
-//   //-------------------------------------------------look "Object keyword"
-
-//   //will move this to room class later as if isobject return object.getfulldesc()
-//   Object currentObject = currentRoom.findObject(message);
-
-//   if(currentObject.getId() != 0) {
-
-//     response += "\n";
-//     //change for look object 1 look object 2 look object 3 later since it only checks the description of the first duplicate object?
-//     for(auto descriptionText : currentObject.getExtra().first) {
-//       response += descriptionText + "\n";
-//     }
-//     return response;
-//   }
-
-//   return this->players[playerId].getUsername() + "> " + "Cannot find " + message + ", no match. \n\n";
-// }
-
-//----------------------Lawrence Yu
 void Model::reset(){
     //  std::cout << "gerooooi " << std::endl;
   for(auto& reset : resets) {
@@ -278,10 +218,12 @@ Context Model::getContext() const {
 
 
 void Model::playerDisconnected(const int playerId) {
+  players[playerId].setStatus("Offline");
   this->rooms[playerLocation[playerId]].removePlayer(playerId);
 }
 
 void Model::playerConnect(const int playerId) {
   std::cout << "s " << playerLocation[playerId] << std::endl;
+  players[playerId].setStatus("Online");
   this->rooms[playerLocation[playerId]].addPlayer(playerId, players[playerId].getUsername());
 }

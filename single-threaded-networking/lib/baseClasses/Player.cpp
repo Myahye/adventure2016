@@ -28,4 +28,16 @@ void Player::setCharacter(const Character& character){
     this->playerCharacter = character;
 }
 
+std::string Player::getStatus() const {
+  return status;
+}
+void Player::setStatus(std::string s) {
+  status = s;
+}
+
+void
+Player::attack(const std::string& name){
+	std::cout << "You are being attacked by " +name << std::endl;
+}
+
 #endif

@@ -43,21 +43,6 @@ namespace Commands {
 		networking::Connection getConnection() const;
 	};
 
-	class AttackCommand : public Command {
-  	private:
-  		networking::Connection connection;
-  		std::string message;
-  	public:
-  		AttackCommand(networking::Connection connection_, const std::string& message_);
-
-  		std::string execute(Context& context);
-
-  		int getId() const;
-
-  		networking::Connection getConnection() const;
-  	};
-
-
 	class FleeCommand : public Command {
   	private:
   		networking::Connection connection;
@@ -121,8 +106,10 @@ namespace Commands {
 	private:
 		networking::Connection connection;
 		std::unordered_map<std::string, std::string> commands;
+		std::string message;
+
 	public:
-		ListCommand(networking::Connection connection_, const std::unordered_map<std::string, std::string>& commands_);
+		ListCommand(networking::Connection connection_, const std::unordered_map<std::string, std::string>& commands_, const std::string& message_);
 
 		std::string execute(Context& context);
 
@@ -179,32 +166,6 @@ namespace Commands {
 
   		networking::Connection getConnection() const;
   	};
-
 }
-
-
-
-namespace CombatCommands {
-	class AttackCommand : public CombatCommand {
-		private:
-			int targetId;
-			std::string sourceName;
-			std::vector<networking::Connection>& clients;
-			networking::Connection sourceConnection;
-			networking::Connection targetConnection;
-			std::string message;
-		public:
-			AttackCommand(std::vector<networking::Connection>& clients_, networking::Connection connection_, const std::string& message_);
-
-			std::string execute(Context& context);
-			std::string getSourceName() const;
-			int getSourceId() const;
-			int getTargetId() const;
-
-			networking::Connection getSourceConnection() const;
-			networking::Connection getTargetConnection() const;
-		};
-}
-
 
 #endif

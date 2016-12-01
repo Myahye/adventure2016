@@ -1,3 +1,5 @@
+
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -100,7 +102,7 @@ void refactoringTest(){
     cout << "npc hit: " << npc.npcCharacter.getHit() << endl;
     cout << "npc description: " << npc.npcCharacter.getDescription() << endl;
     cout << "npc shortdesc: " << npc.npcCharacter.getShortDesc() << endl;
-    
+
     cout << "Player armor: " << player.playerCharacter.getArmor() << endl;
     cout << "Player username: " << player.getUsername() << endl;
     cout << "Player exp: " << player.playerCharacter.getExp() << endl;
@@ -132,6 +134,6 @@ void yamlTest(){
 
 int main() {
     //refactoringTest();
-    yamlTest();
+    //yamlTest();
     return 0;
 }

@@ -44,7 +44,7 @@ ModelInterface modelInterface{};
 std::chrono::time_point<std::chrono::system_clock> lastGameUpdate, lastCombatUpdate, lastWorldReset;
 UpdateState updateState;
 std::chrono::milliseconds immediate = std::chrono::milliseconds(0);
-std::chrono::milliseconds combatUpdate = std::chrono::milliseconds(500);
+std::chrono::milliseconds combatUpdate = std::chrono::milliseconds(5000);
 std::chrono::milliseconds gameUpdate = std::chrono::milliseconds(200);
 std::chrono::milliseconds worldReset = std::chrono::seconds(30);
 
@@ -113,7 +113,7 @@ processMessages(std::deque<Message>& messages, Server& server) {
   }
   //updateState.turn==UpdateTurn::Combat
   else if(updateState.turn==UpdateTurn::Combat){
-    return modelInterface.updateCombat();
+    return modelInterface.updateCombat(clients);
   }
   else {
     std::deque<Message> outgoing;

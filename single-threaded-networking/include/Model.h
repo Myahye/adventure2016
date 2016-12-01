@@ -37,21 +37,16 @@ private:
   void yamlParseAndBuildSpells(const std::string& pathToFile);
   //void yamlParseAndBuildExistingPlayers(const std::string& pathToFile);
   void printAll();
-  
+
   //--------------Lawrence Yu
   Context context;
 public:
-
   //Model(); //temp
   void yamlParseAndBuildExistingPlayers(const std::string& pathToFile);
   Model(const std::vector<std::string>& paths);
 
   int createPlayer(const std::string& username, const std::string& password);
   std::vector<std::tuple<int,std::string,std::string>> getPlayerCredentialsVector() const;
-
-  //Model(const std::string& pathToYamlFile/s);
-  //Populates member variables
-  //Model::yamlParse()
 
   //Methods for players to interact with world
   std::string movePlayer(const int& playerId, const std::string& direction);
@@ -72,7 +67,7 @@ public:
 
   //-----------------------------Lawrence YU
   void reset();
-  
+
   void playerDisconnected(const int playerId);
   void playerConnect(const int playerId);
 
