@@ -21,6 +21,7 @@ class Editor : public Command {
 private:
 	networking::Connection connection;
 	std::string message;
+	int currentlySelectedLineNumber = 0;
 public:
 	Editor(networking::Connection connection_, const std::string& message_);
 

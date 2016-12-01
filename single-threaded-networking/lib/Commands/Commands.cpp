@@ -459,11 +459,38 @@ std::string Editor::execute(Context& context) {
 			message = "";
 			return response;
 	    }
+	    currentlySelectedLineNumber = selectedLineNumber;
 
-		response += "\n\n      Enter the line of text you want to set door " + selectedLineNumber + " description to:\n\n";
+		response += std::string("\n\n      Enter the line of text you want to set door ") + std::to_string(selectedLineNumber) + " description to:\n\n";
 		player->setStatus("SetDoorDescriptionLine");
 		message = "";
 		return response;
+	}
+	if(player->getStatus() == "SetDoorDescriptionLine") {
+
+		auto doors = &currentRoom->doors;
+		response += "\n\n";
+		auto description = {message};
+		(*doors)[currentlySelectedLineNumber].setDesc(description);
+		response += std::string("      Line '") + message + "' added to door " + std::to_string(currentlySelectedLineNumber) + " description\n\n";
+		player->setStatus("EditRoomDescription");
+		currentlySelectedLineNumber = 0;
+
+		response += std::string("\n\n") +  "      Type '1' to add a new door \n" + 
+							 "      Type '2' to remove a door\n" + 
+							 "      Type '3' to set door description\n" + 
+							 "      Type 'back' to go back to previous window\n"
+							 "      Type 'stop' to quit the editor\n\n";
+
+		response += "        Doors in Room: \n";
+		int i = 0;
+		for(auto & door : *doors) {
+			response += std::string("        ") + std::to_string(i) + " - " + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + "Desc: " + door.getDesc() + "\n";
+			i++;
+		}
+
+		message = "";
+		return response + "\n";
 	}
 
 
@@ -478,6 +505,7 @@ std::string Editor::execute(Context& context) {
 		response += "\n\n      Enter the line number that you would like to remove from description:\n\n";
 		player->setStatus("RemoveLineFromRoomDescription");
 		response += "        Room Description: \n";
+		auto description = currentRoom->getDescV();
 		int i = 0;
 		for(auto& d : description) {
 			response += "      ";
@@ -578,7 +606,7 @@ std::string Editor::execute(Context& context) {
 
 	    int selectedLineNumber = std::stoi(message);
 
-	    if(selectedLineNumber < 0 || selectedLineNumber >= description->size()) {
+	    if(selectedLineNumber < 0 || selectedLineNumber >= description.size()) {
 	    	response += "\n\n      Could not find line number " + message + ", Please enter the line number that you would like to remove:\n\n";
 			response += "        Room Description: \n";
 			int i = 0;
@@ -590,8 +618,8 @@ std::string Editor::execute(Context& context) {
 			message = "";
 			return response + "\n";
 	    }
-	    std::string temp = (*description)[selectedLineNumber];
-		description->erase(description->begin()+selectedLineNumber);
+	    std::string temp = description[selectedLineNumber];
+		description.erase(description.begin()+selectedLineNumber);
 		response += std::string("\n\n      Line '") + temp + "' removed from description.";
 		player->setStatus("EditRoomDescription");
 
@@ -1226,6 +1254,7 @@ namespace Commands {
 		//-------------------------------------------------look "Npc keyword"
 
 		//OK findNpc/findRoom will return a Npc* object which we can use to directly modify the selected npc/object in the room 
+		int currentObjectId = 0;
 		if(stealMessage.size() == 2) {
 			Npc* currentNpc = currentRoom->findNpc(stealMessage[1]);
 			std::cout << stealMessage.size() << std::endl;
@@ -1236,6 +1265,18 @@ namespace Commands {
 				//Npc will use a currentNpc->findObjectId(objectTargetPair[0]) method which returns the object ID	of the object in inventory 
 				//Will change removeObjectfromInventory() to take in the objectID (maybe pass in selected index "eg. steal apple '1'");
 				if(currentNpc->npcCharacter.removeObjectFromInventory(stealMessage[0])) {
+
+					for(auto& object : *objects) {
+						for(auto& keyword : object.second.getKeywords()) {
+							if(stealMessage[0].find(keyword) != std::string::npos) {
+								currentObjectId = object.first;
+								break;
+							}
+						}
+					}
+
+
+					player->playerCharacter.addObjectToInventory((*objects)[currentObjectId], 1);
 					response += "Success!\n";
 				} else {
 					response += "Failure.\n";
