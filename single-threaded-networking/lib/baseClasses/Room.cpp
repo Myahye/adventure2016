@@ -2,7 +2,7 @@
 //include "CustomError.h"
 
 Room::Room()
-:mDesc{"No Description"}, mExtendedDesc{std::make_pair(std::vector<std::string>{"No extended description"},std::vector<std::string>{""})}, mName{"Empty Room"},
+:mName{"Empty Room"},
             mRoomId{static_cast<unsigned int>(0)} {}
 
 //Temp constructor for testing and first iteration
