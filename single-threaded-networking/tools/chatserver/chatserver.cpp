@@ -44,7 +44,7 @@ ModelInterface modelInterface{};
 std::chrono::time_point<std::chrono::system_clock> lastGameUpdate, lastCombatUpdate, lastWorldReset;
 UpdateState updateState;
 std::chrono::milliseconds immediate = std::chrono::milliseconds(0);
-std::chrono::milliseconds combatUpdate = std::chrono::milliseconds(5000);
+std::chrono::milliseconds combatUpdate = std::chrono::milliseconds(2000);
 std::chrono::milliseconds gameUpdate = std::chrono::milliseconds(200);
 std::chrono::milliseconds worldReset = std::chrono::seconds(30);
 
