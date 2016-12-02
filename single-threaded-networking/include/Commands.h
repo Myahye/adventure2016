@@ -166,6 +166,20 @@ namespace Commands {
 
   		networking::Connection getConnection() const;
   	};
+
+  	// class ConfuseCommand : public Command {
+   //  private:
+   //      networking::Connection connection;
+   //      std::string message;
+   //  public:
+   //      ConfuseCommand(networking::Connection connection_, const std::string& message_);
+        
+   //      std::string execute(Context& context);
+        
+   //      int getId() const;
+        
+   //      networking::Connection getConnection() const;
+   //  };
 }
 
 #endif

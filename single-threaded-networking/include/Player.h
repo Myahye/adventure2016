@@ -7,6 +7,8 @@ class Player {
     std::string username;
     std::string password;
     std::string status = "Offline";
+    // bool isConfuse = false;
+    // int isConfuseTimer=0;
 
 public:
     // Constructor
@@ -28,6 +30,11 @@ public:
     void setStatus(std::string s);
 
     void attack(const std::string& name);
+
+
+    // bool getIsConfuse();
+    // void setIsConfuse(const bool& isConfuse);
+
 };
 
 #endif /* PLAYER_H */

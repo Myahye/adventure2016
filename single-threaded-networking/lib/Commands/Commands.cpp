@@ -613,4 +613,47 @@ namespace Commands {
 		return this->connection;
 	}
 
+	// ConfuseCommand::ConfuseCommand(networking::Connection connection_, const std::string& message_)
+ //    : connection{connection_}, message{message_} {}
+ //    std::string ConfuseCommand::execute(Context& context) {
+ //        auto players = context.getPlayers();
+ //        auto playerLocations = context.getPlayerLocations();
+ //        auto rooms = context.getRooms();
+ //        auto objects = context.getObjects();
+ //        int playerId = connection.playerId;
+ //        std::string confuseMessage = message.substr(8);
+ //        std::transform(confuseMessage.begin(), confuseMessage.end(), confuseMessage.begin(), ::tolower);
+ //        boost::trim_if(confuseMessage, boost::is_any_of("\t "));
+ //        int currentRoomId = (*playerLocations)[playerId];
+ //        Room* currentRoom = &(*rooms)[currentRoomId];
+ //        std::string targetName = "";
+ //        int targetId = 0;
+ //        //finding targetID
+ //        for(auto& target : (*players)){
+ //            if((target.second).getUsername() == confuseMessage){
+ //                targetId = target.first;
+ //            }
+ //        }
+        
+ //        if(targetId == 0){
+ //            return (*players)[playerId].getUsername() + "> " + "Cannot confuse " + confuseMessage + ", no match\n\n"; 
+ //        }
+        
+ //        if(currentRoomId == (*playerLocations)[targetId] ){
+ //            std::cout << "target : " << targetId << "is in room: " << currentRoomId << "\n";
+ //            auto target = &(*players)[targetId];
+ //            target->setIsConfuse(true);
+ //            return (*players)[playerId].getUsername() + "> " + "Confuse has been cast on " + confuseMessage + "\n\n"; 
+ //        }
+ //        else{
+ //            return (*players)[playerId].getUsername() + "> " + "Target " + confuseMessage + "is not in this room!\n\n"; 
+ //        }
+ //    }
+ //    int ConfuseCommand::getId() const {
+ //        return this->connection.playerId;
+ //    }
+ //    networking::Connection ConfuseCommand::getConnection() const {
+ //        return this->connection;
+ //    }
+
 }
