@@ -583,14 +583,14 @@ namespace Commands {
 		auto npcs = context.getNpcs();
 
 		int playerId = connection.playerId;
-		Player currentPlayer = (*players)[playerId];
+		Player* currentPlayer = &(*players)[playerId];
 		int currentRoomId = (*playerLocations)[playerId];
 		Room* currentRoom = &(*rooms)[currentRoomId];
 
-		if (currentPlayer.playerCharacter.getSwappedStatus()){
+		if (currentPlayer->playerCharacter.getSwappedStatus()){
 			return "You have already been swapped.\n";
 		}
-		if (currentPlayer.playerCharacter.getCurrentMana() < manaCost){
+		if (currentPlayer->playerCharacter.getCurrentMana() < manaCost){
 			return "You do not have enough mana.\n";
 		}
 
@@ -624,11 +624,11 @@ namespace Commands {
 			if ((*players)[targetPlayerId].playerCharacter.getSwappedStatus()){
 				return "Your target player has already been swapped.\n";
 			}
-			currentPlayer.playerCharacter.setCurrentMana(currentPlayer.playerCharacter.getCurrentMana() - manaCost);
-			std::swap(currentPlayer.playerCharacter, (*players)[targetPlayerId].playerCharacter);
-			currentPlayer.playerCharacter.setSwappedStatus(true);
+			currentPlayer->playerCharacter.setCurrentMana(currentPlayer->playerCharacter.getCurrentMana() - manaCost);
+			std::swap(currentPlayer->playerCharacter, (*players)[targetPlayerId].playerCharacter);
+			currentPlayer->playerCharacter.setSwappedStatus(true);
 			(*players)[targetPlayerId].playerCharacter.setSwappedStatus(true);
-			return currentPlayer.getUsername() + "> " + "You have swapped with player " + swapMessage + "\n";
+			return currentPlayer->getUsername() + "> " + "You have swapped with player " + swapMessage + "\n";
 		}
 		// Swap with Npc in the same room
 		swapWithNpc:
@@ -636,14 +636,14 @@ namespace Commands {
 			if (targetNpc->npcCharacter.getSwappedStatus()){
 				return "Your target npc has already been swapped.\n" + std::to_string(targetNpc->npcCharacter.getSwappedStatus());
 			}
-			currentPlayer.playerCharacter.setCurrentMana(currentPlayer.playerCharacter.getCurrentMana() - manaCost);
-			std::swap(currentPlayer.playerCharacter, targetNpc->npcCharacter);
-			currentPlayer.playerCharacter.setSwappedStatus(true);
+			currentPlayer->playerCharacter.setCurrentMana(currentPlayer->playerCharacter.getCurrentMana() - manaCost);
+			std::swap(currentPlayer->playerCharacter, targetNpc->npcCharacter);
+			currentPlayer->playerCharacter.setSwappedStatus(true);
 			targetNpc->npcCharacter.setSwappedStatus(true);
-			return currentPlayer.getUsername() + "> " + "You have swapped with npc " + swapMessage + "\n";
+			return currentPlayer->getUsername() + "> " + "You have swapped with npc " + swapMessage + "\n";
 		}
 		// No target found 
-		return currentPlayer.getUsername() + "> " + "Unable to locate " + swapMessage + "\n";
+		return currentPlayer->getUsername() + "> " + "Unable to locate " + swapMessage + "\n";
 	}
 
 	int SwapCommand::getId() const {
