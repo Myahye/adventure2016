@@ -7,7 +7,7 @@
 #include "Server.h"
 #include "Model.h"
 #include "Commands.h"
-
+#include "PigLatinTranslator.h"
 
 
 class ModelInterface {

@@ -428,7 +428,7 @@ namespace Commands {
 
 	std::string SayCommand::execute(Context& context) {
 		auto players = context.getPlayers();
-		return (*players)[this->playerId].getUsername()+ "> " + message.substr(4) + "\n";
+		return (*players)[this->playerId].getUsername()+ "> " + message.substr(3) + "\n";
 	}
 
 	int SayCommand::getId() const {
@@ -514,10 +514,18 @@ namespace Commands {
 
 
 		if(currentSpell->getType() == "defense"){
-			target->setCurrentHealth(currentTargetHealth + (playerLevel*2 + 50));
+			int finalHealth = currentTargetHealth + (playerLevel*2 + 50);
+			if(finalHealth > target->getMaxHealth()){
+				finalHealth = target->getMaxHealth();
+			}
+			target->setCurrentHealth(finalHealth);
 		} 
 		else{
-			target->setCurrentHealth(currentTargetHealth - (playerLevel*2 + 50)); 
+			int finalHealth = currentTargetHealth - (playerLevel*2 + 50);
+			if(finalHealth <= 0){
+				finalHealth = 0;
+			}
+			target->setCurrentHealth(finalHealth); 
 			//todo: if target dies -- increase xp/lvl up
 		}
 
@@ -613,47 +621,68 @@ namespace Commands {
 		return this->connection;
 	}
 
-	// ConfuseCommand::ConfuseCommand(networking::Connection connection_, const std::string& message_)
- //    : connection{connection_}, message{message_} {}
- //    std::string ConfuseCommand::execute(Context& context) {
- //        auto players = context.getPlayers();
- //        auto playerLocations = context.getPlayerLocations();
- //        auto rooms = context.getRooms();
- //        auto objects = context.getObjects();
- //        int playerId = connection.playerId;
- //        std::string confuseMessage = message.substr(8);
- //        std::transform(confuseMessage.begin(), confuseMessage.end(), confuseMessage.begin(), ::tolower);
- //        boost::trim_if(confuseMessage, boost::is_any_of("\t "));
- //        int currentRoomId = (*playerLocations)[playerId];
- //        Room* currentRoom = &(*rooms)[currentRoomId];
- //        std::string targetName = "";
- //        int targetId = 0;
- //        //finding targetID
- //        for(auto& target : (*players)){
- //            if((target.second).getUsername() == confuseMessage){
- //                targetId = target.first;
- //            }
- //        }
+	ConfuseCommand::ConfuseCommand(networking::Connection connection_, const std::string& message_)
+    : connection{connection_}, message{message_} {}
+    std::string ConfuseCommand::execute(Context& context) {
+        auto players = context.getPlayers();
+        auto playerLocations = context.getPlayerLocations();
+        auto rooms = context.getRooms();
+        auto objects = context.getObjects();
+        int playerId = connection.playerId;
+        std::string confuseMessage = message.substr(7);
+        std::transform(confuseMessage.begin(), confuseMessage.end(), confuseMessage.begin(), ::tolower);
+        boost::trim_if(confuseMessage, boost::is_any_of("\t "));
+        int currentRoomId = (*playerLocations)[playerId];
+        Room* currentRoom = &(*rooms)[currentRoomId];
+        std::string targetName = "";
+        int targetId = 0;
+        //finding targetID
+        for(auto& target : (*players)){
+            if((target.second).getUsername() == confuseMessage){
+                targetId = target.first;
+            }
+        }
         
- //        if(targetId == 0){
- //            return (*players)[playerId].getUsername() + "> " + "Cannot confuse " + confuseMessage + ", no match\n\n"; 
- //        }
-        
- //        if(currentRoomId == (*playerLocations)[targetId] ){
- //            std::cout << "target : " << targetId << "is in room: " << currentRoomId << "\n";
- //            auto target = &(*players)[targetId];
- //            target->setIsConfuse(true);
- //            return (*players)[playerId].getUsername() + "> " + "Confuse has been cast on " + confuseMessage + "\n\n"; 
- //        }
- //        else{
- //            return (*players)[playerId].getUsername() + "> " + "Target " + confuseMessage + "is not in this room!\n\n"; 
- //        }
- //    }
- //    int ConfuseCommand::getId() const {
- //        return this->connection.playerId;
- //    }
- //    networking::Connection ConfuseCommand::getConnection() const {
- //        return this->connection;
- //    }
+        if(targetId == 0){
+            return (*players)[playerId].getUsername() + "> " + "Cannot confuse " + confuseMessage + ", no match\n\n"; 
+        }
+
+        auto target = &(*players)[targetId];
+        auto player = &(*players)[playerId].playerCharacter;
+
+
+        int spellMana = ( ((*players)[targetId].playerCharacter.getMaxMana()/2) +10);
+        int currentPlayerMana = player->getCurrentMana();
+        if(!checkMana(spellMana, currentPlayerMana)){
+			return (*players)[playerId].getUsername() + "> " + "Not enough mana to cast confuse on " + confuseMessage + "\n\n";
+		}
+
+        if(currentRoomId == (*playerLocations)[targetId] ){
+            std::cout << "target : " << targetId << "is in room: " << currentRoomId << "\n";
+            auto target = &(*players)[targetId];
+            target->setIsConfuse(true);
+            player->setCurrentMana(currentPlayerMana - spellMana);
+            return (*players)[playerId].getUsername() + "> " + "Confuse has been cast on " + confuseMessage + "\n\n"; 
+        }
+        else{
+            return (*players)[playerId].getUsername() + "> " + "Target " + confuseMessage + "is not in this room!\n\n"; 
+        }
+    }
+    int ConfuseCommand::getId() const {
+        return this->connection.playerId;
+    }
+
+    bool ConfuseCommand::checkMana(const int spellMana, const int playerMana){
+		if(spellMana <= playerMana){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+    networking::Connection ConfuseCommand::getConnection() const {
+        return this->connection;
+    }
 
 }

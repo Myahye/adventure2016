@@ -6,3 +6,5 @@ add_subdirectory(yamlParser)
 add_subdirectory(yamlSaver)
 add_subdirectory(Resets)
 add_subdirectory(Commands)
+add_subdirectory(PigLatin)
+

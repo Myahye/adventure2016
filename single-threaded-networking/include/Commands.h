@@ -167,19 +167,21 @@ namespace Commands {
   		networking::Connection getConnection() const;
   	};
 
-  	// class ConfuseCommand : public Command {
-   //  private:
-   //      networking::Connection connection;
-   //      std::string message;
-   //  public:
-   //      ConfuseCommand(networking::Connection connection_, const std::string& message_);
+  	class ConfuseCommand : public Command {
+    private:
+        networking::Connection connection;
+        std::string message;
+    public:
+        ConfuseCommand(networking::Connection connection_, const std::string& message_);
         
-   //      std::string execute(Context& context);
+        std::string execute(Context& context);
         
-   //      int getId() const;
+        int getId() const;
         
-   //      networking::Connection getConnection() const;
-   //  };
+        bool checkMana(const int spellMana, const int playerMana);
+
+        networking::Connection getConnection() const;
+    };
 }
 
 #endif
