@@ -20,12 +20,10 @@ private:
     std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > > mExtendedDesc;
     std::string mName;
     unsigned int mRoomId;
-    std::vector<Door> doors;
 
     //--------------------------------------Lawrence Yu
     std::unordered_map<int,std::vector<Npc>> npcsInRoom;
     std::unordered_map<int,std::vector<Object>> objectsInRoom;
-    //std::unordered_map<int,Player*> playersInRoom;
     
     //Maybe change to not use pointers
     Npc* checkNpcKeywords(const std::string& message, const std::pair<int,std::vector<Npc>>& npcIdVectorPair);
@@ -33,6 +31,7 @@ private:
     //Player* checkPlayerUsername(const std::string& message, const std::pair<int,Player*>& player);
 
 public:
+    std::vector<Door> doors;
 std::unordered_map<int, std::string> playersInRoom;
     // Default constructor
     Room();
@@ -53,7 +52,9 @@ std::unordered_map<int, std::string> playersInRoom;
 
     // Mutators
     void setDescription(std::vector<std::string>& new_desc);
+
     void setExtendedDesc(const std::vector< std::pair<std::vector<std::string>, std::vector<std::string> > >& new_extended_desc);
+
     void setName(std::string& new_name);
     void setRoomId(const int new_room_id);
     bool addDoor(const Door& new_door);
@@ -68,13 +69,15 @@ std::unordered_map<int, std::string> playersInRoom;
 
     void addObject(const Object& object, unsigned int limit);
     bool removeObject(const int objectId);
-    
-    void addPlayer(const int playerId, const std::string& username);
-    bool removePlayer(const int playerId);
 
     Npc* findNpc(const std::string& name);
     Object* findObject(const std::string& name);
+
+
+    void addPlayer(const int playerId, const std::string& username);
+    bool removePlayer(const int playerId);
     int findPlayerId(const std::string& name);
+
 
     std::unordered_map<int,std::vector<Npc>> getNpcsInRoom() const;
     std::unordered_map<int,std::vector<Object>> getObjectsInRoom() const;
@@ -83,6 +86,8 @@ std::unordered_map<int, std::string> playersInRoom;
     std::string getObjectsInRoomDesc() const;
     std::string getDoorsInRoomDesc() const;
     std::string getFullRoomDesc() const;
+
+    void addVectorDoors(const std::vector<Door>& doors_);
 
 };
 #endif /* room_h */

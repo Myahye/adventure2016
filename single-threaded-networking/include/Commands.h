@@ -9,6 +9,35 @@
 #include "Npc.h"
 #include "Room.h"
 #include "Object.h"
+#include "Resets.h"
+
+//utility functions
+bool is_number(const std::string& s);
+
+std::string printMiniMap(std::unordered_map<int,Room>* rooms, const int currentRoomId);
+
+std::string getPlayersInRoomDesc(std::unordered_map<int, Player>* players, const std::unordered_map<int, int>* playerLocations, const int currentRoomId);
+std::string printEditCurrentRoomWindow(const std::vector<std::string>& description, const std::vector<Door>& doors, const int currentRoomId, std::vector<std::unique_ptr<Reset>>& resets, const std::vector<int>& resetsInRoomPosition);
+std::string printEditRoomDescriptionWindow(const std::vector<std::string>& description);
+std::string printEditRoomDoorsWindow(const std::vector<Door>& doors);
+
+class Editor {
+private:
+	networking::Connection connection;
+	std::string message;
+public:
+	Editor();
+
+	Editor(networking::Connection connection_, const std::string& message_);
+
+	std::string execute(Context& context, std::vector<std::unique_ptr<Reset>>& resets);
+
+	void setMessage(const std::string& s);
+
+	networking::Connection getConnection() const;
+
+	int getId() const;
+};
 
 namespace Commands {
 
@@ -84,9 +113,21 @@ namespace Commands {
 		int getId() const;
 
 		networking::Connection getConnection() const;
+	};
 
-		//need to move out later
-		bool is_number(const std::string& s);
+	class EquipCommand : public Command {
+	private:
+		networking::Connection connection;
+		std::string message;
+	public:
+		EquipCommand(networking::Connection connection_, const std::string& message_);
+		
+		std::string execute(Context& context);
+
+		int getId() const;
+
+		networking::Connection getConnection() const;
+		
 	};
 
 	class InvalidCommand : public Command {
@@ -111,7 +152,7 @@ namespace Commands {
 
 	public:
 		ListCommand(networking::Connection connection_, const std::unordered_map<std::string, std::string>& commands_, const std::string& message_);
-
+		
 		std::string execute(Context& context);
 
 		int getId() const;
@@ -133,6 +174,63 @@ namespace Commands {
 
 		networking::Connection getConnection() const;
 	};
+
+	class StealCommand : public Command {
+	private:
+		networking::Connection connection;
+		std::string message;
+	public:
+		StealCommand(networking::Connection connection_, const std::string& message_);
+
+		std::string execute(Context& context);
+
+		int getId() const;
+
+		networking::Connection getConnection() const;
+	};
+
+	class TeleportCommand : public Command {
+	private:
+		networking::Connection connection;
+		std::string message;
+	public:
+		TeleportCommand(networking::Connection connection_, const std::string& message_);
+
+		std::string execute(Context& context);
+
+		int getId() const;
+
+		networking::Connection getConnection() const;
+	};
+
+	class SummonCommand : public Command {
+	private:
+		networking::Connection connection;
+		std::string message;
+	public:
+		SummonCommand(networking::Connection connection_, const std::string& message_);
+
+		std::string execute(Context& context);
+
+		int getId() const;
+
+		networking::Connection getConnection() const;
+	};
+
+	class GlobalChatCommand : public Command {
+	private:
+		networking::Connection connection;
+		std::string message;
+	public:
+		GlobalChatCommand(networking::Connection connection_, const std::string& message_);
+
+		std::string execute(Context& context);
+
+		int getId() const;
+
+		networking::Connection getConnection() const;
+	};
+
 
 	class CastCommand : public Command {
 	private:

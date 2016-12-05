@@ -7,14 +7,13 @@ add_library(BaseClass
 	Door.cpp
 	Player.cpp
 	Object.cpp
-	Context.cpp
-	Spells.cpp)
+	Spells.cpp
+	Context.cpp)
 	set_target_properties(networking
 	                      PROPERTIES
 	                      LINKER_LANGUAGE CXX
 	                      CXX_STANDARD 14
 	)
-#target_link_libraries(BaseClass)
 
 install(TARGETS BaseClass DESTINATION lib)
 

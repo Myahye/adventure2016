@@ -1,6 +1,3 @@
-#ifndef PLAYER_CPP
-#define PLAYER_CPP
-
 #include "Player.h"
 
 //Player constructor
@@ -28,13 +25,6 @@ void Player::setCharacter(const Character& character){
     this->playerCharacter = character;
 }
 
-std::string Player::getStatus() const {
-  return status;
-}
-void Player::setStatus(std::string s) {
-  status = s;
-}
-
 void
 Player::attack(const std::string& name){
 	std::cout << "You are being attacked by " +name << std::endl;
@@ -44,4 +34,5 @@ void Player::setSwapTarget(Character& swapTarget) {
   this->swapTarget = &swapTarget;
 } 
 
-#endif
+
+

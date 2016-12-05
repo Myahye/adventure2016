@@ -8,7 +8,9 @@ ModelInterface::ModelInterface() {}
 
 //load config file to map commands["Create"] = getcreatecommandstringfromfile etc.
 
-std::unordered_map<std::string, std::string> commands {{"Create","create"},{"Look","look"},{"Walk","walk"},{"Read","read"},{"Go","go"},{"Attack","attack"},{"Say","say"},{"ListCommands","ls"},{"Status","status"}, {"Take","take"}, {"Flee","flee"}, {"Cast", "cast"}, {"Swap", "swap"}};
+std::unordered_map<std::string, std::string> commands {{"Create","create"},{"Look","look"},{"Walk","walk"},{"Read","read"},{"Go","go"},{"Attack","attack"},{"Say","say"},{"ListCommands","ls"},{"Status","status"}, {"Take","take"}, {"Flee","flee"},{"Equip","equip"},{"Steal","steal"},{"Teleport","teleport"},{"Swap", "swap"},{"Cast", "cast"},{"Summon","summon"}};
+
+std::unordered_map<int,Editor> activeEditors;
 
 void
 ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::vector<Connection>& clients) {
@@ -17,8 +19,15 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
 
     std::string messageText = message.text;
 
-    if (boost::istarts_with(messageText,commands["Create"])) {
-      //this->basicCommandQueue.push_back(std::make_unique<Commands::LookCommand>(message.connection,message.text));
+    auto context = this->model.getContext();
+    auto players = context.getPlayers();
+
+    if((*players)[message.connection.playerId].playerCharacter.getStatus() != "Online" && (*players)[message.connection.playerId].playerCharacter.getSwappedStatus() != true) {
+      activeEditors[message.connection.playerId].setMessage(message.text);
+      std::cout << "georigoerg" << std::endl;
+    } else if (boost::istarts_with(messageText,commands["Create"])) {
+      activeEditors[message.connection.playerId] = Editor{message.connection,message.text};
+      (*players)[message.connection.playerId].playerCharacter.setStatus("WorldBuilding");
     } else if (boost::istarts_with(messageText,commands["Look"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::LookCommand>(message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Go"])) {
@@ -29,18 +38,26 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
       this->combatManager.buildCombatCommand(message.connection,message.text);
     } else if (boost::istarts_with(messageText,commands["Flee"])){
       this->basicCommandQueue.push_back(std::make_unique<Commands::FleeCommand>(message.connection,message.text));
-    }else if (boost::istarts_with(messageText,commands["Say"])) {
+    } else if (boost::istarts_with(messageText,commands["Say"])) {
       createSayCommandForGroup(this->basicCommandQueue, clients, message.text, message.connection.playerId);
     } else if (boost::istarts_with(messageText, commands["ListCommands"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::ListCommand>(message.connection,commands,message.text));
     } else if (boost::istarts_with(messageText, commands["Take"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::TakeCommand>(message.connection,message.text));
+    } else if (boost::istarts_with(messageText,commands["Equip"])) {
+      this->basicCommandQueue.push_back(std::make_unique<Commands::EquipCommand>(message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Status"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::StatusCommand>(message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Swap"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::SwapCommand>(message.connection, message.text));
     } else if (boost::istarts_with(messageText,commands["Cast"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::CastCommand>(message.connection,message.text));
+    } else if (boost::istarts_with(messageText,commands["Steal"])) {
+      this->basicCommandQueue.push_back(std::make_unique<Commands::StealCommand>(message.connection,message.text));
+    } else if (boost::istarts_with(messageText,commands["Teleport"])) {
+      this->basicCommandQueue.push_back(std::make_unique<Commands::TeleportCommand>(message.connection,message.text));
+    } else if (boost::istarts_with(messageText,commands["Summon"])) {
+      this->basicCommandQueue.push_back(std::make_unique<Commands::SummonCommand>(message.connection,message.text));
     } else {
       this->basicCommandQueue.push_back(std::make_unique<Commands::InvalidCommand>(message.connection,message.text));
     }
@@ -61,8 +78,13 @@ ModelInterface::updateGame(){
     outgoing.push_back(message);
   }
 
-  //move out later
-  //this->model.reset();
+  for(auto& editor : activeEditors) {
+    std::string response = editor.second.execute(context, model.getResets());
+    if(response != "") {
+      Message message{editor.second.getConnection(),response};
+      outgoing.push_back(message);
+    }
+  }
 
   return outgoing;
 

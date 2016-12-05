@@ -1,10 +1,12 @@
+#ifndef CONTEXT_H
+#define CONTEXT_H
+
 #include "Room.h"
 #include "Object.h"
 #include "Npc.h"
 #include "Player.h"
 #include "Spells.h"
-#ifndef CONTEXT_H
-#define CONTEXT_H
+
 
 class Context {
 private:
@@ -26,6 +28,7 @@ public:
 	std::unordered_map<int,Npc>* getNpcs();
 	std::unordered_map<int,Object>* getObjects();
 	std::unordered_map<int,Player>* getPlayers();
+	//std::unordered_map<int,Reset>* getResets();
 	std::unordered_map<int,int>* getPlayerLocations();
 	std::vector<Spells>* getOffenseSpells();
   	std::vector<Spells>* getDefenseSpells();

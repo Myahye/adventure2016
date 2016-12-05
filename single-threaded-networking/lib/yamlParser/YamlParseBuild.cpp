@@ -126,7 +126,7 @@ std::pair<int,Player> YamlParseBuild::parsePlayers(const YAML::Node& node){
 		}
 	}
 	if(node["equipment"]){
-		std::unordered_map<int,Object> equipment;
+		std::unordered_map<std::string,Object> equipment;
 		buildObjectsForPlayerEquipment(node["equipment"], equipment);
 		playerClass.playerCharacter.setEquipment(equipment);
 	}
@@ -201,16 +201,18 @@ std::pair<int,Object> YamlParseBuild::parseObjects(const YAML::Node& node){
 
 void YamlParseBuild::buildObjects(std::unordered_map<int,Object>& buildAllObjects){
 	const YAML::Node& Object_Node = fileNode["OBJECTS"];
+
 	//std::unordered_map<int,Object> buildAllObjects;
 
 	std::transform(Object_Node.begin(),Object_Node.end(), std::inserter( buildAllObjects, buildAllObjects.end() ),
 					[this](const YAML::Node& node) { return this->parseObjects(node); });
 	//return buildAllObjects;
 }
-void YamlParseBuild::buildObjectsForPlayerEquipment(const YAML::Node& object_node, std::unordered_map<int,Object>& inventoryObjects){
 
-	std::transform(object_node.begin(),object_node.end(), std::inserter( inventoryObjects, inventoryObjects.end() ),
-					[this](const YAML::Node& node) { return this->parseObjects(node); });
+void YamlParseBuild::buildObjectsForPlayerEquipment(const YAML::Node& object_node, std::unordered_map<std::string,Object>& inventoryObjects){
+
+	// std::transform(object_node.begin(),object_node.end(), std::inserter( inventoryObjects, inventoryObjects.end() ),
+	// 				[this](const YAML::Node& node) { return this->parseObjects(node); });
 }
 
 Object YamlParseBuild::parseObjectsForPlayerInventory(const YAML::Node& node){
@@ -277,57 +279,40 @@ void YamlParseBuild::buildObjectsForPlayerInventory(const YAML::Node& inventory_
 
 
 std::unique_ptr<Reset> YamlParseBuild::parseResets(const YAML::Node& node){
-		std::unique_ptr<Reset> reset;
-
-
-		if(node["action"].as<std::string>() == "npc") {
-			if (node["comment"]){
-				reset = std::make_unique<Resets::ResetNpc>(node["action"].as<std::string>(), node["id"].as<int>(), node["limit"].as<int>(), node["room"].as<int>(), node["comment"].as<std::string>());
-			}
-			else {
-				reset = std::make_unique<Resets::ResetNpc>(node["action"].as<std::string>(), node["id"].as<int>(), node["limit"].as<int>(), node["room"].as<int>(), "");
-			}
-		} else if(node["action"].as<std::string>() == "object") {
-			if (node["comment"]){
-				reset = std::make_unique<Resets::ResetObject>(node["action"].as<std::string>(), node["id"].as<int>(), 1, node["room"].as<int>(), node["comment"].as<std::string>());
-			}
-			else {
-				reset = std::make_unique<Resets::ResetObject>(node["action"].as<std::string>(), node["id"].as<int>(), 1, node["room"].as<int>(), "");
-			}
-		} else if(node["action"].as<std::string>() == "give") {
-			if (node["comment"]){
-				reset = std::make_unique<Resets::ResetGive>(node["action"].as<std::string>(), node["id"].as<int>(), 1, 0, node["comment"].as<std::string>());
-			}
-			else {
-				reset = std::make_unique<Resets::ResetGive>(node["action"].as<std::string>(), node["id"].as<int>(), 1, 0, "");
-			}
-		} else if(node["action"].as<std::string>() == "equip") {
-			if (node["comment"]){
-				reset = std::make_unique<Resets::ResetEquip>(node["action"].as<std::string>(), node["id"].as<int>(), node["slot"].as<int>(), node["comment"].as<std::string>());
-			}
-			else {
-				reset = std::make_unique<Resets::ResetEquip>(node["action"].as<std::string>(), node["id"].as<int>(), node["slot"].as<int>(), "");
-			}
+	if(node["action"].as<std::string>() == "npc") {
+		if (node["comment"]){
+			return std::make_unique<Resets::ResetNpc>(node["action"].as<std::string>(), node["id"].as<int>(), node["limit"].as<int>(), node["room"].as<int>(), node["comment"].as<std::string>());
 		}
-		return std::move(reset);
-
-		// Reset reset{node["action"].as<std::string>(), node["id"].as<int>()};
-
-		// if (node["limit"]){
-		// 	reset.setLimit(node["limit"].as<int>());
-		// }
-		// if (node["room"]){
-		// 	reset.setRoom(node["room"].as<int>());
-		// }
-		// if (node["slot"]){
-		// 	reset.setSlot(node["slot"].as<int>());
-		// }
-		// if (node["comment"]){
-		// 	std::string comment = node["comment"].as<std::string>();
-		// 	reset.setComment(comment);
-		// }
-
-		// buildAllResets.push_back(reset);
+		else {
+			return std::make_unique<Resets::ResetNpc>(node["action"].as<std::string>(), node["id"].as<int>(), node["limit"].as<int>(), node["room"].as<int>(), "");
+		}
+	} else if(node["action"].as<std::string>() == "object") {
+		if (node["comment"]){
+			return std::make_unique<Resets::ResetObject>(node["action"].as<std::string>(), node["id"].as<int>(), 1, node["room"].as<int>(), node["comment"].as<std::string>());
+		}
+		else {
+			return std::make_unique<Resets::ResetObject>(node["action"].as<std::string>(), node["id"].as<int>(), 1, node["room"].as<int>(), "");
+		}
+	} else if(node["action"].as<std::string>() == "give") {
+		if (node["comment"]){
+			return std::make_unique<Resets::ResetGive>(node["action"].as<std::string>(), node["id"].as<int>(), 1, 0, node["comment"].as<std::string>());
+		}
+		else {
+			return std::make_unique<Resets::ResetGive>(node["action"].as<std::string>(), node["id"].as<int>(), 1, 0, "");
+		}
+	} else if(node["action"].as<std::string>() == "equip") {
+		if (node["comment"]){
+			return std::make_unique<Resets::ResetEquip>(node["action"].as<std::string>(), node["id"].as<int>(), node["slot"].as<std::string>(), node["comment"].as<std::string>());
+		}
+		else {
+			return std::make_unique<Resets::ResetEquip>(node["action"].as<std::string>(), node["id"].as<int>(), node["slot"].as<std::string>(), "");
+		}
+	} else if(node["action"].as<std::string>() == "door") {
+			return std::make_unique<Resets::ResetEquip>("", 0, "", "");
+	} else if(node["action"].as<std::string>() == "put") {
+			return std::make_unique<Resets::ResetEquip>("", 0, "", "");
+	}
+	return NULL;
 }
 
 void YamlParseBuild::buildResets(std::vector< std::unique_ptr< Reset > >&  resets){
@@ -336,8 +321,8 @@ void YamlParseBuild::buildResets(std::vector< std::unique_ptr< Reset > >&  reset
 
 	std::transform(Reset_Node.begin(),Reset_Node.end(), std::back_inserter(resets),
 					[this](const YAML::Node& node) { return this->parseResets(node); });
-	//return buildAllObjects;
 }
+
 
 
 Door YamlParseBuild::parseDoors(const YAML::Node& node){
@@ -352,7 +337,7 @@ Door YamlParseBuild::parseDoors(const YAML::Node& node){
 	}
 	if(node["keywords"]){
 		std::vector<std::string> keywordsV = setStringVectorHelper(node["keywords"]);
-		doorObject.setDesc(keywordsV);
+		doorObject.setKeywords(keywordsV);
 	}
 	if(node["to"]){
 		doorObject.setDestinationId(node["to"].as<int>());
@@ -370,6 +355,7 @@ void YamlParseBuild::buildDoors(const YAML::Node& door_node, std::vector<Door>& 
 
 std::pair<int,Room> YamlParseBuild::parseRooms(const YAML::Node& node){
 	Room roomObject;
+
 	int roomId = node["id"].as<int>();
 	if(node["id"]){
 		roomObject.setRoomId(node["id"].as<int>());
@@ -383,6 +369,7 @@ std::pair<int,Room> YamlParseBuild::parseRooms(const YAML::Node& node){
 		buildDoors(node["doors"], doorsV);
 		for (auto& eachDoor : doorsV){
 			eachDoor.setDoorId(roomId);
+
 			roomObject.addDoor(eachDoor);
 		}
 	}
