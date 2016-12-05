@@ -8,6 +8,7 @@ ModelInterface::ModelInterface() {}
 
 //load config file to map commands["Create"] = getcreatecommandstringfromfile etc.
 
+
 std::unordered_map<std::string, std::string> commands {{"Create","create"},{"Look","look"},{"Walk","walk"},{"Read","read"},{"Go","go"},{"Attack","attack"},{"Say","say"},{"ListCommands","ls"},{"Status","status"}, {"Take","take"}, {"Flee","flee"},{"Equip","equip"},{"Steal","steal"},{"Teleport","teleport"},{"Swap", "swap"},{"Cast", "cast"},{"Summon","summon"}};
 
 std::unordered_map<int,Editor> activeEditors;
@@ -51,7 +52,9 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
     } else if (boost::istarts_with(messageText,commands["Swap"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::SwapCommand>(message.connection, message.text));
     } else if (boost::istarts_with(messageText,commands["Cast"])) {
-      this->basicCommandQueue.push_back(std::make_unique<Commands::CastCommand>(message.connection,message.text));
+      this->SpellCommandQueue.push_back(std::make_unique<MagicCommands::CastCommand>(clients,message.connection,message.text));
+    } else if (boost::istarts_with(messageText,commands["Confuse"])) {
+      this->SpellCommandQueue.push_back(std::make_unique<MagicCommands::ConfuseCommand>(clients,message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Steal"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::StealCommand>(message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Teleport"])) {
@@ -70,14 +73,28 @@ ModelInterface::updateGame(){
 
   std::deque<Message> outgoing;
   auto context = this->model.getContext();
-
+  auto players = context.getPlayers();
   for(auto& basicCommand : basicCommandQueue) {
     std::string response = basicCommand->execute(context);
+    if((*players)[basicCommand->getId()].getIsConfuse()){
+      response = latin(response);
+    }
     Message message{basicCommand->getConnection(),response};
     basicCommandQueue.pop_front();
     outgoing.push_back(message);
   }
 
+  for(auto& SpellCommand : SpellCommandQueue) {
+    std::string response = SpellCommand->execute(context);
+    Message message{SpellCommand->getConnection(),response};
+    std::cout << "line 72 interface" << '\n';
+    outgoing.push_back(createAlertMessageForSpell(SpellCommand->getTargetConnection(),SpellCommand->getSourceName(), SpellCommand->getSpellName(), SpellCommand->getSpellType(), SpellCommand->getSpellDamage()));
+    SpellCommandQueue.pop_front();
+    outgoing.push_back(message);
+  }
+
+  //move out later
+  //this->model.reset();
   for(auto& editor : activeEditors) {
     std::string response = editor.second.execute(context, model.getResets());
     if(response != "") {
@@ -131,6 +148,24 @@ Message
 ModelInterface::createAlertMessage(Connection connection, std::string name){
   std::cout<<"6.1 connection == "<<connection.playerId<<std::endl;
   std::string response = "ALERT > You have been attacked by " + name + "\n\n";
+  Message sourceMessage{connection,response};
+  return sourceMessage;
+}
+
+Message
+ModelInterface::createAlertMessageForSpell(Connection connection, std::string name, std::string spellName, std::string spellType, std::string damage){
+  std::cout<<"6.1 connection == "<<connection.playerId<<std::endl;
+  std::string response = "";
+  if(spellType == "offense"){
+    response = "ALERT > " + name + " has casted " + spellName + " upon you, dealing " + damage +" damage!\n\n";
+  }else if(spellType == "defense"){
+    response = "ALERT > " + name + " has casted " + spellName + " upon you, healing you for " + damage +" health!\n\n";
+  }else if(spellType == "confuse"){
+    response = "ALERT > " + name + " has casted " + spellName + " upon you, healing you for " + damage +" health!\n\n";
+    response=latin(response);
+  }else{
+    response = "";
+  }
   Message sourceMessage{connection,response};
   return sourceMessage;
 }

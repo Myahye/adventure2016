@@ -2,8 +2,8 @@
 #define COMMANDS_H
 
 #include <unordered_map>
+#include <iomanip>
 #include <string>
-
 #include "CommandInterface.h"
 #include "Player.h"
 #include "Npc.h"
@@ -121,13 +121,13 @@ namespace Commands {
 		std::string message;
 	public:
 		EquipCommand(networking::Connection connection_, const std::string& message_);
-		
+
 		std::string execute(Context& context);
 
 		int getId() const;
 
 		networking::Connection getConnection() const;
-		
+
 	};
 
 	class InvalidCommand : public Command {
@@ -152,7 +152,7 @@ namespace Commands {
 
 	public:
 		ListCommand(networking::Connection connection_, const std::unordered_map<std::string, std::string>& commands_, const std::string& message_);
-		
+
 		std::string execute(Context& context);
 
 		int getId() const;
@@ -175,83 +175,6 @@ namespace Commands {
 		networking::Connection getConnection() const;
 	};
 
-	class StealCommand : public Command {
-	private:
-		networking::Connection connection;
-		std::string message;
-	public:
-		StealCommand(networking::Connection connection_, const std::string& message_);
-
-		std::string execute(Context& context);
-
-		int getId() const;
-
-		networking::Connection getConnection() const;
-	};
-
-	class TeleportCommand : public Command {
-	private:
-		networking::Connection connection;
-		std::string message;
-	public:
-		TeleportCommand(networking::Connection connection_, const std::string& message_);
-
-		std::string execute(Context& context);
-
-		int getId() const;
-
-		networking::Connection getConnection() const;
-	};
-
-	class SummonCommand : public Command {
-	private:
-		networking::Connection connection;
-		std::string message;
-	public:
-		SummonCommand(networking::Connection connection_, const std::string& message_);
-
-		std::string execute(Context& context);
-
-		int getId() const;
-
-		networking::Connection getConnection() const;
-	};
-
-	class GlobalChatCommand : public Command {
-	private:
-		networking::Connection connection;
-		std::string message;
-	public:
-		GlobalChatCommand(networking::Connection connection_, const std::string& message_);
-
-		std::string execute(Context& context);
-
-		int getId() const;
-
-		networking::Connection getConnection() const;
-	};
-
-
-	class CastCommand : public Command {
-	private:
-		networking::Connection connection;
-		std::string message;
-	public:
-		CastCommand(networking::Connection connection_, const std::string& message_);
-
-		std::string execute(Context& context);
-
-		int getId() const;
-
-		Spells* getCastedSpell(const std::string& castName_, std::vector<Spells>& spells_);
-
-		bool checkMana(const int spellMana, const int playerMana);
-
-		std::string replaceTargetName(std::string hitString, const std::string& targetName);
-
-		networking::Connection getConnection() const;
-	};
-
 	class SwapCommand : public Command {
   	private:
   		networking::Connection connection;
@@ -265,6 +188,131 @@ namespace Commands {
 
   		networking::Connection getConnection() const;
   	};
+
+		class StealCommand : public Command {
+		private:
+			networking::Connection connection;
+			std::string message;
+		public:
+			StealCommand(networking::Connection connection_, const std::string& message_);
+
+			std::string execute(Context& context);
+
+			int getId() const;
+
+			networking::Connection getConnection() const;
+		};
+
+		class TeleportCommand : public Command {
+		private:
+			networking::Connection connection;
+			std::string message;
+		public:
+			TeleportCommand(networking::Connection connection_, const std::string& message_);
+
+			std::string execute(Context& context);
+
+			int getId() const;
+
+			networking::Connection getConnection() const;
+		};
+
+		class SummonCommand : public Command {
+		private:
+			networking::Connection connection;
+			std::string message;
+		public:
+			SummonCommand(networking::Connection connection_, const std::string& message_);
+
+			std::string execute(Context& context);
+
+			int getId() const;
+
+			networking::Connection getConnection() const;
+		};
+
+		class GlobalChatCommand : public Command {
+		private:
+			networking::Connection connection;
+			std::string message;
+		public:
+			GlobalChatCommand(networking::Connection connection_, const std::string& message_);
+
+			std::string execute(Context& context);
+
+			int getId() const;
+
+			networking::Connection getConnection() const;
+		};
+
 }
 
+namespace MagicCommands{
+	class CastCommand : public MagicCommand {
+		private:
+			int targetId;
+			std::string sourceName;
+			std::string spellName;
+			std::string spellDamage;
+			std::string spellType;
+			std::vector<networking::Connection>& clients;
+			networking::Connection connection;
+			networking::Connection Targetconnection;
+
+		std::string message;
+	public:
+		CastCommand(std::vector<networking::Connection>& clients_,networking::Connection connection_, const std::string& message_);
+
+		std::string execute(Context& context);
+
+		int getId() const;
+		std::string getSourceName() const;
+		int getTargetId() const;
+
+		std::string getSpellName() const;
+		std::string getSpellDamage() const;
+		std::string getSpellType() const;
+
+		Spells* getCastedSpell(const std::string& castName_, std::vector<Spells>& spells_);
+
+		bool checkMana(const int spellMana, const int playerMana);
+
+		std::string replaceTargetName(std::string hitString, const std::string& targetName);
+
+		networking::Connection getConnection() const;
+		networking::Connection getTargetConnection() const;
+	};
+
+	class ConfuseCommand : public MagicCommand {
+    private:
+			int targetId;
+			std::vector<networking::Connection>& clients;
+			networking::Connection connection;
+			networking::Connection Targetconnection;
+			std::string sourceName;
+      std::string message;
+			std::string spellName;
+			std::string spellDamage;
+			std::string spellType;
+
+    public:
+        ConfuseCommand(std::vector<networking::Connection>& clients_,networking::Connection connection_, const std::string& message_);
+
+        std::string execute(Context& context);
+
+        int getId() const;
+				int getTargetId() const;
+				std::string getSpellName() const;
+				std::string getSourceName() const;
+				std::string getSpellDamage() const;
+				std::string getSpellType() const;
+
+
+        bool checkMana(const int spellMana, const int playerMana);
+
+        networking::Connection getConnection() const;
+				networking::Connection getTargetConnection() const;
+
+    };
+}
 #endif

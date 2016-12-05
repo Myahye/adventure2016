@@ -40,7 +40,25 @@ int Character::getExp() const{
   return exp;
 }
 void Character::setExp(const int exp){
-  this->exp = exp;
+  //this->exp = exp;
+  int baseXP =93;
+	this->exp += exp;
+	if((baseXP*this->level)<=this->exp){
+		this->level += 1;
+		setNewStats(this->level);
+	}
+}
+
+void Character::setNewStats(const int lvl){
+	int newHealth = maxHealth+lvl*lvl*2;
+	int newMana   = maxMana+lvl*lvl*1.5;
+
+	setMaxHealth(newHealth);
+	setCurrentHealth(newHealth);
+
+	setMaxMana(newMana);
+	setCurrentMana(newMana);
+
 }
 
 int Character::getGold() const{

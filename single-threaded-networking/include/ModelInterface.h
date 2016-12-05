@@ -7,7 +7,7 @@
 #include "Server.h"
 #include "Model.h"
 #include "Commands.h"
-
+#include "PigLatinTranslator.h"
 
 
 class ModelInterface {
@@ -16,10 +16,12 @@ private:
   std::vector<std::string> filepaths = {"../data/shire.yml", "../data/Midgaard.yml", "../data/users.yml", "../data/spells.yml"};
 	Model model{filepaths};
 	std::deque<std::unique_ptr<Command>> basicCommandQueue;
+  std::deque<std::unique_ptr<MagicCommand>> SpellCommandQueue;
 
 	CombatManager combatManager{};
 
   networking::Message createAlertMessage(networking::Connection, std::string);
+  networking::Message createAlertMessageForSpell(networking::Connection connection, std::string name, std::string spellName, std::string spellType, std::string damage);
 
 public:
   ModelInterface();

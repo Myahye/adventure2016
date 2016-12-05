@@ -30,9 +30,20 @@ Player::attack(const std::string& name){
 	std::cout << "You are being attacked by " +name << std::endl;
 }
 
+bool Player::getIsConfuse() {
+  if(isConfuseTimer <= 8){
+    isConfuseTimer++;
+  }else{
+    isConfuseTimer=0;
+    isConfuse=false;
+  }
+  return isConfuse;
+}
+void Player::setIsConfuse(const bool& isConfuse){
+  this->isConfuse = isConfuse;
+}
+
+
 void Player::setSwapTarget(Character& swapTarget) {
   this->swapTarget = &swapTarget;
-} 
-
-
-
+}
