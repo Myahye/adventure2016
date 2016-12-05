@@ -44,8 +44,10 @@
    yamlParseAndBuild(paths[0]);
    yamlParseAndBuild(paths[1]);
    yamlParseAndBuildExistingPlayers(paths[2]);
+   yamlParseAndBuildSpells(paths[3]);
+
    std::cout << "gei " << std::endl;
-   this->context = Context{&this->rooms,&this->npcs,&this->objects,&this->players,&this->playerLocation};
+   this->context = Context{&this->rooms,&this->npcs,&this->objects,&this->players,&this->playerLocation, &this->offenseSpells, &this->defenseSpells};
    std::cout << "goi " << std::endl;
    this->reset();
  }
@@ -58,11 +60,17 @@ void Model::yamlParseAndBuild(const std::string& pathToFile){
   yamlparse.buildResets(this->resets);
   std::cout << "wwww " << std::endl;
   yamlparse.buildRooms(this->rooms);
-      // printAll();
   //this->resets = yamlparse.parseBuildResets(pathToFile);
   //not yet implemented
   // this->allPlayers = yamlParse.parseBuildPlayers(pathToFile);
 
+}
+
+void Model::yamlParseAndBuildSpells(const std::string& pathToFile){
+  std::cout << "DIFFERENT FILE\n\n\n\n\n\n\n";
+  yamlparse.loadFile(pathToFile);
+  yamlparse.buildSpells(this->defenseSpells, true); //true = defensive
+  yamlparse.buildSpells(this->offenseSpells, false); //false = offense
 }
 
 void Model::yamlParseAndBuildExistingPlayers(const std::string& pathToFile){
@@ -90,12 +98,12 @@ void Model::printAll(){
   //   std::cout << std::endl;
   //   count++;
   // }
-  for ( auto it = rooms.begin(); it != rooms.end(); ++it ){
-     std::cout << "Map 1\nid:" << it->first << "\n";
-     (it->second).printClass(count);
-     std::cout << std::endl;
-     count++;
-  }
+  // for ( auto it = rooms.begin(); it != rooms.end(); ++it ){
+  //    std::cout << "Map 1\nid:" << it->first << "\n";
+  //    (it->second).printClass(count);
+  //    std::cout << std::endl;
+  //    count++;
+  // }
    // for ( auto it = resets.begin(); it != resets.end(); ++it ){
    //   std::cout << "Map 3\nid:" << "\n";
 
@@ -103,6 +111,20 @@ void Model::printAll(){
    //   std::cout << std::endl;
    //   count++;
    // }
+
+  std::cout << "size of offenseSpells: " << offenseSpells.size() << std::endl;
+  std::cout << "size of defenseSpells: " << defenseSpells.size() << std::endl;
+
+  for ( auto it = offenseSpells.begin(); it != offenseSpells.end(); ++it ){
+     it->printClass();
+     std::cout << std::endl;
+  }
+
+  for ( auto it = defenseSpells.begin(); it != defenseSpells.end(); ++it ){
+     it->printClass();
+     std::cout << std::endl;
+  }
+
 }
 
 int
@@ -196,6 +218,15 @@ Context Model::getContext() const {
 
 
 void Model::playerDisconnected(const int playerId) {
+
+  if(players[playerId].playerCharacter.getSwappedStatus()) {
+    std::cout << "Swapping back before disconnect..\n" << std::endl;
+
+    players[playerId].playerCharacter.setSwappedStatus(false);
+    players[playerId].swapTarget->setSwappedStatus(false);
+    std::swap(players[playerId].playerCharacter, *players[playerId].swapTarget);
+  }
+
   players[playerId].playerCharacter.setStatus("Offline");
   this->rooms[playerLocation[playerId]].removePlayer(playerId);
 }

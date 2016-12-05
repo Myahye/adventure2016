@@ -12,6 +12,7 @@
 #include "Resets.h"
 #include "Player.h"
 #include "Npc.h"
+#include "Spells.h"
 #include "Context.h"
 
 //using namespace custom_errors;
@@ -24,6 +25,8 @@ private:
   std::unordered_map<int,Npc> npcs;
   std::unordered_map<int,Object> objects;
   std::vector<std::unique_ptr<Reset>> resets;
+  std::vector<Spells> defenseSpells;
+  std::vector<Spells> offenseSpells;
 
   int assignedIds = 1;
   //need to change these to temlpate values
@@ -31,10 +34,11 @@ private:
 
   YamlParseBuild yamlparse;
   void yamlParseAndBuild(const std::string& pathToFile);
+  void yamlParseAndBuildSpells(const std::string& pathToFile);
   //void yamlParseAndBuildExistingPlayers(const std::string& pathToFile);
   void printAll();
 
-
+  //--------------Lawrence Yu
   Context context;
 public:
   //Model(); //temp

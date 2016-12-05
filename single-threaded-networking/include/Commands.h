@@ -2,6 +2,7 @@
 #define COMMANDS_H
 
 #include <unordered_map>
+#include <string>
 
 #include "CommandInterface.h"
 #include "Player.h"
@@ -133,5 +134,39 @@ namespace Commands {
 		networking::Connection getConnection() const;
 	};
 
+	class CastCommand : public Command {
+	private:
+		networking::Connection connection;
+		std::string message;
+	public:
+		CastCommand(networking::Connection connection_, const std::string& message_);
+
+		std::string execute(Context& context);
+
+		int getId() const;
+
+		Spells* getCastedSpell(const std::string& castName_, std::vector<Spells>& spells_);
+
+		bool checkMana(const int spellMana, const int playerMana);
+
+		std::string replaceTargetName(std::string hitString, const std::string& targetName);
+
+		networking::Connection getConnection() const;
+	};
+
+	class SwapCommand : public Command {
+  	private:
+  		networking::Connection connection;
+  		std::string message;
+  	public:
+  		SwapCommand(networking::Connection connection_, const std::string& message);
+
+  		std:: string execute(Context& context);
+
+  		int getId() const;
+
+  		networking::Connection getConnection() const;
+  	};
 }
+
 #endif

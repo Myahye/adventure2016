@@ -415,7 +415,7 @@ void YamlParseBuild::buildRooms (std::unordered_map<int,Room>& buildAllRooms){
 					[this](const YAML::Node& node) { return this->parseRooms(node); });
 }
 
-Spells YamlParseBuild::parseSpells(const YAML::Node& node){
+Spells YamlParseBuild::parseSpells(const YAML::Node& node, bool typeFlag){
 								//the parameter is either 'defense', 'offesnse' or 'others'
 	Spells spellsObject;
 
@@ -454,22 +454,37 @@ Spells YamlParseBuild::parseSpells(const YAML::Node& node){
 	if(node["Duration"]){
 		spellsObject.setDuration(node["Duration"].as<int>());
 	}
-
+	
 	if(node["Mana"]){
 		spellsObject.setMana(node["Mana"].as<int>());
 	}
 	if(node["Minlevel"]){
 		spellsObject.setMinLevel(node["Minlevel"].as<int>());
 	}
+	
+	if(typeFlag){
+		std::string defenseString = "defense";
+		spellsObject.setType(defenseString);
+	}
+	else{
+		std::string offenseString = "offense";
+		spellsObject.setType(offenseString);
+	}
+
 	return spellsObject;
 }
 
-void YamlParseBuild::buildSpells(std::vector<Spells>& spellsV){
-	const YAML::Node& defense_node = fileNode["defense"];
-	//std::unordered_map<int,Object> buildAllObjects;
-
-	std::transform(defense_node.begin(),defense_node.end(), std::inserter(spellsV, spellsV.end()),
-					[this](const YAML::Node& node) { return this->parseSpells(node); });
+void YamlParseBuild::buildSpells(std::vector<Spells>& spellsV, bool typeFlag){
+	if(typeFlag){
+		const YAML::Node& defense_node = fileNode["defense"];	
+		std::transform(defense_node.begin(),defense_node.end(), std::inserter(spellsV, spellsV.end()), 
+					[this,typeFlag](const YAML::Node& node) { return this->parseSpells(node,typeFlag); });
+	}
+	else{
+		const YAML::Node& offense_node = fileNode["offense"];	
+		std::transform(offense_node.begin(),offense_node.end(), std::inserter(spellsV, spellsV.end()), 
+					[this,typeFlag](const YAML::Node& node) { return this->parseSpells(node,typeFlag); });
+	}
 }
 
 //helper classes for yamlParse

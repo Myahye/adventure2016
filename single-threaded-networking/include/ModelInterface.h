@@ -13,7 +13,7 @@
 class ModelInterface {
 
 private:
-	std::vector<std::string> filepaths = {"../data/shire.yml", "../data/Midgaard.yml", "../data/users.yml"};
+  std::vector<std::string> filepaths = {"../data/shire.yml", "../data/Midgaard.yml", "../data/users.yml", "../data/spells.yml"};
 	Model model{filepaths};
 	std::deque<std::unique_ptr<Command>> basicCommandQueue;
 

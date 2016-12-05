@@ -115,6 +115,7 @@ void Character::setHit(const std::string& hit){
 
 std::string Character::getDescription() const{
   std::string descString = "";
+
   for_each(description.begin(), description.end(), [&descString](const std::string& i){descString += i + "\n";} );
   return descString;
 }
@@ -142,6 +143,7 @@ void Character::setKeywords(const std::vector<std::string>& keywords){
 
 std::string Character::getLongDesc() const{
   std::string descString = "";
+
   std::for_each(longdesc.begin(), longdesc.end(), [&descString](const std::string& i){descString += i + "\n";} );
   return descString;
 }
@@ -220,6 +222,7 @@ bool Character::unEquipObject(int slot) {
   return this->inventoryLimit;
 }
 
+>>>>>>> ed94bd4713f19d14f892e1663b3b12855e711df1
 void Character::setInventoryLimit(const int inventoryLimit){
   this->inventoryLimit = inventoryLimit;
 }*/
@@ -241,14 +244,23 @@ void Character::setEquipment(std::unordered_map<int, Object>& equipment){
 std::string Character::getEquipmentDesc() const {
     std::string response = "";
     for_each(equipment.begin(), equipment.end(), [&response](const auto& currentEquip){response += currentEquip.second.getShortDesc() + ", ";});
+
     std::cout << "npe equip: " << equipment.size() << std::endl;
     return response;
 }
 std::string Character::getInventoryDesc() const {
   std::string response = "";
   std::cout << "npe inv: " << inventory.size() << std::endl;
+
   std::for_each(inventory.begin(), inventory.end(), [&response](const auto& currentItem){response += currentItem.second[0].getShortDesc() + " (Quantity: " + std::to_string(currentItem.second.size()) + "), ";});
   return response;
+}
+
+bool Character::getSwappedStatus() const{
+  return isSwapped;
+}
+void Character::setSwappedStatus(bool swap){
+  this->isSwapped = swap;
 }
 
 #endif

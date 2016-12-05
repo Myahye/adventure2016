@@ -14,6 +14,7 @@ public:
     Player (int const id, std::string const username, std::string const password);
 
     Character playerCharacter;
+    Character* swapTarget;
 
     //username
     std::string getUsername() const;
@@ -28,6 +29,8 @@ public:
     void setStatus(std::string s);
 
     void attack(const std::string& name);
+
+    void setSwapTarget(Character& swapTarget);
 };
 
 #endif /* PLAYER_H */

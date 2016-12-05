@@ -16,12 +16,13 @@ class Character {
 	//int inventoryLimit = 10;
 
 	bool isPlayer;
+	bool isSwapped = false;
 
 	int armor = 0;
 	int exp = 0;
 	int gold = 0;
 	int id = 0;
-	int level = 0;
+	int level = 1;
 	int thac0;
 
 	int maxHealth = 100;
@@ -116,9 +117,11 @@ public:
     std::unordered_map<int,Object> getEquipment() const;
     void setEquipment(std::unordered_map<int, Object>& equipment);
 
-
     std::string getEquipmentDesc() const;
     std::string getInventoryDesc() const;
+
+    bool getSwappedStatus() const;
+    void setSwappedStatus(bool swap);
 };
 
 #endif

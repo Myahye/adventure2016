@@ -25,7 +25,7 @@ void Player::setPassword(std::string& password) {
 }
 
 void Player::setCharacter(const Character& character){
-  	this->playerCharacter = character;
+    this->playerCharacter = character;
 }
 
 std::string Player::getStatus() const {
@@ -39,5 +39,9 @@ void
 Player::attack(const std::string& name){
 	std::cout << "You are being attacked by " +name << std::endl;
 }
+
+void Player::setSwapTarget(Character& swapTarget) {
+  this->swapTarget = &swapTarget;
+} 
 
 #endif

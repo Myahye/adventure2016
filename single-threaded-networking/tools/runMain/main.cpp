@@ -124,17 +124,16 @@ void refactoringTest(){
 }
 
 void yamlTest(){
-    std::vector<std::string> filepaths = {"../data/shire.yml", "../data/Midgaard.yml", "../data/users.yml"};
-    /*Model model(filepaths);
+    std::vector<std::string> filepaths = {"../data/shire.yml", "../data/Midgaard.yml", "../data/users.yml",  "../data/spells.yml"};
+    Model model1(filepaths);
     //model.yamlParseAndBuildExistingPlayers("../data/users.yml");
-    YamlSaveData ysd;
-
-    ysd.saveUserData(model.getPlayerMap());*/
+    //YamlSaveData ysd;
+    
+    //ysd.saveUserData(model.getPlayerMap());
 }
 
 int main() {
     //refactoringTest();
     //yamlTest();
-
     return 0;
 }
