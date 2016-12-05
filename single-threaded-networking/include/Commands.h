@@ -133,7 +133,7 @@ namespace Commands {
 		networking::Connection getConnection() const;
 	};
 
-	class CastCommand : public Command {
+	/*class CastCommand : public Command {
 	private:
 		networking::Connection connection;
 		std::string message;
@@ -152,7 +152,7 @@ namespace Commands {
 
 		networking::Connection getConnection() const;
 	};
-
+*/
 	class SwapCommand : public Command {
   	private:
   		networking::Connection connection;
@@ -184,4 +184,40 @@ namespace Commands {
     };
 }
 
+namespace MagicCommands{
+	class CastCommand : public MagicCommand {
+	private:
+		int targetId;
+		std::string sourceName;
+		std::string spellName;
+		std::string spellDamage;
+		std::string spellType;
+		std::vector<networking::Connection>& clients;
+		networking::Connection connection;
+		networking::Connection Targetconnection;
+
+		std::string message;
+	public:
+		CastCommand(std::vector<networking::Connection>& clients_,networking::Connection connection_, const std::string& message_);
+
+		std::string execute(Context& context);
+
+		int getId() const;
+		std::string getSourceName() const;
+		int getTargetId() const;
+
+		std::string getSpellName() const;
+		std::string getSpellDamage() const;
+		std::string getSpellType() const;
+
+		Spells* getCastedSpell(const std::string& castName_, std::vector<Spells>& spells_);
+
+		bool checkMana(const int spellMana, const int playerMana);
+
+		std::string replaceTargetName(std::string hitString, const std::string& targetName);
+
+		networking::Connection getConnection() const;
+		networking::Connection getTargetConnection() const;
+	};
+}
 #endif

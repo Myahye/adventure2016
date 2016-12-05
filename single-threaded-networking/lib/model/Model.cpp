@@ -45,6 +45,7 @@
    yamlParseAndBuild(paths[1]);
    yamlParseAndBuildExistingPlayers(paths[2]);
    yamlParseAndBuildSpells(paths[3]);
+
    std::cout << "gei " << std::endl;
    this->context = Context{&this->rooms,&this->npcs,&this->objects,&this->players,&this->playerLocation, &this->offenseSpells, &this->defenseSpells};
    std::cout << "goi " << std::endl;
