@@ -2,7 +2,7 @@
 //include "CustomError.h"
 
 Room::Room()
-:mDesc{"No Description"}, mExtendedDesc{std::make_pair(std::vector<std::string>{"No extended description"},std::vector<std::string>{""})}, mName{"Empty Room"},
+:mName{"Empty Room"},
             mRoomId{static_cast<unsigned int>(0)} {}
 
 //Temp constructor for testing and first iteration
@@ -46,7 +46,7 @@ int Room::numberOfDoors() const{
 int Room::getRoomInDir(std::string direction) const {
   // std::cout << "In getRoomInDir" << "\n";
   for(Door door : doors){
-    std::cout << "Door in room goes to: " << door.getDir() <<"\n";
+    //std::cout << "Door in room goes to: " << door.getDir() <<"\n";
     if(door.getDir() == direction){
       return door.getDestinationId();
     }
@@ -208,6 +208,7 @@ Object* Room::findObject(const std::string& name) {
   }
   return NULL;
 }
+
 int Room::findPlayerId(const std::string& name) {
   auto player = find_if(playersInRoom.begin(),playersInRoom.end(),
   [&name] (const auto& player) {
@@ -220,12 +221,6 @@ int Room::findPlayerId(const std::string& name) {
   return 0;
 }
 
-std::unordered_map<int,std::vector<Npc>> Room::getNpcsInRoom() const {
-  return npcsInRoom;
-}
-std::unordered_map<int,std::vector<Object>> Room::getObjectsInRoom() const {
-  return objectsInRoom;
-}
 
 Npc* Room::checkNpcKeywords(const std::string& message, const std::pair<int,std::vector<Npc>>& npcIdVectorPair) {
 
@@ -318,3 +313,4 @@ std::string Room::getFullRoomDesc() const {
   response += "     " + getDoorsInRoomDesc() + "\n";
   return response;
 }
+

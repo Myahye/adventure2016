@@ -73,7 +73,7 @@ public:
 	void setShortDesc(const std::string& shortDesc);
 
 	// Getter and setter or wearFlags:
-	  std::vector<std::string> getWearFlags() const;
+	std::vector<std::string> getWearFlags() const;
 	void setWearFlags(const std::vector<std::string>& wearFlags);
 	void addWearFlag(const std::string& wearFlags);
 
@@ -82,12 +82,11 @@ public:
 	void setExtra(const std::vector< std::pair<std::vector<std::string>, std::vector<std::string> > >& extra);
 /*	void addExtraDesc(const std::string& desc);
 	void addExtraKeyword(const std::string& keyword);*/
-
 	void copy_vec(std::vector<std::string>& output, const std::vector<std::string> Alist );
 	void clear_vec(std::vector<std::string> Alist);
 
 	//New function added in to test
-	void printClass(int n) const;
+	void printClass(int n);
 	void printVector(const std::vector<std::string>& vec) const;
 };
 

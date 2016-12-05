@@ -201,39 +201,46 @@ bool Character::removeObjectFromInventory(const std::string& objectName) {
     }
     return false;
 }
-bool Character::equipObject(const Object& object, int slot) {
-    if(inventory.find(object.getId()) == inventory.end()) {
-      return false;
-    }
 
-    if(equipment.find(slot) != equipment.end()) {
-      inventory[equipment[slot].getId()].push_back(equipment[slot]);
-      equipment[slot] = object;
-      inventory[object.getId()].pop_back();
-      //std::cout << "objz: " << object.getId() << std::endl;
-      return true;
-    } else {
-      equipment[slot] = object;
-    //std::cout << "IW" << std::endl;
-
-      inventory[object.getId()].pop_back();
-      if(inventory[object.getId()].empty()) {
-        inventory.erase(object.getId());
-      }
-
-      //std::cout << "IWOEFJ|" << std::endl;
-      return true;
-          // std::cout << this << "Object id: " << equipment[slot].getId() << " Npc id: " << id << " Equipment Desc: " << equipment[slot].getShortDesc() << " Equipment size: " << equipment.size() <<std::endl;
-    }
-}
-
-bool Character::unEquipObject(int slot) {
-    //remove if id == object and pickedupflag==yes
-    if(equipment.find(slot) != equipment.end()) {
-      equipment.erase(slot);
-      return true;
-    }
+//maybe change it so int slot is string item_type and thats ur slots!
+bool Character::equipObject(const Object& object, const std::string& slot) {
+  if(inventory.find(object.getId()) == inventory.end()) {
+    //std::cout << "line 195 player\n";
     return false;
+  }
+
+  // if(slot != "armor" && slot != "weapon") {
+  //   //std::cout << "line 199 player\n";
+  //   return false;
+  // }
+
+  if(equipment.find(slot) != equipment.end()) {
+    inventory[equipment[slot].getId()].push_back(equipment[slot]);
+    equipment[slot] = object;
+    inventory[object.getId()].pop_back();
+    //std::cout << "line 209 player\n";
+    return true;
+  } else {
+    equipment[slot] = object;
+    //std::cout << "IW" << std::endl;
+    inventory[object.getId()].pop_back();
+    
+    if(inventory[object.getId()].empty()) {
+      inventory.erase(object.getId());
+    }
+
+    //std::cout << "line 221 player\n";
+    return true;
+  }
+
+}
+bool Character::unEquipObject(const std::string& slot) {
+  //remove if id == object and pickedupflag==yes
+  if(equipment.find(slot) != equipment.end()) {
+    equipment.erase(slot);
+    return true;
+  }
+  return false;
 }
 
 /*int Character::getInventoryLimit() const{
@@ -252,10 +259,10 @@ void Character::setInventory(std::unordered_map<int, std::vector<Object>>& inven
   this->inventory = inventory;
 }
 
-std::unordered_map<int,Object> Character::getEquipment() const{
+std::unordered_map<std::string,Object> Character::getEquipment() const{
   return this->equipment;
 }
-void Character::setEquipment(std::unordered_map<int, Object>& equipment){
+void Character::setEquipment(std::unordered_map<std::string, Object>& equipment){
   this->equipment = equipment;
 }
 
@@ -272,6 +279,13 @@ std::string Character::getInventoryDesc() const {
 
   std::for_each(inventory.begin(), inventory.end(), [&response](const auto& currentItem){response += currentItem.second[0].getShortDesc() + " (Quantity: " + std::to_string(currentItem.second.size()) + "), ";});
   return response;
+}
+
+bool Character::getSwappedStatus() const{
+  return isSwapped;
+}
+void Character::setSwappedStatus(bool swap){
+  this->isSwapped = swap;
 }
 
 #endif

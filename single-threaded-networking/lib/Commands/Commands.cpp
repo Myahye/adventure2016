@@ -1,6 +1,554 @@
 #include "Commands.h"
 #include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string/iter_find.hpp>
 #include <random>
+
+//utility functions
+bool is_number(const std::string& s)
+{
+	return !s.empty() && std::find_if(s.begin(),
+		s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
+}
+
+std::string printMiniMap(std::unordered_map<int,Room>* rooms, const int currentRoomId) {
+	std::string miniMapS = "     ";
+	std::vector<std::vector<int>> miniMap{{0,0,0,0,0,0,0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,9,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0},
+										  {0,0,0,0,0,0,0,0,0,0,0,0,0}};
+	int temp = 0;
+
+	int currentRoom = currentRoomId;
+	for(int i = 0; i < 6; i+=2) {
+		currentRoom = (*rooms)[currentRoom].getRoomInDir("west");
+		if(currentRoom != -1) {
+			miniMap[6][5-i] = 1;
+			miniMap[6][5-i-1] = 3;
+		}
+
+		// temp = currentRoom;
+		// for(int j = 0; j < 6; j+=2) {
+		// 	temp = (*rooms)[temp].getRoomInDir("north");
+		// 	if(temp != -1) {
+		// 		miniMap[5-j][5-i-1] = 2;
+		// 		miniMap[5-j-1][5-i-1] = 3;
+		// 	}
+		// }
+
+		// temp = currentRoom;
+		// for(int j = 0; j < 6; j+=2) {
+		// 	temp = (*rooms)[temp].getRoomInDir("south");
+		// 	if(temp != -1) {
+		// 		miniMap[7+j][5-i-1] = 2;
+		// 		miniMap[7+j+1][5-i-1] = 3;
+		// 	}
+		// }
+	}
+
+	currentRoom = currentRoomId;
+	for(int i = 0; i < 6; i+=2) {
+		currentRoom = (*rooms)[currentRoom].getRoomInDir("north");
+		if(currentRoom != -1) {
+			miniMap[5-i][6] = 2;
+			miniMap[5-i-1][6] = 3;
+		}
+
+		temp = currentRoom;
+		for(int j = 0; j < 6; j+=2) {
+			temp = (*rooms)[temp].getRoomInDir("west");
+			if(temp != -1) {
+				miniMap[5-i-1][5-j] = 1;
+				miniMap[5-i-1][5-j-1] = 3;
+			}
+		}
+
+		temp = currentRoom;
+		for(int j = 0; j < 6; j+=2) {
+			temp = (*rooms)[temp].getRoomInDir("east");
+			if(temp != -1) {
+				miniMap[5-i-1][7+j] = 1;
+				miniMap[5-i-1][7+j+1] = 3;
+			}
+		}
+	}
+
+	currentRoom = currentRoomId;
+	for(int i = 0; i < 6; i+=2) {
+		currentRoom = (*rooms)[currentRoom].getRoomInDir("south");
+		if(currentRoom != -1) {
+			miniMap[7+i][6] = 2;
+			miniMap[7+i+1][6] = 3;
+		}
+
+		temp = currentRoom;
+		for(int j = 0; j < 6; j+=2) {
+			temp = (*rooms)[temp].getRoomInDir("west");
+			if(temp != -1) {
+				miniMap[7+i+1][5-j] = 1;
+				miniMap[7+i+1][5-j-1] = 3;
+			}
+		}
+
+		temp = currentRoom;
+		for(int j = 0; j < 6; j+=2) {
+			temp = (*rooms)[temp].getRoomInDir("east");
+			if(temp != -1) {
+				miniMap[7+i+1][7+j] = 1;
+				miniMap[7+i+1][7+j+1] = 3;
+			}
+		}
+	}
+
+	currentRoom = currentRoomId;
+	for(int i = 0; i < 6; i+=2) {
+		currentRoom = (*rooms)[currentRoom].getRoomInDir("east");
+		if(currentRoom != -1) {
+			miniMap[6][7+i] = 1;
+			miniMap[6][7+i+1] = 3;
+		}
+
+		// temp = currentRoom;
+		// for(int j = 0; j < 6; j+=2) {
+		// 	temp = (*rooms)[temp].getRoomInDir("north");
+		// 	if(temp != -1) {
+		// 		miniMap[5-j][7+i+1] = 2;
+		// 		miniMap[5-j-1][7+i+1] = 3;
+		// 	}
+		// }
+
+		// temp = currentRoom;
+		// for(int j = 0; j < 6; j+=2) {
+		// 	temp = (*rooms)[temp].getRoomInDir("south");
+		// 	if(temp != -1) {
+		// 		miniMap[7+j][7+i+1] = 2;
+		// 		miniMap[7+j+1][7+i+1] = 3;
+		// 	}
+		// }
+	}
+
+
+	for(int row = 0; row < 13; ++row) {
+		for(int column = 0; column < 13; ++column) {
+			if(miniMap[row][column] == 1) {
+				miniMapS += "-";
+			} else if(miniMap[row][column] == 2) {
+				miniMapS += "|";
+			} else if (miniMap[row][column] == 3) {
+				miniMapS += "*";
+			} else if (miniMap[row][column] == 9) {
+				miniMapS += "P";
+			} else {
+				miniMapS += " ";
+			}
+		}
+		miniMapS += "\n     ";
+	}
+
+	return miniMapS + "\n";
+}
+
+
+
+
+
+
+std::string getPlayersInRoomDesc(std::unordered_map<int, Player>* players, const std::unordered_map<int, int>* playerLocations,
+	const int currentRoomId) {
+	std::string playersInRoom = "     Players: " ;
+	for(auto& playerIdRoomIdpair : *playerLocations) {
+		if(playerIdRoomIdpair.second == currentRoomId) {
+			if((*players)[playerIdRoomIdpair.first].playerCharacter.getStatus() == "Online") {
+				playersInRoom += (*players)[playerIdRoomIdpair.first].getUsername() + ", ";
+			}
+		}
+	}
+	playersInRoom += "\n\n";
+	return playersInRoom;
+}
+std::string printEditCurrentRoomWindow(const std::vector<std::string>& description,
+	const std::vector<Door>& doors, const int currentRoomId, std::vector<std::unique_ptr<Reset>>& resets,
+	const std::vector<int>& resetsInRoomPosition) {
+	std::string response = std::string("\n\n      Type '1' to edit the room description\n") +
+								"      Type '2' to edit the room doors/exits\n" +
+								"      Type 'add [reset type] [object/npc id] [limit] [comment]' to add a new reset eg. 'add npc 3001 1 baker'\n" +
+								"      Type 'remove [line number]' remove the selected reset eg. 'remove 3'\n" +
+								"      Type 'stop' to quit the editor\n\n";
+
+	response += "      Current Room Full Description:";
+
+	response += "\n\n        Room Id: " + std::to_string(currentRoomId) + "\n\n";
+
+	response += "        Room Description: \n";
+	for(auto& d : description) {
+		response += std::string("        ") + d + "\n";
+	}
+
+	response += "\n        Resets in Room: \n";
+	int i = 0;
+	for(auto & reset : resetsInRoomPosition) {
+		response += std::string("        ") + std::to_string(i) + " - " + resets[reset]->printClass();
+		i++;
+	}
+
+	response += "\n        Doors in Room: \n";
+	for(auto & door : doors) {
+		response += std::string("        ") + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + " Desc: " + door.getDesc() + "\n";
+	}
+
+	return response;
+}
+std::string printEditRoomDescriptionWindow(const std::vector<std::string>& description) {
+	std::string response = std::string("\n\n") +    "      Type 'add [description text]' to add a new line of text to description eg. 'add The room is cold and barren.' \n" +
+						 			     "      Type 'remove [line number]' to remove the selected line of text from description eg. 'remove 3'\n" +
+										 "      Type 'set [line number] [description text]' to set a new description for that line eg. 'set 2 The room is cold and barren.' \n" +
+										 "      Type 'back' to go back to the previous window\n"
+										 "      Type 'stop' to quit the editor\n\n";
+	response += "        Room Description: \n";
+	int i = 0;
+	for(auto& d : description) {
+		response += "      ";
+		response += std::to_string(i) + " - " + d + "\n";
+		i++;
+	}
+	return response + "\n";
+}
+
+std::string printEditRoomDoorsWindow(const std::vector<Door>& doors) {
+	std::string response = std::string("\n\n") +  "      Type 'add [dir] [destination Id] -d [description text]' to add a new door eg. 'add west 1100 -d You see the general store.'\n" +
+							 "      Type 'remove [line number]' to remove the selected door eg. 'remove 2'\n" +
+							 "      Type 'back' to go back to previous window\n" +
+							 "      Type 'stop' to quit the editor\n\n";
+
+	response += "        Doors in Room: \n";
+	int i = 0;
+	for(auto & door : doors) {
+		response += std::string("        ") + std::to_string(i) + " - " + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + " Desc: " + door.getDesc() + "\n";
+		i++;
+	}
+
+	return response + "\n";
+}
+
+Editor::Editor() {}
+
+Editor::Editor(networking::Connection connection_, const std::string& message_)
+: connection{connection_}, message{message_} {}
+
+std::string Editor::execute(Context& context, std::vector<std::unique_ptr<Reset>>& resets) {
+	auto players = context.getPlayers();
+	auto rooms = context.getRooms();
+	auto playerLocations = context.getPlayerLocations();
+	//auto objects = context.getObjects();
+	int playerId = connection.playerId;
+
+	std::string response = (*players)[playerId].getUsername() + "> " + message;
+
+	boost::trim_if(message, boost::is_any_of("\t "));
+
+	int currentRoomId = (*playerLocations)[playerId];
+	Room* currentRoom = &(*rooms)[currentRoomId];
+
+	Player* player = &(*players)[playerId];
+
+	auto doors = currentRoom->doors;
+	auto description = currentRoom->getDescV();
+
+	std::vector<int> resetsInRoomPosition;
+
+	int i = 0;
+	for(auto & reset : resets) {
+		if(reset->getRoom() == currentRoomId) {
+			resetsInRoomPosition.push_back(i);
+		}
+		i++;
+	}
+
+
+	if(message == "") {
+		return "";
+	}
+
+
+
+
+	if(message == "stop") {
+		player->playerCharacter.setStatus("Online");
+		message = "";
+		return response + "\n\n" + "      Quiting Editor.\n\n";
+	}
+
+
+
+
+	if(player->playerCharacter.getStatus() == "WorldBuilding" && message == "1") {
+		player->playerCharacter.setStatus("EditCurrentRoom");
+		message = "";
+	}
+	if(player->playerCharacter.getStatus() == "WorldBuilding" && message == "2") {
+		int i = rooms->size()+4000;
+		(*rooms)[i] = Room();
+		(*rooms)[i].setRoomId(i);
+		(*playerLocations)[playerId] = i;
+
+		currentRoomId = (*playerLocations)[playerId];
+		currentRoom = &(*rooms)[currentRoomId];
+
+		doors = currentRoom->doors;
+		description = currentRoom->getDescV();
+
+		resetsInRoomPosition.clear();
+		i = 0;
+		for(auto & reset : resets) {
+			if(reset->getRoom() == currentRoomId) {
+				resetsInRoomPosition.push_back(i);
+			}
+			i++;
+		}
+
+		player->playerCharacter.setStatus("EditCurrentRoom");
+		message = "";
+	}
+	if(player->playerCharacter.getStatus() == "WorldBuilding") {
+		response += "\n\n      CURRENTLY EDITING\n---------------------------------------------";
+		message = "";
+		return response + "\n\n" +  "      Type '1' to edit current room\n" +
+									"      Type '2' to create new room\n" +
+									"      Type 'stop' to quit the editor\n\n";
+	}
+
+
+
+
+	if(player->playerCharacter.getStatus() == "EditCurrentRoom" && message == "1") {
+		player->playerCharacter.setStatus("EditRoomDescription");
+		message = "";
+	}
+	if(player->playerCharacter.getStatus() == "EditCurrentRoom" && message == "2") {
+		player->playerCharacter.setStatus("EditRoomDoors");
+		message = "";
+	}
+	if(player->playerCharacter.getStatus() == "EditCurrentRoom") {
+
+		if(message.substr(0,4) == "add ") {
+			response += "\n\n      CURRENTLY EDITING ROOM\n---------------------------------------------";
+			try {
+				message = message.substr(4);
+
+				std::vector<std::string> addResetMessage;
+			    boost::split(addResetMessage, message, boost::is_any_of("\t "), boost::token_compress_on);
+
+			    if(addResetMessage.size() != 4) {
+			    	response += "\n\n      Invalid Format.";
+			    } else {
+			    	if(addResetMessage[0] == "npc") {
+			    		resets.push_back(std::make_unique<Resets::ResetNpc>(addResetMessage[0], boost::lexical_cast<int>(addResetMessage[1]) , boost::lexical_cast<int>(addResetMessage[2])
+			    		, currentRoomId, addResetMessage[3]));
+			    		resetsInRoomPosition.push_back(resets.size()-1);
+			    		response += " \n\n       successfully added npc reset";
+			    	} else if(addResetMessage[0] == "object") {
+			    		resets.push_back(std::make_unique<Resets::ResetObject>(addResetMessage[0], boost::lexical_cast<int>(addResetMessage[1]) , boost::lexical_cast<int>(addResetMessage[2])
+			    		, currentRoomId, addResetMessage[3]));
+			    		resetsInRoomPosition.push_back(resets.size()-1);
+			    		response += " \n\n       successfully added object reset";
+			    	}
+			    }
+			} catch (boost::bad_lexical_cast) {
+				response += "\n\n      Please enter valid numbers";
+			}
+		} else if(message.substr(0,7) == "remove ") {
+			response += "\n\n      CURRENTLY EDITING ROOM\n---------------------------------------------";
+			try {
+		        int selectedLineNumber = boost::lexical_cast<int>(message.substr(7,1));
+			    if(selectedLineNumber < 0 || (unsigned)selectedLineNumber >= resetsInRoomPosition.size()) {
+		    		response += "\n\n      Could not find line number " + message.substr(7,1) + ", removal failed";
+			    } else {
+				    int resetPositionNumber = resetsInRoomPosition[selectedLineNumber];
+					resets.erase(resets.begin()+resetPositionNumber);
+					resetsInRoomPosition.clear();
+					int i = 0;
+					for(auto & reset : resets) {
+						if(reset->getRoom() == currentRoomId) {
+							resetsInRoomPosition.push_back(i);
+						}
+						i++;
+					}
+					response += " \n\n       reset: '" + std::to_string(selectedLineNumber) + "' removed";
+				}
+			} catch (boost::bad_lexical_cast) {
+		        response += "\n\n      Please enter a valid line number";
+		    }
+		} else {
+			response += "\n\n      CURRENTLY EDITING ROOM\n---------------------------------------------";
+		}
+
+		response += printEditCurrentRoomWindow(description, doors, currentRoom->getRoomId(), resets, resetsInRoomPosition) + "\n   ";
+		message = "";
+		return response;
+	}
+
+
+
+
+	if(player->playerCharacter.getStatus() == "EditRoomDescription") {
+		if(message.substr(0,4) == "add ") {
+			response += "\n\n      CURRENTLY EDITING ROOM DESCRIPTION\n---------------------------------------------";
+			description.push_back(message.substr(4));
+			currentRoom->setDescription(description);
+			response += "\n\n      Line '" + message.substr(4) + "' added to description";
+		} else if(message.substr(0,7) == "remove ") {
+			response += "\n\n      CURRENTLY EDITING ROOM DESCRIPTION\n---------------------------------------------";
+			try {
+		        int selectedLineNumber = boost::lexical_cast<int>(message.substr(7,1));
+
+			    if(selectedLineNumber < 0 || (unsigned)selectedLineNumber >= description.size()) {
+		    		response += "\n\n      Could not find line number " + message.substr(7,1) + ", removal failed";
+			    } else {
+				    std::string temp = description[selectedLineNumber];
+					description.erase(description.begin()+selectedLineNumber);
+					currentRoom->setDescription(description);
+					response += std::string("\n\n      Line '") + temp + "' removed from description.";
+				}
+			} catch (boost::bad_lexical_cast) {
+		        response += "\n\n      Please enter a valid line number";
+		    }
+		} else if(message.substr(0,4) == "set ") {
+			response += "\n\n      CURRENTLY EDITING ROOM DESCRIPTION\n---------------------------------------------";
+		    try {
+		        int selectedLineNumber = boost::lexical_cast<int>(message.substr(4,1));
+
+			    if(selectedLineNumber < 0 || (unsigned)selectedLineNumber >= description.size()) {
+			    	response += "\n\n      Could not find line number " + message.substr(4,1) + ", set failed";
+			    } else {
+			    	std::string desc = "";
+			    	if( message.size() >= 6) {
+			    		desc = message.substr(6);
+			    	}
+
+				    description[selectedLineNumber] = desc;
+				    currentRoom->setDescription(description);
+					response += std::string("\n\n      Line ") + message.substr(4,1) +
+					" description set to " + desc + "'.";
+				}
+			} catch (boost::bad_lexical_cast) {
+		        response += "\n\n      Please enter a valid line number";
+		    }
+		} else if(message == "back") {
+			response += "\n\n      CURRENTLY EDITING ROOM\n---------------------------------------------";
+			player->playerCharacter.setStatus("EditCurrentRoom");
+			response += printEditCurrentRoomWindow(description, doors, currentRoom->getRoomId(), resets, resetsInRoomPosition) + "\n   ";
+			message = "";
+			return response;
+		} else {
+			response += "\n\n      CURRENTLY EDITING ROOM DESCRIPTION\n---------------------------------------------";
+		}
+
+		message = "";
+		response += printEditRoomDescriptionWindow(description);
+		return response;
+	}
+
+
+
+
+	if(player->playerCharacter.getStatus() == "EditRoomDoors") {
+		if(message.substr(0,4) == "add ") {
+			response += "\n\n      CURRENTLY EDITING ROOM DOORS\n---------------------------------------------";
+			try {
+				if(message.find("-d") == std::string::npos) {
+					response += "\n\n      Invalid Format.";
+				} else {
+					message = message.substr(4);
+
+					std::vector <std::string> addDoorMessage;
+					boost::iter_split(addDoorMessage,message, boost::first_finder("-d"));
+
+				    boost::trim_if(addDoorMessage[0], boost::is_any_of("\t "));
+				    boost::trim_if(addDoorMessage[1], boost::is_any_of("\t "));
+
+				    std::vector <std::string> doorDirAndDestinationId;
+				    boost::split(doorDirAndDestinationId, addDoorMessage[0], boost::is_any_of("\t "), boost::token_compress_on);
+				    std::vector <std::string> doorDescription{addDoorMessage[1]};
+
+				    if(doorDirAndDestinationId.size() != 2) {
+				    	response += "\n\n      Invalid Format." + addDoorMessage[0] + " " + addDoorMessage[1];
+				    }
+				    else {
+				    	int selectedRoomId = boost::lexical_cast<int>(doorDirAndDestinationId[1]);
+
+					    if(rooms->find(selectedRoomId) == rooms->end()) {
+				    		response += "\n\n      Could not find room id " + doorDirAndDestinationId[1] + ", add door failed";
+					    } else {
+						    Door temp = Door{doorDirAndDestinationId[0], doorDescription, selectedRoomId};
+							currentRoom->addDoor(temp);
+							doors = currentRoom->doors;
+
+							response += "\n\n      Door: '" + temp.getDir() + "' to Room: '" + std::to_string(temp.getDestinationId()) + "' Desc: '" + temp.getDesc() + "' added to room";
+						}
+				    }
+				}
+			} catch (boost::bad_lexical_cast) {
+				response += "\n\n      Please enter a valid room Id";
+			}
+		} else if(message.substr(0,7) == "remove ") {
+			response += "\n\n      CURRENTLY EDITING ROOM DOORS\n---------------------------------------------";
+			try {
+		        int selectedLineNumber = boost::lexical_cast<int>(message.substr(7,1));
+
+			    if(selectedLineNumber < 0 || (unsigned)selectedLineNumber >= description.size()) {
+		    		response += "\n\n      Could not find line number " + message.substr(7,1) + ", removal failed";
+			    } else {
+				    Door temp = doors[selectedLineNumber];
+					doors.erase(doors.begin()+selectedLineNumber);
+					response += "        door: " + temp.getDir() + " to Room: " + std::to_string(temp.getDestinationId()) + "' removed";
+					currentRoom->doors = doors;
+				}
+			} catch (boost::bad_lexical_cast) {
+		        response += "\n\n      Please enter a valid line number";
+		    }
+		} else if(message == "back") {
+			response += "\n\n      CURRENTLY EDITING ROOM\n---------------------------------------------";
+			player->playerCharacter.setStatus("EditCurrentRoom");
+			response += printEditCurrentRoomWindow(description, doors, currentRoom->getRoomId(), resets, resetsInRoomPosition) + "\n   ";
+			message = "";
+			return response;
+		} else {
+			response += "\n\n      CURRENTLY EDITING ROOM DOORS\n---------------------------------------------";
+		}
+
+		message = "";
+		response += printEditRoomDoorsWindow(doors);
+		return response;
+	}
+
+	std::cout << "G" << std::endl;
+
+	message = "";
+	return (*players)[playerId].getUsername() + "> " + "Cannot find " + message + ", no match. \n\n";
+}
+
+void Editor::setMessage(const std::string& s) {
+	message = s;
+}
+
+networking::Connection Editor::getConnection() const {
+	return this->connection;
+}
+
+int Editor::getId() const {
+	return this->connection.playerId;
+}
+
+
 
 
 
@@ -14,6 +562,7 @@ namespace Commands {
 		auto players = context.getPlayers();
 		auto rooms = context.getRooms();
 		auto playerLocations = context.getPlayerLocations();
+		auto objects = context.getObjects();
 		int playerId = connection.playerId;
 
 		std::string lookMessage = message.substr(4);
@@ -26,8 +575,7 @@ namespace Commands {
 		Room* currentRoom = &(*rooms)[currentRoomId];
 
 		if(lookMessage == "") {
-			std::cout << "FF" << std::endl;
-			return response + "\n\n" + currentRoom->getFullRoomDesc();
+			return response + "\n\n" + printMiniMap(rooms, currentRoomId) + currentRoom->getFullRoomDesc() + getPlayersInRoomDesc(players, playerLocations, currentRoomId);
 		}
 
 		//-------------------------------------------------look "cardinal direction"
@@ -50,6 +598,8 @@ namespace Commands {
 		Npc* currentNpc = currentRoom->findNpc(lookMessage);
 			//will move this to room class later as if isNpc return npc.getfulldesc()
 		if(currentNpc != NULL) {
+
+			response += "\n\n" + currentNpc->npcCharacter.getShortDesc() + ":";
 			response += "\n\n" + currentNpc->npcCharacter.getDescription();
 			response += "\n     Wearing: "  + currentNpc->npcCharacter.getEquipmentDesc();
 			response += "\n     Carrying: " + currentNpc->npcCharacter.getInventoryDesc() + "\n\n";
@@ -62,19 +612,71 @@ namespace Commands {
 		Object* currentObject = currentRoom->findObject(lookMessage);
 		//will move this to room class later as if isobject return object.getfulldesc()
 		if(currentObject != NULL) {
-			response += "\n";
-			//move loop out later;
+			response += "\n\n";
+			//should be vector of pair of vectors
 					//need look through all currentobject get extra for keyword
-			for (auto eachPair : currentObject->getExtra()){
-				for(auto descriptionText : eachPair.first) {
-				  response += descriptionText + "\n";
+			response += currentObject->getShortDesc() + ":\n\n";
+			for(auto& extraPair : currentObject->getExtra()) {
+				for(auto& keyword : extraPair.second) {
+					if(lookMessage.find(keyword) != std::string::npos) {
+						for(auto& descriptionText : extraPair.first) {
+				  			response += descriptionText + "\n";
+						}
+					}
 				}
-				response += "\n";
 			}
+			response += "\n";
 			return response;
 		}
 
-		//look extended description in room
+		//-----------------------------------------------look extended description in room
+
+		//should be vector of pair of vectors
+		auto extendedDescription = currentRoom->getExtendedDesc();
+		for(auto& extendedDescPair : extendedDescription) {
+			for(auto& keyword : extendedDescPair.second) {
+				std::cout << "sdfsdf" << std::endl;
+				if(lookMessage.find(keyword) != std::string::npos) {
+					response += "\n\n";
+					for(auto& descriptionText : extendedDescPair.first) {
+				  		response += descriptionText + "\n";
+					}
+					response += "\n";
+					return response;
+				}
+			}
+		}
+
+		//------------look object in player inventory
+
+		int currentObjectId = 0;
+		for(auto& object : *objects) {
+			for(auto& keyword : object.second.getKeywords()) {
+				if(lookMessage.find(keyword) != std::string::npos) {
+					currentObjectId = object.first;
+					break;
+				}
+			}
+		}
+
+		if(currentObjectId != 0) {
+			auto playerInventory = (*players)[playerId].playerCharacter.getInventory();
+			if(playerInventory.find(currentObjectId) != playerInventory.end()) {
+				response += "\n\n";
+				for(auto& extraPair : (*objects)[currentObjectId].getExtra()) {
+					for(auto& keyword : extraPair.second) {
+						if(lookMessage.find(keyword) != std::string::npos) {
+							for(auto& descriptionText : extraPair.first) {
+					  			response += descriptionText + "\n";
+							}
+						}
+					}
+				}
+				response += "\n";
+				return response;
+			}
+		}
+
 
 		std::cout << "G" << std::endl;
 
@@ -121,10 +723,7 @@ namespace Commands {
 			//throw custom_errors::NoSuchDoorException();
 			(*playerLocations)[playerId] = destRoomId;
 
-			currentRoom->removePlayer(playerId);
-			destRoom->addPlayer(playerId, currentPlayer.getUsername());
-
-			return currentPlayer.getUsername() + "> " + message + "\n\n" + destRoom->getFullRoomDesc();
+			return currentPlayer.getUsername() + "> " + message + "\n\n" + printMiniMap(rooms, destRoomId) + destRoom->getFullRoomDesc() + getPlayersInRoomDesc(players, playerLocations, destRoomId);
 		} else {
 			return currentPlayer.getUsername() + "> " + "There is no door in the " + goMessage + " direction." + "\n\n";
 		}
@@ -259,9 +858,8 @@ namespace Commands {
 				" Health: "+std::to_string((*players)[playerId].playerCharacter.getCurrentHealth())+"/"+std::to_string((*players)[playerId].playerCharacter.getMaxHealth())+"\n"+
 				" Mana  : "+std::to_string((*players)[playerId].playerCharacter.getCurrentMana())+"/"+std::to_string((*players)[playerId].playerCharacter.getMaxMana())+"\n"+
 				" EXP   : "+std::to_string((*players)[playerId].playerCharacter.getExp())+"\n"+
-				" Level : "+std::to_string((*players)[playerId].playerCharacter.getLevel())+"\n";
-
-
+				" Level : "+std::to_string((*players)[playerId].playerCharacter.getLevel())+"\n"+
+				" Swap Status: "+std::to_string((*players)[playerId].playerCharacter.getSwappedStatus())+"\n";
 	}
 	int StatusCommand::getId() const {
 		return this->connection.playerId;
@@ -298,10 +896,12 @@ namespace Commands {
 	: connection{connection_}, message{message_} {}
 
 	std::string TakeCommand::execute(Context& context) {
-		auto players = context.getPlayers();
-		auto rooms = context.getRooms();
-		auto playerLocations = context.getPlayerLocations();
 		int playerId = connection.playerId;
+		auto players = context.getPlayers();
+		auto player = &(*players)[playerId];
+		auto rooms = context.getRooms();
+		auto objects = context.getObjects();
+		auto playerLocations = context.getPlayerLocations();
 
 		std::string messageText = message.substr(4);
 		std::transform(messageText.begin(), messageText.end(), messageText.begin(), ::tolower);
@@ -310,10 +910,15 @@ namespace Commands {
 	    boost::trim_if(messageText, boost::is_any_of("\t "));
 	    boost::split(takeMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
 
-		std::string response = (*players)[playerId].getUsername() + "> " + message;
+		std::string response = "";
+		std::string takeString = "take";
 
 		int currentRoomId = (*playerLocations)[playerId];
 		Room* currentRoom = &(*rooms)[currentRoomId];
+
+		//add dummy object to room to test
+		//currentRoom->addObject((*objects)[std::stoi(messageText)],1); // mithril/axe
+		Object* currentObject = currentRoom->findObject(messageText);
 
 	 	std::cout << "EHTH" << std::endl;
 
@@ -330,6 +935,16 @@ namespace Commands {
 				//Npc will use a currentNpc->findObjectId(objectTargetPair[0]) method which returns the object ID	of the object in inventory
 				//Will change removeObjectfromInventory() to take in the objectID (maybe pass in selected index "eg. steal apple '1'");
 				if(currentNpc->npcCharacter.removeObjectFromInventory(takeMessage[0])) {
+					int currentObjectId = 0;
+					for(auto& object : *objects) {
+						for(auto& keyword : object.second.getKeywords()) {
+							if(keyword.find(takeMessage[0]) != std::string::npos) {
+								(*players)[playerId].playerCharacter.addObjectToInventory(object.second,1);
+								break;
+							}
+						}
+					}
+
 					response += "Success!\n";
 				} else {
 					response += "Failure.\n";
@@ -346,42 +961,37 @@ namespace Commands {
 		//Will change removeObject() to take in the objectID (maybe pass in selected index "eg. steal apple '1'");
 		//if(std::isdigit(takeMessage.end()) )
 
-		Object* currentObject = currentRoom->findObject(takeMessage[0]);
+
 		if(currentObject != NULL){
-			if(currentRoom->removeObject(currentObject->getId())) {
-				response += "\n Take: " + takeMessage[0] + "\n\n";
-				return response;
+			if( std::find((currentObject->getWearFlags()).begin(),
+				(currentObject->getWearFlags()).end(), takeString )!=(currentObject->getWearFlags()).end() ){
+
+				player->playerCharacter.addObjectToInventory(*currentObject, 1);
+				currentRoom->removeObject(currentObject->getId());
+				std::cout << "player inventory: " << player->playerCharacter.getInventoryDesc() << "\n";
+				//bool ret = currentRoom->removeObject(currentObject->getId());
+				//response += messageText + "added to inventory\n\n";
+				return player->getUsername() + "> " + messageText + " added to inventory\n\n";
+			}
+			else{
+				//response += messageText + "is not an object you can take!\n\n";
+				return player->getUsername() + "> " + messageText + " is not an object you can take!\n\n";
 			}
 		}
-
-		std::cout << "EEEE" << std::endl;
-
-		//room will use a currentRoom->findNpcId(objectTargetPair[0]) method which returns the object ID	of the object in inventory
-		//Will change removeNPC() to take in the npcID (maybe pass in selected duplicate index "eg. steal apple '1'");
-		//if(is_number(takeMessage.end()) {}
-
-		Npc* currentNpc = currentRoom->findNpc(takeMessage[0]);
-		if(currentNpc != NULL) {
-			if(currentRoom->removeNpc(currentNpc->npcCharacter.getId())) {
-				response += "\n Take: " + takeMessage[0] + "\n\n";
-				return response;
-			}
+		else{
+			//response += "Cannot take " + messageText + ", no match. \n\n";
+			return player->getUsername() + "> " + "Cannot take " + messageText + ", no match. \n\n";
 		}
 
-		//-----take player
 
-		int currentPlayerId = currentRoom->findPlayerId(takeMessage[0]);
-		if(currentPlayerId != 0) {
-			if(currentRoom->removePlayer(currentPlayerId)) {
-				response += "\n Take: " + takeMessage[0] + "\n\n";
-				return response;
-			}
-		}
-		std::cout << "size " << currentRoom->playersInRoom.size() << std::endl;
+		//-------------------------------------------------look "Object keyword"
 
-		std::cout << "G" << std::endl;
+		//Object* currentObject = currentRoom->>findObject(ObjectTargetPair[0]);
 
-		return (*players)[playerId].getUsername() + "> " + "Cannot steal " + takeMessage[0] + ", no match. \n\n";
+		//Room will use a currentRoom->>findObject(objectTargetPair[0]) method which returns the object ID of the object in inventory
+		//Will change removeObject() to take in the objectID (maybe pass in selected index "eg. steal apple '1'");
+
+		//return player.getUsername() + "> " + response;
 	}
 	int TakeCommand::getId() const {
 		return this->connection.playerId;
@@ -391,16 +1001,70 @@ namespace Commands {
 		return this->connection;
 	}
 
-	//Need to move out but don't know where
-	bool TakeCommand::is_number(const std::string& s)
-	{
-		return !s.empty() && std::find_if(s.begin(),
-			s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
+
+	EquipCommand::EquipCommand(networking::Connection connection_, const std::string& message_)
+	: connection{connection_}, message{message_} {}
+
+	std::string EquipCommand::execute(Context& context) {
+		int playerId = connection.playerId;
+		auto players = context.getPlayers();
+		auto player = &(*players)[playerId]; //need to make it a reference so it changes the object itself rather than changing a copy of object
+		auto rooms = context.getRooms();
+		auto playerLocations = context.getPlayerLocations();
+
+		std::string messageText = message.substr(5);
+		std::transform(messageText.begin(), messageText.end(), messageText.begin(), ::tolower);
+	    boost::trim_if(messageText, boost::is_any_of("\t "));
+		std::string response = "";
+
+		int currentRoomId = (*playerLocations)[playerId];
+		Room* currentRoom = &(*rooms)[currentRoomId];
+		Object* currentObject = currentRoom->findObject(messageText);
+
+		//currentobject can not be found
+		if(currentObject == NULL){
+			return player->getUsername() + "> " + "Cannot equip " + messageText + ", no match. \n\n";
+		}
+
+		const std::string& armorFlag = " armor";
+		std::string weaponFlag = "weapon";
+		std::string itemtype = currentObject->getItemType();
+		//boost::trim_if(itemtype, boost::is_any_of(" "));
+		bool equipObjectRet;
+		std::cout << "objects itemtype : " << itemtype << "\n";
+		if( itemtype == armorFlag ){	// need to change to work with midgaard
+			equipObjectRet = player->playerCharacter.equipObject(*currentObject, armorFlag);
+			int currentArmor = player->playerCharacter.getArmor();
+			player->playerCharacter.setArmor(currentArmor + 10); //maybe change this later
+			//std::cout << "line 425 commands\n";
+		} else if (itemtype == weaponFlag){ // need to change to work with midgaard
+			equipObjectRet = player->playerCharacter.equipObject(*currentObject, weaponFlag);
+			int currentAttack = player->playerCharacter.getThac0();
+			player->playerCharacter.setThac0(currentAttack + 10); //maybe change this later
+			//std::cout << "line 428 commands\n";
+		} else{
+			//std::cout << "line 430 commands\n";
+			return player->getUsername() + "> " + messageText + " is not an item that can be equipped! \n\n";
+		}
+
+		if(equipObjectRet){
+			return player->getUsername() + "> " + messageText + " has been equipped!\n\n";
+		} else {
+			return player->getUsername() + "> " + messageText + " is not in your inventory!\n\n";
+		}
+	}
+
+	int EquipCommand::getId() const {
+		return this->connection.playerId;
+	}
+
+	networking::Connection EquipCommand::getConnection() const {
+		return this->connection;
 	}
 
 
 
-		ListCommand::ListCommand(networking::Connection connection_, const std::unordered_map<std::string, std::string>& commands_, const std::string& message_)
+	ListCommand::ListCommand(networking::Connection connection_, const std::unordered_map<std::string, std::string>& commands_, const std::string& message_)
 	: connection{connection_}, commands{commands_}, message{message_} {}
 
 	std::string ListCommand::execute(Context& context) {
@@ -468,6 +1132,7 @@ namespace Commands {
 	}
 
 
+
 	SayCommand::SayCommand(networking::Connection connection_, const std::string& message_, int playerId_)
 	: connection{connection_}, message{message_}, playerId{playerId_} {}
 
@@ -483,139 +1148,145 @@ namespace Commands {
 	networking::Connection SayCommand::getConnection() const {
 		return this->connection;
 	}
-/*
-	//CastCommand
-	CastCommand::CastCommand(networking::Connection connection_, const std::string& message_)
+
+	StealCommand::StealCommand(networking::Connection connection_, const std::string& message_)
 	: connection{connection_}, message{message_} {}
 
-	std::string CastCommand::execute(Context& context) {
-		auto players = context.getPlayers();
-		auto rooms = context.getRooms();
-		auto playerLocations = context.getPlayerLocations();
-		auto offenseSpells = context.getOffenseSpells();
-		auto defenseSpells = context.getDefenseSpells();
-
+	std::string StealCommand::execute(Context& context) {
 		int playerId = connection.playerId;
+		auto players = context.getPlayers();
+		auto player = &(*players)[playerId];
+		auto rooms = context.getRooms();
+		auto objects = context.getObjects();
+		auto playerLocations = context.getPlayerLocations();
 
-		std::string messageText = this->message.substr(4);
+		std::string messageText = message.substr(5);
 		std::transform(messageText.begin(), messageText.end(), messageText.begin(), ::tolower);
 
-		std::vector <std::string> castMessage;
-    	boost::trim_if(messageText, boost::is_any_of("\t "));
-    	boost::split(castMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
+		std::vector <std::string> stealMessage;
+	    boost::trim_if(messageText, boost::is_any_of("\t "));
+	    boost::split(stealMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
+
+		std::string response = "";
 
 		int currentRoomId = (*playerLocations)[playerId];
 		Room* currentRoom = &(*rooms)[currentRoomId];
-		Spells* castedDefenseSpell = getCastedSpell(castMessage[0], (*defenseSpells));
-		Spells* castedOffenseSpell = getCastedSpell(castMessage[0], (*offenseSpells));
-		Spells* currentSpell;
-
-		if(castedDefenseSpell != nullptr){
-			std::cout << "line 492\n";
-			currentSpell = castedDefenseSpell;
-		}
-		else if(castedOffenseSpell != nullptr){
-			std::cout << "line 496\n";
-			currentSpell = castedOffenseSpell;
-		}
-		else{
-			return (*players)[playerId].getUsername() + "> " + "Cannot cast " + castMessage[0] + ", no match\n\n";
-		}
-
-		int targetId = currentRoom->findPlayerId(castMessage[1]);
-		auto target = &(*players)[targetId].playerCharacter;
-		int currentTargetHealth= target->getCurrentHealth();
-		auto player = &(*players)[playerId].playerCharacter;
-		int currentPlayerMana = player->getCurrentMana();
-		int spellMana = currentSpell->getMana();
+		//add dummy object to room to test
 
 
-		//if findPlayerId can't find the player it will return 0
-		//might need to change this
-		if(targetId == 0){
-			return (*players)[playerId].getUsername() + "> " + "Target " + castMessage[1] + " not found\n\n";
-		}
+		 std::cout << "EHTH" << std::endl;
 
-		/* -- for testing purposes this will be commented out, uncomment out later
-		if(targetId == playerId && castedOffenseSpell != nullptr){
-			return (*players)[playerId].getUsername() + "> " + "Cannot cast " + castMessage[0] + " on yourself!\n\n";
-		}
-		*/
+		 /*
+		 * Make static function findObject() at the top of this file that searches through the object Map and returns the object ID
+		 */
 
-/*		if(currentTargetHealth == 0){
-			return (*players)[playerId].getUsername() + "> " + "Target " + castMessage[1] + " has already been defeated!\n\n";
-		}
+		//-------------------------------------------------look "Npc keyword"
 
-		if(!checkMana(spellMana, currentPlayerMana)){
-			return (*players)[playerId].getUsername() + "> " + "Not enough mana to cast " + castMessage[0] + "\n\n";
-		}
+		//OK findNpc/findRoom will return a Npc* object which we can use to directly modify the selected npc/object in the room
+		int currentObjectId = 0;
+		if(stealMessage.size() == 2) {
+			Npc* currentNpc = currentRoom->findNpc(stealMessage[1]);
+			std::cout << stealMessage.size() << std::endl;
+			if(currentNpc != NULL) {
+				std::cout << "wewwr" << std::endl;
+				response += "\n Steal: " + stealMessage[0] + " From: " + stealMessage[1] + "\n\n";
+				std::cout << "wsfsdfer" << std::endl;
+				//Npc will use a currentNpc->findObjectId(objectTargetPair[0]) method which returns the object ID	of the object in inventory
+				//Will change removeObjectfromInventory() to take in the objectID (maybe pass in selected index "eg. steal apple '1'");
+				if(currentNpc->npcCharacter.removeObjectFromInventory(stealMessage[0])) {
 
-		player->setCurrentMana(currentPlayerMana - spellMana);
-		std::string targetName = (*players)[targetId].getUsername();
-		std::string hitChar = replaceTargetName(currentSpell->getHitChar(), targetName);
-		int playerLevel = player->getLevel();
-		int currentPlayerExp = player->getExp();
-		player->setExp(currentPlayerExp + (playerLevel*2 + 10)); //need leveling up method in player
-
-
-		if(currentSpell->getType() == "defense"){
-			int finalHealth = currentTargetHealth + (playerLevel*2 + 50);
-			if(finalHealth > target->getMaxHealth()){
-				finalHealth = target->getMaxHealth();
-			}
-			target->setCurrentHealth(finalHealth);
-		}
-		else{
-			int finalHealth = currentTargetHealth - (playerLevel*2 + 50);
-			if(finalHealth <= 0){
-				finalHealth = 0;
-			}
-			target->setCurrentHealth(finalHealth);
-			//todo: if target dies -- increase xp/lvl up
-		}
+					for(auto& object : *objects) {
+						for(auto& keyword : object.second.getKeywords()) {
+							if(stealMessage[0].find(keyword) != std::string::npos) {
+								currentObjectId = object.first;
+								break;
+							}
+						}
+					}
 
 
-		return (*players)[playerId].getUsername() + "> " + castMessage[0] + " has been cast on " + castMessage[1] + "\n\t" + hitChar + "\n\n";
+					player->playerCharacter.addObjectToInventory((*objects)[currentObjectId], 1);
+					response += "Success!\n";
+				} else {
+					response += "Failure.\n";
+				}
+				//}
 
- 		//todo: setmax and setcurrent in character need to be changed, specifically
- 		//setcurrent needs to check it the parameter passed is greater than max
- 		//if it is, then set it to max, else set it to parameter passed
-
-	}
-
-	Spells* CastCommand::getCastedSpell(const std::string& castName_, std::vector<Spells>& spells_){
-		for (auto & spell: spells_) {
-			if(spell.getName() == castName_) {
-				return &spell;
+				return response;
 			}
 		}
-		return nullptr;
+		std::cout << "POIP" << std::endl;
+
+		return player->getUsername() + "> " + "Cannot steal " + messageText + ", no match. \n\n";
 	}
 
-	bool CastCommand::checkMana(const int spellMana, const int playerMana){
-		if(spellMana <= playerMana){
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-
-	//--Mohamed
-	//will replace every instance of $N to targetName
-	std::string CastCommand::replaceTargetName(std::string hitString, const std::string& targetName){
-  		boost::replace_all(hitString, "$N", targetName); // <#include <boost/algorithm/string/replace.hpp>
-		return hitString;
-	}
-
-	int CastCommand::getId() const {
+	int StealCommand::getId() const {
 		return this->connection.playerId;
 	}
 
-	networking::Connection CastCommand::getConnection() const {
+	networking::Connection StealCommand::getConnection() const {
 		return this->connection;
 	}
-*/
+
+	TeleportCommand::TeleportCommand(networking::Connection connection_, const std::string& message_)
+	: connection{connection_}, message{message_} {}
+
+	std::string TeleportCommand::execute(Context& context) {
+		auto players = context.getPlayers();
+		auto playerLocations = context.getPlayerLocations();
+		auto rooms = context.getRooms();
+
+		int playerId = connection.playerId;
+
+		std::string teleportMessage = message.substr(8);
+		std::transform(teleportMessage.begin(), teleportMessage.end(), teleportMessage.begin(), ::tolower);
+	    boost::trim_if(teleportMessage, boost::is_any_of("\t "));
+
+		(*playerLocations)[playerId] = std::stoi(teleportMessage);
+
+		return (*players)[playerId].getUsername() + "> " + message + "\n\n" + printMiniMap(rooms, std::stoi(teleportMessage)) + (*rooms)[std::stoi(teleportMessage)].getFullRoomDesc() + getPlayersInRoomDesc(players, playerLocations, std::stoi(teleportMessage));
+	}
+
+	int TeleportCommand::getId() const {
+		return this->connection.playerId;
+	}
+
+	networking::Connection TeleportCommand::getConnection() const {
+		return this->connection;
+	}
+
+	SummonCommand::SummonCommand(networking::Connection connection_, const std::string& message_)
+	: connection{connection_}, message{message_} {}
+
+	std::string SummonCommand::execute(Context& context) {
+		auto players = context.getPlayers();
+		auto playerLocations = context.getPlayerLocations();
+		auto rooms = context.getRooms();
+		auto objects = context.getObjects();
+
+		int playerId = connection.playerId;
+
+		std::string teleportMessage = message.substr(7);
+		std::transform(teleportMessage.begin(), teleportMessage.end(), teleportMessage.begin(), ::tolower);
+	    boost::trim_if(teleportMessage, boost::is_any_of("\t "));
+
+	    int objectId = std::stoi(teleportMessage);
+
+	    if(objects->find(objectId) != objects->end()) {
+	    	(*rooms)[(*playerLocations)[playerId]].addObject((*objects)[objectId],1);
+	    	return (*players)[playerId].getUsername() + "> " + message + "\n\n" + "success";
+	    }
+
+		return (*players)[playerId].getUsername() + "> " + message + "\n\n" + "failed"; //+ printMiniMap(rooms, std::stoi(teleportMessage)) + (*rooms)[std::stoi(teleportMessage)].getFullRoomDesc() + getPlayersInRoomDesc(players, playerLocations, std::stoi(teleportMessage));
+	}
+
+	int SummonCommand::getId() const {
+		return this->connection.playerId;
+	}
+
+	networking::Connection SummonCommand::getConnection() const {
+		return this->connection;
+	}
 
 	/*
 	***************************************************************************************************************
@@ -627,14 +1298,24 @@ namespace Commands {
 	: connection{connection_}, message{message_} {}
 
 	std::string SwapCommand::execute(Context& context) {
+
+		const int manaCost = 10;
+
 		auto players = context.getPlayers();
 		auto playerLocations = context.getPlayerLocations();
 		auto rooms = context.getRooms();
-		auto npcs = context.getNpcs();
 
 		int playerId = connection.playerId;
+		Player* currentPlayer = &(*players)[playerId];
 		int currentRoomId = (*playerLocations)[playerId];
 		Room* currentRoom = &(*rooms)[currentRoomId];
+
+		if (currentPlayer->playerCharacter.getSwappedStatus()){
+			return currentPlayer->getUsername() + "> You have already been swapped.\n";
+		}
+		if (currentPlayer->playerCharacter.getCurrentMana() < manaCost){
+			return currentPlayer->getUsername() + "> You do not have enough mana.\n";
+		}
 
 		std::string swapMessage = message.substr(4);
 		boost::trim_if(swapMessage, boost::is_any_of("\t "));
@@ -642,20 +1323,62 @@ namespace Commands {
 		int targetPlayerId = currentRoom->findPlayerId(swapMessage);
 		Npc* targetNpc = currentRoom->findNpc(swapMessage);
 
-		// Swap with another player in the same room
-		if(targetPlayerId != 0) {
-			(*players)[playerId].playerCharacter.setCurrentMana((*players)[playerId].playerCharacter.getCurrentMana() - 10);
-			std::swap((*players)[playerId].playerCharacter, (*players)[targetPlayerId].playerCharacter);
-			return (*players)[playerId].getUsername() + "> " + "You have swapped with " + (*players)[targetPlayerId].getUsername() + "\n";
+		if (swapMessage.substr(swapMessage.length() - 2) == " p"){
+			swapMessage = swapMessage.substr(0, swapMessage.length()-2);
+			targetPlayerId = currentRoom->findPlayerId(swapMessage);
+			goto swapWithPlayer;
+		}
+		else if (swapMessage.substr(swapMessage.length() - 2) == " n"){
+			swapMessage = swapMessage.substr(0, swapMessage.length()-2);
+			targetNpc = currentRoom->findNpc(swapMessage);
+			goto swapWithNpc;
+		}
 
+		else if (targetPlayerId && targetNpc != NULL){
+			return currentPlayer->getUsername() + "> A player and an NPC have the same name " + swapMessage + ": " +
+					"\n \t Type 'swap "+ swapMessage + " p'" + " to swap with the player." +
+					"\n \t Type 'swap "+ swapMessage + " n'" + " to swap with the npc. \n";
+		}
+
+		// Swap with another player in the same room
+		swapWithPlayer:
+		if(targetPlayerId) {
+			if(playerId == targetPlayerId) {
+				return currentPlayer->getUsername() + "> You cannot swap with yourself.\n";
+			}
+
+			if ((*players)[targetPlayerId].playerCharacter.getSwappedStatus()){
+				return currentPlayer->getUsername() + "> Your target player has already been swapped.\n";
+			}
+			currentPlayer->playerCharacter.setCurrentMana(currentPlayer->playerCharacter.getCurrentMana() - manaCost);
+
+			// Keep track of Player who was swapped
+			currentPlayer->setSwapTarget((*players)[targetPlayerId].playerCharacter);
+			(*players)[targetPlayerId].setSwapTarget(currentPlayer->playerCharacter);
+
+			std::swap(currentPlayer->playerCharacter, (*players)[targetPlayerId].playerCharacter);
+			currentPlayer->playerCharacter.setSwappedStatus(true);
+			(*players)[targetPlayerId].playerCharacter.setSwappedStatus(true);
+			return currentPlayer->getUsername() + "> " + "You have swapped with player " + swapMessage + "\n";
+		}
 		// Swap with Npc in the same room
-		} else if(targetNpc != NULL) {
-			(*players)[playerId].playerCharacter.setCurrentMana((*players)[playerId].playerCharacter.getCurrentMana() - 10);
-			std::swap((*players)[playerId].playerCharacter, (*npcs)[targetNpc->npcCharacter.getId()].npcCharacter);
-			return (*players)[playerId].getUsername() + "> " + "You have swapped with " + (*npcs)[targetNpc->npcCharacter.getId()].npcCharacter.getShortDesc() + "\n";
+		swapWithNpc:
+		if(targetNpc != NULL) {
+			if (targetNpc->npcCharacter.getSwappedStatus()){
+				return currentPlayer->getUsername() + "> Your target npc has already been swapped.\n" + std::to_string(targetNpc->npcCharacter.getSwappedStatus());
+			}
+			currentPlayer->playerCharacter.setCurrentMana(currentPlayer->playerCharacter.getCurrentMana() - manaCost);
+
+			// Keep track of Npc who was swapped
+			currentPlayer->setSwapTarget(targetNpc->npcCharacter);
+
+			std::swap(currentPlayer->playerCharacter, targetNpc->npcCharacter);
+			currentPlayer->playerCharacter.setSwappedStatus(true);
+			targetNpc->npcCharacter.setSwappedStatus(true);
+			return currentPlayer->getUsername() + "> " + "You have swapped with npc " + swapMessage + "\n";
 		}
 		// No target found
-		return (*players)[playerId].getUsername() + "> " + "Unable to locate " + swapMessage + "\n";
+		return currentPlayer->getUsername() + "> " + "Unable to locate " + swapMessage + "\n";
 	}
 
 	int SwapCommand::getId() const {
@@ -665,71 +1388,6 @@ namespace Commands {
 	networking::Connection SwapCommand::getConnection() const {
 		return this->connection;
 	}
-
-	/*ConfuseCommand::ConfuseCommand(networking::Connection connection_, const std::string& message_)
-    : connection{connection_}, message{message_} {}
-    std::string ConfuseCommand::execute(Context& context) {
-        auto players = context.getPlayers();
-        auto playerLocations = context.getPlayerLocations();
-        auto rooms = context.getRooms();
-        auto objects = context.getObjects();
-        int playerId = connection.playerId;
-        std::string confuseMessage = message.substr(7);
-        std::transform(confuseMessage.begin(), confuseMessage.end(), confuseMessage.begin(), ::tolower);
-        boost::trim_if(confuseMessage, boost::is_any_of("\t "));
-        int currentRoomId = (*playerLocations)[playerId];
-        Room* currentRoom = &(*rooms)[currentRoomId];
-        std::string targetName = "";
-        int targetId = 0;
-        //finding targetID
-        for(auto& target : (*players)){
-            if((target.second).getUsername() == confuseMessage){
-                targetId = target.first;
-            }
-        }
-
-        if(targetId == 0){
-            return (*players)[playerId].getUsername() + "> " + "Cannot confuse " + confuseMessage + ", no match\n\n";
-        }
-
-        auto target = &(*players)[targetId];
-        auto player = &(*players)[playerId].playerCharacter;
-
-
-        int spellMana = ( ((*players)[targetId].playerCharacter.getMaxMana()/2) +10);
-        int currentPlayerMana = player->getCurrentMana();
-        if(!checkMana(spellMana, currentPlayerMana)){
-			return (*players)[playerId].getUsername() + "> " + "Not enough mana to cast confuse on " + confuseMessage + "\n\n";
-		}
-
-        if(currentRoomId == (*playerLocations)[targetId] ){
-            std::cout << "target : " << targetId << "is in room: " << currentRoomId << "\n";
-            auto target = &(*players)[targetId];
-            target->setIsConfuse(true);
-            player->setCurrentMana(currentPlayerMana - spellMana);
-            return (*players)[playerId].getUsername() + "> " + "Confuse has been cast on " + confuseMessage + "\n\n";
-        }
-        else{
-            return (*players)[playerId].getUsername() + "> " + "Target " + confuseMessage + "is not in this room!\n\n";
-        }
-    }
-    int ConfuseCommand::getId() const {
-        return this->connection.playerId;
-    }
-
-    bool ConfuseCommand::checkMana(const int spellMana, const int playerMana){
-		if(spellMana <= playerMana){
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-
-    networking::Connection ConfuseCommand::getConnection() const {
-        return this->connection;
-    }*/
-
 }
 
 namespace MagicCommands{
@@ -1017,5 +1675,4 @@ namespace MagicCommands{
 		std::string ConfuseCommand::getSpellType() const{
 			return this->spellType;
 		}
-
 }

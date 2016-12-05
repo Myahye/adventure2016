@@ -30,7 +30,7 @@ Door::Door(const std::string& new_dir, const std::vector<std::string>& new_desc,
 std::string
 Door::getDesc() const {
     std::string descString = "";
-    std::for_each(desc.begin(), desc.end(), [&descString](std::string i){descString += i + "\n";} );    
+    std::for_each(desc.begin(), desc.end(), [&descString](std::string i){descString += i;} );    
     return descString;
 }
 std::vector<std::string>

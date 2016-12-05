@@ -4,18 +4,21 @@
 #include "Character.h"
 
 class Player {
+private:
+
+public:
+    Character playerCharacter;
     std::string username;
     std::string password;
     std::string status = "Offline";
     bool isConfuse = false;
     int isConfuseTimer=0;
 
-public:
+    Character* swapTarget;
+
     // Constructor
     Player ();
     Player (int const id, std::string const username, std::string const password);
-
-    Character playerCharacter;
 
     //username
     std::string getUsername() const;
@@ -26,15 +29,13 @@ public:
     void setPassword(std::string& password);
 
     void setCharacter(const Character& character);
-    std::string getStatus() const;
-    void setStatus(std::string s);
 
     void attack(const std::string& name);
-
 
     bool getIsConfuse();
     void setIsConfuse(const bool& isConfuse);
 
+    void setSwapTarget(Character& swapTarget);
 };
 
 #endif /* PLAYER_H */

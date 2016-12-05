@@ -104,6 +104,12 @@ void Model::printAll(){
   //    std::cout << std::endl;
   //    count++;
   // }
+  for ( auto it = rooms.begin(); it != rooms.end(); ++it ){
+     std::cout << "Map 1\nid:" << it->first << "\n";
+     (it->second).printClass(count);
+     std::cout << std::endl;
+     count++;
+  }
    // for ( auto it = resets.begin(); it != resets.end(); ++it ){
    //   std::cout << "Map 3\nid:" << "\n";
 
@@ -136,7 +142,7 @@ Model::createPlayer(const std::string& username, const std::string& password){
 
   Player newPlayer{this->assignedIds, username, password};
   players.insert({this->assignedIds, newPlayer});
-  playerLocation[assignedIds] = 3007;
+  playerLocation[assignedIds] = 3001;  //change later to 3007
   assignedIds++;
   for (auto & player: players) {
       std::cout << "Player Id: " << player.second.playerCharacter.getId() << ", username: " << player.second.getUsername() << ", password: " << player.second.getPassword() << "\n";
@@ -216,8 +222,21 @@ Context Model::getContext() const {
   return this->context;
 }
 
+std::vector<std::unique_ptr<Reset>>& Model::getResets() {
+  return resets;
+}
+
 
 void Model::playerDisconnected(const int playerId) {
+
+  if(players[playerId].playerCharacter.getSwappedStatus()) {
+    std::cout << "Swapping back before disconnect..\n" << std::endl;
+
+    players[playerId].playerCharacter.setSwappedStatus(false);
+    players[playerId].swapTarget->setSwappedStatus(false);
+    std::swap(players[playerId].playerCharacter, *players[playerId].swapTarget);
+  }
+
   players[playerId].playerCharacter.setStatus("Offline");
   this->rooms[playerLocation[playerId]].removePlayer(playerId);
 }

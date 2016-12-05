@@ -137,8 +137,8 @@ timeTillNextUpdate(){
   /*std::cout << "nextGameUpdate in: " <<  gameUpdate.count() << " - " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastGameUpdate).count()<< std::endl;
   std::cout << "nextGameUpdate in: " <<  nextGameUpdate.count() << std::endl;
 
-  std::cout << "nexCombatUpdate in: " <<  combatUpdate.count() << " - " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastCombatUpdate).count()<< std::endl;
-  std::cout << "nexCombatUpdate in: " <<  nextCombatUpdate.count() << std::endl;
+  // std::cout << "nexCombatUpdate in: " <<  combatUpdate.count() << " - " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastCombatUpdate).count()<< std::endl;
+  // std::cout << "nexCombatUpdate in: " <<  nextCombatUpdate.count() << std::endl;
 
   std::cout << "nextWorldReset in: " <<  worldReset.count() << " - " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - lastWorldReset).count()<< std::endl;
   std::cout << "nextWorldReset in: " <<  nextWorldReset.count() << std::endl;

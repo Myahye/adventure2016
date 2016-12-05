@@ -33,7 +33,7 @@ Object::Object(const Object &ob){
   copy_vec(this->wearFlags,ob.getWearFlags());
 
   /*-----------copy extra---------------*/
-  for(auto& i:extra){
+  for(auto& i:ob.getExtra()){
     extra.push_back(i);
   }
 }
@@ -61,7 +61,7 @@ Object& Object::operator =(const Object& ob){
   copy_vec(this->wearFlags,ob.getWearFlags());
 
   /*-----------copy extra---------------*/
-  for(auto& i:extra){
+  for(auto& i: ob.getExtra()){
     extra.push_back(i);
   }
   
@@ -183,8 +183,8 @@ std::vector< std::pair<std::vector<std::string>, std::vector<std::string> > > Ob
   return extra;
 }
 
-void Object::setExtra(const std::vector< std::pair<std::vector<std::string>, std::vector<std::string> > >& extra) {
-  this->extra = extra;
+void Object::setExtra(const std::vector< std::pair<std::vector<std::string>, std::vector<std::string> > >& extraa) {
+  this->extra = extraa;
 }
 
 /*void Object::addExtraDesc(const std::string& desc){
@@ -206,7 +206,7 @@ void Object::clear_vec(std::vector<std::string> Alist){
 }
 
 //New function added in to test
-void Object::printClass(int n) const{
+void Object::printClass(int n) {
   std::cout << "\n\n";
   std::cout << "Object: "<< n << "\n";
   std::cout << "Object Id: " << id << std::endl;
