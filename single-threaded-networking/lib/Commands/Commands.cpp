@@ -588,10 +588,10 @@ namespace Commands {
 		Room* currentRoom = &(*rooms)[currentRoomId];
 
 		if (currentPlayer->playerCharacter.getSwappedStatus()){
-			return "You have already been swapped.\n";
+			return currentPlayer->getUsername() + "> You have already been swapped.\n";
 		}
 		if (currentPlayer->playerCharacter.getCurrentMana() < manaCost){
-			return "You do not have enough mana.\n";
+			return currentPlayer->getUsername() + "> You do not have enough mana.\n";
 		}
 
 		std::string swapMessage = message.substr(4);
@@ -612,8 +612,7 @@ namespace Commands {
 		}
 
 		else if (targetPlayerId && targetNpc != NULL){
-
-			return "A player and an NPC have the same name " + swapMessage + ": " +
+			return currentPlayer->getUsername() + "> A player and an NPC have the same name " + swapMessage + ": " +
 					"\n \t Type 'swap "+ swapMessage + " p'" + " to swap with the player." +
 					"\n \t Type 'swap "+ swapMessage + " n'" + " to swap with the npc. \n";
 		}
@@ -621,8 +620,12 @@ namespace Commands {
 		// Swap with another player in the same room
 		swapWithPlayer:
 		if(targetPlayerId) {
+			if(playerId == targetPlayerId) {
+				return currentPlayer->getUsername() + "> You cannot swap with yourself.\n";
+			}
+
 			if ((*players)[targetPlayerId].playerCharacter.getSwappedStatus()){
-				return "Your target player has already been swapped.\n";
+				return currentPlayer->getUsername() + "> Your target player has already been swapped.\n";
 			}
 			currentPlayer->playerCharacter.setCurrentMana(currentPlayer->playerCharacter.getCurrentMana() - manaCost);
 			std::swap(currentPlayer->playerCharacter, (*players)[targetPlayerId].playerCharacter);
@@ -634,7 +637,7 @@ namespace Commands {
 		swapWithNpc:
 		if(targetNpc != NULL) {
 			if (targetNpc->npcCharacter.getSwappedStatus()){
-				return "Your target npc has already been swapped.\n" + std::to_string(targetNpc->npcCharacter.getSwappedStatus());
+				return currentPlayer->getUsername() + "> Your target npc has already been swapped.\n" + std::to_string(targetNpc->npcCharacter.getSwappedStatus());
 			}
 			currentPlayer->playerCharacter.setCurrentMana(currentPlayer->playerCharacter.getCurrentMana() - manaCost);
 			std::swap(currentPlayer->playerCharacter, targetNpc->npcCharacter);
