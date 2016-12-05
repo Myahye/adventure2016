@@ -158,5 +158,5 @@ std::cout<<"shit"<<std::endl;
 	networking::Connection AttackCommand::getConnection() const {
 		return this->connection;
 	}
-
+}
 

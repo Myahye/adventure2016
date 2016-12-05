@@ -114,8 +114,8 @@ public:
     std::unordered_map<int,std::vector<Object>> getInventory() const;
     void setInventory(std::unordered_map<int, std::vector<Object>>& inventory);
 
-    std::unordered_map<int,Object> getEquipment() const;
-    void setEquipment(std::unordered_map<int, Object>& equipment);
+    std::unordered_map<std::string,Object> getEquipment() const;
+    void setEquipment(std::unordered_map<std::string, Object>& equipment);
 
     std::string getEquipmentDesc() const;
     std::string getInventoryDesc() const;

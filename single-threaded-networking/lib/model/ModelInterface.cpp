@@ -8,7 +8,7 @@ ModelInterface::ModelInterface() {}
 
 //load config file to map commands["Create"] = getcreatecommandstringfromfile etc.
 
-std::unordered_map<std::string, std::string> commands {{"Create","create"},{"Look","look"},{"Walk","walk"},{"Read","read"},{"Go","go"},{"Attack","attack"},{"Say","say"},{"ListCommands","ls"},{"Status","status"}, {"Take","take"}, {"Flee","flee"},{"Equip","equip"},{"Steal","steal"},{"Teleport","teleport"},{"Swap", "swap"},{"Cast", "cast"}};
+std::unordered_map<std::string, std::string> commands {{"Create","create"},{"Look","look"},{"Walk","walk"},{"Read","read"},{"Go","go"},{"Attack","attack"},{"Say","say"},{"ListCommands","ls"},{"Status","status"}, {"Take","take"}, {"Flee","flee"},{"Equip","equip"},{"Steal","steal"},{"Teleport","teleport"},{"Swap", "swap"},{"Cast", "cast"},{"Summon","summon"}};
 
 std::unordered_map<int,Editor> activeEditors;
 
@@ -22,11 +22,12 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
     auto context = this->model.getContext();
     auto players = context.getPlayers();
 
-    if((*players)[message.connection.playerId].getStatus() != "Online") {
+    if((*players)[message.connection.playerId].playerCharacter.getStatus() != "Online" && (*players)[message.connection.playerId].playerCharacter.getSwappedStatus() != true) {
       activeEditors[message.connection.playerId].setMessage(message.text);
+      std::cout << "georigoerg" << std::endl;
     } else if (boost::istarts_with(messageText,commands["Create"])) {
       activeEditors[message.connection.playerId] = Editor{message.connection,message.text};
-      (*players)[message.connection.playerId].setStatus("WorldBuilding");
+      (*players)[message.connection.playerId].playerCharacter.setStatus("WorldBuilding");
     } else if (boost::istarts_with(messageText,commands["Look"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::LookCommand>(message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Go"])) {

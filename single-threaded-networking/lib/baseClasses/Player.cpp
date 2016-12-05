@@ -1,6 +1,3 @@
-#ifndef PLAYER_CPP
-#define PLAYER_CPP
-
 #include "Player.h"
 
 //Player constructor
@@ -26,13 +23,6 @@ void Player::setPassword(std::string& password) {
 
 void Player::setCharacter(const Character& character){
     this->playerCharacter = character;
-}
-
-std::string Player::getStatus() const {
-  return status;
-}
-void Player::setStatus(std::string s) const {
-  status = s;
 }
 
 void

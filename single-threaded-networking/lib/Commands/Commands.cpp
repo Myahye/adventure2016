@@ -167,7 +167,7 @@ std::string getPlayersInRoomDesc(std::unordered_map<int, Player>* players, const
 	std::string playersInRoom = "     Players: " ;
 	for(auto& playerIdRoomIdpair : *playerLocations) {
 		if(playerIdRoomIdpair.second == currentRoomId) {
-			if((*players)[playerIdRoomIdpair.first].getStatus() == "Online") {
+			if((*players)[playerIdRoomIdpair.first].playerCharacter.getStatus() == "Online") {
 				playersInRoom += (*players)[playerIdRoomIdpair.first].getUsername() + ", ";
 			}
 		}
@@ -282,7 +282,7 @@ std::string Editor::execute(Context& context, std::vector<std::unique_ptr<Reset>
 
 
 	if(message == "stop") {
-		player->setStatus("Online");
+		player->playerCharacter.setStatus("Online");
 		message = "";
 		return response + "\n\n" + "      Quiting Editor.\n\n";
 	}
@@ -290,11 +290,11 @@ std::string Editor::execute(Context& context, std::vector<std::unique_ptr<Reset>
 
 
 
-	if(player->getStatus() == "WorldBuilding" && message == "1") {
-		player->setStatus("EditCurrentRoom");
+	if(player->playerCharacter.getStatus() == "WorldBuilding" && message == "1") {
+		player->playerCharacter.setStatus("EditCurrentRoom");
 		message = "";
 	}
-	if(player->getStatus() == "WorldBuilding" && message == "2") {
+	if(player->playerCharacter.getStatus() == "WorldBuilding" && message == "2") {
 		int i = rooms->size()+4000;
 		(*rooms)[i] = Room();
 		(*rooms)[i].setRoomId(i);
@@ -315,10 +315,10 @@ std::string Editor::execute(Context& context, std::vector<std::unique_ptr<Reset>
 			i++;
 		}
 
-		player->setStatus("EditCurrentRoom");
+		player->playerCharacter.setStatus("EditCurrentRoom");
 		message = "";
 	}
-	if(player->getStatus() == "WorldBuilding") {
+	if(player->playerCharacter.getStatus() == "WorldBuilding") {
 		response += "\n\n      CURRENTLY EDITING\n---------------------------------------------";
 		message = "";
 		return response + "\n\n" +  "      Type '1' to edit current room\n" +
@@ -329,15 +329,15 @@ std::string Editor::execute(Context& context, std::vector<std::unique_ptr<Reset>
 
 
 
-	if(player->getStatus() == "EditCurrentRoom" && message == "1") {
-		player->setStatus("EditRoomDescription");
+	if(player->playerCharacter.getStatus() == "EditCurrentRoom" && message == "1") {
+		player->playerCharacter.setStatus("EditRoomDescription");
 		message = "";
 	}
-	if(player->getStatus() == "EditCurrentRoom" && message == "2") {
-		player->setStatus("EditRoomDoors");
+	if(player->playerCharacter.getStatus() == "EditCurrentRoom" && message == "2") {
+		player->playerCharacter.setStatus("EditRoomDoors");
 		message = "";
 	}
-	if(player->getStatus() == "EditCurrentRoom") {
+	if(player->playerCharacter.getStatus() == "EditCurrentRoom") {
 
 		if(message.substr(0,4) == "add ") {
 			response += "\n\n      CURRENTLY EDITING ROOM\n---------------------------------------------";
@@ -399,7 +399,7 @@ std::string Editor::execute(Context& context, std::vector<std::unique_ptr<Reset>
 
 
 
-	if(player->getStatus() == "EditRoomDescription") {
+	if(player->playerCharacter.getStatus() == "EditRoomDescription") {
 		if(message.substr(0,4) == "add ") {
 			response += "\n\n      CURRENTLY EDITING ROOM DESCRIPTION\n---------------------------------------------";
 			description.push_back(message.substr(4));
@@ -444,7 +444,7 @@ std::string Editor::execute(Context& context, std::vector<std::unique_ptr<Reset>
 		    }
 		} else if(message == "back") {
 			response += "\n\n      CURRENTLY EDITING ROOM\n---------------------------------------------";
-			player->setStatus("EditCurrentRoom");
+			player->playerCharacter.setStatus("EditCurrentRoom");
 			response += printEditCurrentRoomWindow(description, doors, currentRoom->getRoomId(), resets, resetsInRoomPosition) + "\n   ";
 			message = "";
 			return response;
@@ -460,7 +460,7 @@ std::string Editor::execute(Context& context, std::vector<std::unique_ptr<Reset>
 
 
 
-	if(player->getStatus() == "EditRoomDoors") {
+	if(player->playerCharacter.getStatus() == "EditRoomDoors") {
 		if(message.substr(0,4) == "add ") {
 			response += "\n\n      CURRENTLY EDITING ROOM DOORS\n---------------------------------------------";
 			try {
@@ -517,7 +517,7 @@ std::string Editor::execute(Context& context, std::vector<std::unique_ptr<Reset>
 		    }
 		} else if(message == "back") {
 			response += "\n\n      CURRENTLY EDITING ROOM\n---------------------------------------------";
-			player->setStatus("EditCurrentRoom");
+			player->playerCharacter.setStatus("EditCurrentRoom");
 			response += printEditCurrentRoomWindow(description, doors, currentRoom->getRoomId(), resets, resetsInRoomPosition) + "\n   ";
 			message = "";
 			return response;
@@ -900,15 +900,15 @@ namespace Commands {
 		auto players = context.getPlayers();
 		auto player = &(*players)[playerId];
 		auto rooms = context.getRooms();
-		//auto objects = context.getObjects();
+		auto objects = context.getObjects();
 		auto playerLocations = context.getPlayerLocations();
 
 		std::string messageText = message.substr(4);
 		std::transform(messageText.begin(), messageText.end(), messageText.begin(), ::tolower);
 
-		//std::vector <std::string> takeMessage;
+		std::vector <std::string> takeMessage;
 	    boost::trim_if(messageText, boost::is_any_of("\t "));
-	    //boost::split(takeMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
+	    boost::split(takeMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
 
 		std::string response = "";
 		std::string takeString = "take";
@@ -935,6 +935,16 @@ namespace Commands {
 				//Npc will use a currentNpc->findObjectId(objectTargetPair[0]) method which returns the object ID	of the object in inventory
 				//Will change removeObjectfromInventory() to take in the objectID (maybe pass in selected index "eg. steal apple '1'");
 				if(currentNpc->npcCharacter.removeObjectFromInventory(takeMessage[0])) {
+					int currentObjectId = 0;
+					for(auto& object : *objects) {
+						for(auto& keyword : object.second.getKeywords()) {
+							if(keyword.find(takeMessage[0]) != std::string::npos) {
+								(*players)[playerId].playerCharacter.addObjectToInventory(object.second,1);
+								break;
+							}
+						}
+					}
+
 					response += "Success!\n";
 				} else {
 					response += "Failure.\n";
@@ -951,7 +961,6 @@ namespace Commands {
 		//Will change removeObject() to take in the objectID (maybe pass in selected index "eg. steal apple '1'");
 		//if(std::isdigit(takeMessage.end()) )
 
-		Object* currentObject = currentRoom->findObject(takeMessage[0]);
 
 		if(currentObject != NULL){
 			if( std::find((currentObject->getWearFlags()).begin(), 
@@ -1245,7 +1254,6 @@ namespace Commands {
 	networking::Connection SummonCommand::getConnection() const {
 		return this->connection;
 	}
-}
 
 	//CastCommand
 	CastCommand::CastCommand(networking::Connection connection_, const std::string& message_)
@@ -1388,7 +1396,6 @@ namespace Commands {
 		auto players = context.getPlayers();
 		auto playerLocations = context.getPlayerLocations();
 		auto rooms = context.getRooms();
-		auto npcs = context.getNpcs();
 
 		int playerId = connection.playerId;
 		Player* currentPlayer = &(*players)[playerId];

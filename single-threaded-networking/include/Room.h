@@ -73,6 +73,12 @@ std::unordered_map<int, std::string> playersInRoom;
     Npc* findNpc(const std::string& name);
     Object* findObject(const std::string& name);
 
+
+    void addPlayer(const int playerId, const std::string& username);
+    bool removePlayer(const int playerId);
+    int findPlayerId(const std::string& name);
+
+
     std::unordered_map<int,std::vector<Npc>> getNpcsInRoom() const;
     std::unordered_map<int,std::vector<Object>> getObjectsInRoom() const;
 

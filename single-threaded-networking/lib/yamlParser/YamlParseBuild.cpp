@@ -211,8 +211,8 @@ void YamlParseBuild::buildObjects(std::unordered_map<int,Object>& buildAllObject
 
 void YamlParseBuild::buildObjectsForPlayerEquipment(const YAML::Node& object_node, std::unordered_map<std::string,Object>& inventoryObjects){
 
-	std::transform(object_node.begin(),object_node.end(), std::inserter( inventoryObjects, inventoryObjects.end() ),
-					[this](const YAML::Node& node) { return this->parseObjects(node); });
+	// std::transform(object_node.begin(),object_node.end(), std::inserter( inventoryObjects, inventoryObjects.end() ),
+	// 				[this](const YAML::Node& node) { return this->parseObjects(node); });
 }
 
 Object YamlParseBuild::parseObjectsForPlayerInventory(const YAML::Node& node){
