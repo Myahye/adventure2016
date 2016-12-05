@@ -7,8 +7,9 @@ class Reset {
 public:
 	virtual void execute(Context& context) = 0;
 	virtual Npc* getCurrentlySelectedNpc() = 0;
-	virtual void printClass(int n) = 0;
+	virtual std::string printClass() = 0;
 	virtual ~Reset() {}
+	virtual int getRoom() = 0;
 };
 
 #endif

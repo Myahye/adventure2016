@@ -36,15 +36,12 @@ namespace Resets {
 	}
 
 	//New function added in to test
-	void ResetNpc::printClass(int n) {
-		std::cout << "\n\n";
-		std::cout << "Reset: "<< n << "\n";
-		std::cout << "ID: " << id << std::endl;
-		std::cout << "\taction: " << action << std::endl;
-		std::cout << "\tcomment: " << comment << std::endl;
-		std::cout << "\tid: " << id << std::endl;
-		std::cout << "\tlimit: " << limit << std::endl;
-		std::cout << "\troom: " << room << std::endl;
+	std::string ResetNpc::printClass() {
+		return std::string("Reset ") + action + " " + std::to_string(id)  + " to Room: " + std::to_string(room) + ", limit: " + std::to_string(limit) + " comment: " + comment + "\n";
+	}
+
+	int ResetNpc::getRoom() {
+		return room;
 	}
 
 //-----------------------------------------ResetObject
@@ -74,15 +71,12 @@ namespace Resets {
 	}
 
 	//New function added in to test
-	void ResetObject::printClass(int n) {
-		std::cout << "\n\n";
-		std::cout << "Reset: "<< n << "\n";
-		std::cout << "ID: " << id << std::endl;
-		std::cout << "\taction: " << action << std::endl;
-		std::cout << "\tcomment: " << comment << std::endl;
-		std::cout << "\tid: " << id << std::endl;
-		std::cout << "\tlimit: " << limit << std::endl;
-		std::cout << "\troom: " << room << std::endl;
+	std::string ResetObject::printClass() {
+		return std::string("Reset ") + action + " " + std::to_string(id)  + " to Room: " + std::to_string(room) + ", limit: " + std::to_string(limit) + " comment: " + comment + "\n";
+	}
+
+	int ResetObject::getRoom() {
+		return room;
 	}
 
 //-----------------------------------------ResetGive
@@ -113,19 +107,16 @@ namespace Resets {
 	}
 
 	//New function added in to test
-	void ResetGive::printClass(int n) {
-		std::cout << "\n\n";
-		std::cout << "Reset: "<< n << "\n";
-		std::cout << "ID: " << id << std::endl;
-		std::cout << "\taction: " << action << std::endl;
-		std::cout << "\tcomment: " << comment << std::endl;
-		std::cout << "\tid: " << id << std::endl;
-		std::cout << "\tlimit: " << limit << std::endl;
-		std::cout << "\troom: " << room << std::endl;
+	std::string ResetGive::printClass() {
+		return "";
 	}
 	//Get currentlySelectedNpc
 	Npc* ResetGive::getCurrentlySelectedNpc() {
 		return this->currentlySelectedNpc;
+	}
+
+	int ResetGive::getRoom() {
+		return room;
 	}
 
 //-----------------------------------------ResetEquip
@@ -157,18 +148,16 @@ namespace Resets {
 	}
 
 	//New function added in to test
-	void ResetEquip::printClass(int n) {
-		std::cout << "\n\n";
-		std::cout << "Reset: "<< n << "\n";
-		std::cout << "ID: " << id << std::endl;
-		std::cout << "\taction: " << action << std::endl;
-		std::cout << "\tcomment: " << comment << std::endl;
-		std::cout << "\tid: " << id << std::endl;
-		std::cout << "\tslot: " << slot<< std::endl;
+	std::string ResetEquip::printClass() {
+		return "";
 	}
 	//Get currentlySelectedNpc
 	Npc* ResetEquip::getCurrentlySelectedNpc() {
 		return this->currentlySelectedNpc;
+	}
+
+	int ResetEquip::getRoom() {
+		return -1;
 	}
 
 

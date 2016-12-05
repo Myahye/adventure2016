@@ -21,6 +21,10 @@ std::unordered_map<int,Player>* Context::getPlayers() {
 	return this->players;
 }
 
+// std::unordered_map<int,Reset>* Context::getResets() {
+// 	return this->resets;
+// }
+
 std::unordered_map<int,int>* Context::getPlayerLocations() {
 	return this->playerLocations;
 }

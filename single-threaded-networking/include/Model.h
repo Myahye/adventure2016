@@ -65,6 +65,8 @@ public:
 
   Context getContext() const;
 
+  std::vector<std::unique_ptr<Reset>>& getResets();
+
   //-----------------------------Lawrence YU
   void reset();
 

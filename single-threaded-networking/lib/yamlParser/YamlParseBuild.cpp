@@ -337,7 +337,7 @@ Door YamlParseBuild::parseDoors(const YAML::Node& node){
 	}
 	if(node["keywords"]){
 		std::vector<std::string> keywordsV = setStringVectorHelper(node["keywords"]);
-		doorObject.setDesc(keywordsV);
+		doorObject.setKeywords(keywordsV);
 	}
 	if(node["to"]){
 		doorObject.setDestinationId(node["to"].as<int>());
@@ -369,6 +369,7 @@ std::pair<int,Room> YamlParseBuild::parseRooms(const YAML::Node& node){
 		buildDoors(node["doors"], doorsV);
 		for (auto& eachDoor : doorsV){
 			eachDoor.setDoorId(roomId);
+
 			roomObject.addDoor(eachDoor);
 		}
 	}

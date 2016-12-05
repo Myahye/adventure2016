@@ -16,40 +16,46 @@ namespace Resets {
 
 	class ResetNpc : public Reset {
 	private:
+		Npc* currentlySelectedNpc = NULL;
+	public:
 		std::string action;
 		int id;
 		unsigned int limit;
 		int room;
 		std::string comment;
-		Npc* currentlySelectedNpc = NULL;
-	public:
+
 		ResetNpc(const std::string& action, int const id, unsigned int const limit, int const room, const std::string& comment);
 
 		void execute(Context& context);
 
 		Npc* getCurrentlySelectedNpc();
 
-		void printClass(int n);
+		std::string printClass();
+
+		int getRoom();
 	};
 
 	//-----------------------------------------ResetObject
 
 	class ResetObject : public Reset {
 	private:
+		Npc* currentlySelectedNpc = NULL;
+	public:
 		std::string action;
 		int id;
 		unsigned int limit;
 		int room;
 		std::string comment;
-		Npc* currentlySelectedNpc = NULL;
-	public:
+
 		ResetObject(const std::string& action, int const id, unsigned int const limit, int const room, const std::string& comment);
 
 		void execute(Context& context);
 
 		Npc* getCurrentlySelectedNpc();
 
-		void printClass(int n);
+		std::string printClass();
+
+		int getRoom();
 	};
 
 	//-----------------------------------------ResetGive
@@ -69,7 +75,9 @@ namespace Resets {
 
 		Npc* getCurrentlySelectedNpc();
 
-		void printClass(int n);
+		std::string printClass();
+
+		int getRoom();
 	};
 
 	//-----------------------------------------ResetEquip
@@ -88,7 +96,9 @@ namespace Resets {
 
 		Npc* getCurrentlySelectedNpc();
 
-		void printClass(int n);
+		std::string printClass();
+
+		int getRoom();
 	};
 }
 

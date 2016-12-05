@@ -1,6 +1,7 @@
 #include "Commands.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string/iter_find.hpp>
 #include <random>
 
 //utility functions
@@ -175,9 +176,12 @@ std::string getPlayersInRoomDesc(std::unordered_map<int, Player>* players, const
 	return playersInRoom;
 }
 std::string printEditCurrentRoomWindow(const std::vector<std::string>& description, 
-	const std::vector<Door>& doors, const int currentRoomId) {
+	const std::vector<Door>& doors, const int currentRoomId, std::vector<std::unique_ptr<Reset>>& resets, 
+	const std::vector<int>& resetsInRoomPosition) {
 	std::string response = std::string("\n\n      Type '1' to edit the room description\n") +
 								"      Type '2' to edit the room doors/exits\n" +
+								"      Type 'add [reset type] [object/npc id] [limit] [comment]' to add a new reset eg. 'add npc 3001 1 baker'\n" +
+								"      Type 'remove [line number]' remove the selected reset eg. 'remove 3'\n" +
 								"      Type 'stop' to quit the editor\n\n";
 
 	response += "      Current Room Full Description:";
@@ -189,12 +193,16 @@ std::string printEditCurrentRoomWindow(const std::vector<std::string>& descripti
 		response += std::string("        ") + d + "\n";
 	}
 
-	// response += currentRoom->getNpcsInRoomDesc();
-	// response += currentRoom->getObjectsInRoomDesc();
+	response += "\n        Resets in Room: \n";
+	int i = 0;
+	for(auto & reset : resetsInRoomPosition) {
+		response += std::string("        ") + std::to_string(i) + " - " + resets[reset]->printClass();
+		i++;
+	}
 
 	response += "\n        Doors in Room: \n";
 	for(auto & door : doors) {
-		response += std::string("        ") + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + "\n";
+		response += std::string("        ") + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + " Desc: " + door.getDesc() + "\n";
 	}
 
 	return response;
@@ -205,6 +213,7 @@ std::string printEditRoomDescriptionWindow(const std::vector<std::string>& descr
 										 "      Type 'set [line number] [description text]' to set a new description for that line eg. 'set 2 The room is cold and barren.' \n" + 
 										 "      Type 'back' to go back to the previous window\n"
 										 "      Type 'stop' to quit the editor\n\n";
+	response += "        Room Description: \n";
 	int i = 0;
 	for(auto& d : description) {
 		response += "      ";
@@ -214,10 +223,28 @@ std::string printEditRoomDescriptionWindow(const std::vector<std::string>& descr
 	return response + "\n";
 }
 
+std::string printEditRoomDoorsWindow(const std::vector<Door>& doors) {
+	std::string response = std::string("\n\n") +  "      Type 'add [dir] [destination Id] -d [description text]' to add a new door eg. 'add west 1100 -d You see the general store.'\n" + 
+							 "      Type 'remove [line number]' to remove the selected door eg. 'remove 2'\n" + 
+							 "      Type 'back' to go back to previous window\n" +
+							 "      Type 'stop' to quit the editor\n\n";
+
+	response += "        Doors in Room: \n";
+	int i = 0;
+	for(auto & door : doors) {
+		response += std::string("        ") + std::to_string(i) + " - " + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + " Desc: " + door.getDesc() + "\n";
+		i++;
+	}
+
+	return response + "\n";
+}
+
+Editor::Editor() {}
+
 Editor::Editor(networking::Connection connection_, const std::string& message_)
 : connection{connection_}, message{message_} {}
 
-std::string Editor::execute(Context& context) {
+std::string Editor::execute(Context& context, std::vector<std::unique_ptr<Reset>>& resets) {
 	auto players = context.getPlayers();
 	auto rooms = context.getRooms();
 	auto playerLocations = context.getPlayerLocations();
@@ -236,7 +263,16 @@ std::string Editor::execute(Context& context) {
 	auto doors = currentRoom->doors;
 	auto description = currentRoom->getDescV();
 
-	response += "\n\n      CURRENTLY EDITING\n---------------------------------------------";
+	std::vector<int> resetsInRoomPosition;
+
+	int i = 0;
+	for(auto & reset : resets) {
+		if(reset->getRoom() == currentRoomId) {
+			resetsInRoomPosition.push_back(i);
+		}
+		i++;
+	}
+
 
 	if(message == "") {
 		return "";
@@ -270,10 +306,20 @@ std::string Editor::execute(Context& context) {
 		doors = currentRoom->doors;
 		description = currentRoom->getDescV();
 
+		resetsInRoomPosition.clear();
+		i = 0;
+		for(auto & reset : resets) {
+			if(reset->getRoom() == currentRoomId) {
+				resetsInRoomPosition.push_back(i);
+			}
+			i++;
+		}
+
 		player->setStatus("EditCurrentRoom");
 		message = "";
 	}
 	if(player->getStatus() == "WorldBuilding") {
+		response += "\n\n      CURRENTLY EDITING\n---------------------------------------------";
 		message = "";
 		return response + "\n\n" +  "      Type '1' to edit current room\n" +
 									"      Type '2' to create new room\n" +  
@@ -292,7 +338,60 @@ std::string Editor::execute(Context& context) {
 		message = "";
 	}
 	if(player->getStatus() == "EditCurrentRoom") {
-		response += printEditCurrentRoomWindow(description, doors, currentRoom->getRoomId()) + "\n   ";
+
+		if(message.substr(0,4) == "add ") {
+			response += "\n\n      CURRENTLY EDITING ROOM\n---------------------------------------------";
+			try {
+				message = message.substr(4);
+
+				std::vector<std::string> addResetMessage;
+			    boost::split(addResetMessage, message, boost::is_any_of("\t "), boost::token_compress_on);
+
+			    if(addResetMessage.size() != 4) {
+			    	response += "\n\n      Invalid Format.";
+			    } else {
+			    	if(addResetMessage[0] == "npc") {
+			    		resets.push_back(std::make_unique<Resets::ResetNpc>(addResetMessage[0], boost::lexical_cast<int>(addResetMessage[1]) , boost::lexical_cast<int>(addResetMessage[2])
+			    		, currentRoomId, addResetMessage[3]));
+			    		resetsInRoomPosition.push_back(resets.size()-1);
+			    		response += " \n\n       successfully added npc reset";
+			    	} else if(addResetMessage[0] == "object") {
+			    		resets.push_back(std::make_unique<Resets::ResetObject>(addResetMessage[0], boost::lexical_cast<int>(addResetMessage[1]) , boost::lexical_cast<int>(addResetMessage[2])
+			    		, currentRoomId, addResetMessage[3]));
+			    		resetsInRoomPosition.push_back(resets.size()-1);
+			    		response += " \n\n       successfully added object reset";
+			    	}
+			    }
+			} catch (boost::bad_lexical_cast) {
+				response += "\n\n      Please enter valid numbers";
+			}
+		} else if(message.substr(0,7) == "remove ") {
+			response += "\n\n      CURRENTLY EDITING ROOM\n---------------------------------------------";
+			try {
+		        int selectedLineNumber = boost::lexical_cast<int>(message.substr(7,1));
+			    if(selectedLineNumber < 0 || (unsigned)selectedLineNumber >= resetsInRoomPosition.size()) {
+		    		response += "\n\n      Could not find line number " + message.substr(7,1) + ", removal failed";
+			    } else {
+				    int resetPositionNumber = resetsInRoomPosition[selectedLineNumber];
+					resets.erase(resets.begin()+resetPositionNumber);
+					resetsInRoomPosition.clear();
+					int i = 0;
+					for(auto & reset : resets) {
+						if(reset->getRoom() == currentRoomId) {
+							resetsInRoomPosition.push_back(i);
+						}
+						i++;
+					}
+					response += " \n\n       reset: '" + std::to_string(selectedLineNumber) + "' removed";
+				}
+			} catch (boost::bad_lexical_cast) {
+		        response += "\n\n      Please enter a valid line number";
+		    }
+		} else {
+			response += "\n\n      CURRENTLY EDITING ROOM\n---------------------------------------------";
+		}
+
+		response += printEditCurrentRoomWindow(description, doors, currentRoom->getRoomId(), resets, resetsInRoomPosition) + "\n   ";
 		message = "";
 		return response;
 	}
@@ -301,13 +400,13 @@ std::string Editor::execute(Context& context) {
 
 
 	if(player->getStatus() == "EditRoomDescription") {
-
 		if(message.substr(0,4) == "add ") {
+			response += "\n\n      CURRENTLY EDITING ROOM DESCRIPTION\n---------------------------------------------";
 			description.push_back(message.substr(4));
 			currentRoom->setDescription(description);
 			response += "\n\n      Line '" + message.substr(4) + "' added to description";
-		}
-		if(message.substr(0,7) == "remove ") {
+		} else if(message.substr(0,7) == "remove ") {
+			response += "\n\n      CURRENTLY EDITING ROOM DESCRIPTION\n---------------------------------------------";
 			try {
 		        int selectedLineNumber = boost::lexical_cast<int>(message.substr(7,1));
 
@@ -322,8 +421,8 @@ std::string Editor::execute(Context& context) {
 			} catch (boost::bad_lexical_cast) {
 		        response += "\n\n      Please enter a valid line number";
 		    }
-		}
-		if(message.substr(0,4) == "set ") {
+		} else if(message.substr(0,4) == "set ") {
+			response += "\n\n      CURRENTLY EDITING ROOM DESCRIPTION\n---------------------------------------------";
 		    try {
 		        int selectedLineNumber = boost::lexical_cast<int>(message.substr(4,1));
 
@@ -343,12 +442,14 @@ std::string Editor::execute(Context& context) {
 			} catch (boost::bad_lexical_cast) {
 		        response += "\n\n      Please enter a valid line number";
 		    }
-		}
-		if(message == "back") {
+		} else if(message == "back") {
+			response += "\n\n      CURRENTLY EDITING ROOM\n---------------------------------------------";
 			player->setStatus("EditCurrentRoom");
-			response += printEditCurrentRoomWindow(description, doors, currentRoom->getRoomId()) + "\n   ";
+			response += printEditCurrentRoomWindow(description, doors, currentRoom->getRoomId(), resets, resetsInRoomPosition) + "\n   ";
 			message = "";
 			return response;
+		} else {
+			response += "\n\n      CURRENTLY EDITING ROOM DESCRIPTION\n---------------------------------------------";
 		}
 
 		message = "";
@@ -359,231 +460,75 @@ std::string Editor::execute(Context& context) {
 
 
 
-	if(player->getStatus() == "EditRoomDoors" && message == "1") {
-		response += "\n\n      Enter the door you would like to add in a 'direction roomId' format eg. 'west 1100':\n\n";
-		player->setStatus("AddDoor");
-		message = "";
-		return response;
-	}
-	if(player->getStatus() == "EditRoomDoors" && message == "2") {
-		response += "\n\n      Enter the line number of the door you would like to remove:\n\n";
-		player->setStatus("RemoveDoor");
-		response += "        Doors in Room: \n";
-		int i = 0;
-		auto doors = currentRoom->doors;
-		for(auto & door : doors) {
-			response += std::string("        ") + std::to_string(i) + " - " + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + "Desc: " + door.getDesc() + "\n";
-			i++;
-		}
-		message = "";
-		return response;
-	}
-	if(player->getStatus() == "EditRoomDoors" && message == "3") {
-		response += "\n\n      Enter the line number of the door description you would like to modify:\n\n";
-		player->setStatus("SetDoorDescription");
-		response += "        Doors in Room: \n";
-		int i = 0;
-		auto doors = currentRoom->doors;
-		for(auto & door : doors) {
-			response += std::string("        ") + std::to_string(i) + " - " + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + "Desc: " + door.getDesc() + "\n";
-			i++;
-		}
-		message = "";
-		return response;
-	}
-	if(player->getStatus() == "EditRoomDoors" && message == "back") {
-		player->setStatus("EditCurrentRoom");
-		//print options
-		response += std::string("\n\n      Type '1' to edit the room description\n") +  
-							"      Type 'stop' to quit the editor\n\n";
-		//print desc
-
-		//print exits
-
-		//print resets
-		response += "      Current Room Full Description:";
-
-		response += "\n\n      Room Id: " + std::to_string(currentRoom->getRoomId());
-
-		message = "";
-
-		response += "\n\n";
-		auto description = currentRoom->getDescV();
-		response += "        Room Description: \n";
-		for(auto& d : description) {
-			response += std::string("        ") + d + "\n";
-		}
-		response += "\n";
-		// response += currentRoom->getNpcsInRoomDesc();
-		// response += currentRoom->getObjectsInRoomDesc();
-		response += "        Doors in Room: \n";
-		auto doors = currentRoom->doors;
-		for(auto & door : doors) {
-			response += std::string("        ") + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + "\n";
-		}
-		response += "\n";
-		response += "   " + getPlayersInRoomDesc(players, playerLocations, currentRoomId);
-
-		return response;
-	}
 	if(player->getStatus() == "EditRoomDoors") {
-		response += std::string("\n\n") +  "      Type '1' to add a new door \n" + 
-							 "      Type '2' to remove a door\n" + 
-							 "      Type '3' to set door description\n" + 
-							 "      Type 'back' to go back to previous window\n"
-							 "      Type 'stop' to quit the editor\n\n";
+		if(message.substr(0,4) == "add ") {
+			response += "\n\n      CURRENTLY EDITING ROOM DOORS\n---------------------------------------------";
+			try {
+				if(message.find("-d") == std::string::npos) {
+					response += "\n\n      Invalid Format.";
+				} else {
+					message = message.substr(4);
 
-		response += "        Doors in Room: \n";
-		int i = 0;
-		auto doors = currentRoom->doors;
-		for(auto & door : doors) {
-			response += std::string("        ") + std::to_string(i) + " - " + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + "Desc: " + door.getDesc() + "\n";
-			i++;
-		}
+					std::vector <std::string> addDoorMessage;
+					boost::iter_split(addDoorMessage,message, boost::first_finder("-d"));
 
-		message = "";
-		return response + "\n";
-	}
+				    boost::trim_if(addDoorMessage[0], boost::is_any_of("\t "));
+				    boost::trim_if(addDoorMessage[1], boost::is_any_of("\t "));
 
-	if(player->getStatus() == "AddDoor") {
+				    std::vector <std::string> doorDirAndDestinationId;
+				    boost::split(doorDirAndDestinationId, addDoorMessage[0], boost::is_any_of("\t "), boost::token_compress_on);
+				    std::vector <std::string> doorDescription{addDoorMessage[1]};
 
-		response += "\n\n";
-		auto doors = currentRoom->doors;
+				    if(doorDirAndDestinationId.size() != 2) {
+				    	response += "\n\n      Invalid Format." + addDoorMessage[0] + " " + addDoorMessage[1];
+				    }
+				    else {
+				    	int selectedRoomId = boost::lexical_cast<int>(doorDirAndDestinationId[1]);
 
-		std::transform(message.begin(), message.end(), message.begin(), ::tolower);
-		std::vector <std::string> doorMessage;
-	    boost::split(doorMessage, message, boost::is_any_of("\t "), boost::token_compress_on);
+					    if(rooms->find(selectedRoomId) == rooms->end()) {
+				    		response += "\n\n      Could not find room id " + doorDirAndDestinationId[1] + ", add door failed";
+					    } else {
+						    Door temp = Door{doorDirAndDestinationId[0], doorDescription, selectedRoomId};
+							currentRoom->addDoor(temp);
+							doors = currentRoom->doors;
 
-	    if(doorMessage.size() != 2) {
-	    	response += "\n\n      INVALID FORMAT, Enter the door you would like to add in a 'direction roomId' formt eg. 'west 1100':\n\n";
-	    	message = "";
-			return response;
-	    }
-
-	    Door temp = Door{doorMessage[0]};
-	    temp.setDestinationId(std::stoi(doorMessage[1]));
-
-		currentRoom->addDoor(temp);
-		response += "      Door: '" + temp.getDir() + " to Room: " + std::to_string(temp.getDestinationId()) + "' added to room\n\n";
-		player->setStatus("EditRoomDoors");
-
-		response += std::string("\n\n") +  "      Type '1' to add a new door \n" + 
-							 "      Type '2' to remove a door\n" + 
-							 "      Type '3' to set door description\n" + 
-							 "      Type 'back' to go back to previous window\n"
-							 "      Type 'stop' to quit the editor\n\n";
-
-		response += "        Doors in Room: \n";
-		int i = 0;
-		doors = currentRoom->doors;
-		for(auto & door : doors) {
-			response += std::string("        ") + std::to_string(i) + " - " + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + "Desc: " + door.getDesc() + "\n";
-			i++;
-		}
-
-		message = "";
-		return response + "\n";
-	}
-
-	if(player->getStatus() == "RemoveDoor") {
-
-		response += "\n\n";
-		auto doors = &currentRoom->doors;
-
-	    boost::trim_if(message, boost::is_any_of("\t "));
-
-	    int selectedLineNumber = std::stoi(message);
-
-	    if(selectedLineNumber < 0 || (unsigned)selectedLineNumber >= doors->size()) {
-	    	response += "\n\n      Could not find line number " + message + ", Please enter the line number of the door you would like to remove:\n\n";
-			response += "        Doors in Room: \n";
-			int i = 0;
-			auto doors = currentRoom->doors;
-			for(auto & door : doors) {
-				response += std::string("        ") + std::to_string(i) + " - " + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + "Desc: " + door.getDesc() + "\n";
-				i++;
+							response += "\n\n      Door: '" + temp.getDir() + "' to Room: '" + std::to_string(temp.getDestinationId()) + "' Desc: '" + temp.getDesc() + "' added to room";
+						}
+				    }
+				}
+			} catch (boost::bad_lexical_cast) {
+				response += "\n\n      Please enter a valid room Id";
 			}
+		} else if(message.substr(0,7) == "remove ") {
+			response += "\n\n      CURRENTLY EDITING ROOM DOORS\n---------------------------------------------";
+			try {
+		        int selectedLineNumber = boost::lexical_cast<int>(message.substr(7,1));
+
+			    if(selectedLineNumber < 0 || (unsigned)selectedLineNumber >= description.size()) {
+		    		response += "\n\n      Could not find line number " + message.substr(7,1) + ", removal failed";
+			    } else {
+				    Door temp = doors[selectedLineNumber];
+					doors.erase(doors.begin()+selectedLineNumber);
+					response += "        door: " + temp.getDir() + " to Room: " + std::to_string(temp.getDestinationId()) + "' removed";
+					currentRoom->doors = doors;
+				}
+			} catch (boost::bad_lexical_cast) {
+		        response += "\n\n      Please enter a valid line number";
+		    }
+		} else if(message == "back") {
+			response += "\n\n      CURRENTLY EDITING ROOM\n---------------------------------------------";
+			player->setStatus("EditCurrentRoom");
+			response += printEditCurrentRoomWindow(description, doors, currentRoom->getRoomId(), resets, resetsInRoomPosition) + "\n   ";
 			message = "";
 			return response;
-	    }
-	    Door temp = (*doors)[selectedLineNumber];
-		doors->erase(doors->begin()+selectedLineNumber);
-		response += "        door: " + temp.getDir() + " to Room: " + std::to_string(temp.getDestinationId()) + "' removed\n\n";
-		player->setStatus("EditRoomDoors");
-
-		response += std::string("\n\n") +  "      Type '1' to add a new door \n" + 
-							 "      Type '2' to remove a door\n" + 
-							 "      Type '3' to set door description\n" + 
-							 "      Type 'back' to go back to previous window\n"
-							 "      Type 'stop' to quit the editor\n\n";
-
-		response += "        Doors in Room: \n";
-		int i = 0;
-		for(auto & door : *doors) {
-			response += std::string("        ") + std::to_string(i) + " - " + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + "Desc: " + door.getDesc() + "\n";
-			i++;
+		} else {
+			response += "\n\n      CURRENTLY EDITING ROOM DOORS\n---------------------------------------------";
 		}
 
 		message = "";
-		return response + "\n";
-	}
-
-	if(player->getStatus() == "SetDoorDescription") {
-
-		response += "\n\n";
-		auto doors = &currentRoom->doors;
-
-	    boost::trim_if(message, boost::is_any_of("\t "));
-
-	    int selectedLineNumber = std::stoi(message);
-
-	    if(selectedLineNumber < 0 || (unsigned)selectedLineNumber >= doors->size()) {
-	    	response += "\n\n      Could not find line number " + message + ", Please enter the line number of the door descritpion you would like to modify:\n\n";
-			response += "        Doors in Room: \n";
-			int i = 0;
-			auto doors = currentRoom->doors;
-			for(auto & door : doors) {
-				response += std::string("        ") + std::to_string(i) + " - " + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + "Desc: " + door.getDesc() + "\n";
-				i++;
-			}
-			message = "";
-			return response;
-	    }
-	    currentlySelectedLineNumber = selectedLineNumber;
-
-		response += std::string("\n\n      Enter the line of text you want to set door ") + std::to_string(selectedLineNumber) + " description to:\n\n";
-		player->setStatus("SetDoorDescriptionLine");
-		message = "";
+		response += printEditRoomDoorsWindow(doors);
 		return response;
 	}
-	if(player->getStatus() == "SetDoorDescriptionLine") {
-
-		auto doors = &currentRoom->doors;
-		response += "\n\n";
-		auto description = {message};
-		(*doors)[currentlySelectedLineNumber].setDesc(description);
-		response += std::string("      Line '") + message + "' added to door " + std::to_string(currentlySelectedLineNumber) + " description\n\n";
-		player->setStatus("EditRoomDescription");
-		currentlySelectedLineNumber = 0;
-
-		response += std::string("\n\n") +  "      Type '1' to add a new door \n" + 
-							 "      Type '2' to remove a door\n" + 
-							 "      Type '3' to set door description\n" + 
-							 "      Type 'back' to go back to previous window\n"
-							 "      Type 'stop' to quit the editor\n\n";
-
-		response += "        Doors in Room: \n";
-		int i = 0;
-		for(auto & door : *doors) {
-			response += std::string("        ") + std::to_string(i) + " - " + "door: " + door.getDir() + " to Room: " + std::to_string(door.getDestinationId()) + "Desc: " + door.getDesc() + "\n";
-			i++;
-		}
-
-		message = "";
-		return response + "\n";
-	}
-
-
 
 	std::cout << "G" << std::endl;
 

@@ -9,6 +9,7 @@
 #include "Npc.h"
 #include "Room.h"
 #include "Object.h"
+#include "Resets.h"
 
 //utility functions
 bool is_number(const std::string& s);
@@ -16,16 +17,20 @@ bool is_number(const std::string& s);
 std::string printMiniMap(std::unordered_map<int,Room>* rooms, const int currentRoomId);
 
 std::string getPlayersInRoomDesc(std::unordered_map<int, Player>* players, const std::unordered_map<int, int>* playerLocations, const int currentRoomId);
+std::string printEditCurrentRoomWindow(const std::vector<std::string>& description, const std::vector<Door>& doors, const int currentRoomId, std::vector<std::unique_ptr<Reset>>& resets, const std::vector<int>& resetsInRoomPosition);
+std::string printEditRoomDescriptionWindow(const std::vector<std::string>& description);
+std::string printEditRoomDoorsWindow(const std::vector<Door>& doors);
 
-class Editor : public Command {
+class Editor {
 private:
 	networking::Connection connection;
 	std::string message;
-	int currentlySelectedLineNumber = 0;
 public:
+	Editor();
+
 	Editor(networking::Connection connection_, const std::string& message_);
 
-	std::string execute(Context& context);
+	std::string execute(Context& context, std::vector<std::unique_ptr<Reset>>& resets);
 
 	void setMessage(const std::string& s);
 

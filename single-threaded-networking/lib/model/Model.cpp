@@ -104,6 +104,12 @@ void Model::printAll(){
   //    std::cout << std::endl;
   //    count++;
   // }
+  for ( auto it = rooms.begin(); it != rooms.end(); ++it ){
+     std::cout << "Map 1\nid:" << it->first << "\n";
+     (it->second).printClass(count);
+     std::cout << std::endl;
+     count++;
+  }
    // for ( auto it = resets.begin(); it != resets.end(); ++it ){
    //   std::cout << "Map 3\nid:" << "\n";
 
@@ -214,6 +220,10 @@ void Model::reset(){
 
 Context Model::getContext() const {
   return this->context;
+}
+
+std::vector<std::unique_ptr<Reset>>& Model::getResets() {
+  return resets;
 }
 
 
