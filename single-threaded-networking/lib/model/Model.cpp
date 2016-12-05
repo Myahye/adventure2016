@@ -218,6 +218,15 @@ Context Model::getContext() const {
 
 
 void Model::playerDisconnected(const int playerId) {
+
+  if(players[playerId].playerCharacter.getSwappedStatus()) {
+    std::cout << "Swapping back before disconnect..\n" << std::endl;
+
+    players[playerId].playerCharacter.setSwappedStatus(false);
+    players[playerId].swapTarget->setSwappedStatus(false);
+    std::swap(players[playerId].playerCharacter, *players[playerId].swapTarget);
+  }
+
   players[playerId].setStatus("Offline");
   this->rooms[playerLocation[playerId]].removePlayer(playerId);
 }

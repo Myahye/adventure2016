@@ -628,6 +628,11 @@ namespace Commands {
 				return currentPlayer->getUsername() + "> Your target player has already been swapped.\n";
 			}
 			currentPlayer->playerCharacter.setCurrentMana(currentPlayer->playerCharacter.getCurrentMana() - manaCost);
+
+			// Keep track of Player who was swapped
+			currentPlayer->setSwapTarget((*players)[targetPlayerId].playerCharacter);
+			(*players)[targetPlayerId].setSwapTarget(currentPlayer->playerCharacter);
+
 			std::swap(currentPlayer->playerCharacter, (*players)[targetPlayerId].playerCharacter);
 			currentPlayer->playerCharacter.setSwappedStatus(true);
 			(*players)[targetPlayerId].playerCharacter.setSwappedStatus(true);
@@ -640,6 +645,10 @@ namespace Commands {
 				return currentPlayer->getUsername() + "> Your target npc has already been swapped.\n" + std::to_string(targetNpc->npcCharacter.getSwappedStatus());
 			}
 			currentPlayer->playerCharacter.setCurrentMana(currentPlayer->playerCharacter.getCurrentMana() - manaCost);
+
+			// Keep track of Npc who was swapped
+			currentPlayer->setSwapTarget(targetNpc->npcCharacter);
+
 			std::swap(currentPlayer->playerCharacter, targetNpc->npcCharacter);
 			currentPlayer->playerCharacter.setSwappedStatus(true);
 			targetNpc->npcCharacter.setSwappedStatus(true);

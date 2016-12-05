@@ -40,4 +40,8 @@ Player::attack(const std::string& name){
 	std::cout << "You are being attacked by " +name << std::endl;
 }
 
+void Player::setSwapTarget(Character& swapTarget) {
+  this->swapTarget = &swapTarget;
+} 
+
 #endif
