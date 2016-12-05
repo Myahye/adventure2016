@@ -71,15 +71,8 @@ ModelInterface::updateGame(){
 std::deque<Message>
 ModelInterface::updateCombat(std::vector<Connection>& clients){
 
-  std::deque<Message> outgoing;
   auto context = this->model.getContext();
-  std::deque<Message> res = this->combatManager.updateCombat(clients, context);
-  for(Message m : res){
-    outgoing.push_back(m);
-  }
-
-  //move out later
-  //this->model.reset();
+  std::deque<Message> outgoing = this->combatManager.updateCombat(clients, context);
 
   return outgoing;
 

@@ -39,9 +39,15 @@ class Character {
 	std::vector<std::string> keywords;
 	std::vector<std::string> longdesc;
 
+	std::string status = "Offline";
+
+
 public:
 	Character(bool isPlayer);
 	Character(const int id, bool isPlayer);
+
+	std::string getStatus() const;
+	void setStatus(std::string s);
 
 	bool checkCharacterType();
 	void setCharacterType(bool isPlayer);

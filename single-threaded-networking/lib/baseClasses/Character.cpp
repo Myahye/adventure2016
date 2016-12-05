@@ -14,6 +14,14 @@ Character::Character (const int id, bool isPlayer){
   setCharacterType(isPlayer);
 }
 
+std::string Character::getStatus() const {
+  return status;
+}
+void Character::setStatus(std::string s) {
+  status = s;
+}
+
+
 bool Character::checkCharacterType(){
   return isPlayer;
 }

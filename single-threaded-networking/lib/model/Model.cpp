@@ -227,12 +227,12 @@ void Model::playerDisconnected(const int playerId) {
     std::swap(players[playerId].playerCharacter, *players[playerId].swapTarget);
   }
 
-  players[playerId].setStatus("Offline");
+  players[playerId].playerCharacter.setStatus("Offline");
   this->rooms[playerLocation[playerId]].removePlayer(playerId);
 }
 
 void Model::playerConnect(const int playerId) {
   std::cout << "s " << playerLocation[playerId] << std::endl;
-  players[playerId].setStatus("Online");
+  players[playerId].playerCharacter.setStatus("Online");
   this->rooms[playerLocation[playerId]].addPlayer(playerId, players[playerId].getUsername());
 }

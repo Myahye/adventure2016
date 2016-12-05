@@ -41,7 +41,7 @@ public:
 
 	//This will be used by Player to send itself a message
   //void createMessageForClient(const int playerId, const std::string& message);
-  networking::Message createAlertMessage(networking::Connection, std::string);
+  networking::Message createAlertMessage(networking::Connection, std::string, bool npcFlag);
 
 };
 
