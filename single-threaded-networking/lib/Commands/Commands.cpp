@@ -400,19 +400,63 @@ namespace Commands {
 
 
 
-	ListCommand::ListCommand(networking::Connection connection_, const std::unordered_map<std::string, std::string>& commands_, const std::string& message_)
-		: connection{connection_}, commands{commands_}, message{message_} {}
+	ListCommand::ListCommand(networking::Connection connection_, const std::unordered_map<std::string, std::string>& commands_, const std::string& message_) 
+	: connection{connection_}, commands{commands_}, message{message_} {}
 
 	std::string ListCommand::execute(Context& context) {
-		auto players = context.getPlayers();
 		int playerId = connection.playerId;
+		auto players = context.getPlayers();
+		auto player = (*players)[playerId];
+		auto offenseSpells = context.getOffenseSpells();
+		auto defenseSpells = context.getDefenseSpells();
+
 		std::string allCommands = "";
 
-		for( const auto& i : commands){
-    		allCommands += i.second + "\n";
-  		}
+		std::string lsMessage = message.substr(2);
+		std::transform(lsMessage.begin(), lsMessage.end(), lsMessage.begin(), ::tolower);
+	    boost::trim_if(lsMessage, boost::is_any_of("\t "));
 
-		return (*players)[playerId].getUsername()+ "> " + "All possible Commands:\n" + allCommands + "\n";
+		if(lsMessage == ""){
+			for( const auto& i : commands){
+    			allCommands += i.second + "\n";
+  			}
+  			return (*players)[playerId].getUsername()+ "> " + "All possible Commands:\n" + allCommands + "\n\n";
+  		}else if (lsMessage == "inventory"){
+  			return (*players)[playerId].getUsername()+ "> " + "Inventory:\n" + player.playerCharacter.getInventoryDesc() + "\n\n";
+		}else if (lsMessage == "equipment"){
+			return (*players)[playerId].getUsername()+ "> " + "Equipment:\n" + player.playerCharacter.getEquipmentDesc() + "\n\n";
+  		}else if (lsMessage == "spells"){
+  			std::ostringstream offenseResponse;
+  			std::ostringstream defenseResponse; 
+ 			offenseResponse << "Offense:\n";
+  			int counter = 0;
+
+  			for(auto& offenseObject : (*offenseSpells)){
+  				if(counter>2){
+  					offenseResponse << "\n";
+  					counter = 0;
+  				}
+  				counter++;
+  				offenseResponse << std::setw(20) << std::left << offenseObject.getName();
+  			}
+  			counter = 0;
+  			offenseResponse << "\n\n";
+  			defenseResponse << "Defense:\n";
+  			for(auto& defenseObject : (*defenseSpells)){
+  				if(counter>2){
+  					defenseResponse << "\n";
+  					counter = 0;
+  				}
+  				counter++;
+  				defenseResponse << std::setw(20) << std::left << defenseObject.getName();
+  			}
+  			defenseResponse << "\n\n";
+  			return (*players)[playerId].getUsername()+ "> " + "Spells:\n" + offenseResponse.str() + defenseResponse.str() + "\n\n";
+
+
+  		}else{
+  			return (*players)[playerId].getUsername()+ "> " + "Cannot list " + lsMessage + ", no match\n\n";
+  		}
 	}
 
 	int ListCommand::getId() const {
@@ -422,6 +466,7 @@ namespace Commands {
 	networking::Connection ListCommand::getConnection() const {
 		return this->connection;
 	}
+
 
 	SayCommand::SayCommand(networking::Connection connection_, const std::string& message_, int playerId_)
 	: connection{connection_}, message{message_}, playerId{playerId_} {}
@@ -458,11 +503,21 @@ namespace Commands {
 		std::vector <std::string> castMessage;
     	boost::trim_if(messageText, boost::is_any_of("\t "));
     	boost::split(castMessage, messageText, boost::is_any_of("\t "), boost::token_compress_on);
+    	std::string castedSpell = "";
+    	int i;
+    	for (i = 0; i < castMessage.size()-1; ++i){//castMessage[size] = target
+    		castedSpell += castMessage[i] + " ";
+    	}
+    	std::cout << "target->" << castMessage[i] << "\n";
+    	std::string targetName = castMessage[i];
+    	boost::trim_if(castedSpell, boost::is_any_of("\t ")); 
+    	std::cout << "spell->" << castedSpell << "\n";
+
 		
 		int currentRoomId = (*playerLocations)[playerId];
 		Room* currentRoom = &(*rooms)[currentRoomId];
-		Spells* castedDefenseSpell = getCastedSpell(castMessage[0], (*defenseSpells));
-		Spells* castedOffenseSpell = getCastedSpell(castMessage[0], (*offenseSpells));
+		Spells* castedDefenseSpell = getCastedSpell(castedSpell, (*defenseSpells));
+		Spells* castedOffenseSpell = getCastedSpell(castedSpell, (*offenseSpells));
 		Spells* currentSpell;
 		
 		if(castedDefenseSpell != nullptr){
@@ -474,10 +529,10 @@ namespace Commands {
 			currentSpell = castedOffenseSpell;
 		}
 		else{
-			return (*players)[playerId].getUsername() + "> " + "Cannot cast " + castMessage[0] + ", no match\n\n";
+			return (*players)[playerId].getUsername() + "> " + "Cannot cast " + castedSpell + ", no match\n\n";
 		}
 		
-		int targetId = currentRoom->findPlayerId(castMessage[1]);
+		int targetId = currentRoom->findPlayerId(targetName);
 		auto target = &(*players)[targetId].playerCharacter;
 		int currentTargetHealth= target->getCurrentHealth();
 		auto player = &(*players)[playerId].playerCharacter;
@@ -486,27 +541,26 @@ namespace Commands {
 
 
 		//if findPlayerId can't find the player it will return 0
-		//might need to change this
 		if(targetId == 0){
-			return (*players)[playerId].getUsername() + "> " + "Target " + castMessage[1] + " not found\n\n";
+			return (*players)[playerId].getUsername() + "> " + "Target " + castedSpell + " not found\n\n";
 		}
 		
-		/* -- for testing purposes this will be commented out, uncomment out later
+		//-- for testing purposes this will be commented out, uncomment out later
 		if(targetId == playerId && castedOffenseSpell != nullptr){
-			return (*players)[playerId].getUsername() + "> " + "Cannot cast " + castMessage[0] + " on yourself!\n\n";
+			return (*players)[playerId].getUsername() + "> " + "Cannot cast " + castedSpell + " on yourself!\n\n";
 		}
-		*/
+		
 
 		if(currentTargetHealth == 0){
-			return (*players)[playerId].getUsername() + "> " + "Target " + castMessage[1] + " has already been defeated!\n\n";
+			return (*players)[playerId].getUsername() + "> " + "Target " + targetName + " has already been defeated!\n\n";
 		}
 
 		if(!checkMana(spellMana, currentPlayerMana)){
-			return (*players)[playerId].getUsername() + "> " + "Not enough mana to cast " + castMessage[0] + "\n\n";
+			return (*players)[playerId].getUsername() + "> " + "Not enough mana to cast " + castedSpell + "\n\n";
 		}
 
 		player->setCurrentMana(currentPlayerMana - spellMana);
-		std::string targetName = (*players)[targetId].getUsername();
+		//std::string targetName = (*players)[targetId].getUsername();
 		std::string hitChar = replaceTargetName(currentSpell->getHitChar(), targetName);
 		int playerLevel = player->getLevel();
 		int currentPlayerExp = player->getExp();
@@ -526,11 +580,10 @@ namespace Commands {
 				finalHealth = 0;
 			}
 			target->setCurrentHealth(finalHealth); 
-			//todo: if target dies -- increase xp/lvl up
 		}
 
 
-		return (*players)[playerId].getUsername() + "> " + castMessage[0] + " has been cast on " + castMessage[1] + "\n\t" + hitChar + "\n\n";
+		return (*players)[playerId].getUsername() + "> " + castedSpell + " has been cast on " + targetName + "\n\t" + hitChar + "\n\n";
  		
  		//todo: setmax and setcurrent in character need to be changed, specifically
  		//setcurrent needs to check it the parameter passed is greater than max
