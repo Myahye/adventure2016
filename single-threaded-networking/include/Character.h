@@ -56,6 +56,7 @@ public:
 
 	int getExp() const;
 	void setExp(const int exp);
+	void setNewStats(const int lvl);
 
 	int getGold() const;
     void setGold(const int gold);
