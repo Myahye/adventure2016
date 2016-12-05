@@ -40,10 +40,9 @@ ModelInterface::buildCommands(const std::deque<Message>& clientMessages, std::ve
     } else if (boost::istarts_with(messageText,commands["Swap"])) {
       this->basicCommandQueue.push_back(std::make_unique<Commands::SwapCommand>(message.connection, message.text));
     } else if (boost::istarts_with(messageText,commands["Cast"])) {
-      std::cout << "line 43-modelinterface\n";
       this->SpellCommandQueue.push_back(std::make_unique<MagicCommands::CastCommand>(clients,message.connection,message.text));
     } else if (boost::istarts_with(messageText,commands["Confuse"])) {
-      this->basicCommandQueue.push_back(std::make_unique<Commands::ConfuseCommand>(message.connection,message.text));
+      this->SpellCommandQueue.push_back(std::make_unique<MagicCommands::ConfuseCommand>(clients,message.connection,message.text));
     } else {
       this->basicCommandQueue.push_back(std::make_unique<Commands::InvalidCommand>(message.connection,message.text));
     }
@@ -68,17 +67,12 @@ ModelInterface::updateGame(){
   }
 
   for(auto& SpellCommand : SpellCommandQueue) {
-    std::cout << "line 73-modelinterface\n";
     std::string response = SpellCommand->execute(context);
-    std::cout << "line 75-modelinterface\n";
     Message message{SpellCommand->getConnection(),response};
-    std::cout << "line 77-modelinterface\n";
-    std::cout << "line 79-modelinterface\n";
+    std::cout << "line 72 interface" << '\n';
     outgoing.push_back(createAlertMessageForSpell(SpellCommand->getTargetConnection(),SpellCommand->getSourceName(), SpellCommand->getSpellName(), SpellCommand->getSpellType(), SpellCommand->getSpellDamage()));
     SpellCommandQueue.pop_front();
-    std::cout << "line 81-modelinterface\n";
     outgoing.push_back(message);
-    std::cout << "line 83-modelinterface\n";
   }
 
   //move out later
@@ -141,6 +135,9 @@ ModelInterface::createAlertMessageForSpell(Connection connection, std::string na
     response = "ALERT > " + name + " has casted " + spellName + " upon you, dealing " + damage +" damage!\n\n";
   }else if(spellType == "defense"){
     response = "ALERT > " + name + " has casted " + spellName + " upon you, healing you for " + damage +" health!\n\n";
+  }else if(spellType == "confuse"){
+    response = "ALERT > " + name + " has casted " + spellName + " upon you, healing you for " + damage +" health!\n\n";
+    response=latin(response);
   }else{
     response = "";
   }
