@@ -9,7 +9,7 @@ ModelInterface::ModelInterface() {}
 //load config file to map commands["Create"] = getcreatecommandstringfromfile etc.
 
 
-std::unordered_map<std::string, std::string> commands {{"Create","create"},{"Look","look"},{"Walk","walk"},{"Read","read"},{"Go","go"},{"Attack","attack"},{"Say","say"},{"ListCommands","ls"},{"Status","status"}, {"Take","take"}, {"Flee","flee"},{"Equip","equip"},{"Steal","steal"},{"Teleport","teleport"},{"Swap", "swap"},{"Cast", "cast"},{"Summon","summon"}};
+std::unordered_map<std::string, std::string> commands {{"Create","create"},{"Look","look"},{"Walk","walk"},{"Read","read"},{"Go","go"},{"Attack","attack"},{"Say","say"},{"ListCommands","ls"},{"Status","status"}, {"Take","take"}, {"Flee","flee"},{"Equip","equip"},{"Steal","steal"},{"Teleport","teleport"},{"Swap", "swap"},{"Cast", "cast"},{"Summon","summon"},{"Confuse", "confuse"}};
 
 std::unordered_map<int,Editor> activeEditors;
 
