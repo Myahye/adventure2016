@@ -337,6 +337,7 @@ std::string Editor::execute(Context& context, std::vector<std::unique_ptr<Reset>
 		player->playerCharacter.setStatus("EditRoomDoors");
 		message = "";
 	}
+	//I rushed this out so insufficient error checking
 	if(player->playerCharacter.getStatus() == "EditCurrentRoom") {
 
 		if(message.substr(0,4) == "add ") {
@@ -1242,6 +1243,7 @@ namespace Commands {
 		std::transform(teleportMessage.begin(), teleportMessage.end(), teleportMessage.begin(), ::tolower);
 	    boost::trim_if(teleportMessage, boost::is_any_of("\t "));
 
+	   	//command for testing purposes/no error checking
 		(*playerLocations)[playerId] = std::stoi(teleportMessage);
 
 		return (*players)[playerId].getUsername() + "> " + message + "\n\n" + printMiniMap(rooms, std::stoi(teleportMessage)) + (*rooms)[std::stoi(teleportMessage)].getFullRoomDesc() + getPlayersInRoomDesc(players, playerLocations, std::stoi(teleportMessage));
@@ -1266,10 +1268,11 @@ namespace Commands {
 
 		int playerId = connection.playerId;
 
-		std::string teleportMessage = message.substr(7);
+		std::string teleportMessage = message.substr(6);
 		std::transform(teleportMessage.begin(), teleportMessage.end(), teleportMessage.begin(), ::tolower);
 	    boost::trim_if(teleportMessage, boost::is_any_of("\t "));
 
+	    //command for testing purposes/no error checking
 	    int objectId = std::stoi(teleportMessage);
 
 	    if(objects->find(objectId) != objects->end()) {
